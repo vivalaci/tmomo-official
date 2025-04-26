@@ -1,0 +1,104 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- header top nav -->
+{{:ModuleInclude('public/header_top_nav')}}
+
+<!-- search -->
+{{:ModuleInclude('public/nav_search')}}
+
+<!-- header nav -->
+{{:ModuleInclude('public/header_nav')}}
+
+<!-- goods category -->
+{{:ModuleInclude('public/goods_category')}}
+
+<!-- content start -->
+<div class="am-container plugins-payecoquick">
+    <div class="am-u-md-8">
+        <!-- form start -->
+        <form class="am-form form-validation" action="{{:PluginsHomeUrl('payecoquick', 'index', 'pay')}}" method="POST" request-type="ajax-fun" request-value="FormBackHandle">
+            <div class="am-form-group business-form-block">
+                <label>真实姓名<span class="am-form-group-label-tips-must">*</span></label>
+                <input type="text" name="name" placeholder="姓名" data-validation-message="请输入姓名" class="am-radius" value="" required />
+            </div>
+            <div class="am-form-group business-form-block">
+                <label>身份证号码<span class="am-form-group-label-tips-must">*</span></label>
+                <input type="text" name="idcard" placeholder="身份证号码" data-validation-message="请输入身份证号码" class="am-radius" value="" required />
+            </div>
+            <div class="am-form-group business-form-block">
+                <label>银行卡号<span class="am-form-group-label-tips-must">*</span><span class="am-form-group-label-tips">当前身份证开户的银行卡</span></label>
+                <input type="text" name="bank_card" placeholder="银行卡号" data-validation-message="请输入银行卡号" class="am-radius" value="" required />
+            </div>
+            <div class="am-form-group business-form-block">
+                <label>手机号码<span class="am-form-group-label-tips-must">*</span><span class="am-form-group-label-tips">银行预留的手机号码</span></label>
+                <input type="text" name="mobile" placeholder="手机号码" data-validation-message="请输入手机号码" class="am-radius" value="" required />
+            </div>
+            <div class="am-form-group business-form-block">
+                <label>{{:MyLang('form_verify_title')}}<span class="am-form-group-label-tips-must">*</span></label>
+                <div class="am-input-group am-input-group-sm">
+                    <input type="number" name="sms_code" class="am-radius am-form-field" placeholder="{{:MyLang('form_verify_placeholder')}}" min="0" data-validation-message="请输入验证码" autocomplete="off" value="" required />
+                    <span class="am-input-group-btn">
+                        <button class="am-btn am-btn-default am-radius btn-loading-example verify-submit" type="button" data-am-loading="{spinner:'circle-o-notch', loadingText:'{{:MyLang('send_tips')}}'}" data-text="{{:MyLang('form_verify_button_text')}}" data-send-text="{{:MyLang('form_verify_send_text')}}" data-time="60" data-url="{{:PluginsHomeUrl('payecoquick', 'index', 'verify')}}" enctype="multipart/form-data">{{:MyLang('form_verify_button_text')}}</button>
+                    </span>
+                </div>
+            </div>
+            <div class="am-form-group business-form-block pwd-container am-hide">
+                <label>银行卡安全码<span class="am-form-group-label-tips-must">*</span><span class="am-form-group-label-tips">有效期+CVN，如：0314231表示有效期=201403、CVN=231</span></label>
+                <input type="text" name="pwd" placeholder="银行卡安全码" data-validation-message="请输入银行卡密码" class="am-radius" value="" required />
+            </div>
+
+            <div class="am-form-group business-form-block am-form-group-refreshing am-margin-top-lg am-padding-left-0">
+                <input type="hidden" name="sms_id" value="" />
+                <input type="hidden" name="order_id" value="{{$data.order_id}}" />
+                <input type="hidden" name="order_no" value="{{$data.order_no}}" />
+                <input type="hidden" name="subject" value="{{$data.name}}" />
+                <input type="hidden" name="total_price" value="{{$data.total_price}}" />
+                <input type="hidden" name="notify_url" value="{{$data.notify_url}}" />
+                <input type="hidden" name="call_back_url" value="{{$data.call_back_url}}" />
+                <input type="hidden" name="redirect_url" value="{{$data.redirect_url}}" />
+                <input type="hidden" name="site_name" value="{{$data.site_name}}" />
+                <input type="hidden" name="check_url" value="{{$data.check_url}}" />
+                <input type="hidden" name="user_info" value='{{:base64_encode(json_encode($data.user))}}' />
+                <button type="submit" class="am-btn am-btn-primary am-radius btn-loading-example am-btn-sm am-btn-block" data-am-loading="{loadingText:'支付中...'}">确认支付</button>
+            </div>
+        </form>
+        <!-- form end -->
+    </div>
+    <div class="am-u-md-4 am-padding-top-sm">
+        <div class="am-margin-top-sm">
+            <p>支付金额：<strong class="am-text-danger am-text-sm">{{$currency_symbol}}{{$data.total_price}}</strong></p>
+        </div>
+        <hr data-am-widget="divider" style="" class="am-divider am-divider-default" />
+        {{if !empty($plugins_config['right_images'])}}
+            <img src="{{$plugins_config.right_images}}" />
+        {{/if}}
+        {{if !empty($plugins_config['right_desc'])}}
+            <div class="am-alert am-alert-warning">
+                <p>{{:implode('<br />', $plugins_config['right_desc'])}}</p>
+            </div>
+        {{/if}}
+    </div>
+</div>
+<!-- content end -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}
+<script type="text/javascript">
+// 返回处理
+function FormBackHandle(e)
+{
+    if(e.code == 0)
+    {
+        $.AMUI.progress.done();
+        Prompt(e.msg, 'success');
+        setTimeout(function()
+        {
+            window.location.href = e.data;
+        }, 3000);
+    } else {
+        $('form.form-validation').find('button[type="submit"]').button('reset');
+        $.AMUI.progress.done();
+        Prompt(e.msg);
+    }
+}
+</script>

@@ -1,0 +1,87 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'themeswitch',
+            'title'     => '主题切换',
+        ])}}
+
+        <div class="themeswitch-content am-padding-bottom-xs">
+            <!-- 操作提示 -->
+            <div class="am-operate-stretch-tips">
+                <div class="title">
+                    <i class="iconfont icon-tips"></i>
+                    <strong title="{{:MyLang('operate_list_tips_msg')}}">{{:MyLang('operate_list_tips_button_text')}}</strong>
+                    <i class="iconfont icon-contract contract" title="{{:MyLang('operate_list_tips_retract_text')}}"></i> 
+                </div>
+                <p>url带参数[ is_jump=0 ]、则不会自动跳转、如：https://shopxo.net/?is_jump=0</p>
+            </div>
+
+            <!-- 基础配置 -->
+            <div class="am-panel am-panel-default am-radius themeswitch-content-base">
+                <div class="am-panel-hd">
+                    <span class="am-panel-title">{{:MyLang('base_config_title')}}</span>
+                    <a class="am-margin-left-lg" href="{{:PluginsAdminUrl('themeswitch', 'admin', 'saveinfo')}}">
+                        <i class="am-icon-edit"></i>
+                        <span>{{:MyLang('edit_title')}}</span>
+                    </a>
+                </div>
+                <div class="am-panel-bd">
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>H5自定义地址</label>
+                                <div>
+                                    {{if empty($data['h5_url'])}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 系统h5地址 ]
+                                    {{else /}}
+                                        {{:MyLang('already_setup_tips')}}[ {{$data.h5_url}} ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>是否手机模式下</label>
+                                <div>
+                                    {{if isset($data['is_mobile']) and $data['is_mobile'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>是否微信环境中</label>
+                                <div>
+                                    {{if isset($data['is_wechat_env']) and $data['is_wechat_env'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>微信环境中-是否需要登录</label>
+                                <div>
+                                    {{if isset($data['is_wechat_env_login']) and $data['is_wechat_env_login'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>跳转带上referrer参数</label>
+                                <div>
+                                    {{if isset($data['js_jump_referrer']) and $data['js_jump_referrer'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

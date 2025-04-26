@@ -1,0 +1,58 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'commongobacktop',
+            'title'     => MyLang('base_config_title'),
+            'back_url'  => PluginsAdminUrl('commongobacktop', 'admin', 'index'),
+        ])}}
+
+        <!-- form start -->
+        <form class="am-form form-validation am-form-full-screen am-form-popup-sticky" action="{{:PluginsAdminUrl('commongobacktop', 'admin', 'save')}}" method="POST" request-type="ajax-url" request-value="{{:PluginsAdminUrl('commongobacktop', 'admin', 'index')}}" enctype="multipart/form-data">
+            <div class="am-form-group am-form-file">
+                <label class="am-block">图片<span class="am-form-group-label-tips">建议50*50px</span></label>
+                <div class="am-form-file-upload-container">
+                    <ul class="plug-file-upload-view plugins-images-view" data-form-name="images" data-max-number="1" data-delete="0" data-dialog-type="images">
+                        <li>
+                            <input type="text" name="images" value="{{if !empty($data['images_old'])}}{{$data.images_old}}{{/if}}" data-validation-message="{{:MyLang('form_upload_images_message')}}" required />
+                            <img src="{{if !empty($data['images'])}}{{$data.images}}{{else /}}{{:StaticAttachmentUrl('default-images.jpg')}}{{/if}}" />
+                        </li>
+                    </ul>
+                    <div class="plug-file-upload-submit" data-view-tag="ul.plugins-images-view">
+                        <i class="iconfont icon-upload-add"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="am-form-group">
+                <label>是否全局<span class="am-form-group-label-tips">否则只在首页显示，是则全局展示</span></label>
+                <div>
+                    {{foreach $is_whether_list as $v}}
+                        <label class="am-radio-inline">
+                            <input type="radio" name="is_overall" value="{{$v.id}}" {{if isset($data['is_overall']) and $data['is_overall'] eq $v['id']}}checked="checked"{{else /}}{{if !isset($data['is_overall']) and isset($v['checked']) and $v['checked'] eq true}}checked="checked"{{/if}}{{/if}} data-am-ucheck /> {{$v.name}}
+                        </label>
+                    {{/foreach}}
+                </div>
+            </div>
+
+            <div class="am-form-popup-submit">
+                <a href="{{:PluginsAdminUrl('commongobacktop', 'admin', 'index', $params)}}" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg">
+                    <i class="am-icon-mail-reply"></i>
+                    <span>{{:MyLang('retreat_title')}}</span>
+                </a>
+                <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('save_title')}}'}">
+                    <i class="am-icon-save"></i>
+                    <span>{{:MyLang('save_title')}}</span>
+                </button>
+            </div>
+        </form>
+        <!-- form end -->
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

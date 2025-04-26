@@ -1,0 +1,234 @@
+<!-- 开通时长 -->
+<div class="am-popup am-radius level-vip" id="plugins-level-buy-open-popup">
+    <div class="am-popup-inner">
+        <div class="am-popup-hd">
+            <div class="am-popup-title">
+                <div class="label">开通账号：</div>
+                <img class="img" src="{{if empty($user['avatar'])}}{{:UserDefaultAvatar()}}{{else /}}{{$user.avatar}}{{/if}}">
+                <div class="user">{{if empty($user['avatar'])}}用户名{{else /}}{{$user.user_name_view}}{{/if}}</div>
+            </div>
+            <div class="level-close">
+                <span data-am-modal-close class="am-close">&times;</span>
+            </div>
+        </div>
+        <div class="am-popup-bd am-padding-0">
+            <form class="am-form form-validation-plugins-level-create am-form-popup-fixed" action="{{:PluginsHomeUrl('membershiplevelvip', 'buy', 'create')}}" method="POST" request-type="ajax-fun" request-value="PluginsLevelBuyBack">
+                {{if !empty($level_list)}}
+                    <div data-am-widget class="am-tabs am-height am-pr" data-am-tabs="{noSwipe: 1}">
+                        <ul class="am-tabs-nav am-nav am-nav-tabs">
+                            {{foreach $level_list as $lk=>$level}}
+                                {{if isset($level['is_supported_pay_buy']) and $level.is_supported_pay_buy eq 1}}
+                                    <li class="am-padding-horizontal-xs {{if $lk eq 0}} am-active{{/if}}">
+                                        <div class="nav-bg"></div>
+                                        <a href="[data-tab-panel-{{$lk}}]">{{$level.name}}</a>
+                                    </li>
+                                {{/if}}
+                            {{/foreach}}
+                        </ul>
+                        <div class="level-tabs-right tabs-sign am-hide" data-scroll-width=".level-vip ul.am-tabs-nav.am-nav.am-nav-tabs" data-list-width=".level-vip ul.am-tabs-nav.am-nav.am-nav-tabs li" data-num="1">
+                            <i class="am-icon-chevron-right"></i>
+                        </div>
+                        <div class="am-tabs-bd">
+                            {{foreach $level_list as $lk=>$level}}
+                                <div data-tab-panel-{{$lk}} class="am-tab-panel {{if $lk eq 0}} am-active{{/if}}">
+                                    <div class="am-form-group am-form-group-refreshing">
+                                        <div class="am-pr">
+                                            <div class="level-payment-item vip-item-{{$lk}} {{if !empty($level['pay_period_rules']) and count($level.pay_period_rules) gt 1}} am-scrollable-horizontal{{/if}}">
+                                                {{if isset($level['is_supported_pay_buy']) and $level.is_supported_pay_buy eq 1 and !empty($level['pay_period_rules']) and is_array($level['pay_period_rules'])}}
+                                                    <ul class="am-slides items vip-list am-flex am-flex-nowarp am-flex-row {{if !empty($level['pay_period_rules']) and count($level.pay_period_rules) eq 1}}only-one{{/if}}">
+                                                        {{foreach $level.pay_period_rules as $rules}}
+                                                            {{if !empty($level['pay_period_rules']) and count($level.pay_period_rules) eq 1}}
+                                                                <li>
+                                                                    <div class="content am-radius-lg" data-value="{{$level.id}}-{{$rules.number}}" data-field="opening">
+                                                                        <div class="am-flex am-flex-row am-flex-justify-between am-flex-items-center">
+                                                                            <div class="only-left">
+                                                                                <p class="number">
+                                                                                    {{if empty($rules['number'])}}
+                                                                                        <span class="value">终身</span>
+                                                                                    {{else /}}
+                                                                                        <span class="value">{{$rules.value}}{{$rules.unit}}VIP</span>
+                                                                                    {{/if}}
+                                                                                </p>
+                                                                                <p class="desc">
+                                                                                    {{if !empty($rules['desc'])}}
+                                                                                        {{$rules.desc}}
+                                                                                    {{/if}}
+                                                                                </p>
+                                                                            </div>
+                                                                            <div class="only-right am-flex-1 am-text-right">
+                                                                                <p class="price">
+                                                                                    <span class="symbol">{{$currency_symbol}}</span>
+                                                                                    <strong class="value" data-price="{{$rules.price}}">{{$rules.price}}</strong>
+                                                                                </p>
+                                                                            </div>
+                                                                        </div>
+                                                                        <i class="iconfont icon-subscript"></i>
+                                                                    </div>
+                                                                </li>
+                                                            {{else/}}
+                                                                <li>
+                                                                    <div class="content am-radius-lg" data-value="{{$level.id}}-{{$rules.number}}" data-field="opening">
+                                                                        <p class="number am-text-center">
+                                                                            {{if empty($rules['number'])}}
+                                                                                <span class="value">终身</span>
+                                                                            {{else /}}
+                                                                                <span class="value">{{$rules.value}}{{$rules.unit}}VIP</span>
+                                                                            {{/if}}
+                                                                        </p>
+                                                                        <p class="price am-text-center">
+                                                                            <span class="symbol">{{$currency_symbol}}<strong class="value" data-price="{{$rules.price}}">{{$rules.price}}</strong></span>
+                                                                        </p>
+                                                                        <p class="bottom-line">
+                                                                            {{if !empty($rules['desc'])}}
+                                                                                {{$rules.desc}}
+                                                                            {{/if}}
+                                                                        </p>
+                                                                        <i class="iconfont icon-subscript"></i>
+                                                                    </div>
+                                                                </li>
+                                                            {{/if}}
+                                                        {{/foreach}}
+                                                    </ul>
+                                                {{else /}}
+                                                    <div class="table-no"><i class="am-icon-warning"></i> 购买时长未配置</div>
+                                                {{/if}}
+                                            </div>
+                                            <div class="level-tabs-right vip-sign am-hide" data-scroll-width=".vip-item-{{$lk}}" data-list-width=".vip-item-{{$lk}} .vip-list li" data-num="1">
+                                                <i class="am-icon-chevron-right"></i>
+                                            </div>
+                                        </div>
+                                        <div class="divider"></div>
+                                        <div class="am-pr">
+                                            <div class="level-payment-item pay-item-{{$lk}} am-scrollable-horizontal">
+                                                {{if !empty($payment_list)}}
+                                                    <ul class="payment-list am-flex am-flex-nowarp am-flex-row am-margin-bottom-main">
+                                                        {{foreach $payment_list as $payment}}
+                                                            <li>
+                                                                <div class="content am-radius-lg" data-value="{{$payment.id}}" data-field="payment_id">
+                                                                    {{if !empty($payment['tips'])}}
+                                                                        <p class="tips">{{$payment.tips}}</p>
+                                                                    {{/if}}
+                                                                    {{if !empty($payment.logo)}}
+                                                                        <img src="{{$payment.logo}}" />
+                                                                    {{/if}}
+                                                                    <span>{{$payment.name}}</span>
+                                                                    <i class="iconfont icon-subscript"></i>
+                                                                </div>
+                                                            </li>
+                                                        {{/foreach}}
+                                                    </ul>
+                                                {{/if}}
+                                                {{if empty($payment_list)}}
+                                                    <div class="table-no"><i class="am-icon-warning"></i> 没有支付方式</div>
+                                                {{/if}}
+                                            </div>
+                                            <div class="level-tabs-right pay-sign am-hide" data-scroll-width=".pay-item-{{$lk}}" data-list-width=".pay-item-{{$lk}} .payment-list li" data-num="1">
+                                                <i class="am-icon-chevron-right"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {{/foreach}}
+                        </div>
+                    </div>
+                {{else /}}
+                    <div class="table-no"><i class="am-icon-warning"></i> 未配置会员等级</div>
+                {{/if}}
+                <div class="am-form-popup-submit am-flex am-flex-justify-right am-flex-items-center">
+                    <input type="hidden" name="opening"  value="" />
+                    <input type="hidden" name="id" value="" />
+                    <input type="hidden" name="payment_id" value="" />
+                    <input type="hidden" name="payment_user_order_no" value="" />
+                    <div class="pay-price am-hide">
+                        <span>付费金额:</span>
+                        <span class="price">{{$currency_symbol}}<strong>628.00</strong></span>
+                    </div>
+                    <button type="submit" class="am-btn am-btn-primary am-btn-lg am-radius-lg btn-loading-example" data-am-loading="{loadingText:'确认支付'}">确认支付</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- 支付方式 -->
+<div class="am-popup am-radius" id="plugins-level-buy-pay-popup">
+    <div class="am-popup-inner">
+        <div class="am-popup-hd">
+            <h4 class="am-popup-title">支付确认</h4>
+            <span data-am-modal-close class="am-close">&times;</span>
+        </div>
+        <div class="am-popup-bd">
+            <form class="am-form form-validation-plugins-level-pay am-form-popup-fixed" action="{{:PluginsHomeUrl('membershiplevelvip', 'buy', 'pay')}}" method="POST" request-type="form">
+                <div class="base am-radius">
+                    <p>开通单号：<span class="order-no">...</span></p>
+                    <p>开通时长：<strong class="value">...</strong> <span class="value-unit am-text-grey am-text-xs">{{:MyLang('day_title')}}</span></p>
+                    <p>付费金额：<strong class="price">...</strong></p>
+                </div>
+                <div class="business-list business-list-nbfc">
+                    {{if !empty($payment_list)}}
+                        <ul class="am-avg-sm-2 am-avg-md-3 am-avg-lg-3 payment-list" data-type="payment">
+                            {{foreach $payment_list as $payment}}
+                                <li class="am-padding-sm payment-document-{{$payment.id}}" data-value="{{$payment.id}}">
+                                    <div class="business-item am-cf am-padding-sm am-radius">
+                                        {{if !empty($payment['tips'])}}
+                                            <p class="tips">{{$payment.tips}}</p>
+                                        {{/if}}
+                                        {{if !empty($payment.logo)}}
+                                            <img src="{{$payment.logo}}" class="am-radius" />
+                                        {{/if}}
+                                        <span>{{$payment.name}}</span>
+                                        <i class="iconfont icon-subscript"></i>
+                                    </div>
+                                </li>
+                            {{/foreach}}
+                        </ul>
+                    {{else /}}
+                        <div class="table-no"><i class="am-icon-warning"></i> 没有支付方式</div>
+                    {{/if}}
+                </div>
+
+                <div class="am-form-popup-submit">
+                    <input type="hidden" name="id" value="" />
+                    <input type="hidden" name="payment_id" value="" />
+                    <button type="button" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg" data-am-modal-close>
+                        <i class="am-icon-paint-brush"></i>
+                        <span>{{:MyLang('cancel_title')}}</span>
+                    </button>
+                    <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('confirm_payment_title')}}'}">
+                        <i class="am-icon-check"></i>
+                        <span>{{:MyLang('confirm_payment_title')}}</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+/**
+ * 支付回调
+ */
+function PluginsLevelBuyBack(e)
+{    
+    // 会员购买页面释放表单
+    $.AMUI.progress.done();
+    $('#plugins-level-buy-open-popup form.am-form').find('button[type="submit"]').button('reset');
+
+    // 成功则调起支付窗口
+    if(e.code == 0)
+    {
+        // 会员购买页面释放表单
+        $('#plugins-level-buy-open-popup').modal('close');
+
+        // 调起支付
+        var $popup = $('#plugins-level-buy-open-popup');
+        $popup.find('input[name="id"]').val(e.data.id);
+        $popup.find('input[name="payment_user_order_no"]').val(e.data.payment_user_order_no);
+        $popup.find('.am-form').attr('action', `{{:PluginsHomeUrl('membershiplevelvip', 'buy', 'pay')}}`);
+        $popup.find('.am-form').attr('request-type', 'form');
+        $popup.find('.am-form').submit();
+    } else {
+        Prompt(e.msg);
+    }
+}
+</script>

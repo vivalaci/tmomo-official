@@ -1,0 +1,9 @@
+<div class="am-form-group">
+    <label>分销等级</label>
+    <select name="plugins_distribution_level" class="am-radius chosen-select" data-placeholder="{{:MyLang('please_select_tips')}}" data-validation-message="请选择分销会员等级">
+        <option value="">{{:MyLang('please_select_tips')}}</option>
+        {{foreach $level_list_data as $v}}
+            <option value="{{$v.id}}" {{if isset($user_data['plugins_distribution_level']) and $user_data['plugins_distribution_level'] eq $v['id']}}selected{{/if}}>{{$v.name}}</option>
+        {{/foreach}}
+    </select>
+</div>

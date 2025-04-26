@@ -1,0 +1,45 @@
+{
+    "base":{
+        "plugins":"homemiddleadv",
+        "name":"首页中间广告",
+        "logo":"\/static\/upload\/images\/plugins_homemiddleadv\/2019\/04\/22\/1555917416820968.jpg",
+        "author":"Devil",
+        "author_url":"https:\/\/shopxo.net\/",
+        "version":"3.2.2",
+        "desc":"首页中间广告，推荐位",
+        "apply_terminal":[
+            "pc",
+            "h5",
+            "ios",
+            "android",
+            "weixin",
+            "alipay",
+            "baidu",
+            "toutiao",
+            "qq"
+        ],
+        "apply_version":[
+            "6.4.0"
+        ],
+        "is_home":false
+    },
+    "hook":{
+        "plugins_common_header":[
+            "app\\plugins\\homemiddleadv\\Hook"
+        ],
+        "plugins_view_home_floor_top":[
+            "app\\plugins\\homemiddleadv\\Hook"
+        ],
+        "plugins_service_base_data_return_api_index_index":[
+            "app\\plugins\\homemiddleadv\\Hook"
+        ]
+    },
+    "history":[
+        {
+            "host":"shopxo.com",
+            "url":"http:\/\/shopxo.com\/",
+            "ip":"127.0.0.1",
+            "time":"2024-12-22 12:17:22"
+        }
+    ]
+}

@@ -1,0 +1,64 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- header top nav -->
+{{:ModuleInclude('public/header_top_nav')}}
+
+<!-- search -->
+{{:ModuleInclude('public/nav_search')}}
+
+<!-- header nav -->
+{{:ModuleInclude('public/header_nav')}}
+
+<!-- goods category -->
+{{:ModuleInclude('public/goods_category')}}
+
+<!-- content start -->
+<div class="am-g am-container plugins-brand">
+    <!-- nav -->
+    {{if !empty($brand_category_list)}}
+        <div class="am-radius am-background-white am-padding-main brand-sticky" data-am-sticky="{animation: 'slide-top'}">
+            <div class="am-slider am-slider-default am-slider-carousel title-slider" data-am-flexslider="{itemWidth: {{if IsMobile()}}80{{else /}}108{{/if}}, itemMargin: 5, slideshow: false,controlNav:false}">
+                <ul class="am-slides brand-nav am-flex am-flex-row am-flex-items-center am-flex-nowarp am-text-nowrap">
+                    {{foreach $brand_category_list as $k=>$v}}
+                        <li class="{{if $k eq 0}}am-active{{/if}}">
+                            <div class="brand-item am-flex am-flex-col am-flex-justify-center am-flex-items-center" data-value="{{$v.id}}">
+                                {{if !empty($v['icon'])}}
+                                    <a class="am-margin-bottom-xs" style="background-image: url({{if empty($v['icon'])}}{{$v.icon}}{{else /}}{{$v.icon}}{{/if}})" alt="{{$v.name}}"></a>
+                                {{/if}}
+                                <p>{{$v.name}}</p>
+                            </div>
+                        </li>
+                    {{/foreach}}
+                </ul>
+            </div>
+        </div>
+    {{/if}}
+
+    <!-- list -->
+    {{if !empty($brand_list)}}
+        <div class="data-list am-margin-vertical-module-half">
+            <ul class="am-flex am-flex-row am-flex-warp am-flex-items-center">
+                {{foreach $brand_list as $v}}
+                    <li class="b-c-{{:implode(' b-c-', $v['brand_category_ids'])}}">
+                        <div class="am-background-white am-radius am-text-center">
+                            <a href="{{:MyUrl('index/search/index', ['brand'=>$v['id']])}}" target="_blank" class="am-block am-padding-sm am-pr">
+                                <img src="{{$v.logo}}" alt="{{$v.name}}" />
+                                <h3 class="am-gallery-title am-text-center am-padding-vertical-sm">{{$v.name}}</h3>
+                                {{if !empty($v.describe)}}
+                                    <div class="am-gallery-desc">{{$v.describe}}</div>
+                                {{/if}}
+                            </a>
+                        </div>
+                    </li>
+                {{/foreach}}
+            </ul>
+        </div>
+    {{/if}}
+    <div class="brand-bot-data am-hide">
+        {{:ModuleInclude('public/not_data')}}
+    </div>
+</div>
+<!-- content end -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

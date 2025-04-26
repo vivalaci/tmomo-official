@@ -1,0 +1,15 @@
+{{if empty($user_level)}}
+    <div class="am-margin-bottom-sm">
+        <span class="am-text-warning">
+            {{if empty($plugins_config['non_conformity_desc'])}}
+                暂时还不符合加入分销条件
+            {{else /}}
+                {{:implode('<br />', $plugins_config['non_conformity_desc'])}}
+            {{/if}}
+        </span>
+        <a href="{{$Think.__MY_URL__}}" class="am-margin-left-xs am-text-primary">去首页逛逛 >></a>
+        {{if (!isset($plugins_config['is_show_introduce']) or $plugins_config['is_show_introduce'] eq 1) and (!isset($plugins_control) or $plugins_control neq 'introduce')}}
+            <a href="{{:PluginsHomeUrl('distribution', 'introduce', 'index')}}" class="am-margin-left am-text-primary">等级介绍 >></a>
+        {{/if}}
+    </div>
+{{/if}}

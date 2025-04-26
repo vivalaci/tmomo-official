@@ -1,0 +1,84 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- content start -->
+<div class="popup-pure-page right-content am-padding-main">
+    <!-- nav -->
+    {{:ModuleInclude('public/plugins_admin_nav', [
+        'plugins'   => 'distribution',
+        'nav_data'  => [
+            [
+                'name'       => '佣金订单',
+                'plugins'    => 'distribution',
+                'control'    => 'shopprofit',
+                'action'     => 'index',
+                'is_active'  => 0,
+            ],
+            [
+                'name'       => '返佣配置',
+                'plugins'    => 'distribution',
+                'control'    => 'shoplevel',
+                'action'     => 'index',
+                'is_active'  => 1,
+            ],
+        ],
+    ])}}
+
+    <form class="am-form am-form-popup-fixed">
+        {{if empty($level_data['level'])}}
+            <div class="table-no am-margin-bottom-lg"><i class="am-icon-warning"></i> 没有分销等级数据</div>
+        {{else /}}
+            <div class="am-margin-bottom-lg">
+                <strong>启用分销</strong>
+                <span class="am-margin-left-sm">{{if !empty($level_data['data']) and isset($level_data['data']['is_enable']) and $level_data['data']['is_enable'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}</span>
+            </div>
+            {{foreach $level_data.level as $v}}
+                <div class="am-flex am-flex-col am-gap-1 am-margin-bottom-lg">
+                    <h3 class="am-panel-title">
+                        {{if !empty($v['images_url'])}}
+                            <img src="{{$v.images_url}}" width="20" height="20" class="am-margin-right-xs" />
+                        {{/if}}
+                        <span>{{$v.name}}</span>
+                    </h3>
+                    <div class="am-padding-vertical-xs">
+                        <table class="am-table am-margin-bottom-0">
+                            <tr>
+                                <th width="150">向上返佣比例（1~3级）</th>
+                                <td>
+                                    <span class="am-badge am-badge-primary am-radius am-margin-bottom-xs">一级 {{$v.level_rate_one}}%</span>
+                                    <span class="am-badge am-badge-secondary am-radius am-margin-bottom-xs">二级 {{$v.level_rate_two}}%</span>
+                                    <span class="am-badge am-badge-success am-radius">三级 {{$v.level_rate_three}}%</span>
+                                </td>
+                            </tr>
+                            {{if isset($plugins_config['is_profit_down_return_shop']) and $plugins_config['is_profit_down_return_shop'] eq 1}}
+                                <tr>
+                                    <th width="150">向下返佣比例</th>
+                                    <td>
+                                        <span class="am-badge am-badge-warning am-radius">{{$v.down_return_rate}}%</span>
+                                    </td>
+                                </tr>
+                            {{/if}}
+                            {{if isset($plugins_config['is_profit_self_buy_shop']) and $plugins_config['is_profit_self_buy_shop'] eq 1}}
+                                <tr>
+                                    <th width="150">内购返佣比例</th>
+                                    <td>
+                                        <span class="am-badge am-badge-warning am-radius">{{$v.self_buy_rate}}%</span>
+                                    </td>
+                                </tr>
+                            {{/if}}
+                        </table>
+                    </div>
+                </div>
+            {{/foreach}}
+        {{/if}}
+        <div class="am-form-popup-submit am-text-left">
+            <a href="{{:PluginsHomeUrl('distribution', 'shoplevel', 'saveinfo')}}" class="am-btn am-btn-primary am-btn-xs am-radius">
+                <i class="am-icon-edit am-show-sm-only"></i>
+                <span>编辑返佣配置</span>
+            </a>
+        </div>
+    </form>
+</div>
+<!-- content end -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

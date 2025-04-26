@@ -1,0 +1,57 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        {{if !empty($goods_data)}}
+            <!-- form start -->
+            <form class="am-form form-validation am-form-full-screen am-form-popup-fixed" action="{{:PluginsAdminUrl('intellectstools', 'goods', 'notesave')}}" method="POST" request-type="ajax-reload" request-value="parent">
+                <div class="am-margin-bottom">
+                    <div class="am-nbfc">
+                        <a href="{{$goods_data.goods_url}}" target="_blank">
+                            <img src="{{$goods_data.images}}" class="am-img-thumbnail am-radius am-margin-right-sm am-fl" width="60" height="60" />
+                            <span class="am-nowrap-initial">{{$goods_data.title}}</span>
+                        </a>
+                        {{if !empty($goods_data['simple_desc'])}}
+                            <p class="am-text-danger am-nowrap-initial">{{$goods_data.simple_desc}}</p>
+                        {{/if}}
+                    </div>
+                    <p class="am-margin-top-xs"><span>{{$currency_symbol}}</span><strong>{{$goods_data.price}}</strong></p>
+                </div>
+
+                <div class="am-form-group">
+                    <label class="am-block">备注信息</label>
+                    <textarea rows="6" name="content" class="am-radius" placeholder="备注信息" data-validation-message="请填写备注信息">{{if !empty($note_data['content'])}}{{$note_data.content}}{{/if}}</textarea>
+                </div>
+
+                {{if !empty($note_data)}}
+                    <div class="am-color-grey am-text-xs">
+                        <p>添加时间 {{$note_data.add_time}}</p>
+                        {{if !empty($note_data['upd_time'])}}
+                            <p class="am-margin-top-sm">更新时间 {{$note_data.upd_time}}</p>
+                        {{/if}}
+                    </div>
+                {{/if}}
+
+                <div class="am-form-popup-submit">
+                    <input type="hidden" name="id" value="{{$goods_data.id}}" />
+                    <button type="button" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg" data-am-modal-close>
+                        <i class="am-icon-paint-brush"></i>
+                        <span>{{:MyLang('cancel_title')}}</span>
+                    </button>
+                    <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('save_title')}}'}">
+                        <i class="am-icon-save"></i>
+                        <span>{{:MyLang('save_title')}}</span>
+                    </button>
+                </div>
+            </form>
+            <!-- form end -->
+        {{else /}}
+            {{:ModuleInclude('public/not_data', ['msg'=>MyLang('goods_info_incorrect_tips')])}}
+        {{/if}}
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

@@ -1,0 +1,54 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'sms',
+            'title'     => '短信',
+        ])}}
+
+        <div class="sms-content">
+            <!-- 基础配置 -->
+            <div class="am-panel am-panel-default am-radius sms-content-base">
+                <div class="am-panel-hd">
+                    <span class="am-panel-title">{{:MyLang('base_config_title')}}</span>
+                    <a class="am-margin-left-lg" href="{{:PluginsAdminUrl('sms', 'admin', 'saveinfo')}}">
+                        <i class="am-icon-edit"></i>
+                        <span>{{:MyLang('edit_title')}}</span>
+                    </a>
+                </div>
+                <div class="am-panel-bd">
+                    <p class="am-color-red am-margin-bottom-sm am-text-sm am-animation-shake am-animation-delay-1">注意：系统默认支持阿里云短信、如使用阿里云短信则不需要使用当前插件。</p>
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('backstage_admin.is_sms_open')}}</label>
+                                <div>
+                                    {{if isset($data['is_sms_open']) and $data['is_sms_open'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('backstage_admin.platform')}}</label>
+                                <div>
+                                    {{if !empty($sms_platform_list) and !empty($data['platform']) and isset($sms_platform_list[$data['platform']])}}
+                                        {{$sms_platform_list[$data['platform']]}}
+                                    {{else /}}
+                                        <span class="am-text-grey">{{:MyLang('no_setup_tips')}}</span>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer -->
+{{:ModuleInclude('public/footer')}}

@@ -1,0 +1,178 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content distribution-content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'distribution',
+            'nav_data'  => $plugins_nav_menu_list,
+        ])}}
+
+        <!-- form start -->
+        <form class="am-form form-validation am-form-full-screen am-form-popup-sticky" action="{{:PluginsAdminUrl('distribution', 'poster', 'save')}}" method="POST" request-type="ajax-url" request-value="{{:PluginsAdminUrl('distribution', 'poster', 'index')}}" enctype="multipart/form-data">
+            <div class="am-alert" data-am-alert>
+                <p>可拖动头像、二维码、昵称调整位置，如修改</p>
+                <p>修改后如需生效，请清除用户已生成的海报<button type="button" class="am-btn am-btn-danger am-radius am-btn-xs am-margin-left-xs submit-ajax" data-url="{{:PluginsAdminUrl('distribution', 'poster', 'delete')}}" data-id="1">清除海报</button></p>
+            </div>
+
+            <div class="am-cf">
+                <!-- 左侧海报 -->
+                <div class="poster-images am-fl am-margin-bottom-sm">
+                    <img src="{{if empty($data['backdrop'])}}{{:StaticAttachmentUrl('default-backdrop.png')}}{{else /}}{{$data.backdrop}}{{/if}}" class="backdrop" data-form-name="backdrop" data-dialog-type="images" data-is-attr="src" />
+                    <img src="{{:StaticAttachmentUrl('default-user-avatar-md.png')}}" class="tdrag avatar {{if !empty($data['avatar_border_style'])}}{{$distribution_border_style_list[$data['avatar_border_style']]['class']}}{{else /}}am-circle{{/if}}" 
+                    style="
+                        {{if !empty($data['avatar_width'])}}width:{{$data['avatar_width']}}px;{{/if}}
+                        {{if isset($data['avatar_top'])}}top:{{$data['avatar_top']}}px;{{/if}}
+                        {{if isset($data['avatar_left'])}}left:{{$data['avatar_left']}}px;{{/if}}
+                    " />
+
+                    <p class="tdrag userinfo am-text-sm"
+                    style="
+                        {{if !empty($data['userinfo_size'])}}font-size:{{$data.userinfo_size}}px;{{/if}}
+                        {{if !empty($data['userinfo_color'])}}color:{{$data.userinfo_color}};{{/if}}
+                        {{if isset($data['userinfo_top'])}}top:{{$data['userinfo_top']}}px;{{/if}}
+                        {{if isset($data['userinfo_left'])}}left:{{$data['userinfo_left']}}px;{{/if}}
+                    ">用户信息</p>
+
+                    <img src="{{:StaticAttachmentUrl('default-qrcode.png')}}" class="tdrag qrcode {{if !empty($data['qrcode_border_style'])}}{{$distribution_border_style_list[$data['qrcode_border_style']]['class']}}{{/if}}" 
+                    style="
+                        {{if !empty($data['qrcode_width'])}}width:{{$data['qrcode_width']}}px;{{/if}}
+                        {{if isset($data['qrcode_top'])}}top:{{$data['qrcode_top']}}px;{{/if}}
+                        {{if isset($data['qrcode_left'])}}left:{{$data['qrcode_left']}}px;{{/if}}
+                    " />
+                </div>
+
+                <!-- 右侧表单 -->
+                <div class="poster-right am-fr" data-border-style='{{:json_encode(array_column($distribution_border_style_list, "class"))}}'>
+                    <div class="am-panel am-panel-default am-radius am-margin-bottom-0">
+                        <div class="am-panel-bd am-cf">
+                            <div class="am-u-sm-12">
+                                <div class="am-form-group">
+                                    <input type="hidden" name="backdrop" value="{{if empty($data['backdrop'])}}{{:StaticAttachmentUrl('default-backdrop.png')}}{{else /}}{{$data.backdrop}}{{/if}}" />
+                                    <div class="am-cf">
+                                        <label class="am-block">海报背景图<span class="am-form-group-label-tips">宽大于(等于)750像素，高大于(等于)1200px</span><span class="am-form-group-label-tips-must" 
+                                            >图片需要使用jpg格式</span></label>
+                                        <div class="plug-file-upload-submit" data-view-tag=".poster-images .backdrop">
+                                            <i class="iconfont icon-upload-add"></i>
+                                        </div>
+                                        <a href="javascript:;" class="am-btn-link am-margin-left-xs poster-recovery-default" data-default-poster="{{:StaticAttachmentUrl('default-backdrop.png')}}">恢复默认海报</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="am-panel am-panel-default am-radius am-margin-bottom-0">
+                        <div class="am-panel-bd am-cf">
+                            <div class="am-u-sm-12 am-u-md-6">
+                                <div class="am-form-group">
+                                    <label>头像宽度<span class="am-form-group-label-tips">最小30，最大300，默认30，单位px</span></label>
+                                    <input type="hidden" name="avatar_top" value="{{if empty($data['avatar_top'])}}12{{else /}}{{$data.avatar_top}}{{/if}}" />
+                                    <input type="hidden" name="avatar_left" value="{{if empty($data['avatar_left'])}}119{{else /}}{{$data.avatar_left}}{{/if}}" />
+                                    <input type="number" name="avatar_width" placeholder="头像宽度" min="30" max="300" data-validation-message="头像宽度尺寸 30~300 之间" class="am-radius" value="{{if !empty($data['avatar_width'])}}{{$data.avatar_width}}{{else /}}30{{/if}}" />
+                                </div>
+                            </div>
+                            <div class="am-u-sm-12 am-u-md-6">
+                                <div class="am-form-group">
+                                    <label>头像样式<span class="am-form-group-label-tips">默认 圆形</span></label>
+                                    <div class="am-radio-group">
+                                        {{foreach $distribution_border_style_list as $v}}
+                                            <label class="am-radio-inline">
+                                                <input type="radio" name="avatar_border_style" value="{{$v.value}}" {{if isset($data['avatar_border_style']) and $data['avatar_border_style'] eq $v['value']}}checked="checked"{{else /}}{{if !isset($data['avatar_border_style']) and $v['value'] eq 2}}checked="checked"{{/if}}{{/if}} data-am-ucheck /> {{$v.name}}
+                                            </label>
+                                        {{/foreach}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="am-panel am-panel-default am-radius am-margin-bottom-0">
+                        <div class="am-panel-bd am-cf">
+                            <div class="am-u-sm-12 am-u-md-6">
+                                <div class="am-form-group">
+                                    <label>二维码宽度<span class="am-form-group-label-tips">最小30，最大300，默认 100，单位px</span></label>
+                                    <input type="hidden" name="qrcode_top" value="{{if empty($data['qrcode_top'])}}100{{else /}}{{$data.qrcode_top}}{{/if}}" />
+                                    <input type="hidden" name="qrcode_left" value="{{if empty($data['qrcode_left'])}}99{{else /}}{{$data.qrcode_left}}{{/if}}" />
+                                    <input type="number" name="qrcode_width" placeholder="二维码宽度" min="30" max="300" data-validation-message="二维码宽度尺寸 30~300 之间" class="am-radius" value="{{if !empty($data['qrcode_width'])}}{{$data.qrcode_width}}{{else /}}100{{/if}}" />
+                                </div>
+                            </div>
+                            <div class="am-u-sm-12 am-u-md-6">
+                                <div class="am-form-group">
+                                    <label>二维码样式<span class="am-form-group-label-tips">默认 正方形</span></label>
+                                    <div class="am-radio-group">
+                                        {{foreach $distribution_border_style_list as $v}}
+                                            <label class="am-radio-inline">
+                                                <input type="radio" name="qrcode_border_style" value="{{$v.value}}" {{if isset($data['qrcode_border_style']) and $data['qrcode_border_style'] eq $v['value']}}checked="checked"{{else /}}{{if !isset($data['qrcode_border_style']) and $v['value'] eq 0}}checked="checked"{{/if}}{{/if}} data-am-ucheck /> {{$v.name}}
+                                            </label>
+                                        {{/foreach}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="am-panel am-panel-default am-radius am-margin-bottom-0">
+                        <div class="am-panel-bd am-cf">
+                            <div class="am-u-sm-12 am-u-md-6">
+                                <div class="am-form-group">
+                                    <label>用户信息<span class="am-form-group-label-tips">默认 昵称</span></label>
+                                    <div class="am-radio-group">
+                                        {{foreach $distribution_userinfo_list as $v}}
+                                            <label class="am-radio-inline">
+                                                <input type="radio" name="userinfo_type" value="{{$v.value}}" {{if isset($data['userinfo_type']) and $data['userinfo_type'] eq $v['value']}}checked="checked"{{else /}}{{if !isset($data['userinfo_type']) and $v['value'] eq 0}}checked="checked"{{/if}}{{/if}} data-am-ucheck /> {{$v.name}}
+                                            </label>
+                                        {{/foreach}}
+                                    </div>
+                                    <div class="am-margin-top-lg">
+                                        <label>用户字体大小<span class="am-form-group-label-tips">默认 14px</span></label>
+                                        <div class="am-margin-top-xs">
+                                            <input type="number" name="userinfo_size" placeholder="用户字体大小" min="0" max="80" data-validation-message="用户字体大小最大 80" class="am-radius" value="{{if !empty($data['userinfo_size'])}}{{$data.userinfo_size}}{{else /}}14{{/if}}" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="am-u-sm-12 am-u-md-6">
+                                <div class="am-form-group">
+                                    <label>用户颜色<span class="am-form-group-label-tips">默认 黑色</span></label>
+                                    <div class="am-margin-top-sm">
+                                        <div class="colorpicker-container">
+                                            <input type="hidden" name="userinfo_top" value="{{if empty($data['userinfo_top'])}}77{{else /}}{{$data.userinfo_top}}{{/if}}" />
+                                            <input type="hidden" name="userinfo_left" value="{{if empty($data['userinfo_left'])}}113{{else /}}{{$data.userinfo_left}}{{/if}}" />
+                                            <input type="hidden" name="userinfo_color" value="{{if !empty($data['userinfo_color'])}}{{$data.userinfo_color}}{{/if}}" />
+                                            <div class="colorpicker-submit" data-color="{{if !empty($data['userinfo_color'])}}{{$data.userinfo_color}}{{/if}}" data-color-tag="input[name='userinfo_color']" data-color-style="background-color"></div>
+                                            <img class="imitate-colorpicker-submit" src="{{:StaticAttachmentUrl('colorpicker.png')}}" width="24" height="24" />
+                                        </div>
+                                    </div>
+                                    <div class="am-margin-top-lg">
+                                        <label>用户自动居中</label>
+                                        <div class="am-radio-group am-flex-items-center">
+                                            {{foreach $distribution_is_enable_list as $v}}
+                                                <label class="am-radio-inline">
+                                                    <input type="radio" name="userinfo_auto_center" value="{{$v.value}}" {{if isset($data['userinfo_auto_center']) and $data['userinfo_auto_center'] eq $v['value']}}checked="checked"{{else /}}{{if !isset($data['userinfo_auto_center']) and isset($v['checked']) and $v['checked'] eq true}}checked="checked"{{/if}}{{/if}} data-am-ucheck /> {{$v.name}}
+                                                </label>
+                                            {{/foreach}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="am-form-popup-submit">
+                <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('save_title')}}'}">
+                    <i class="am-icon-save"></i>
+                    <span>{{:MyLang('save_title')}}</span>
+                </button>
+            </div>
+        </form>
+        <!-- form end -->
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

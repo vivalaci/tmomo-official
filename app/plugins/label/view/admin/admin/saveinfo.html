@@ -1,0 +1,120 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'label',
+            'title'     => MyLang('base_config_title'),
+            'back_url'  => PluginsAdminUrl('label', 'admin', 'index'),
+        ])}}
+
+        <!-- form start -->
+        <form class="am-form form-validation am-form-full-screen am-form-popup-sticky" action="{{:PluginsAdminUrl('label', 'admin', 'save')}}" method="POST" request-type="ajax-url" request-value="{{:PluginsAdminUrl('label', 'admin', 'index')}}" enctype="multipart/form-data">
+            <!-- 标签配置 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">标签配置</h3>
+                </div>
+                <div class="am-panel-bd am-padding-vertical-xs">
+                    <div class="am-form-group">
+                        <label class="am-block">后台用户管理列表（关联标签）<span class="am-form-group-label-tips">默认否</span></label>
+                        <input name="is_admin_user_label" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_admin_user_label']) and $data['is_admin_user_label'] eq 1}}checked="true"{{/if}} />
+                    </div>
+                    <div class="am-form-group">
+                        <label class="am-block">后台商品管理列表（关联标签）<span class="am-form-group-label-tips">默认否</span></label>
+                        <input name="is_admin_goods_label" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_admin_goods_label']) and $data['is_admin_goods_label'] eq 1}}checked="true"{{/if}} />
+                    </div>
+                    <div class="am-form-group">
+                        <label class="am-block">后台订单管理列表（展示用户标签）<span class="am-form-group-label-tips">默认否</span></label>
+                        <input name="is_admin_order_user_label" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_admin_order_user_label']) and $data['is_admin_order_user_label'] eq 1}}checked="true"{{/if}} />
+                    </div>
+                    
+                    <div class="am-form-group">
+                        <label>商品展示标签位置<span class="am-form-group-label-tips">默认 上居左</span></label>
+                        <div class="am-margin-top-sm">
+                            {{if !empty($label_style_list)}}
+                                {{foreach $label_style_list as $k=>$v}}
+                                <label class="am-radio-inline am-margin-right-sm">
+                                    <input type="radio" name="user_goods_show_style" value="{{$k}}" {{if (isset($data['user_goods_show_style']) and $data['user_goods_show_style'] eq $k) or (!isset($data['user_goods_show_style']) and $k eq 'top-left')}}checked="checked"{{/if}} data-am-ucheck /> {{$v}}
+                                </label>
+                                {{/foreach}}
+                            {{/if}}
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label class="am-block">采用图标展示<span class="am-form-group-label-tips">默认否、开启后未配置图标的标签将不会展示</span></label>
+                        <input name="is_user_goods_label_icon" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_user_goods_label_icon']) and $data['is_user_goods_label_icon'] eq 1}}checked="true"{{/if}} />
+                    </div>
+                    <div class="am-form-group">
+                        <label class="am-block">商品展示标签开启标签入口<span class="am-form-group-label-tips">默认否，可点击标签进入标签详情页</span></label>
+                        <input name="is_user_goods_label_url" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_user_goods_label_url']) and $data['is_user_goods_label_url'] eq 1}}checked="true"{{/if}} />
+                    </div>
+                    <div class="am-form-group">
+                        <label class="am-block">首页商品展示标签<span class="am-form-group-label-tips">默认否</span></label>
+                        <input name="is_user_goods_home_label" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_user_goods_home_label']) and $data['is_user_goods_home_label'] eq 1}}checked="true"{{/if}} />
+                    </div>
+                    <div class="am-form-group">
+                        <label class="am-block">搜索页商品展示标签<span class="am-form-group-label-tips">默认否</span></label>
+                        <input name="is_user_goods_search_label" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_user_goods_search_label']) and $data['is_user_goods_search_label'] eq 1}}checked="true"{{/if}} />
+                    </div>
+                    <div class="am-form-group">
+                        <label class="am-block">分类页商品展示标签<span class="am-form-group-label-tips">默认否</span></label>
+                        <input name="is_user_goods_category_label" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_user_goods_category_label']) and $data['is_user_goods_category_label'] eq 1}}checked="true"{{/if}} />
+                    </div>
+                </div>
+            </div>
+
+            <!-- web端配置 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">web端配置</h3>
+                </div>
+                <div class="am-panel-bd am-padding-vertical-xs">
+                    <div class="am-form-group">
+                        <label class="am-block">商品详情页相册展示标签<span class="am-form-group-label-tips">默认否</span></label>
+                        <input name="is_user_goods_detail_photo_label" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_user_goods_detail_photo_label']) and $data['is_user_goods_detail_photo_label'] eq 1}}checked="true"{{/if}} />
+                    </div>
+                    <div class="am-form-group">
+                        <label class="am-block">商品详情页标题展示标签<span class="am-form-group-label-tips">默认否，该位置使用标签名称、不受图标展示影响</span></label>
+                        <input name="is_user_goods_detail_title_label" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_user_goods_detail_title_label']) and $data['is_user_goods_detail_title_label'] eq 1}}checked="true"{{/if}} />
+                    </div>
+                </div>
+            </div>
+
+            <!-- 手机端配置 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">手机端配置</h3>
+                </div>
+                <div class="am-panel-bd am-padding-vertical-xs">
+                    <div class="am-form-group">
+                        <label class="am-block">商品详情页相册展示标签<span class="am-form-group-label-tips">默认否</span></label>
+                        <input name="is_app_user_goods_detail_photo_label" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_app_user_goods_detail_photo_label']) and $data['is_app_user_goods_detail_photo_label'] eq 1}}checked="true"{{/if}} />
+                    </div>
+                    <div class="am-form-group">
+                        <label class="am-block">商品详情页标题展示标签<span class="am-form-group-label-tips">默认否，该位置使用标签名称、不受图标展示影响</span></label>
+                        <input name="is_app_user_goods_detail_title_label" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_app_user_goods_detail_title_label']) and $data['is_app_user_goods_detail_title_label'] eq 1}}checked="true"{{/if}} />
+                    </div>
+                </div>
+            </div>
+
+            <div class="am-form-popup-submit">
+                <a href="{{:PluginsAdminUrl('label', 'admin', 'index', $params)}}" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg">
+                    <i class="am-icon-mail-reply"></i>
+                    <span>{{:MyLang('retreat_title')}}</span>
+                </a>
+                <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('save_title')}}'}">
+                    <i class="am-icon-save"></i>
+                    <span>{{:MyLang('save_title')}}</span>
+                </button>
+            </div>
+        </form>
+        <!-- form end -->
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

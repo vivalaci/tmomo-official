@@ -1,0 +1,728 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'intellectstools',
+            'nav_data'  => $plugins_nav_menu_list,
+        ])}}
+
+        <div class="intellectstools-content">
+            <!-- 基础配置 -->
+            <div class="am-panel am-panel-default am-radius intellectstools-content-base">
+                <div class="am-panel-hd">
+                    <span class="am-panel-title">{{:MyLang('base_config_title')}}</span>
+                    <a class="am-margin-left-lg" href="{{:PluginsAdminUrl('intellectstools', 'admin', 'saveinfo')}}">
+                        <i class="am-icon-edit"></i>
+                        <span>{{:MyLang('edit_title')}}</span>
+                    </a>
+                </div>
+                <div class="am-panel-bd">
+                    <h3 class="am-margin-top-sm am-margin-bottom-0 am-padding-left-xs">基础配置</h3>
+                    <hr class="am-margin-top-xs am-margin-bottom-sm" />
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>图片高度固定（web端）</label>
+                                <div>
+                                    {{if isset($data['is_images_height_fixed']) and $data['is_images_height_fixed'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <h3 class="am-margin-top-lg am-margin-bottom-0 am-padding-left-xs">购物车</h3>
+                    <hr class="am-margin-top-xs am-margin-bottom-sm" />
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>搜索右侧展示购物车（PC端）</label>
+                                <div>
+                                    {{if isset($data['is_search_right_cart']) and $data['is_search_right_cart'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>去除顶部小导航右侧购物车（PC端）</label>
+                                <div>
+                                    {{if isset($data['is_del_nav_top_right_cart']) and $data['is_del_nav_top_right_cart'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>购物车展示优惠明细（手机端）</label>
+                                <div>
+                                    {{if isset($data['is_cart_show_discount']) and $data['is_cart_show_discount'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>订单确认页面商品底部说明</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if !empty($data['cart_view_bottom_desc'])}}
+                                        {{:implode('<br />', $data['cart_view_bottom_desc'])}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}，不展示
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <h3 class="am-margin-top-lg am-margin-bottom-0 am-padding-left-xs">用户相关</h3>
+                    <hr class="am-margin-top-xs am-margin-bottom-sm" />
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>强制用户登录（WEB端）</label>
+                                <div>
+                                    {{if isset($data['is_user_force_login']) and $data['is_user_force_login'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>后台用户列表登入用户</label>
+                                <div>
+                                    {{if isset($data['is_admin_user_login']) and $data['is_admin_user_login'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>用户管理列表（备注）</label>
+                                <div>
+                                    {{if isset($data['is_user_note']) and $data['is_user_note'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <h3 class="am-margin-top-lg am-margin-bottom-0 am-padding-left-xs">订单相关</h3>
+                    <hr class="am-margin-top-xs am-margin-bottom-sm" />
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>订单管理列表（修改）</label>
+                                <div>
+                                    {{if isset($data['is_admin_order_operate_edit']) and $data['is_admin_order_operate_edit'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                    {{if isset($data['is_admin_order_operate_edit_shop']) and $data['is_admin_order_operate_edit_shop'] eq 1}}
+                                        <span class="am-badge am-badge-success am-radius am-margin-left-xs">支持多商户</span>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>订单管理列表（备注）</label>
+                                <div>
+                                    {{if isset($data['is_order_note']) and $data['is_order_note'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                    {{if isset($data['is_order_note_shop']) and $data['is_order_note_shop'] eq 1}}
+                                        <span class="am-badge am-badge-success am-radius am-margin-left-xs">支持多商户</span>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>用户订单查看（备注）（web端）</label>
+                                <div>
+                                    {{if isset($data['is_order_note_user']) and $data['is_order_note_user'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                    {{if !empty($data['order_note_user_name'])}}
+                                        <span class="am-margin-left-xs">，自定义名称：</span><span class="am-badge am-badge-success am-radius">{{$data.order_note_user_name}}</span>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>订单管理列表（售后退款/退货）</label>
+                                <div>
+                                    {{if isset($data['is_order_aftersale']) and $data['is_order_aftersale'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>用户订单管理列表展示回购</label>
+                                <div>
+                                    {{if isset($data['is_index_order_buy_again']) and $data['is_index_order_buy_again'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                    {{if isset($data['is_index_order_buy_again_buy']) and $data['is_index_order_buy_again_buy'] eq 1}}
+                                        <span class="am-badge am-badge-success am-radius am-margin-left-xs">直接购买</span>
+                                    {{/if}}
+                                    {{if isset($data['is_index_order_buy_again_cart']) and $data['is_index_order_buy_again_cart'] eq 1}}
+                                        <span class="am-badge am-badge-success am-radius am-margin-left-xs">放入购物车</span>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>用户订单列表和详情支付限定</label>
+                                <div>
+                                    {{if isset($data['is_order_pay_only_can_buy_payment']) and $data['is_order_pay_only_can_buy_payment'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>下单确认页面留言快捷选择</label>
+                                <div>
+                                    {{if isset($data['is_buy_user_note_fast_choice']) and $data['is_buy_user_note_fast_choice'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>下单确认页面留言快捷选择数据</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if empty($data['buy_user_note_fast_choice_data'])}}
+                                        <p class="am-text-grey">{{:MyLang('no_setup_tips')}}</p>
+                                    {{else /}}
+                                        <p>{{:MyLang('already_setup_tips')}}[ {{:implode(',', $data['buy_user_note_fast_choice_data'])}} ]</p>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>订单仅保留数据</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if isset($data['is_order_data_keep_only']) and $data['is_order_data_keep_only'] eq 1}}
+                                        <a href="{{:PluginsHomeUrl('intellectstools', 'crontab', 'orderdelete')}}" target="_blank" class="am-fr">定时脚本地址 <i class="am-icon-external-link"></i></a>
+                                        <span>{{:MyLang('yes_title')}}</span>
+                                        {{if !empty($data['order_data_keep_only_number'])}}
+                                            <span class="am-margin-left-sm">仅保留{{$data.order_data_keep_only_number}}条</span>
+                                        {{/if}}
+                                        {{if empty($data['order_data_keep_only_order_status'])}}
+                                            <p class="am-text-grey">全部订单状态</p>
+                                        {{else /}}
+                                            <p>
+                                                {{foreach :MyConst('common_order_status') as $v}}
+                                                    {{if in_array($v['id'], $data['order_data_keep_only_order_status'])}}
+                                                        <span class="am-margin-right-sm">{{$v.name}}</span>
+                                                    {{/if}}
+                                                {{/foreach}}
+                                            </p>
+                                        {{/if}}
+                                    {{else /}}
+                                        {{:MyLang('no_title')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>订单确认页面商品底部说明</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if !empty($data['buy_view_goods_bottom_desc'])}}
+                                        {{:implode('<br />', $data['buy_view_goods_bottom_desc'])}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}，不展示
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <h3 class="am-margin-top-lg am-margin-bottom-0 am-padding-left-xs">订单售后</h3>
+                    <hr class="am-margin-top-xs am-margin-bottom-sm" />
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>订单售后页面客服信息展示</label>
+                                <div>
+                                    {{if isset($data['is_order_aftersale_service_show']) and $data['is_order_aftersale_service_show'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                    {{if isset($data['is_order_aftersale_service_show_shop']) and $data['is_order_aftersale_service_show_shop'] eq 1}}
+                                        <span class="am-badge am-badge-success am-radius am-margin-left-xs">支持多商户</span>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>客服提示信息</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if empty($data['order_aftersale_service_msg'])}}
+                                        <p class="am-text-grey">{{:MyLang('no_setup_tips')}}</p>
+                                    {{else /}}
+                                        <p>{{:MyLang('already_setup_tips')}}[ {{$data.order_aftersale_service_msg}} ]</p>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>在线客服</label>
+                                <div>
+                                    {{if isset($data['is_order_aftersale_service_chat']) and $data['is_order_aftersale_service_chat'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>QQ客服</label>
+                                <div>
+                                    {{if empty($data['order_aftersale_service_qq'])}}
+                                        <p class="am-text-grey">{{:MyLang('no_setup_tips')}}</p>
+                                    {{else /}}
+                                        <p>{{:MyLang('already_setup_tips')}}[ {{$data.order_aftersale_service_qq}} ]</p>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>电话客服</label>
+                                <div>
+                                    {{if empty($data['order_aftersale_service_tel'])}}
+                                        <p class="am-text-grey">{{:MyLang('no_setup_tips')}}</p>
+                                    {{else /}}
+                                        <p>{{:MyLang('already_setup_tips')}}[ {{$data.order_aftersale_service_tel}} ]</p>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>微信客服</label>
+                                <div>
+                                    {{if empty($data['order_aftersale_service_weixin'])}}
+                                        <p class="am-text-grey">{{:MyLang('no_setup_tips')}}</p>
+                                    {{else /}}
+                                        <img src="{{$data.order_aftersale_service_weixin}}" class="am-radius" width="40" />
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>line客服</label>
+                                <div>
+                                    {{if empty($data['order_aftersale_service_line'])}}
+                                        <p class="am-text-grey">{{:MyLang('no_setup_tips')}}</p>
+                                    {{else /}}
+                                        <img src="{{$data.order_aftersale_service_line}}" class="am-radius" width="40" />
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <h3 class="am-margin-top-lg am-margin-bottom-0 am-padding-left-xs">商品相关</h3>
+                    <hr class="am-margin-top-xs am-margin-bottom-sm" />
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>商品管理顶部（批量移动分类）</label>
+                                <div>
+                                    {{if isset($data['is_goods_top_category_move']) and $data['is_goods_top_category_move'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>商品管理顶部（批量上下架）</label>
+                                <div>
+                                    {{if isset($data['is_goods_top_is_shelves']) and $data['is_goods_top_is_shelves'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                    {{if isset($data['is_goods_top_is_shelves_shop']) and $data['is_goods_top_is_shelves_shop'] eq 1}}
+                                        <span class="am-badge am-badge-success am-radius am-margin-left-xs">支持多商户</span>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>商品管理列表（库存修改）</label>
+                                <div>
+                                    {{if isset($data['is_admin_goods_operate_inventory']) and $data['is_admin_goods_operate_inventory'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>商品管理列表（价格修改）</label>
+                                <div>
+                                    {{if isset($data['is_admin_goods_operate_price']) and $data['is_admin_goods_operate_price'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                    {{if isset($data['is_admin_goods_operate_price_shop']) and $data['is_admin_goods_operate_price_shop'] eq 1}}
+                                        <span class="am-badge am-badge-success am-radius am-margin-left-xs">支持多商户</span>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>商品管理列表（备注）</label>
+                                <div>
+                                    {{if isset($data['is_goods_note']) and $data['is_goods_note'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                    {{if isset($data['is_goods_note_shop']) and $data['is_goods_note_shop'] eq 1}}
+                                        <span class="am-badge am-badge-success am-radius am-margin-left-xs">支持多商户</span>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>商品管理编辑（数据美化）</label>
+                                <div>
+                                    {{if isset($data['is_goods_beautify']) and $data['is_goods_beautify'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>商品详情页（默认选中第一个有效规格）</label>
+                                <div>
+                                    {{if isset($data['is_goods_detail_selected_first_spec']) and $data['is_goods_detail_selected_first_spec'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>商品上方鼠标悬浮加购和收藏（web端）</label>
+                                <div>
+                                    {{if isset($data['is_goods_above_suspension_cart_favor']) and $data['is_goods_above_suspension_cart_favor'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>商品页面开启评论入口</label>
+                                <div>
+                                    {{if isset($data['is_goods_detail_comments_add']) and $data['is_goods_detail_comments_add'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>自动增加销量</label>
+                                <div>
+                                    {{if empty($data['auto_inc_sales_number'])}}
+                                        <p class="am-text-grey">未设置、不增加</p>
+                                    {{else /}}
+                                        <p>{{:MyLang('already_setup_tips')}}[ {{$data.auto_inc_sales_number}} ]</p>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <h3 class="am-margin-top-lg am-margin-bottom-0 am-padding-left-xs">批量评价配置</h3>
+                    <hr class="am-margin-top-xs am-margin-bottom-sm" />
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>首次随机范围值</label>
+                                <div>
+                                    {{if empty($data['first_number_min'])}}
+                                        <p class="am-text-grey">未设置、最小值默认[ 10 ]</p>
+                                    {{else /}}
+                                        <p>已设置、最小值[ {{$data.first_number_min}} ]</p>
+                                    {{/if}}
+                                    {{if empty($data['first_number_max'])}}
+                                        <p class="am-text-grey">未设置、最大值默认[ 30 ]</p>
+                                    {{else /}}
+                                        <p>已设置、最大值[ {{$data.first_number_max}} ]</p>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>续增随机范围值</label>
+                                <div>
+                                    {{if empty($data['last_number_min'])}}
+                                        <p class="am-text-grey">未设置、最小值默认[ 1 ]</p>
+                                    {{else /}}
+                                        <p>已设置、最小值[ {{$data.last_number_min}} ]</p>
+                                    {{/if}}
+                                    {{if empty($data['last_number_max'])}}
+                                        <p class="am-text-grey">未设置、最大值默认[ 5 ]</p>
+                                    {{else /}}
+                                        <p>已设置、最大值[ {{$data.last_number_max}} ]</p>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>续增间隔时间</label>
+                                <div>
+                                    {{if empty($data['last_interval_time'])}}
+                                        <p class="am-text-grey">{{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 1440 ]分钟</p>
+                                    {{else /}}
+                                        <p>{{:MyLang('already_setup_tips')}}[ {{$data.last_interval_time}} ]分钟</p>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>数据评分随机最小值</label>
+                                <div>
+                                    {{if empty($data['rating_rand_min'])}}
+                                        <p class="am-text-grey">{{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 1 ]评分</p>
+                                    {{else /}}
+                                        <p>{{:MyLang('already_setup_tips')}}[ {{$data.rating_rand_min}} ]评分</p>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>自动控制</label>
+                                <div>
+                                    {{if empty($data['auto_control_number'])}}
+                                        <p class="am-text-grey">未设置、不控制</p>
+                                    {{else /}}
+                                        <p>{{:MyLang('already_setup_tips')}}[ {{$data.auto_control_number}} ]</p>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>数据时间跳过夜间</label>
+                                <div>
+                                    {{if isset($data['is_skip_night']) and $data['is_skip_night'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>显示评价数据</label>
+                                <div>
+                                    {{if isset($data['is_comments_show']) and $data['is_comments_show'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>随机匿名</label>
+                                <div>
+                                    {{if isset($data['is_rand_anonymous']) and $data['is_rand_anonymous'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>随机用户</label>
+                                <div>
+                                    {{if isset($data['is_rand_user']) and $data['is_rand_user'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>商品单独配置</label>
+                                <div>
+                                    {{if isset($data['is_goods_alone_comments_config']) and $data['is_goods_alone_comments_config'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <h3 class="am-margin-top-lg am-margin-bottom-0 am-padding-left-xs">页面提示信息</h3>
+                    <hr class="am-margin-top-xs am-margin-bottom-sm" />
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>商品详情页-基础温馨提示信息(标题/内容)</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if empty($data['goods_detail_base_tips_msg'])}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 不展示 ]
+                                    {{else /}}
+                                        {{:MyLang('already_setup_tips')}}[ {{if !empty($data['goods_detail_base_tips_title'])}}<strong class="am-margin-right-xs">{{$data.goods_detail_base_tips_title}}</strong>{{/if}} {{$data.goods_detail_base_tips_msg}} ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>商品详情页-详情内容顶部提示信息(标题/内容)</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if !empty($data['goods_detail_content_top_tips_title'])}}<p><strong class="am-margin-right-xs">{{$data.goods_detail_content_top_tips_title}}</strong></p>{{/if}}
+                                    {{if !empty($data['goods_detail_content_top_tips_msg'])}}
+                                        {{:implode('<br />', $data['goods_detail_content_top_tips_msg'])}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 不展示 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <h3 class="am-margin-top-lg am-margin-bottom-0 am-padding-left-xs">用户地址</h3>
+                    <hr class="am-margin-top-xs am-margin-bottom-sm" />
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启地址信息智能识别</label>
+                                <div>
+                                    {{if isset($data['is_user_address_discern']) and $data['is_user_address_discern'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启地理位置选择智能识别</label>
+                                <div>
+                                    {{if isset($data['is_user_address_location_discern']) and $data['is_user_address_location_discern'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>禁止用户地址选择省市区</label>
+                                <div>
+                                    {{if isset($data['is_user_address_forbid_choice_region']) and $data['is_user_address_forbid_choice_region'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <h3 class="am-margin-top-lg am-margin-bottom-0 am-padding-left-xs">后台首页库存预警</h3>
+                    <hr class="am-margin-top-xs am-margin-bottom-sm" />
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启后台库存预警</label>
+                                <div>
+                                    {{if isset($data['is_admin_inventory_early_warning']) and $data['is_admin_inventory_early_warning'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>预警值</label>
+                                <div>
+                                    {{if empty($data['admin_warehouse_inventory_early_warning_number'])}}
+                                        <p class="am-text-grey">{{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 5条 ]</p>
+                                    {{else /}}
+                                        <p>{{:MyLang('already_setup_tips')}}[ {{$data.admin_warehouse_inventory_early_warning_number}} ]</p>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>自动控制</label>
+                                <div>
+                                    {{if empty($data['admin_warehouse_max_number'])}}
+                                        <p class="am-text-grey">{{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 8条 ]</p>
+                                    {{else /}}
+                                        <p>{{:MyLang('already_setup_tips')}}[ {{$data.admin_warehouse_max_number}} ]</p>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <h3 class="am-margin-top-lg am-margin-bottom-0 am-padding-left-xs">首页轮播右侧商品</h3>
+                    <hr class="am-margin-top-xs am-margin-bottom-sm" />
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启首页轮播右侧展示商品</label>
+                                <div>
+                                    {{if isset($data['is_home_banner_right_goods']) and $data['is_home_banner_right_goods'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>指定商品</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if !empty($data['home_banner_right_goods_data']) and is_array($data['home_banner_right_goods_data']) and !empty($data['appoint_home_banner_right_goods_list']) and is_array($data['appoint_home_banner_right_goods_list'])}}
+                                        <a href="javascript:;" data-am-modal="{target: '#appoint-warm-tips-popup'}">{{:MyLang('view_title')}}({{:count($data.appoint_home_banner_right_goods_list)}}) >></a>
+                                        <div class="am-popup am-radius" id="appoint-warm-tips-popup">
+                                            <div class="am-popup-inner">
+                                                <div class="am-popup-hd">
+                                                    <h4 class="am-popup-title">指定商品</h4>
+                                                    <span data-am-modal-close class="am-close">&times;</span>
+                                                </div>
+                                                <div class="am-popup-bd">
+                                                    <ul class="am-list am-list-border">
+                                                        {{foreach $data.home_banner_right_goods_data as $v}}
+                                                            {{if !empty($data['appoint_home_banner_right_goods_list'][$v['id']])}}
+                                                                <li>
+                                                                    <a href="{{$data['appoint_home_banner_right_goods_list'][$v['id']]['goods_url']}}" target="_blank" class="am-text-truncate">
+                                                                        <img src="{{$data['appoint_home_banner_right_goods_list'][$v['id']]['images']}}" class="am-fl am-margin-right-xs" width="20" height="20" />
+                                                                        {{if !empty($v['name'])}}
+                                                                            <span class="am-badge am-radius">{{$v.name}}</span>
+                                                                        {{/if}}
+                                                                        <span>{{$data['appoint_home_banner_right_goods_list'][$v['id']]['title']}}</span>
+                                                                    </a>
+                                                                </li>
+                                                            {{/if}}
+                                                        {{/foreach}}
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {{else /}}
+                                        <span class="am-text-grey">{{:MyLang('no_setup_tips')}}</span>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <h3 class="am-margin-top-lg am-margin-bottom-0 am-padding-left-xs">商品页购买按钮跳转链接</h3>
+                    <hr class="am-margin-top-xs am-margin-bottom-sm" />
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启用户端商品详情页展示入口</label>
+                                <div>
+                                    {{if isset($data['is_user_goods_detail_show_buy_btn_run']) and $data['is_user_goods_detail_show_buy_btn_run'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启后台商品编辑页面配置</label>
+                                <div>
+                                    {{if isset($data['is_admin_goods_saveinfo_buy_btn_config']) and $data['is_admin_goods_saveinfo_buy_btn_config'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>后台商品编辑页面配置按钮默认名称</label>
+                                <div>
+                                    {{if empty($data['admin_goods_saveinfo_config_default_name'])}}
+                                        <p class="am-text-grey">{{:MyLang('no_setup_tips')}}</p>
+                                    {{else /}}
+                                        <p>{{:MyLang('already_setup_tips')}}[ {{$data.admin_goods_saveinfo_config_default_name}} ]</p>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>后台商品编辑页面配置按钮默认链接</label>
+                                <div>
+                                    {{if empty($data['admin_goods_saveinfo_config_default_url'])}}
+                                        <p class="am-text-grey">{{:MyLang('no_setup_tips')}}</p>
+                                    {{else /}}
+                                        <p>{{:MyLang('already_setup_tips')}}[ {{$data.admin_goods_saveinfo_config_default_url}} ]</p>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

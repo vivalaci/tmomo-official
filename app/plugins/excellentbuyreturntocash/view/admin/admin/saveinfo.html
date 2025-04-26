@@ -1,0 +1,343 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'excellentbuyreturntocash',
+            'title'     => MyLang('base_config_title'),
+            'back_url'  => PluginsAdminUrl('excellentbuyreturntocash', 'admin', 'index'),
+        ])}}
+
+        <!-- form start -->
+        <form class="am-form form-validation am-form-full-screen am-form-popup-sticky" action="{{:PluginsAdminUrl('excellentbuyreturntocash', 'admin', 'save')}}" method="POST" request-type="ajax-url" request-value="{{:PluginsAdminUrl('excellentbuyreturntocash', 'admin', 'index')}}">
+            <!-- 基础配置 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">{{:MyLang('base_config_title')}}</h3>
+                </div>
+                <div class="am-panel-bd am-padding-vertical-xs">
+                    <div class="am-form-group">
+                        <label>商品详情面板返券名称<span class="am-form-group-label-tips">默认 返卡劵</span></label>
+                        <input type="text" name="goods_detail_panel_title" placeholder="商品详情面板返券名称" data-validation-message="请输入商品详情面板返券名称" class="am-radius" {{if !empty($data['goods_detail_panel_title'])}} value="{{$data.goods_detail_panel_title}}"{{/if}} />
+                    </div>
+                    <div class="am-form-group">
+                        <label>商品详情标题返券icon<span class="am-form-group-label-tips">留空则不展示</span></label>
+                        <input type="text" name="goods_detail_title_coupon_icon" placeholder="商品详情标题返券icon" data-validation-message="请输入商品详情标题返券icon" class="am-radius" {{if !empty($data['goods_detail_title_coupon_icon'])}} value="{{$data.goods_detail_title_coupon_icon}}"{{/if}} />
+                    </div>
+                    <div class="am-form-group">
+                        <label>商品详情标题返现icon<span class="am-form-group-label-tips">留空则不展示</span></label>
+                        <input type="text" name="goods_detail_title_cash_icon" placeholder="商品详情标题返现icon" data-validation-message="请输入商品详情标题返现icon" class="am-radius" {{if !empty($data['goods_detail_title_cash_icon'])}} value="{{$data.goods_detail_title_cash_icon}}"{{/if}} />
+                    </div>
+                    <div class="am-form-group">
+                        <label class="am-block">使用指定优惠券订单返现</label>
+                        <div class="am-alert am-alert-warning am-margin-0">
+                            <p>1. 默认否，不强制</p>
+                            <p>2. 订单必须使用了 返劵配置已关联的 优惠券才进行返现</p>
+                        </div>
+                        <div class="am-margin-top-xs">
+                            <input name="is_appoint_coupon_cach" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_appoint_coupon_cach']) and $data['is_appoint_coupon_cach'] eq 1}}checked="true"{{/if}} />
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label class="am-block">结算转换订单货币汇率<span class="am-form-group-label-tips">结算金额除以订单汇率值</span></label>
+                        <input name="is_profit_transform_currency_rate" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_profit_transform_currency_rate']) and $data['is_profit_transform_currency_rate'] eq 1}}checked="true"{{/if}} />
+                    </div>
+                </div>
+            </div>
+
+            <!-- 限制购买 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">限制购买</h3>
+                </div>
+                <div class="am-panel-bd am-padding-vertical-xs">
+                    <div class="am-form-group">
+                        <label>限制分类购买数量</label>
+                        <div class="am-alert am-alert-warning am-margin-0">
+                            <p>1. 购买指定分类下的商品限制数量</p>
+                            <p>2. 包含子级分类</p>
+                        </div>
+                        <select name="limit_buy_category_ids" class="am-radius chosen-select am-margin-top-xs" multiple="multiple" data-placeholder="{{:MyLang('optional_tips')}}" data-validation-message="{{:MyLang('form_goods_category_message')}}">
+                            {{if !empty($goods_category_list)}}
+                                {{foreach $goods_category_list as $v}}
+                                    <option value="{{$v.id}}" {{if !empty($data['limit_buy_category_ids_all']) and in_array($v['id'], $data['limit_buy_category_ids_all'])}}selected{{/if}}>{{$v.name}}</option>
+                                    {{if !empty($v['items'])}}
+                                        {{foreach $v.items as $vs}}
+                                            <option style="padding-left: 15px;" value="{{$vs.id}}" {{if !empty($data['limit_buy_category_ids_all']) and in_array($vs['id'], $data['limit_buy_category_ids_all'])}}selected{{/if}}>{{if empty($vs['items'])}}├{{else /}}└{{/if}}² {{$vs.name}}</option>
+                                            {{if !empty($vs['items'])}}
+                                                {{foreach $vs.items as $kss=>$vss}}
+                                                    <option style="padding-left: 30px;" value="{{$vss.id}}" {{if !empty($data['limit_buy_category_ids_all']) and in_array($vss['id'], $data['limit_buy_category_ids_all'])}}selected{{/if}}>{{if $kss eq count($vs['items'])-1}}└{{else /}}├{{/if}}³ {{$vss.name}}</option>
+                                                {{/foreach}}
+                                            {{/if}}
+                                        {{/foreach}}
+                                    {{/if}}
+                                {{/foreach}}
+                            {{/if}}
+                        </select>
+                    </div>
+                    <div class="am-form-group">
+                        <label>限制单件购买最大数量<span class="am-form-group-label-tips">空或0则不限制</span></label>
+                        <input type="number" name="limit_goods_buy_bumber_max" min="0" placeholder="限制单件购买最大数量" data-validation-message="请输入限制单件购买最大数量" class="am-radius" {{if !empty($data['limit_goods_buy_bumber_max'])}} value="{{$data.limit_goods_buy_bumber_max}}"{{/if}} />
+                    </div>
+                    <div class="am-form-group">
+                        <label>限制总购买最大数量<span class="am-form-group-label-tips">空或0则不限制</span></label>
+                        <input type="number" name="limit_order_buy_bumber_max" min="0" placeholder="限制总购买最大数量" data-validation-message="请输入限制总购买最大数量" class="am-radius" {{if !empty($data['limit_order_buy_bumber_max'])}} value="{{$data.limit_order_buy_bumber_max}}"{{/if}} />
+                    </div>
+                </div>
+            </div>
+
+            <!-- 返劵 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">返劵</h3>
+                </div>
+                <div class="am-panel-bd return-category-coupon-container">
+                    <div class="am-form-group">
+                        <label>返券类型<span class="am-form-group-label-tips">默认 购买数量倍数</span></label>
+                        <div>
+                            {{foreach $return_coupon_type_list as $v}}
+                                <label class="am-radio-inline am-margin-right-sm">
+                                    <input type="radio" name="return_coupon_type" value="{{$v.value}}" {{if isset($data['return_coupon_type']) and $data['return_coupon_type'] eq $v['value']}}checked="checked"{{else /}}{{if !isset($data['return_coupon_type']) and isset($v['checked']) and $v['checked'] eq true}}checked="checked"{{/if}}{{/if}} data-am-ucheck /> {{$v.name}}
+                                </label>
+                            {{/foreach}}
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label>返券数量倍数<span class="am-form-group-label-tips">默认1倍、按照购买数量发放优惠券</span></label>
+                        <input type="number" name="return_coupon_multiple" min="0" placeholder="返券数量倍数" data-validation-message="请输入返券数量倍数限制总购买最大数量" class="am-radius" value="{{if !empty($data['return_coupon_multiple'])}}{{$data.return_coupon_multiple}}{{else /}}1{{/if}}" />
+                    </div>
+
+                    <!-- 返券列表 -->
+                    <div class="am-form-group am-margin-bottom-0 am-margin-top-xs">
+                        <div class="am-alert am-alert-warning am-margin-0">
+                            <p>1. 一个商品分类关联一个优惠券（包含子分类）分类向上匹配、如配置了订单金额则订单金额需要满足</p>
+                            <p>2. 倍数规则：根据用户下单的商品所属分类匹配优惠券、匹配到优惠券则停止（一个商品仅匹配一张优惠券）</p>
+                            <p>3. 订单金额规则：匹配到优惠券后减去当前订单金额、再次匹配，直到订单金额用尽或者无更多优惠券（如订单金额为1000，配置了金额为500和200的规则、优先匹配500的金额、再1000减500、500再次匹配满足的第二个200限制、500减200、300继续匹配...）</p>
+                        </div>
+                        <ul class="am-list am-list-static am-list-border am-list-striped am-btn-sm am-margin-top-xs am-margin-bottom-0 am-padding-bottom-0 return-category-coupon-list">
+                            {{if !empty($data['return_category_coupon_ids_all'])}}
+                                {{foreach $data.return_category_coupon_ids_all as $v}}
+                                    <li>
+                                        <span>{{$v.category_name}} / {{$v.coupon_name}}{{if !empty($v['order_total_price']) and $v['order_total_price'] gt 0}} / {{$v.order_total_price}}{{/if}}</span>
+                                        <span class="am-badge am-radius am-icon-remove return-coupon-submit-delete"> 移除</span>
+                                    </li>
+                                {{/foreach}}
+                            {{/if}}
+                        </ul>
+                        <input type="hidden" name="return_category_coupon_ids" value="{{if !empty($data['return_category_coupon_ids'])}}{{$data.return_category_coupon_ids}}{{/if}}">
+                        <button type="button" class="am-btn am-btn-secondary am-radius am-icon-plus am-btn-sm am-margin-top-sm return-coupon-submit-add"> 添加返券</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 返现 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">返现</h3>
+                </div>
+                <div class="am-panel-bd am-padding-vertical-xs">
+                    <div class="am-form-group">
+                        <label>返现分类</label>
+                        <div class="am-alert am-alert-warning am-margin-0">
+                            <p>1. 指定分类下的订单商品、订单完成后进行相应的比例返现到钱包</p>
+                            <p>2. 包含子级分类</p>
+                        </div>
+                        <select name="return_to_cash_category_ids" class="am-radius chosen-select am-margin-top-xs" multiple="multiple" data-placeholder="{{:MyLang('optional_tips')}}" data-validation-message="{{:MyLang('form_goods_category_message')}}">
+                            {{if !empty($goods_category_list)}}
+                                {{foreach $goods_category_list as $v}}
+                                    <option value="{{$v.id}}" {{if !empty($data['return_to_cash_category_ids_all']) and in_array($v['id'], $data['return_to_cash_category_ids_all'])}}selected{{/if}}>{{$v.name}}</option>
+                                    {{if !empty($v['items'])}}
+                                        {{foreach $v.items as $vs}}
+                                            <option style="padding-left: 15px;" value="{{$vs.id}}" {{if !empty($data['return_to_cash_category_ids_all']) and in_array($vs['id'], $data['return_to_cash_category_ids_all'])}}selected{{/if}}>{{if empty($vs['items'])}}├{{else /}}└{{/if}}² {{$vs.name}}</option>
+                                            {{if !empty($vs['items'])}}
+                                                {{foreach $vs.items as $kss=>$vss}}
+                                                    <option style="padding-left: 30px;" value="{{$vss.id}}" {{if !empty($data['return_to_cash_category_ids_all']) and in_array($vss['id'], $data['return_to_cash_category_ids_all'])}}selected{{/if}}>{{if $kss eq count($vs['items'])-1}}└{{else /}}├{{/if}}³ {{$vss.name}}</option>
+                                                {{/foreach}}
+                                            {{/if}}
+                                        {{/foreach}}
+                                    {{/if}}
+                                {{/foreach}}
+                            {{/if}}
+                        </select>
+                    </div>
+                    <div class="am-form-group">
+                        <label>返现比例<span class="am-form-group-label-tips">空或0则不返现，0~100之间的数值，采用订单支付金额比例</span></label>
+                        <div class="am-input-group am-input-group-sm">
+                            <input type="number" name="return_to_cash_rate" placeholder="返现比例" min="0" data-validation-message="请输入返现比例" class="am-form-field am-radius" {{if !empty($data['return_to_cash_rate'])}} value="{{$data.return_to_cash_rate}}"{{/if}} />
+                            <span class="am-input-group-btn">
+                                <button type="button" class="am-btn am-btn-default am-radius">%</button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label>返现周期<span class="am-form-group-label-tips">默认43200分钟，单位[ 分钟 ]，订单完成时间起算</span></label>
+                        <div class="am-input-group am-input-group-sm">
+                            <input type="number" name="return_to_cash_time" placeholder="返现周期" min="0" data-validation-message="请输入返现周期" class="am-form-field am-radius" {{if !empty($data['return_to_cash_time'])}} value="{{$data.return_to_cash_time}}"{{/if}} />
+                            <span class="am-input-group-btn">
+                                <button type="button" class="am-btn am-btn-default am-radius">{{:MyLang('minute_title')}}</button>
+                            </span>
+                        </div>
+                        <div class="am-alert am-alert-warning" data-am-alert>
+                            <p class="am-text-warning">建议将该地址添加到linux定时任务定时请求即可（结果 sucs:0, fail:0 冒号后面则是处理的数据条数，sucs成功，fali失败）</p>
+                            <p class="am-text-secondary">插件已经做了兼容处理，访问分销管理后台也会自动运行一次，脚本每次处理50条数据</p>
+                            <a href="{{:PluginsHomeUrl('excellentbuyreturntocash', 'crontab', 'profit')}}" target="_blank">{{:PluginsHomeUrl('excellentbuyreturntocash', 'crontab', 'profit')}}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 自动返现 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">自动返现</h3>
+                </div>
+                <div class="am-panel-bd am-padding-vertical-xs">
+                    <div class="am-form-group">
+                        <label>自动返现分类</label>
+                        <div class="am-alert am-alert-warning am-margin-0">
+                            <p>1. 指定分类下的订单商品、订单完成后进行相应的比例返现到钱包</p>
+                            <p>2. 包含子级分类</p>
+                            <p>3. 未设置分类则不自动返现、并且 返现基准数 必须大于0</p>
+                        </div>
+                        <select name="return_auto_cash_category_ids" class="am-radius chosen-select am-margin-top-xs" multiple="multiple" data-placeholder="{{:MyLang('optional_tips')}}" data-validation-message="{{:MyLang('form_goods_category_message')}}">
+                            {{if !empty($goods_category_list)}}
+                                {{foreach $goods_category_list as $v}}
+                                    <option value="{{$v.id}}" {{if !empty($data['return_auto_cash_category_ids_all']) and in_array($v['id'], $data['return_auto_cash_category_ids_all'])}}selected{{/if}}>{{$v.name}}</option>
+                                    {{if !empty($v['items'])}}
+                                        {{foreach $v.items as $vs}}
+                                            <option style="padding-left: 15px;" value="{{$vs.id}}" {{if !empty($data['return_auto_cash_category_ids_all']) and in_array($vs['id'], $data['return_auto_cash_category_ids_all'])}}selected{{/if}}>{{if empty($vs['items'])}}├{{else /}}└{{/if}}² {{$vs.name}}</option>
+                                            {{if !empty($vs['items'])}}
+                                                {{foreach $vs.items as $kss=>$vss}}
+                                                    <option style="padding-left: 30px;" value="{{$vss.id}}" {{if !empty($data['return_auto_cash_category_ids_all']) and in_array($vss['id'], $data['return_auto_cash_category_ids_all'])}}selected{{/if}}>{{if $kss eq count($vs['items'])-1}}└{{else /}}├{{/if}}³ {{$vss.name}}</option>
+                                                {{/foreach}}
+                                            {{/if}}
+                                        {{/foreach}}
+                                    {{/if}}
+                                {{/foreach}}
+                            {{/if}}
+                        </select>
+                    </div>
+                    <div class="am-form-group">
+                        <label>自动返现比例<span class="am-form-group-label-tips">空或0则不返现，0~100之间的数值，采用订单支付金额比例</span></label>
+                        <div class="am-input-group am-input-group-sm">
+                            <input type="number" name="return_auto_cash_rate" placeholder="自动返现比例" min="0" data-validation-message="请输入自动返现比例" class="am-form-field am-radius" {{if !empty($data['return_auto_cash_rate'])}} value="{{$data.return_auto_cash_rate}}"{{/if}} />
+                            <span class="am-input-group-btn">
+                                <button type="button" class="am-btn am-btn-default am-radius">%</button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label>自动返现基数</label>
+                        <div class="am-alert am-alert-warning am-margin-0">
+                            <p>1. 0或空则不处理</p>
+                            <p>2. 大于0则会根据这个基数计算商品销量是否达到这个[ 基准数值 ]、如果达到则提前结算用返现订单、不受返现周期限制</p>
+                            <p>3. 销量计算规则以用户当前订单收货时间开始计算（包含用户当前的订单）之后的订单销量（必须也是已收货完成）</p>
+                        </div>
+                        <div class="am-input-group am-input-group-sm am-margin-top-xs">
+                            <input type="number" name="return_auto_cash_number" placeholder="自动返现基数" min="0" data-validation-message="请输入自动返现基数" class="am-form-field am-radius" {{if !empty($data['return_auto_cash_number'])}} value="{{$data.return_auto_cash_number}}"{{/if}} />
+                            <span class="am-input-group-btn">
+                                <button type="button" class="am-btn am-btn-default am-radius">件</button>
+                            </span>
+                        </div>
+                        <div class="am-alert am-alert-warning" data-am-alert>
+                            <p class="am-text-warning">建议将该地址添加到linux定时任务定时请求即可（结果 sucs:0, fail:0 冒号后面则是处理的数据条数，sucs成功，fali失败）</p>
+                            <p class="am-text-secondary">插件已经做了兼容处理，访问分销管理后台也会自动运行一次，脚本每次处理50条数据</p>
+                            <a href="{{:PluginsHomeUrl('excellentbuyreturntocash', 'crontab', 'auto')}}" target="_blank">{{:PluginsHomeUrl('excellentbuyreturntocash', 'crontab', 'auto')}}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 用户返现订单 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">用户返现订单</h3>
+                </div>
+                <div class="am-panel-bd am-padding-vertical-xs">
+                    <div class="am-form-group">
+                        <label class="am-block">开启用户返现订单列表<span class="am-form-group-label-tips">默认否</span></label>
+                        <input name="is_enable_cach_order" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_enable_cach_order']) and $data['is_enable_cach_order'] eq 1}}checked="true"{{/if}} />
+                    </div>
+                    <div class="am-form-group">
+                        <label>用户返现订单页面公告<span class="am-form-group-label-tips">位于用户返现订单中心，空则不显示</span></label>
+                        <textarea rows="3" name="user_cach_order_notice" class="am-radius am-field-valid" placeholder="用户返现订单页面公告" data-validation-message="请填写用户返现订单页面公告告">{{if !empty($data['user_cach_order_notice'])}}{{:implode("\\n", $data['user_cach_order_notice'])}}{{/if}}</textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="am-form-popup-submit">
+                <a href="{{:PluginsAdminUrl('excellentbuyreturntocash', 'admin', 'index', $params)}}" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg">
+                    <i class="am-icon-mail-reply"></i>
+                    <span>{{:MyLang('retreat_title')}}</span>
+                </a>
+                <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('save_title')}}'}">
+                    <i class="am-icon-save"></i>
+                    <span>{{:MyLang('save_title')}}</span>
+                </button>
+            </div>
+        </form>
+        <!-- form end -->
+
+        <!-- 返券选择 -->
+        <div class="am-popup" id="popup-return-coupon-win">
+            <div class="am-popup-inner">
+                <div class="am-popup-hd">
+                    <h4 class="am-popup-title">返券选择</h4>
+                    <span data-am-modal-close class="am-close">&times;</span>
+                </div>
+                <div class="am-popup-bd">
+                    <form action="false" class="am-form">
+                        <div class="am-form-group">
+                            <label>指定分类下购买返劵</label>
+                            <select name="category_id" class="am-radius chosen-select" data-placeholder="{{:MyLang('form_goods_category_placeholder')}}" data-validation-message="{{:MyLang('form_goods_category_message')}}">
+                                {{if !empty($goods_category_list)}}
+                                    <option value="">{{:MyLang('form_goods_category_placeholder')}}</option>
+                                    {{foreach $goods_category_list as $v}}
+                                        <option value="{{$v.id}}">{{$v.name}}</option>
+                                        {{if !empty($v['items'])}}
+                                            {{foreach $v.items as $vs}}
+                                                <option style="padding-left: 15px;" value="{{$vs.id}}">{{if empty($vs['items'])}}├{{else /}}└{{/if}}² {{$vs.name}}</option>
+                                                {{if !empty($vs['items'])}}
+                                                    {{foreach $vs.items as $kss=>$vss}}
+                                                        <option style="padding-left: 30px;" value="{{$vss.id}}">{{if $kss eq count($vs['items'])-1}}└{{else /}}├{{/if}}³ {{$vss.name}}</option>
+                                                    {{/foreach}}
+                                                {{/if}}
+                                            {{/foreach}}
+                                        {{/if}}
+                                    {{/foreach}}
+                                {{/if}}
+                            </select>
+                        </div>
+
+                        <div class="am-form-group">
+                            <label>可返的劵</label>
+                            <select name="coupon_id" class="am-radius chosen-select" data-placeholder="{{:MyLang('optional_tips')}}" data-validation-message="请选择优惠券">
+                                {{if !empty($coupon_list)}}
+                                    <option value="">{{:MyLang('optional_tips')}}</option>
+                                    {{foreach $coupon_list as $v}}
+                                        <option value="{{$v.id}}">{{$v.name}}({{$v.desc}})</option>
+                                    {{/foreach}}
+                                {{/if}}
+                            </select>
+                        </div>
+
+                        <div class="am-form-group">
+                            <label>订单金额<span class="am-form-group-label-tips">可选、不设置则发放计算规则不扣除金额</span></label>
+                            <input type="number" name="order_total_price" placeholder="订单金额" min="0" step="0.01" data-validation-message="请输入订单金额" class="am-form-field am-radius" {{if !empty($data['order_total_price'])}} value="{{$data.order_total_price}}"{{/if}} />
+                        </div>
+
+                        <div class="am-form-group am-form-group-refreshing am-margin-top-sm">
+                            <button type="button" class="am-btn am-btn-primary am-radius btn-loading-example am-btn-sm am-btn-block">{{:MyLang('confirm_title')}}</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

@@ -1,0 +1,17 @@
+<!-- 操作栏 -->
+<button type="button" class="am-btn am-btn-default am-btn-xs am-radius am-btn-block submit-popup" data-url="{{:PluginsAdminUrl('membershiplevelvip', 'order', 'detail', ['id'=>$module_data['id']])}}" data-title="{{:MyLang('detail_title')}}">
+    <i class="am-icon-eye"></i>
+    <span>{{:MyLang('detail_title')}}</span>
+</button>
+{{if $module_data['status'] eq 0}}
+    <button type="button" class="am-btn am-btn-warning am-btn-xs am-radius submit-ajax" data-url="{{:PluginsAdminUrl('membershiplevelvip', 'order', 'cancel')}}" data-id="{{$module_data.id}}" data-view="reload" data-msg="取消后不可恢复、确认操作吗？">
+        <i class="am-icon-paint-brush"></i>
+        <span>{{:MyLang('cancel_title')}}</span>
+    </button>
+{{/if}}
+{{if in_array($module_data['status'], [2,3])}}
+    <button type="button" class="am-btn am-btn-danger am-btn-xs am-radius am-btn-block submit-delete" data-url="{{:PluginsAdminUrl('membershiplevelvip', 'order', 'delete')}}" data-id="{{$module_data.id}}">
+        <i class="iconfont icon-delete"></i>
+        <span>{{:MyLang('delete_title')}}</span>
+    </button>
+{{/if}}

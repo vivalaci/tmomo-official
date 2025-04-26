@@ -1,0 +1,287 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'themestyle',
+            'title'     => MyLang('base_nav_config_title').(empty($data['id']) ? MyLang('created_title') : MyLang('edit_title')),
+            'back_url'  => PluginsAdminUrl('themestyle', 'config', 'index', $params),
+        ])}}
+
+        <!-- form start -->
+        <form class="am-form form-validation am-form-full-screen am-form-popup-sticky" action="{{:PluginsAdminUrl('themestyle', 'config', 'save')}}" method="POST" request-type="ajax-url" request-value="{{:PluginsAdminUrl('themestyle', 'config', 'index')}}" enctype="multipart/form-data">
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">{{:MyLang('base_config_title')}}</h3>
+                </div>
+                <div class="am-panel-bd">
+                    <div class="am-cf">
+                        <div class="am-u-sm-12 am-u-md-6 am-padding-horizontal-0">
+                            <div class="am-cf">
+                                <div class="am-u-md-12 am-padding-horizontal-0">
+                                    <div class="am-form-group">
+                                        <label>{{:MyLang('service.config.form_item_name')}}<span class="am-form-group-label-tips-must">*</span></label>
+                                        <input type="text" name="name" placeholder="{{:MyLang('service.config.form_item_name')}}" maxlength="60" data-validation-message="{{:MyLang('service.config.form_item_name_message')}}" class="am-radius" value="{{if !empty($data['name'])}}{{$data.name}}{{/if}}" />
+                                    </div>
+                                </div>
+                                <div class="am-u-md-12 am-padding-horizontal-0">
+                                    {{:ModuleInclude('lib/sort')}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="am-u-sm-12 am-u-md-6 am-padding-horizontal-0">
+                            <div class="am-cf">
+                                <div class="am-u-sm-6 am-padding-horizontal-0">
+                                    <div class="am-form-group am-form-file">
+                                        <label class="am-block">{{:MyLang('icon_title')}}<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" data-am-popover="{content: '{{:MyLang('service.config.form_item_icon_tips')}}', trigger: 'hover focus', theme: 'sm'}"></a></label>
+                                        <div class="am-form-file-upload-container">
+                                            <ul class="plug-file-upload-view icon-images-view" data-form-name="icon" data-max-number="1" data-dialog-type="images">
+                                                <li>
+                                                    <input type="text" name="icon" value="{{if !empty($data['icon'])}}{{$data.icon}}{{/if}}" data-validation-message="{{:MyLang('form_upload_images_message')}}" />
+                                                    <img src="{{if !empty($data['icon'])}}{{$data.icon}}{{else /}}{{:StaticAttachmentUrl('default-images.jpg')}}{{/if}}" />
+                                                    <i class="iconfont icon-close"></i>
+                                                </li>
+                                            </ul>
+                                            <div class="plug-file-upload-submit" data-view-tag="ul.icon-images-view">
+                                                <i class="iconfont icon-upload-add"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="am-u-sm-6 am-padding-horizontal-0">
+                                    <div class="am-cf">
+                                        <div class="am-u-md-12 am-padding-horizontal-0">
+                                            {{:ModuleInclude('lib/is_enable')}}
+                                        </div>
+                                        <div class="am-u-md-12 am-padding-horizontal-0">
+                                            <div class="am-form-group">
+                                                <label class="am-block">{{:MyLang('service.config.form_item_is_default_title')}}</label>
+                                                <input name="is_default" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_default']) and $data['is_default'] eq 1}}checked="true"{{/if}} />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="am-panel am-panel-default am-radius" id="goods-nav-web">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">{{:MyLang('base_title')}}</h3>
+                </div>
+                <div class="am-panel-bd">
+                    <legend class="am-text-sm am-margin-top-sm">
+                        <strong class="am-text-grey">{{:MyLang('base_title')}}</strong>
+                    </legend>
+                    <ul class="am-avg-sm-5 am-avg-md-8 am-avg-lg-10">
+                        <li>
+                            <div class="am-form-group">
+                                <label>{{:MyLang('service.config.form_item_html_body_size')}}<span class="am-form-group-label-tips">{{:MyLang('service.config.form_item_html_body_size_tips')}}</span></label>
+                                <div class="am-input-group am-input-group-sm">
+                                    <input type="number" name="config[html_body_size]" placeholder="{{:MyLang('service.config.form_item_html_body_size')}}" min="8" max="20" data-validation-message="{{:MyLang('service.config.form_item_html_body_size_message')}}" class="am-radius" value="{{if !empty($data['config']) and !empty($data['config']['html_body_size'])}}{{$data.config.html_body_size}}{{/if}}" />
+                                    <span class="am-input-group-btn">
+                                        <button type="button" class="am-btn am-btn-default am-radius">px</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="am-form-group">
+                                <label>{{:MyLang('service.config.form_item_body_bg_color_title')}}</label>
+                                <div class="colorpicker-container">
+                                    <input type="hidden" name="config[body_bg_color]" value="{{if !empty($data['config']) and !empty($data['config']['body_bg_color'])}}{{$data.config.body_bg_color}}{{/if}}" class="body-bg-color" />
+                                    <div class="colorpicker-submit" data-color="{{if !empty($data['config']) and !empty($data['config']['body_bg_color'])}}{{$data.config.body_bg_color}}{{/if}}" data-color-tag="input[name='config[body_bg_color]']" data-color-style="background-color"></div>
+                                    <img class="imitate-colorpicker-submit" src="{{:StaticAttachmentUrl('colorpicker.png')}}" width="24" height="24" />
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="am-form-group">
+                                <label>{{:MyLang('service.config.form_item_color_price_title')}}</label>
+                                <div class="colorpicker-container">
+                                    <input type="hidden" name="config[color_price]" value="{{if !empty($data['config']) and !empty($data['config']['color_price'])}}{{$data.config.color_price}}{{/if}}" class="color-price" />
+                                    <div class="colorpicker-submit" data-color="{{if !empty($data['config']) and !empty($data['config']['color_price'])}}{{$data.config.color_price}}{{/if}}" data-color-tag="input[name='config[color_price]']" data-color-style="background-color"></div>
+                                    <img class="imitate-colorpicker-submit" src="{{:StaticAttachmentUrl('colorpicker.png')}}" width="24" height="24" />
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="am-form-group">
+                                <label>{{:MyLang('service.config.form_item_color_red_title')}}</label>
+                                <div class="colorpicker-container">
+                                    <input type="hidden" name="config[color_red]" value="{{if !empty($data['config']) and !empty($data['config']['color_red'])}}{{$data.config.color_red}}{{/if}}" class="color-red" />
+                                    <div class="colorpicker-submit" data-color="{{if !empty($data['config']) and !empty($data['config']['color_red'])}}{{$data.config.color_red}}{{/if}}" data-color-tag="input[name='config[color_red]']" data-color-style="background-color"></div>
+                                    <img class="imitate-colorpicker-submit" src="{{:StaticAttachmentUrl('colorpicker.png')}}" width="24" height="24" />
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="am-form-group">
+                                <label>{{:MyLang('service.config.form_item_color_yellow_title')}}</label>
+                                <div class="colorpicker-container">
+                                    <input type="hidden" name="config[color_yellow]" value="{{if !empty($data['config']) and !empty($data['config']['color_yellow'])}}{{$data.config.color_yellow}}{{/if}}" class="color-yellow" />
+                                    <div class="colorpicker-submit" data-color="{{if !empty($data['config']) and !empty($data['config']['color_yellow'])}}{{$data.config.color_yellow}}{{/if}}" data-color-tag="input[name='config[color_yellow]']" data-color-style="background-color"></div>
+                                    <img class="imitate-colorpicker-submit" src="{{:StaticAttachmentUrl('colorpicker.png')}}" width="24" height="24" />
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="am-form-group">
+                                <label>{{:MyLang('service.config.form_item_color_blue_title')}}</label>
+                                <div class="colorpicker-container">
+                                    <input type="hidden" name="config[color_blue]" value="{{if !empty($data['config']) and !empty($data['config']['color_blue'])}}{{$data.config.color_blue}}{{/if}}" class="color-blue" />
+                                    <div class="colorpicker-submit" data-color="{{if !empty($data['config']) and !empty($data['config']['color_blue'])}}{{$data.config.color_blue}}{{/if}}" data-color-tag="input[name='config[color_blue]']" data-color-style="background-color"></div>
+                                    <img class="imitate-colorpicker-submit" src="{{:StaticAttachmentUrl('colorpicker.png')}}" width="24" height="24" />
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="am-form-group">
+                                <label>{{:MyLang('service.config.form_item_color_green_title')}}</label>
+                                <div class="colorpicker-container">
+                                    <input type="hidden" name="config[color_green]" value="{{if !empty($data['config']) and !empty($data['config']['color_green'])}}{{$data.config.color_green}}{{/if}}" class="color-green" />
+                                    <div class="colorpicker-submit" data-color="{{if !empty($data['config']) and !empty($data['config']['color_green'])}}{{$data.config.color_green}}{{/if}}" data-color-tag="input[name='config[color_green]']" data-color-style="background-color"></div>
+                                    <img class="imitate-colorpicker-submit" src="{{:StaticAttachmentUrl('colorpicker.png')}}" width="24" height="24" />
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <ul class="am-avg-sm-5 am-avg-md-8 am-avg-lg-10">
+                        <li>
+                            <div class="am-form-group">
+                                <label>{{:MyLang('service.config.form_item_color_main_title')}}</label>
+                                <div class="colorpicker-container">
+                                    <input type="hidden" name="config[color_main]" value="{{if !empty($data['config']) and !empty($data['config']['color_main'])}}{{$data.config.color_main}}{{/if}}" class="color-main" />
+                                    <div class="colorpicker-submit" data-color="{{if !empty($data['config']) and !empty($data['config']['color_main'])}}{{$data.config.color_main}}{{/if}}" data-color-tag="input[name='config[color_main]']" data-color-style="background-color"></div>
+                                    <img class="imitate-colorpicker-submit" src="{{:StaticAttachmentUrl('colorpicker.png')}}" width="24" height="24" />
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="am-form-group">
+                                <label>{{:MyLang('service.config.form_item_color_main_light_title')}}</label>
+                                <div class="colorpicker-container">
+                                    <input type="hidden" name="config[color_main_light]" value="{{if !empty($data['config']) and !empty($data['config']['color_main_light'])}}{{$data.config.color_main_light}}{{/if}}" class="color-main-light" />
+                                    <div class="colorpicker-submit" data-color="{{if !empty($data['config']) and !empty($data['config']['color_main_light'])}}{{$data.config.color_main_light}}{{/if}}" data-color-tag="input[name='config[color_main_light]']" data-color-style="background-color"></div>
+                                    <img class="imitate-colorpicker-submit" src="{{:StaticAttachmentUrl('colorpicker.png')}}" width="24" height="24" />
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="am-form-group">
+                                <label>{{:MyLang('service.config.form_item_color_main_hover_title')}}</label>
+                                <div class="colorpicker-container">
+                                    <input type="hidden" name="config[color_main_hover]" value="{{if !empty($data['config']) and !empty($data['config']['color_main_hover'])}}{{$data.config.color_main_hover}}{{/if}}" class="color-main-hover" />
+                                    <div class="colorpicker-submit" data-color="{{if !empty($data['config']) and !empty($data['config']['color_main_hover'])}}{{$data.config.color_main_hover}}{{/if}}" data-color-tag="input[name='config[color_main_hover]']" data-color-style="background-color"></div>
+                                    <img class="imitate-colorpicker-submit" src="{{:StaticAttachmentUrl('colorpicker.png')}}" width="24" height="24" />
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="am-form-group">
+                                <label>{{:MyLang('service.config.form_item_color_secondary_title')}}</label>
+                                <div class="colorpicker-container">
+                                    <input type="hidden" name="config[color_secondary]" value="{{if !empty($data['config']) and !empty($data['config']['color_secondary'])}}{{$data.config.color_secondary}}{{/if}}" class="color-secondary" />
+                                    <div class="colorpicker-submit" data-color="{{if !empty($data['config']) and !empty($data['config']['color_secondary'])}}{{$data.config.color_secondary}}{{/if}}" data-color-tag="input[name='config[color_secondary]']" data-color-style="background-color"></div>
+                                    <img class="imitate-colorpicker-submit" src="{{:StaticAttachmentUrl('colorpicker.png')}}" width="24" height="24" />
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                
+                    <legend class="am-text-sm am-margin-top-lg">
+                        <strong class="am-text-grey">圆角</strong>
+                    </legend>
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-8">
+                        <li>
+                            <div class="am-form-group">
+                                <label>{{:MyLang('service.config.form_item_border_radius')}}<span class="am-form-group-label-tips">{{:MyLang('service.config.form_item_border_radius_tips')}}</span></label>
+                                <div class="am-input-group am-input-group-sm">
+                                    <input type="number" name="config[border_radius]" step="0.01" min="0" max="30" placeholder="{{:MyLang('service.config.form_item_border_radius')}}" data-validation-message="{{:MyLang('service.config.form_item_border_radius_message')}}" class="am-radius" value="{{if !empty($data['config']) and !empty($data['config']['border_radius'])}}{{$data.config.border_radius}}{{/if}}" />
+                                    <span class="am-input-group-btn">
+                                        <button type="button" class="am-btn am-btn-default am-radius">rem</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="am-form-group">
+                                <label>{{:MyLang('service.config.form_item_border_radius_sm')}}<span class="am-form-group-label-tips">{{:MyLang('service.config.form_item_border_radius_sm_tips')}}</span></label>
+                                <div class="am-input-group am-input-group-sm">
+                                    <input type="number" name="config[border_radius_sm]" step="0.01" min="0" max="30" placeholder="{{:MyLang('service.config.form_item_border_radius_sm')}}" data-validation-message="{{:MyLang('service.config.form_item_border_radius_sm_message')}}" class="am-radius" value="{{if !empty($data['config']) and !empty($data['config']['border_radius_sm'])}}{{$data.config.border_radius_sm}}{{/if}}" />
+                                    <span class="am-input-group-btn">
+                                        <button type="button" class="am-btn am-btn-default am-radius">rem</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="am-form-group">
+                                <label>{{:MyLang('service.config.form_item_border_radius_lg')}}<span class="am-form-group-label-tips">{{:MyLang('service.config.form_item_border_radius_lg_tips')}}</span></label>
+                                <div class="am-input-group am-input-group-sm">
+                                    <input type="number" name="config[border_radius_lg]" step="0.01" min="0" max="30" placeholder="{{:MyLang('service.config.form_item_border_radius_lg')}}" data-validation-message="{{:MyLang('service.config.form_item_border_radius_lg_message')}}" class="am-radius" value="{{if !empty($data['config']) and !empty($data['config']['border_radius_lg'])}}{{$data.config.border_radius_lg}}{{/if}}" />
+                                    <span class="am-input-group-btn">
+                                        <button type="button" class="am-btn am-btn-default am-radius">rem</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                
+                    <!-- 按钮和小徽章 -->
+                    {{foreach $main_color_list as $v}}
+                        <div class="am-panel am-panel-default am-radius" id="goods-nav-web">
+                            <div class="am-panel-hd">
+                                <h3 class="am-panel-title">{{$v.name}}</h3>
+                            </div>
+                            <div class="am-panel-bd">
+                                {{foreach $v.items as $vs}}
+                                    <legend class="am-text-sm am-margin-top-lg">
+                                        <strong class="am-text-grey">{{$vs.name}}</strong>
+                                    </legend>
+                                    {{foreach $vs.items as $vss}}
+                                        <ul class="am-avg-sm-5 am-avg-md-8 am-avg-lg-10">
+                                            {{foreach $vss.items as $vsss}}
+                                                <li>
+                                                    <div class="am-form-group">
+                                                        <label>{{:MyLang('service.config.form_item_color_'.$v['type'].'_'.$vsss.'_title')}}</label>
+                                                        <div class="colorpicker-container">
+                                                            <input type="hidden" name="config[color_{{$v.type}}_{{$vsss}}]" value="{{if !empty($data['config']) and !empty($data['config']['color_'.$v['type'].'_'.$vsss])}}{{$data.config['color_'.$v['type'].'_'.$vsss]}}{{/if}}" class="color-{{$v.type}}_{{$vsss}}" />
+                                                            <div class="colorpicker-submit" data-color="{{if !empty($data['config']) and !empty($data['config']['color_'.$v['type'].'_'.$vsss])}}{{$data.config['color_'.$v['type'].'_'.$vsss]}}{{/if}}" data-color-tag="input.color-{{$v.type}}_{{$vsss}}" data-color-style="background-color"></div>
+                                                            <img class="imitate-colorpicker-submit" src="{{:StaticAttachmentUrl('colorpicker.png')}}" width="24" height="24" />
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            {{/foreach}}
+                                        </ul>
+                                    {{/foreach}}
+                                {{/foreach}}
+                            </div>
+                        </div>
+                    {{/foreach}}
+                </div>
+            </div>
+
+            <div class="am-form-popup-submit">
+                <input type="hidden" name="id" {{if !empty($data['id'])}} value="{{$data.id}}"{{/if}} />
+                <a href="{{:PluginsAdminUrl('themestyle', 'config', 'index', $params)}}" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg">
+                    <i class="am-icon-mail-reply"></i>
+                    <span>{{:MyLang('retreat_title')}}</span>
+                </a>
+                <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('save_title')}}'}">
+                    <i class="am-icon-save"></i>
+                    <span>{{:MyLang('save_title')}}</span>
+                </button>
+            </div>
+        </form>
+        <!-- form end -->
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

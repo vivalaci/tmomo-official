@@ -1,0 +1,59 @@
+{{:ModuleInclude('public/header')}}
+
+{{if !empty($data['id'])}}
+    <!-- form start -->
+    <form class="am-form form-validation am-form-popup-fixed" action="{{:PluginsAdminUrl('invoice', 'invoice', 'issue')}}" method="POST" request-type="ajax-reload" request-value="parent">
+        <div class="am-padding">
+            {{if in_array($data['invoice_type'], [0,3])}}
+                <!-- 电子发票信息 -->
+                <div class="am-form-group am-form-file">
+                    <label class="am-block">发票附件<span class="am-form-group-label-tips">最多30个文件</span></label>
+                    <div class="am-form-file-upload-container">
+                        <ul class="plug-file-upload-view plug-file-upload-view-file plugins-invoice-file-view" data-form-name="electronic_invoice" data-dialog-type="file" data-max-number="30">
+                            {{if !empty($data['electronic_invoice']) and is_array($data['electronic_invoice'])}}
+                                {{foreach $data.electronic_invoice as $k=>$v}}
+                                    <li>
+                                        <input type="text" name="electronic_invoice[{{$k}}][title]" value="{{$v.title}}" />
+                                        <input type="text" name="electronic_invoice[{{$k}}][url]" value="{{$v.url}}" />
+                                        <a href="{{$v.url}}" title="{{$v.title}}" target="_blank">{{$v.title}}</a><i class="iconfont icon-close"></i>
+                                    </li>
+                                {{/foreach}}
+                            {{/if}}
+                        </ul>
+                        <div class="plug-file-upload-submit" data-view-tag="ul.plugins-invoice-file-view">
+                            <i class="iconfont icon-upload-add"></i>
+                        </div>
+                    </div>
+                </div>
+            {{else /}}
+                <!-- 快递信息 -->
+                <div class="am-form-group">
+                    <label>快递名称<span class="am-form-group-label-tips-must">*</span></label>
+                    <input type="text" name="express_name" placeholder="快递名称" maxlength="60" data-validation-message="快递名称格式最多60个字符" class="am-radius" {{if !empty($data['express_name'])}} value="{{$data.express_name}}"{{/if}} required />
+                </div>
+                <div class="am-form-group">
+                    <label>快递单号<span class="am-form-group-label-tips-must">*</span></label>
+                    <input type="text" name="express_number" placeholder="快递单号" maxlength="60" data-validation-message="快递单号格式最多60个字符" class="am-radius" {{if !empty($data['express_number'])}} value="{{$data.express_number}}"{{/if}} required />
+                </div>
+            {{/if}}
+
+            <div class="am-form-popup-submit">
+                <input type="hidden" name="id" value="{{$data.id}}" />
+                <button type="button" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg" data-am-modal-close>
+                    <i class="am-icon-paint-brush"></i>
+                    <span>{{:MyLang('cancel_title')}}</span>
+                </button>
+                <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('confirm_title')}}'}">
+                    <i class="am-icon-check"></i>
+                    <span>{{:MyLang('confirm_title')}}</span>
+                </button>
+            </div>
+        </div>
+    </form>
+    <!-- form end -->
+{{else /}}
+    {{:ModuleInclude('public/not_data', ['msg'=>MyLang('data_id_error_tips')])}}
+{{/if}}
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

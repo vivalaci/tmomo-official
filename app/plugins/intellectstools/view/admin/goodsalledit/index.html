@@ -1,0 +1,149 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'intellectstools',
+            'nav_data'  => $plugins_nav_menu_list,
+        ])}}
+
+        <div class="intellectstools-content">
+            {{:ModuleInclude('public/nav_switch_btn', [
+                'nav_data' => [
+                    [
+                        'name' => 'Excel模板导出',
+                        'key'  => 'excel',
+                    ],
+                    [
+                        'name' => 'Excel数据导入更新',
+                        'key'  => 'import',
+                    ],
+                ]
+            ])}}
+
+            <div class="nav-content">
+                <!-- excel模板导出 -->
+                <div class="item am-active" data-key="excel">
+                    <form class="am-form form-validation" method="post" action="{{:PluginsAdminUrl('intellectstools', 'goodsalledit', 'download')}}" request-type="form">
+                        <div class="am-form-group">
+                            <label class="am-block">规格主键类型<span class="am-form-group-label-tips-must">*</span><span class="am-form-group-label-tips">对应商品规格中的 规格 和 条形码</span></label>
+                            <div class="am-radio-group">
+                                {{foreach $goods_export_key_type as $v}}
+                                    <label class="am-radio-inline">
+                                        <input type="radio" name="export_key_type" value="{{$v.field}}" data-am-ucheck required data-validation-message="请选择规格主键类型" /> {{$v.title}}
+                                    </label>
+                                {{/foreach}}
+                            </div>
+                        </div>
+
+                        <hr data-am-widget="divider" class="am-divider am-divider-dashed am-margin-0" />
+
+                        <label class="am-block am-margin-top-lg">可修改字段<span class="am-form-group-label-tips-must">*</span><span class="am-form-group-label-tips">至少选择一个字段</span></label>
+                        <ul class="field-content am-cf">
+                            {{foreach $goods_export_fields as $v}}
+                                <li class="am-fl">
+                                    <label class="am-checkbox">
+                                        <input type="checkbox" name="export_field[]" value="{{$v.field}}" data-am-ucheck minchecked="1" required data-validation-message="请至少选择一个可修改字段" />
+                                        <input type="text" name="export_title[{{$v.field}}]" value="{{$v.title}}" class="am-radius input-title" required data-validation-message="请填写{{$v.title}}字段名称" />
+                                    </label>
+                                    <i class="drag-submit">排序</i>
+                                </li>
+                            {{/foreach}}
+                        </ul>
+
+                        <div class="am-margin-vertical-sm">
+                            <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs" data-am-loading="{spinner: 'circle-o-notch', loadingText:'导出模板'}">
+                                <i class="am-icon-file-excel-o"></i>
+                                <span>导出模板</span>
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- 提示信息 -->
+                    <div class="am-alert am-alert-default" data-am-alert>
+                        <button type="button" class="am-close">&times;</button>
+                        <ul>
+                            <li class="am-text-danger">导出到模板标题不可再次修改、格式自动以（名称{{$data_colon_join}}字段名称）命名</li>
+                            <li class="am-margin-top-sm">1. 以商品编码和条形码为主键（具体到SKU的操作）</li>
+
+                            <li class="am-margin-top-sm">2. 商品参数（多个参数使用 {{$data_semicolon_join}} 分割，参数类型/参数名称/与参数值之间使用 {{$data_colon_join}} 区分）、未指定参数类型则默认全部类型、以参数名称为单位 存在更新则添加</li>
+                            <li class="am-padding-left-lg">如详情：详情{{$data_colon_join}}风格{{$data_colon_join}}复古风{{$data_semicolon_join}}详情{cn}款式类别{{$data_colon_join}}图案花纹</li>
+                            <li class="am-padding-left-lg">如基础：基础{{$data_colon_join}}产地{{$data_colon_join}}中国{{$data_semicolon_join}}详情{cn}适合人群{{$data_colon_join}}大众</li>
+                            <li class="am-padding-left-lg">如全部：风格{{$data_colon_join}}复古风{{$data_semicolon_join}}款式类别{{$data_colon_join}}图案花纹</li>
+
+                            <li class="am-margin-top-sm">3. 商品基础数据和规格数据一起更新的时候、可以仅第一条数据填写基础数据</li>
+                            <li class="am-margin-top-sm">4. 商品分类（多个分类使用 {{$data_semicolon_join}} 分割）、原数据删除新增所添加的分类</li>
+                            <li class="am-padding-left-lg">如：连衣裙{{$data_semicolon_join}}女装{{$data_semicolon_join}}裙子</li>
+
+                            <li class="am-margin-top-sm">5. 规格库存（使用 {{$data_colon_join}} 分割、指定仓库名称和库存数量），仓库必须要存在、仓库商品和仓库商品规格不存在会自动添加、存在则更新</li>
+                            <li class="am-padding-left-lg">如：默认仓库{{$data_colon_join}}100</li>
+                        </ul>
+
+                        <div class="am-margin-top-lg">
+                            {{if !empty($goods_export_fields_list['base'])}}
+                                <p><label>商品基础字段</label></p>
+                                <div class="am-padding-left-sm">
+                                    {{:implode('、', $goods_export_fields_list.base)}} 
+                                </div>
+                            {{/if}}
+                            {{if !empty($goods_export_fields_list['spec'])}}
+                                <p><label>商品规格字段</label></p>
+                                <div class="am-padding-left-sm">
+                                    {{:implode('、', $goods_export_fields_list.spec)}} 
+                                </div>
+                            {{/if}}
+                            {{if !empty($goods_export_fields_list['category'])}}
+                                <p><label>商品分类字段</label></p>
+                                <div class="am-padding-left-sm">
+                                    {{:implode('、', $goods_export_fields_list.category)}} 
+                                </div>
+                            {{/if}}
+                            {{if !empty($goods_export_fields_list['parameters'])}}
+                                <p><label>商品参数字段</label></p>
+                                <div class="am-padding-left-sm">
+                                    {{:implode('、', $goods_export_fields_list.parameters)}} 
+                                </div>
+                            {{/if}}
+                            {{if !empty($goods_export_fields_list['inventory'])}}
+                                <p><label>商品规格库存字段</label></p>
+                                <div class="am-padding-left-sm">
+                                    {{:implode('、', $goods_export_fields_list.inventory)}} 
+                                </div>
+                            {{/if}}
+                        </div>
+                    </div>
+                </div>
+                <!-- Excel数据导入更新 -->
+                <div class="item" data-key="import">
+                    <form class="am-form form-validation-import am-form-full-screen am-form-popup-sticky" action="{{:PluginsAdminUrl('intellectstools', 'goodsalledit', 'upload')}}" method="POST" request-type="ajax-url" request-value="{{:PluginsAdminUrl('intellectstools', 'goodsalledit', 'index')}}" enctype="multipart/form-data">
+                        <div class="am-form-group">
+                            <div class="am-form-file">
+                                <button type="button" class="am-btn am-btn-default am-btn-sm am-radius">
+                                <i class="am-icon-cloud-upload"></i> {{:MyLang('form_choice_file_title')}}</button>
+                                <input type="file" name="file" class="file-event" data-tips-tag="#form-file-tips" data-validation-message="{{:MyLang('form_upload_file_message')}}" accept=".xls,.xlsx,.csv,.xlsm" required />
+                                <span class="tips am-text-xs">上传一个excel格式文件</span>
+                                <div id="form-file-tips" class="am-margin-top-xs"></div>
+                            </div>
+                            <div class="am-tips-card">
+                                <p>1. 选择导出的模板填写好的数据excel文件导入</p>
+                                <p>2. 一个更新错误则全部不成功</p>
+                            </div>
+                        </div>
+                        <div class="am-form-popup-submit">
+                            <button type="submit" class="am-btn am-btn-primary am-radius btn-loading-example am-btn-xs" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('submit_title')}}'}">
+                                <i class="am-icon-cloud-upload"></i>
+                                <span>{{:MyLang('submit_title')}}</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

@@ -1,0 +1,122 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- header top nav -->
+{{:ModuleInclude('public/header_top_nav')}}
+
+<!-- search -->
+{{:ModuleInclude('public/nav_search')}}
+
+<!-- header nav -->
+{{:ModuleInclude('public/header_nav')}}
+
+<!-- goods category -->
+{{:ModuleInclude('public/goods_category')}}
+
+<!-- content -->
+<div class="am-container user-main">
+    <!-- user menu start -->
+    {{:ModuleInclude('public/user_menu')}}
+    <!-- user menu end -->
+
+    <!-- content start -->
+    <div class="user-content">
+        <div class="user-content-body">
+            {{:ModuleInclude('public/admin_nav', [
+                'title'     => '取货点'.(empty($data['id']) ? MyLang('created_title') : MyLang('edit_title')),
+                'back_url'  => $form_back_url
+            ])}}
+
+            <form class="am-form form-validation am-form-full-screen am-form-popup-sticky" action="{{:PluginsHomeUrl('distribution', 'extraction', 'applysave')}}" method="POST" request-type="ajax-url" request-value="{{:PluginsHomeUrl('distribution', 'extraction', 'index')}}" enctype="multipart/form-data">
+                <div class="am-cf">
+                    <div class="am-u-sm-6 am-padding-horizontal-0">
+                        <div class="am-form-group am-form-file">
+                            <label class="am-block">logo图片<span class="am-form-group-label-tips">建议300*300px</span></label>
+                            <div class="am-form-file-upload-container">
+                                <ul class="plug-file-upload-view logo" data-form-name="logo" data-max-number="1" data-dialog-type="images">
+                                    {{if !empty($data['logo'])}}
+                                        <li>
+                                            <input type="text" name="logo" value="{{$data.logo}}" data-validation-message="请上传logo图片" required />
+                                            <img src="{{$data.logo}}" />
+                                            <i class="iconfont icon-close"></i>
+                                        </li>
+                                    {{/if}}
+                                </ul>
+                                <div class="plug-file-upload-submit" data-view-tag="ul.logo">
+                                    <i class="iconfont icon-upload-add"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="am-u-sm-6 am-padding-horizontal-0">
+                        <div class="am-form-group">
+                            <label>别名</label>
+                            <input type="text" name="alias" placeholder="别名" minlength="0" maxlength="16" data-validation-message="别名格式最多 16 个字符" class="am-radius" value="{{if !empty($data['alias'])}}{{$data.alias}}{{/if}}" required/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="am-cf">
+                    <div class="am-u-sm-6 am-padding-horizontal-0">
+                        <div class="am-form-group">
+                            <label>联系人<span class="am-form-group-label-tips-must">*</span></label>
+                            <input type="text" name="name" placeholder="联系人" minlength="0" maxlength="16" data-validation-message="联系人格式 2~16 个字符之间" class="am-radius" value="{{if !empty($data['name'])}}{{$data.name}}{{/if}}" />
+                        </div>
+                    </div>
+                    <div class="am-u-sm-6 am-padding-horizontal-0">
+                        <div class="am-form-group">
+                            <label>联系电话<span class="am-form-group-label-tips-must">*</span></label>
+                            <input type="text" name="tel" placeholder="联系电话" minlength="0" maxlength="30" data-validation-message="联系电话格式有误" class="am-radius" value="{{if !empty($data['tel'])}}{{$data.tel}}{{/if}}" />
+                        </div>
+                    </div>
+                </div>
+
+                {{:ModuleInclude('lib/region_linkage')}}
+                <div class="am-form-group address-detail">
+                    <label>详细地址<span class="am-form-group-label-tips-must">*</span></label>
+                    <div class="am-input-group am-input-group-sm">
+                        <input type="hidden" name="lng" id="form-lng" value="{{if !empty($data['lng'])}}{{$data.lng}}{{/if}}" />
+                        <input type="hidden" name="lat" id="form-lat" value="{{if !empty($data['lat'])}}{{$data.lat}}{{/if}}" />
+                        <input type="text" name="address" id="form-address" placeholder="详细地址" minlength="2" maxlength="80" data-validation-message="详细地址格式 1~80 个字符之间" class="am-radius" value="{{if !empty($data['address'])}}{{$data.address}}{{/if}}" required />
+                        <span class="am-input-group-btn">
+                            <button class="am-btn am-btn-default am-radius" type="button" id="map-location-submit">
+                                <i class="am-icon-map-marker"></i>
+                                <span>{{:MyLang('location_title')}}</span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="am-form-group am-form-group-refreshing map-container am-margin-top-xs">
+                    <div id="map" data-level="17"></div>
+                </div>
+
+                {{if !empty($data) and isset($data['status']) and $data['status'] eq 1}}
+                    <div class="am-alert am-alert-warning" data-am-alert>
+                        <p>注意：编辑信息将重新审核后方可生效</p>
+                    </div>
+                {{/if}}
+
+                <div class="am-form-popup-submit">
+                    <a href="{{:PluginsHomeUrl('distribution', 'extraction', 'index', $params)}}" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg">
+                        <i class="am-icon-mail-reply"></i>
+                        <span>{{:MyLang('retreat_title')}}</span>
+                    </a>
+                    <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('confirm_title')}}'}">
+                        <i class="am-icon-save"></i>
+                        <span>{{:MyLang('confirm_title')}}</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- content end -->
+</div>
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}
+<script type="text/javascript">
+$(function()
+{
+    // 百度地图初始化
+    MapInit({{if !empty($data['lng'])}}{{$data['lng']}}{{else /}}114.182783{{/if}},{{if !empty($data['lat'])}}{{$data['lat']}}{{else /}}22.300275{{/if}});
+});
+</script>

@@ -1,0 +1,183 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'multilingual',
+            'title'     => MyLang('base_config_title'),
+            'back_url'  => PluginsAdminUrl('multilingual', 'admin', 'index'),
+        ])}}
+
+        <!-- form start -->
+        <form class="am-form form-validation am-form-full-screen am-form-popup-sticky" action="{{:PluginsAdminUrl('multilingual', 'admin', 'save')}}" method="POST" request-type="ajax-url" request-value="{{:PluginsAdminUrl('multilingual', 'admin', 'index')}}" enctype="multipart/form-data">
+            {{:ModuleInclude('public/nav_switch_btn', [
+                'nav_data' => [
+                    [
+                        'name' => MyLang('base_config_title'),
+                        'key'  => 'base',
+                    ],
+                    [
+                        'name' => 'web后端翻译配置',
+                        'key'  => 'web-admin',
+                    ],
+                    [
+                        'name' => 'web前端js翻译配置',
+                        'key'  => 'web-js',
+                    ],
+                    [
+                        'name' => '手机端翻译配置',
+                        'key'  => 'app',
+                    ],
+                    [
+                        'name' => 'API配置',
+                        'key'  => 'api',
+                    ]
+                ]
+            ])}}
+
+            <div class="nav-content">
+                <div class="am-operate-stretch-tips">
+                    <div class="title">
+                        <i class="iconfont icon-tips"></i>
+                        <strong title="{{:MyLang('operate_list_tips_msg')}}">{{:MyLang('operate_list_tips_button_text')}}</strong>
+                        <i class="iconfont icon-contract contract" title="{{:MyLang('operate_list_tips_retract_text')}}"></i> 
+                    </div>
+                    <p>1. 仅支持将中文翻译为目标语言</p>
+                    <p>2. 目标语言为系统自带的多语言切换目标</p>
+                </div>
+
+                <!-- 基础配置 -->
+                <div class="item am-active" data-key="base">
+                    <div class="am-form-group">
+                        <label class="am-block">使用数据库存储模式<span class="am-form-group-label-tips">默认否、使用缓存模式</span></label>
+                        <input name="is_db_storage" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_db_storage']) and $data['is_db_storage'] eq 1}}checked="true"{{/if}} />
+                        <div class="am-tips-card">
+                            <p>数据库存储模式、是将翻译的数据永久存储在数据库中，可以在上一页翻译数据中查看及修正系统翻译不准确的内容</p>
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label class="am-block">搜索关键字跟随语言转换<span class="am-form-group-label-tips">默认否、开启后搜索关键字跟随用户选择的语言自动转换</span><span class="am-form-group-label-tips-must">2.0版本起支持</span></label>
+                        <input name="is_search_auto_switch" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_search_auto_switch']) and $data['is_search_auto_switch'] eq 1}}checked="true"{{/if}} />
+                    </div>
+                </div>
+
+                <!-- web后端翻译配置 -->
+                <div class="item" data-key="web-admin">
+                    <div class="am-form-group">
+                        <label class="am-block">模板fetch视图数据</label>
+                        <input name="is_translate_web_fetch_view" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_translate_web_fetch_view']) and $data['is_translate_web_fetch_view'] eq 1}}checked="true"{{/if}} />
+                        <div class="am-tips-card">
+                            <p>页面输出html之前就提前翻译好数据、再返回到页面渲染</p>
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label class="am-block">模板assign数据<span class="am-form-group-label-tips">默认否，建议不要开启、如果是做纯内容站点可以开启</span></label>
+                        <input name="is_translate_web_assign" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_translate_web_assign']) and $data['is_translate_web_assign'] eq 1}}checked="true"{{/if}} />
+                        <div class="am-tips-card">
+                            <p>直接将页面复制的数据翻译，这种情况又一个弊端（如果页面要做数据编辑就会导致编辑的数据不是原始的了）</p>
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label class="am-block">翻译基础公共数据</label>
+                        <input name="is_translate_web_ajax_base" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_translate_web_ajax_base']) and $data['is_translate_web_ajax_base'] eq 1}}checked="true"{{/if}} />
+                        <div class="am-tips-card">
+                            <p>如：联动地区数据</p>
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label class="am-block">Ajax异步接口数据</label>
+                        <div class="am-margin-top-sm">
+                            <input name="is_translate_web_ajax" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_translate_web_ajax']) and $data['is_translate_web_ajax'] eq 1}}checked="true"{{/if}} />
+                            <label class="am-checkbox-inline am-margin-left-lg">
+                                <input type="checkbox" name="is_translate_web_ajax_msg" value="1" data-am-ucheck {{if isset($data['is_translate_web_ajax_msg']) and $data['is_translate_web_ajax_msg'] eq 1}}checked{{/if}} /> 仅msg提示信息（不影响基础公共数据）
+                            </label>
+                        </div>
+                        <div class="am-tips-card">
+                            <p>仅 app/admin 和 app/index 两个模块下的异步接口数据</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- web前端js翻译配置 -->
+                <div class="item" data-key="web-js">
+                    <div class="am-form-group">
+                        <label class="am-block">开启web前端js翻译</label>
+                        <input name="is_enable_frontend" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_enable_frontend']) and $data['is_enable_frontend'] eq 1}}checked="true"{{/if}} />
+                    </div>
+                    <div class="am-form-group">
+                        <label>实时监听间隔时间<span class="am-form-group-label-tips">单位 秒</span></label>
+                        <div class="am-input-group am-input-group-sm">
+                            <input type="number" name="real_time_monitoring" placeholder="实时监听间隔时间" min="0" data-validation-message="请填写实时监听间隔时间" class="am-form-field am-radius" {{if !empty($data['real_time_monitoring'])}} value="{{$data.real_time_monitoring}}"{{/if}} />
+                            <span class="am-input-group-btn">
+                                <button type="button" class="am-btn am-btn-default am-radius">{{:MyLang('second_title')}}</button>
+                            </span>
+                        </div>
+                        <div class="am-tips-card">
+                            <p>1. 间隔时间不建议配置的太低、建议在3~6秒之间</p>
+                            <p>2. 频繁监听容易对接口造成压力、影响站点性能</p>
+                            <p>3. 空或者0表示关闭实时监听</p>
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label>停留页面翻译接口最多请求次数<span class="am-form-group-label-tips">单位 次</span></label>
+                        <div class="am-input-group am-input-group-sm">
+                            <input type="number" name="stop_page_request_number" placeholder="停留页面翻译接口最多请求次数" min="0" data-validation-message="请填写停留页面翻译接口最多请求次数" class="am-form-field am-radius" {{if !empty($data['stop_page_request_number'])}} value="{{$data.stop_page_request_number}}"{{/if}} />
+                            <span class="am-input-group-btn">
+                                <button type="button" class="am-btn am-btn-default am-radius">次</button>
+                            </span>
+                        </div>
+                        <div class="am-tips-card">
+                            <p>1. 间隔时间不建议配置的太高、建议在2~5次之间</p>
+                            <p>2. 由于页面标签可能出现不规范导致翻译失败、频繁请求接口造成压力、影响站点性能</p>
+                            <p>3. 空或者0表示关闭请求翻译接口</p>
+                            <p>4. 首次进入页面不参与计数</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 手机端翻译配置 -->
+                <div class="item" data-key="app">
+                    <div class="am-form-group">
+                        <label class="am-block">开启手机端翻译</label>
+                        <input name="is_translate_app" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_translate_app']) and $data['is_translate_app'] eq 1}}checked="true"{{/if}} />
+                    </div>
+                </div>
+
+                <!-- API配置 -->
+                <div class="item" data-key="api">
+                    <div class="am-alert am-alert-warning am-margin-top-sm">
+                        <p>1. 本插件采用百度翻译API接口实现</p>
+                        <p>2. 需要先到百度翻译开放平台申请API接口权限（通用翻译）<a href="https://api.fanyi.baidu.com/" target="_blank" class="am-margin-left-sm">点击去申请API权限 >></a></p>
+                        <p>3. 如需增加更多语言可以在文件中增加[app/plugins/multilingual/service/MultilingualService.php 、方法 MultilingualList]参考文档<a href="https://api.fanyi.baidu.com/doc/21" target="_blank" class="am-margin-left-sm">点击参考 >></a></p>
+                    </div>
+                    <div class="am-form-group">
+                        <label>appid<span class="am-form-group-label-tips">APP ID</span></label>
+                        <input type="text" name="appid" placeholder="appid" maxlength="30" data-validation-message="APPID格式最多 30 个字符" class="am-radius" {{if !empty($data['appid'])}} value="{{$data.appid}}"{{/if}} />
+                    </div>
+                    <div class="am-form-group">
+                        <label>appkey<span class="am-form-group-label-tips">密钥</span></label>
+                        <input type="text" name="appkey" placeholder="appkey" maxlength="60" data-validation-message="密钥格式最多 60 个字符" class="am-radius" {{if !empty($data['appkey'])}} value="{{$data.appkey}}"{{/if}} />
+                    </div>
+                </div>
+            </div>
+
+            <div class="am-form-popup-submit">
+                <a href="{{:PluginsAdminUrl('multilingual', 'admin', 'index', $params)}}" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg">
+                    <i class="am-icon-mail-reply"></i>
+                    <span>{{:MyLang('retreat_title')}}</span>
+                </a>
+                <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('save_title')}}'}">
+                    <i class="am-icon-save"></i>
+                    <span>{{:MyLang('save_title')}}</span>
+                </button>
+            </div>
+        </form>
+        <!-- form end -->
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

@@ -1,0 +1,32 @@
+{
+    "base":{
+        "plugins":"speedplaceorder",
+        "name":"极速下单",
+        "logo":"\/static\/upload\/images\/plugins_speedplaceorder\/2020\/03\/15\/1584236319707716.jpg",
+        "author":"Devil",
+        "author_url":"https:\/\/shopxo.net\/",
+        "version":"3.2.2",
+        "desc":"快速选择商品、快捷加入购物车、批量快速下单",
+        "apply_terminal":[
+            "pc",
+            "h5"
+        ],
+        "apply_version":[
+            "6.4.0"
+        ],
+        "is_home":true
+    },
+    "hook":{
+        "plugins_service_navigation_header_handle":[
+            "app\\plugins\\speedplaceorder\\Hook"
+        ]
+    },
+    "history":[
+        {
+            "host":"shopxo.com",
+            "url":"http:\/\/shopxo.com\/",
+            "ip":"127.0.0.1",
+            "time":"2024-12-22 12:13:55"
+        }
+    ]
+}

@@ -1,0 +1,14 @@
+{{if !empty($fee_list)}}
+
+
+    <div id="buy-items-plugins-freightfee-{{$warehouse_id}}" class="plugins-freightfee-buy am-margin-bottom" data-warehouse-id="{{$warehouse_id}}">
+        <span>运送方式:</span>
+        <div class="am-inline-block">
+            <select class="am-radius chosen-select" data-placeholder="{{:MyLang('please_select_tips')}}" data-is-clearout="0">
+                {{foreach $fee_list as $k=>$v}}
+                    <option value="{{$k}}" {{if isset($v['active']) and $v['active'] eq 1}}selected{{/if}}>{{$v.fee_name}}</option>
+                {{/foreach}}
+            </select>
+        </div>
+    </div>
+{{/if}}

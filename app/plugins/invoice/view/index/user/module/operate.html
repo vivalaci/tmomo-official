@@ -1,0 +1,19 @@
+<!-- 操作栏 -->
+<button type="button" class="am-btn am-btn-default am-btn-xs am-radius am-btn-block submit-popup" data-url="{{:PluginsHomeUrl('invoice', 'user', 'detail', ['id'=>$module_data['id']])}}" data-title="{{:MyLang('detail_title')}}">
+    <i class="am-icon-eye"></i>
+    <span>{{:MyLang('detail_title')}}</span>
+</button>
+
+{{if in_array($module_data['status'], [0,3])}}
+    <!-- 待开票和已拒绝可以 编辑/删除 -->
+    <a class="am-btn am-btn-secondary am-btn-xs am-radius am-btn-block" href="{{:PluginsHomeUrl('invoice', 'user', 'saveinfo', array_merge($params, ['id'=>$module_data['id']]))}}">
+        <i class="am-icon-edit"></i>
+        <span>{{:MyLang('edit_title')}}</span>
+    </a>
+{{/if}}
+{{if in_array($module_data['status'], [0,3,4])}}
+    <button type="button" class="am-btn am-btn-danger am-btn-xs am-radius am-btn-block submit-delete" data-url="{{:PluginsHomeUrl('invoice', 'user', 'delete')}}" data-id="{{$module_data.id}}" data-key="ids">
+        <i class="iconfont icon-delete"></i>
+        <span>{{:MyLang('delete_title')}}</span>
+    </button>
+{{/if}}

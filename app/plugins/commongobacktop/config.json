@@ -1,0 +1,38 @@
+{
+    "base":{
+        "plugins":"commongobacktop",
+        "name":"回到顶部",
+        "logo":"\/static\/upload\/images\/plugins_commongobacktop\/2019\/02\/15\/1550200927239565.jpg",
+        "author":"Devil",
+        "author_url":"https:\/\/shopxo.net\/",
+        "version":"3.2.2",
+        "desc":"当滚动到底部的时候出现回到顶部操作",
+        "apply_terminal":[
+            "pc",
+            "h5"
+        ],
+        "apply_version":[
+            "6.4.0"
+        ],
+        "is_home":false
+    },
+    "hook":{
+        "plugins_view_common_bottom":[
+            "app\\plugins\\commongobacktop\\Hook"
+        ],
+        "plugins_common_page_bottom":[
+            "app\\plugins\\commongobacktop\\Hook"
+        ],
+        "plugins_common_header":[
+            "app\\plugins\\commongobacktop\\Hook"
+        ]
+    },
+    "history":[
+        {
+            "host":"shopxo.com",
+            "url":"http:\/\/shopxo.com\/",
+            "ip":"127.0.0.1",
+            "time":"2024-12-22 12:16:21"
+        }
+    ]
+}

@@ -1,0 +1,74 @@
+<!-- 继承公共的 form -->
+{{extend name="../../../module/view/form_table/detail" /}}
+
+<!-- 重写数据模块 -->
+{{block name="detail_data"}}
+    {{:ModuleInclude('public/detail_nav_switch_tabs', [
+        'nav_data' => [
+            [
+                'name' => MyLang('form_base_data_title'),
+                'key'  => 'base',
+            ],
+            [
+                'name'     => MyLang('universal_throughout_venue_tips'),
+                'key'      => 'classification-0',
+                'is_show'  => (isset($data['use_limit_type']) && $data['use_limit_type'] === 0) ? 1 : 0,
+            ],
+            [
+                'name'     => MyLang('restricted_classification_text'),
+                'key'      => 'classification-1',
+                'is_show'  => (isset($data['use_limit_type']) && $data['use_limit_type'] === 1) ? 1 : 0,
+            ],
+            [
+                'name'     => MyLang('restricted_goods_text'),
+                'key'      => 'products',
+                'is_show'  => (isset($data['use_limit_type']) && $data['use_limit_type'] === 2) ? 1 : 0,
+            ]
+        ]
+    ])}}
+    <div class="detail-content-switch-data-item">
+        <!-- 父级内容 -->
+        <div class="item am-active" data-key="base">
+            {__block__}
+        </div>
+        {{if isset($data['use_limit_type'])}}
+            <!-- 限定分类 -->
+            {{if $data['use_limit_type'] eq 0}}
+                <div class="item" data-key="classification-0">
+                    <p class="am-text-center am-text-warning">
+                        {{if empty($data['shop_id'])}}{{:MyLang('universal_throughout_venue_tips')}}{{else /}}
+                            <span>{{:MyLang('only_current_shop_user_tips')}}</span>
+                            <a class="am-margin-left-sm am-text-primary" href="{{:PluginsHomeUrl('shop', 'index', 'detail', ['id'=>$data['shop_id']])}}" target="_blank">{{:MyLang('view_shop_text')}} >></a>
+                        {{/if}}
+                    </p>
+                </div>
+            {{/if}}
+
+            <!-- 限定分类 -->
+            {{if $data['use_limit_type'] eq 1}}
+                <div class="item" data-key="classification-1">
+                    {{if !empty($data['category_names'])}}
+                        <p>{{:implode('，', $data['category_names'])}}</p>
+                    {{else /}}
+                        {{:ModuleInclude('public/not_data')}}
+                    {{/if}}
+                </div>
+            {{/if}}
+
+            <!-- 限定商品 -->
+            {{if $data['use_limit_type'] eq 2}}
+                <div class="item" data-key="products">
+                    {{if !empty($data['goods_items'])}}
+                        <dl class="dl-content dl-content-dd-only">
+                            {{foreach $data.goods_items as $v}}
+                                <dd><a href="{{$v.goods_url}}" target="_blank">{{$v.title}}</a></dd>
+                            {{/foreach}}
+                        </dl>
+                    {{else /}}
+                        {{:ModuleInclude('public/not_data')}}
+                    {{/if}}
+                </div>
+            {{/if}}
+        {{/if}}
+    </div>
+{{/block}}

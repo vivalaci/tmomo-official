@@ -1,0 +1,636 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'thirdpartylogin',
+            'title'     => '第三方登录',
+        ])}}
+
+        <div class="thirdpartylogin-content">
+            <!-- 基础配置 -->
+            <div class="am-panel am-panel-default am-radius thirdpartylogin-content-base">
+                <div class="am-panel-hd">
+                    <span class="am-panel-title">{{:MyLang('base_config_title')}}</span>
+                    <a class="am-margin-left-lg" href="{{:PluginsAdminUrl('thirdpartylogin', 'admin', 'saveinfo')}}">
+                        <i class="am-icon-edit"></i>
+                        <span>{{:MyLang('edit_title')}}</span>
+                    </a>
+                </div>
+                <div class="am-panel-bd">
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>强制绑定帐号</label>
+                                <div>
+                                    {{if isset($data['is_force_bind_user']) and $data['is_force_bind_user'] eq 1}}{{:MyLang('yes_title')}}{{else /}}<span class="am-color-grey">{{:MyLang('no_title')}}</span>{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>登录页面展示登录入口</label>
+                                <div>
+                                    {{if isset($data['is_logininfo_show_ent']) and $data['is_logininfo_show_ent'] eq 1}}{{:MyLang('yes_title')}}{{else /}}<span class="am-color-grey">{{:MyLang('no_title')}}</span>{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>注册页面展示登录入口</label>
+                                <div>
+                                    {{if isset($data['is_reginfo_show_ent']) and $data['is_reginfo_show_ent'] eq 1}}{{:MyLang('yes_title')}}{{else /}}<span class="am-color-grey">{{:MyLang('no_title')}}</span>{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启web端扫码登录</label>
+                                <div>
+                                    {{if isset($data['is_web_login_scan']) and $data['is_web_login_scan'] eq 1}}{{:MyLang('yes_title')}}{{else /}}<span class="am-color-grey">{{:MyLang('no_title')}}</span>{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>顶部导航左侧登录入口名称</label>
+                                <div>
+                                    {{if empty($data['nav_top_left_ent_name'])}}
+                                        <span class="am-color-grey">{{:MyLang('no_setup_tips')}}</span>
+                                    {{else /}}
+                                        {{:MyLang('already_setup_tips')}}[ {{$data.nav_top_left_ent_name}} ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>H5自定义地址</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if !empty($data['h5_url'])}}
+                                        {{$data.h5_url}}
+                                    {{else /}}
+                                        <span class="am-color-grey">{{:MyLang('no_setup_tips')}}</span>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- 平台配置 -->
+            <div data-am-widget="tabs" class="am-tabs am-tabs-default am-radius am-margin-0 thirdpartylogin-content-base" data-am-tabs="{noSwipe: 1}">
+                <ul class="am-tabs-nav am-cf">
+                    <li class="am-active"><a href="[data-tab-panel-0]">钉钉</a></li>
+                    <li><a href="[data-tab-panel-1]">支付宝</a></li>
+                    <li><a href="[data-tab-panel-2]">微信</a></li>
+                    <li><a href="[data-tab-panel-3]">QQ</a></li>
+                    <li><a href="[data-tab-panel-4]">微博</a></li>
+                    <li><a href="[data-tab-panel-5]">闽诊通</a></li>
+                    <li><a href="[data-tab-panel-6]">苹果</a></li>
+                    <li><a href="[data-tab-panel-7]">谷歌</a></li>
+                    <li><a href="[data-tab-panel-8]">APP本机号码登录</a></li>
+                </ul>
+                <div class="am-tabs-bd">
+                    <!-- 钉钉 -->
+                    <div data-tab-panel-0 class="am-tab-panel am-active">
+                        <div class="am-alert am-margin-xs">
+                            <p>回调地址</p>
+                            <p><a href="{{:PluginsHomeUrl('thirdpartylogin', 'index', 'back', ['platform'=>'dingding'])}}" target="_blank">{{:PluginsHomeUrl('thirdpartylogin', 'index', 'back', ['platform'=>'dingding'])}}</a></p>
+                            <div class="am-margin-top-sm">
+                                <a href="https://open-dev.dingtalk.com/" target="_blank">去钉钉开放平台申请权限 >></a>
+                            </div>
+                        </div>
+                        <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                            <li>
+                                <div class="items am-padding-sm">
+                                    <label>应用名称</label>
+                                    <div>
+                                        {{if empty($data['dingding_app_name'])}}
+                                            <span class="am-color-grey">{{:MyLang('no_setup_tips')}}</span>
+                                        {{else /}}
+                                            {{:MyLang('already_setup_tips')}}[ {{$data.dingding_app_name}} ]
+                                        {{/if}}
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="items am-padding-sm">
+                                    <label>AppKey</label>
+                                    <div>
+                                        {{if empty($data['dingding_app_id'])}}
+                                            <span class="am-color-grey">{{:MyLang('no_setup_tips')}}</span>
+                                        {{else /}}
+                                            {{:MyLang('already_setup_tips')}}[ {{$data.dingding_app_id}} ]
+                                        {{/if}}
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="items am-padding-sm">
+                                    <label>AppSecret</label>
+                                    <div class="am-scrollable-vertical">
+                                        {{if empty($data['dingding_app_secret'])}}
+                                            <span class="am-color-grey">{{:MyLang('no_setup_tips')}}</span>
+                                        {{else /}}
+                                            {{:MyLang('already_setup_tips')}}[ {{$data.dingding_app_secret}} ]
+                                        {{/if}}
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="items am-padding-sm">
+                                    <label>钉钉环境自动登录</label>
+                                    <div>
+                                        {{if isset($data['dingding_is_env_auto_login']) and $data['dingding_is_env_auto_login'] eq 1}}{{:MyLang('yes_title')}}{{else /}}<span class="am-color-grey">{{:MyLang('no_title')}}</span>{{/if}}
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="items am-padding-sm">
+                                    <label>开启登录</label>
+                                    <div>
+                                        {{if isset($data['dingding_is_enable']) and $data['dingding_is_enable'] eq 1}}{{:MyLang('yes_title')}}{{else /}}<span class="am-color-grey">{{:MyLang('no_title')}}</span>{{/if}}
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                        <div class="am-panel am-panel-default am-radius am-margin-xs">
+                            <div class="am-panel-hd">
+                                <h3 class="am-panel-title">更多应用</h3>
+                            </div>
+                            <div class="am-panel-bd">
+                                {{if !empty($data['dingding_more_app']) and is_array($data['dingding_more_app'])}}
+                                    <ul class="am-list am-list-static am-margin-bottom-0 thirdpartylogin-more-app-list">
+                                        {{foreach $data.dingding_more_app as $k=>$v}}
+                                            <li>
+                                                <span>应用名称：</span>
+                                                <strong>{{$v.app_name}}</strong>
+                                                <span class="am-margin-left-lg">AppKey：</span>
+                                                <strong>{{$v.app_id}}</strong>
+                                                <span class="am-margin-left-lg">AppSecret：</span>
+                                                <strong>{{$v.app_secret}}</strong>
+                                                <div class="am-margin-top-xs">
+                                                    <span>登录地址：</span>
+                                                    <a href="{{:PluginsHomeUrl('thirdpartylogin', 'index', 'login', ['platform'=>'dingding', 'appoint'=>$k])}}" target="_blank">{{:PluginsHomeUrl('thirdpartylogin', 'index', 'login', ['platform'=>'dingding', 'appoint'=>$k])}}</a>
+                                                </div>
+                                                <div class="am-margin-top-xs">
+                                                    <span>回调地址：</span>
+                                                    <a href="{{:PluginsHomeUrl('thirdpartylogin', 'index', 'back', ['platform'=>'dingding', 'appoint'=>$k])}}" target="_blank">{{:PluginsHomeUrl('thirdpartylogin', 'index', 'back', ['platform'=>'dingding', 'appoint'=>$k])}}</a>
+                                                </div>
+                                            </li>
+                                        {{/foreach}}
+                                    </ul>
+                                {{else /}}
+                                    <div class="am-text-center am-padding-lg">
+                                        <i class="am-icon-warning"></i>
+                                        <span>无更多应用</span>
+                                    </div>
+                                {{/if}}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 支付宝 -->
+                    <div data-tab-panel-1 class="am-tab-panel">
+                        <div class="am-alert am-margin-xs">
+                            <p>回调地址</p>
+                            <p><a href="{{:PluginsHomeUrl('thirdpartylogin', 'index', 'back', ['platform'=>'alipay'])}}" target="_blank">{{:PluginsHomeUrl('thirdpartylogin', 'index', 'back', ['platform'=>'alipay'])}}</a></p>
+                            <div class="am-margin-top-sm">
+                                <a href="https://open.alipay.com/" target="_blank">去支付宝开放平台申请权限 >></a>
+                            </div>
+                        </div>
+                        <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                            <li>
+                                <div class="items am-padding-sm">
+                                    <label>AppKey</label>
+                                    <div>
+                                        {{if empty($data['alipay_app_id'])}}
+                                            <span class="am-color-grey">{{:MyLang('no_setup_tips')}}</span>
+                                        {{else /}}
+                                            {{:MyLang('already_setup_tips')}}[ {{$data.alipay_app_id}} ]
+                                        {{/if}}
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="items am-padding-sm">
+                                    <label>应用公钥</label>
+                                    <div class="am-scrollable-vertical">
+                                        {{if empty($data['alipay_rsa_public'])}}
+                                            <span class="am-color-grey">{{:MyLang('no_setup_tips')}}</span>
+                                        {{else /}}
+                                            {{:MyLang('already_setup_tips')}}[ {{$data.alipay_rsa_public}} ]
+                                        {{/if}}
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="items am-padding-sm">
+                                    <label>应用私钥</label>
+                                    <div class="am-scrollable-vertical">
+                                        {{if empty($data['alipay_rsa_private'])}}
+                                            <span class="am-color-grey">{{:MyLang('no_setup_tips')}}</span>
+                                        {{else /}}
+                                            {{:MyLang('already_setup_tips')}}[ {{$data.alipay_rsa_private}} ]
+                                        {{/if}}
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="items am-padding-sm">
+                                    <label>支付宝公钥</label>
+                                    <div class="am-scrollable-vertical">
+                                        {{if empty($data['alipay_out_rsa_public'])}}
+                                            <span class="am-color-grey">{{:MyLang('no_setup_tips')}}</span>
+                                        {{else /}}
+                                            {{:MyLang('already_setup_tips')}}[ {{$data.alipay_out_rsa_public}} ]
+                                        {{/if}}
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="items am-padding-sm">
+                                    <label>支付宝环境自动登录</label>
+                                    <div>
+                                        {{if isset($data['alipay_is_env_auto_login']) and $data['alipay_is_env_auto_login'] eq 1}}{{:MyLang('yes_title')}}{{else /}}<span class="am-color-grey">{{:MyLang('no_title')}}</span>{{/if}}
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="items am-padding-sm">
+                                    <label>开启登录</label>
+                                    <div>
+                                        {{if isset($data['alipay_is_enable']) and $data['alipay_is_enable'] eq 1}}{{:MyLang('yes_title')}}{{else /}}<span class="am-color-grey">{{:MyLang('no_title')}}</span>{{/if}}
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- 微信 -->
+                    <div data-tab-panel-2 class="am-tab-panel">
+                        <div class="am-alert am-margin-xs">
+                            <p>回调地址</p>
+                            <p><a href="{{:__MY_HOST__}}" target="_blank">{{:__MY_HOST__}}</a></p>
+
+                            <p class="am-margin-top-sm">APP接口地址</p>
+                            <p><a href="{{:__MY_URL__}}api.php?s=plugins/index&pluginsname=thirdpartylogin&pluginscontrol=index&pluginsaction=bind&platform=weixin" target="_blank">{{:__MY_URL__}}api.php?s=plugins/index&pluginsname=thirdpartylogin&pluginscontrol=index&pluginsaction=bind&platform=weixin</a></p>
+
+                            <div class="am-margin-top-sm">
+                                <a href="https://open.weixin.qq.com/" target="_blank">去微信开放平台申请权限 >></a>
+                            </div>
+                        </div>
+                        <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                            <li>
+                                <div class="items am-padding-sm">
+                                    <label>AppID - APP应用</label>
+                                    <div>
+                                        {{if empty($data['weixin_app_id'])}}
+                                            <span class="am-color-grey">{{:MyLang('no_setup_tips')}}</span>
+                                        {{else /}}
+                                            {{:MyLang('already_setup_tips')}}[ {{$data.weixin_app_id}} ]
+                                        {{/if}}
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="items am-padding-sm">
+                                    <label>AppSecret - APP应用</label>
+                                    <div class="am-scrollable-vertical">
+                                        {{if empty($data['weixin_app_secret'])}}
+                                            <span class="am-color-grey">{{:MyLang('no_setup_tips')}}</span>
+                                        {{else /}}
+                                            {{:MyLang('already_setup_tips')}}[ {{$data.weixin_app_secret}} ]
+                                        {{/if}}
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="items am-padding-sm">
+                                    <label>AppID - 网站应用</label>
+                                    <div>
+                                        {{if empty($data['weixin_web_id'])}}
+                                            <span class="am-color-grey">{{:MyLang('no_setup_tips')}}</span>
+                                        {{else /}}
+                                            {{:MyLang('already_setup_tips')}}[ {{$data.weixin_web_id}} ]
+                                        {{/if}}
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="items am-padding-sm">
+                                    <label>AppSecret - 网站应用</label>
+                                    <div class="am-scrollable-vertical">
+                                        {{if empty($data['weixin_web_secret'])}}
+                                            <span class="am-color-grey">{{:MyLang('no_setup_tips')}}</span>
+                                        {{else /}}
+                                            {{:MyLang('already_setup_tips')}}[ {{$data.weixin_web_secret}} ]
+                                        {{/if}}
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="items am-padding-sm">
+                                    <label>AppID - 公众号</label>
+                                    <div>
+                                        {{if empty($data['weixin_public_id'])}}
+                                            <span class="am-color-grey">{{:MyLang('no_setup_tips')}}</span>
+                                        {{else /}}
+                                            {{:MyLang('already_setup_tips')}}[ {{$data.weixin_public_id}} ]
+                                        {{/if}}
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="items am-padding-sm">
+                                    <label>AppSecret - 公众号</label>
+                                    <div class="am-scrollable-vertical">
+                                        {{if empty($data['weixin_public_secret'])}}
+                                            <span class="am-color-grey">{{:MyLang('no_setup_tips')}}</span>
+                                        {{else /}}
+                                            {{:MyLang('already_setup_tips')}}[ {{$data.weixin_public_secret}} ]
+                                        {{/if}}
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="items am-padding-sm">
+                                    <label>微信环境静默授权 - 公众号</label>
+                                    <div>
+                                        {{if isset($data['weixin_public_is_auth_base']) and $data['weixin_public_is_auth_base'] eq 1}}{{:MyLang('yes_title')}}{{else /}}<span class="am-color-grey">{{:MyLang('no_title')}}</span>{{/if}}
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="items am-padding-sm">
+                                    <label>微信环境自动登录 - 公众号</label>
+                                    <div>
+                                        {{if isset($data['weixin_is_env_auto_login']) and $data['weixin_is_env_auto_login'] eq 1}}{{:MyLang('yes_title')}}{{else /}}<span class="am-color-grey">{{:MyLang('no_title')}}</span>{{/if}}
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="items am-padding-sm">
+                                    <label>开启登录</label>
+                                    <div>
+                                        {{if isset($data['weixin_is_enable']) and $data['weixin_is_enable'] eq 1}}{{:MyLang('yes_title')}}{{else /}}<span class="am-color-grey">{{:MyLang('no_title')}}</span>{{/if}}
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- QQ -->
+                    <div data-tab-panel-3 class="am-tab-panel">
+                        <div class="am-alert am-margin-xs">
+                            <p>回调地址</p>
+                            <p><a href="{{:PluginsHomeUrl('thirdpartylogin', 'index', 'back', ['platform'=>'qq'])}}" target="_blank">{{:PluginsHomeUrl('thirdpartylogin', 'index', 'back', ['platform'=>'qq'])}}</a></p>
+
+                            <p class="am-margin-top-sm">APP接口地址</p>
+                            <p><a href="{{:__MY_URL__}}api.php?s=plugins/index&pluginsname=thirdpartylogin&pluginscontrol=index&pluginsaction=bind&platform=qq" target="_blank">{{:__MY_URL__}}api.php?s=plugins/index&pluginsname=thirdpartylogin&pluginscontrol=index&pluginsaction=bind&platform=qq</a></p>
+
+                            <div class="am-margin-top-sm">
+                                <a href="https://connect.qq.com/" target="_blank">去QQ开放平台申请权限 >></a>
+                            </div>
+                        </div>
+                        <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                            <li>
+                                <div class="items am-padding-sm">
+                                    <label>AppKey - APP应用</label>
+                                    <div>
+                                        {{if empty($data['qq_app_id'])}}
+                                            <span class="am-color-grey">{{:MyLang('no_setup_tips')}}</span>
+                                        {{else /}}
+                                            {{:MyLang('already_setup_tips')}}[ {{$data.qq_app_id}} ]
+                                        {{/if}}
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="items am-padding-sm">
+                                    <label>AppSecret - APP应用</label>
+                                    <div class="am-scrollable-vertical">
+                                        {{if empty($data['qq_app_secret'])}}
+                                            <span class="am-color-grey">{{:MyLang('no_setup_tips')}}</span>
+                                        {{else /}}
+                                            {{:MyLang('already_setup_tips')}}[ {{$data.qq_app_secret}} ]
+                                        {{/if}}
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="items am-padding-sm">
+                                    <label>AppKey - 网站应用</label>
+                                    <div>
+                                        {{if empty($data['qq_web_id'])}}
+                                            <span class="am-color-grey">{{:MyLang('no_setup_tips')}}</span>
+                                        {{else /}}
+                                            {{:MyLang('already_setup_tips')}}[ {{$data.qq_web_id}} ]
+                                        {{/if}}
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="items am-padding-sm">
+                                    <label>AppSecret - 网站应用</label>
+                                    <div class="am-scrollable-vertical">
+                                        {{if empty($data['qq_web_secret'])}}
+                                            <span class="am-color-grey">{{:MyLang('no_setup_tips')}}</span>
+                                        {{else /}}
+                                            {{:MyLang('already_setup_tips')}}[ {{$data.qq_web_secret}} ]
+                                        {{/if}}
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="items am-padding-sm">
+                                    <label>QQ环境自动登录（仅web端有效）</label>
+                                    <div>
+                                        {{if isset($data['qq_is_env_auto_login']) and $data['qq_is_env_auto_login'] eq 1}}{{:MyLang('yes_title')}}{{else /}}<span class="am-color-grey">{{:MyLang('no_title')}}</span>{{/if}}
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="items am-padding-sm">
+                                    <label>开启登录</label>
+                                    <div>
+                                        {{if isset($data['qq_is_enable']) and $data['qq_is_enable'] eq 1}}{{:MyLang('yes_title')}}{{else /}}<span class="am-color-grey">{{:MyLang('no_title')}}</span>{{/if}}
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- 新浪微博 -->
+                    <div data-tab-panel-4 class="am-tab-panel">
+                        <div class="am-alert am-margin-xs">
+                            <p>回调地址</p>
+                            <p><a href="{{:PluginsHomeUrl('thirdpartylogin', 'index', 'back', ['platform'=>'weibo'])}}" target="_blank">{{:PluginsHomeUrl('thirdpartylogin', 'index', 'back', ['platform'=>'weibo'])}}</a></p>
+                            <div class="am-margin-top-sm">
+                                <a href="https://open.weibo.com/" target="_blank">去新浪微博开放平台申请权限 >></a>
+                            </div>
+                        </div>
+                        <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                            <li>
+                                <div class="items am-padding-sm">
+                                    <label>AppKey</label>
+                                    <div>
+                                        {{if empty($data['weibo_app_id'])}}
+                                            <span class="am-color-grey">{{:MyLang('no_setup_tips')}}</span>
+                                        {{else /}}
+                                            {{:MyLang('already_setup_tips')}}[ {{$data.weibo_app_id}} ]
+                                        {{/if}}
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="items am-padding-sm">
+                                    <label>AppSecret</label>
+                                    <div class="am-scrollable-vertical">
+                                        {{if empty($data['weibo_app_secret'])}}
+                                            <span class="am-color-grey">{{:MyLang('no_setup_tips')}}</span>
+                                        {{else /}}
+                                            {{:MyLang('already_setup_tips')}}[ {{$data.weibo_app_secret}} ]
+                                        {{/if}}
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="items am-padding-sm">
+                                    <label>新浪微博环境自动登录</label>
+                                    <div>
+                                        {{if isset($data['weibo_is_env_auto_login']) and $data['weibo_is_env_auto_login'] eq 1}}{{:MyLang('yes_title')}}{{else /}}<span class="am-color-grey">{{:MyLang('no_title')}}</span>{{/if}}
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="items am-padding-sm">
+                                    <label>开启登录</label>
+                                    <div>
+                                        {{if isset($data['weibo_is_enable']) and $data['weibo_is_enable'] eq 1}}{{:MyLang('yes_title')}}{{else /}}<span class="am-color-grey">{{:MyLang('no_title')}}</span>{{/if}}
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- 闽诊通 -->
+                    <div data-tab-panel-5 class="am-tab-panel">
+                        <div class="am-alert am-margin-xs">
+                            <div>
+                                <a href="http://3dsky.com.cn/" target="_blank">去闽诊通平台申请权限 >></a>
+                            </div>
+                        </div>
+                        <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                            <li>
+                                <div class="items am-padding-sm">
+                                    <label>AppID</label>
+                                    <div>
+                                        {{if empty($data['3dsky_app_id'])}}
+                                            <span class="am-color-grey">{{:MyLang('no_setup_tips')}}</span>
+                                        {{else /}}
+                                            {{:MyLang('already_setup_tips')}}[ {{$data.3dsky_app_id}} ]
+                                        {{/if}}
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="items am-padding-sm">
+                                    <label>AppSecret</label>
+                                    <div class="am-scrollable-vertical">
+                                        {{if empty($data['3dsky_app_secret'])}}
+                                            <span class="am-color-grey">{{:MyLang('no_setup_tips')}}</span>
+                                        {{else /}}
+                                            {{:MyLang('already_setup_tips')}}[ {{$data.3dsky_app_secret}} ]
+                                        {{/if}}
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="items am-padding-sm">
+                                    <label>开启登录</label>
+                                    <div>
+                                        {{if isset($data['3dsky_is_enable']) and $data['3dsky_is_enable'] eq 1}}{{:MyLang('yes_title')}}{{else /}}<span class="am-color-grey">{{:MyLang('no_title')}}</span>{{/if}}
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- 苹果 -->
+                    <div data-tab-panel-6 class="am-tab-panel">
+                        <div class="am-alert am-margin-xs">
+                            <p class="am-margin-top-sm">APP接口地址（仅支持IOS端）</p>
+                            <p><a href="{{:__MY_URL__}}api.php?s=plugins/index&pluginsname=thirdpartylogin&pluginscontrol=index&pluginsaction=bind&platform=apple" target="_blank">{{:__MY_URL__}}api.php?s=plugins/index&pluginsname=thirdpartylogin&pluginscontrol=index&pluginsaction=bind&platform=apple</a></p>
+
+                            <div class="am-margin-top-sm">
+                                <a href="https://developer.apple.com/" target="_blank">去苹果开放平台申请权限 >></a>
+                            </div>
+                        </div>
+                        <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                            <li>
+                                <div class="items am-padding-sm">
+                                    <label>开启登录</label>
+                                    <div>
+                                        {{if isset($data['apple_is_enable']) and $data['apple_is_enable'] eq 1}}{{:MyLang('yes_title')}}{{else /}}<span class="am-color-grey">{{:MyLang('no_title')}}</span>{{/if}}
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- 谷歌 -->
+                    <div data-tab-panel-7 class="am-tab-panel">
+                        <div class="am-alert am-margin-xs">
+                            <p class="am-margin-top-sm">APP接口地址（仅支持APP端）</p>
+                            <p><a href="{{:__MY_URL__}}api.php?s=plugins/index&pluginsname=thirdpartylogin&pluginscontrol=index&pluginsaction=bind&platform=google" target="_blank">{{:__MY_URL__}}api.php?s=plugins/index&pluginsname=thirdpartylogin&pluginscontrol=index&pluginsaction=bind&platform=google</a></p>
+
+                            <div class="am-margin-top-sm">
+                                <a href="https://console.cloud.google.com/" target="_blank">去谷歌开放平台申请权限 >></a>
+                            </div>
+                        </div>
+                        <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                            <li>
+                                <div class="items am-padding-sm">
+                                    <label>开启登录</label>
+                                    <div>
+                                        {{if isset($data['google_is_enable']) and $data['google_is_enable'] eq 1}}{{:MyLang('yes_title')}}{{else /}}<span class="am-color-grey">{{:MyLang('no_title')}}</span>{{/if}}
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- APP本机号码登录 -->
+                    <div data-tab-panel-8 class="am-tab-panel">
+                        <div class="am-alert am-margin-xs">
+                            <p class="am-margin-top-sm">APP接口地址（仅支持APP端），该登录不受【强制绑定帐号】配置所影响，手机号码存在就登录、则自动注册并登录</p>
+                            <p><a href="{{:__MY_URL__}}api.php?s=plugins/index&pluginsname=thirdpartylogin&pluginscontrol=index&pluginsaction=apponekeyusermobile" target="_blank">{{:__MY_URL__}}api.php?s=plugins/index&pluginsname=thirdpartylogin&pluginscontrol=index&pluginsaction=apponekeyusermobile</a></p>
+
+                            <div class="am-margin-top-sm">
+                                <a href="https://doc.dcloud.net.cn/uniCloud/univerify.html" target="_blank">去Dcloud云平台申请权限 >></a>
+                            </div>
+                        </div>
+                        <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                            <li>
+                                <div class="items am-padding-sm">
+                                    <label>开启登录</label>
+                                    <div>
+                                        {{if isset($data['apponekeyusermobile_is_enable']) and $data['apponekeyusermobile_is_enable'] eq 1}}{{:MyLang('yes_title')}}{{else /}}<span class="am-color-grey">{{:MyLang('no_title')}}</span>{{/if}}
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

@@ -1,0 +1,20 @@
+{{if !empty($plugins_config['goods_detail_content_top_tips_msg'])}}
+    <div class="am-container am-margin-bottom-sm plugins-intellectstools-goods-content-top am-margin-top-main">
+        <div class="am-panel am-panel-secondary am-radius am-margin-bottom-0">
+            {{if !empty($plugins_config['goods_detail_content_top_tips_title'])}}
+                <div class="am-panel-hd">
+                    <p class="am-panel-title">{{$plugins_config.goods_detail_content_top_tips_title}}</p>
+                </div>
+            {{/if}}
+            {{if !empty($plugins_config['goods_detail_content_top_tips_msg']) and is_array($plugins_config['goods_detail_content_top_tips_msg'])}}
+                <table class="am-table">
+                    {{foreach $plugins_config.goods_detail_content_top_tips_msg as $v}}
+                        <tr>
+                            <td>{{$v|raw}}</td>
+                        </tr>
+                    {{/foreach}}
+                </table>
+            {{/if}}
+        </div>
+    </div>
+{{/if}}

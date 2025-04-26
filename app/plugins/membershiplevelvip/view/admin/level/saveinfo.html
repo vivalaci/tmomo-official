@@ -1,0 +1,304 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'membershiplevelvip',
+            'title'     => '会员等级'.(empty($data['id']) ? MyLang('created_title') : MyLang('edit_title')),
+            'back_url'  => PluginsAdminUrl('membershiplevelvip', 'level', 'index', $params),
+        ])}}
+
+        <div class="membershiplevelvip-content">
+            <!-- form start -->
+            <form class="am-form form-validation am-form-full-screen am-form-popup-sticky" action="{{:PluginsAdminUrl('membershiplevelvip', 'level', 'save')}}" method="POST" request-type="ajax-url" request-value="{{:PluginsAdminUrl('membershiplevelvip', 'level', 'index')}}" enctype="multipart/form-data">
+                <!-- 基础配置 -->
+                <div class="am-panel am-panel-default am-radius">
+                    <div class="am-panel-hd">
+                        <h3 class="am-panel-title">{{:MyLang('base_config_title')}}</h3>
+                    </div>
+                    <div class="am-panel-bd">
+                        <div class="am-cf">
+                            <div class="am-u-sm-6 am-padding-horizontal-0">
+                                <div class="am-form-group">
+                                    <label>名称</label>
+                                    <input type="text" name="name" placeholder="名称" minlength="1" maxlength="30" data-validation-message="名称格式 1~30 个字符" class="am-radius" {{if !empty($data['name'])}} value="{{$data.name}}"{{/if}} required />
+                                </div>
+                            </div>
+                            <div class="am-u-sm-6 am-padding-horizontal-0">
+                                {{:ModuleInclude('lib/is_enable')}}
+                            </div>
+                        </div>
+
+                        <div class="am-cf">
+                            <div class="am-u-sm-6 am-padding-horizontal-0">
+                                <div class="am-form-group am-form-file">
+                                    <label class="am-block">图标<span class="am-form-group-label-tips">建议50*50px</span></label>
+                                    <div class="am-form-file-upload-container">
+                                        <ul class="plug-file-upload-view images_url-images-view" data-form-name="images_url" data-max-number="1" data-delete="1" data-dialog-type="images">
+                                            {{if !empty($data['images_url'])}}
+                                                <li>
+                                                    <input type="text" name="images_url" value="{{$data.images_url}}" data-validation-message="请上传图标" />
+                                                    <img src="{{$data.images_url}}" />
+                                                    <i class="iconfont icon-close"></i>
+                                                </li>
+                                            {{/if}}
+                                        </ul>
+                                        <div class="plug-file-upload-submit" data-view-tag="ul.images_url-images-view">
+                                            <i class="iconfont icon-upload-add"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="am-u-sm-6 am-padding-horizontal-0">
+                                <div class="am-form-group">
+                                    <label>规则值</label>
+                                    <div class="rules-value">
+                                        <input type="number" placeholder="最小值" name="rules_min" min="0" step="0.01" data-validation-message="请填写规则最小值" class="am-radius" {{if isset($data['rules_min'])}} value="{{$data.rules_min}}"{{/if}} />
+                                        <span class="am-text-grey">~</span>
+                                        <input type="number" placeholder="最大值" min="0" step="0.01" name="rules_max" data-validation-message="请填写规则最大值" class="am-radius" {{if isset($data['rules_max'])}} value="{{$data.rules_max}}"{{/if}} />
+                                    </div>
+                                    <div class="am-tips-card">
+                                        <p>
+                                            自动分配会员等级、规则举例（如手动设置用户等级后则以手动设置权重最高）<br>
+                                            <span class="mini-tips-text">
+                                                最小规则0 - 最小规则0 / 则是 不自动匹配<br>
+                                                最小规则0 - 最大规则100 / 则是 小于100<br>
+                                                最小规则100 - 最大规则500 / 则是 大于等于100并且小于500<br>
+                                                最小规则500 - 最大规则0 / 则是 大于500
+                                            </span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 购物优惠 -->
+                <div class="am-panel am-panel-default am-radius">
+                    <div class="am-panel-hd">
+                        <h3 class="am-panel-title">购物优惠</h3>
+                    </div>
+                    <div class="am-panel-bd">
+                        <div class="am-tips-card">
+                            <p>
+                                <p>
+                                    <strong>优惠说明</strong>
+                                </p>
+                                <span class="mini-tips-text">
+                                    满减优惠 与 折扣率可<span class="am-color-red">叠加使用</span>，如需只使用其中一项优惠，则请注意只需配置该优惠项即可！！！
+                                </span>
+                            </p>
+                            <p class="am-margin-top-xs">
+                                <p>
+                                    <strong>折扣说明</strong>
+                                </p>
+                                <span class="mini-tips-text">
+                                    当用户组商品规格未设置自定义金额、则采用这折扣率。
+                                </span>
+                            </p>
+                            <p>
+                                <p>
+                                    <strong>计算规则</strong>
+                                </p>
+                                <span class="mini-tips-text">
+                                    大于等于[订单满金额]则减[满减金额](不含运费)，空则无优惠
+                                </span>
+                            </p>
+                        </div>
+
+                        <div class="am-cf am-margin-top">
+                            <div class="am-u-sm-12 am-u-md-6 am-padding-horizontal-0">
+                                <div class="am-form-group">
+                                    <label>满减优惠</label>
+                                    <div class="double-input-value">
+                                        <span>满</span>
+                                        <input type="number" name="order_price" min="0.00" step="0.01" placeholder="订单满金额" data-validation-message="请输入有效的订单满金额" class="am-radius" {{if !empty($data['order_price']) and $data['order_price'] gt 0}} value="{{$data.order_price}}"{{/if}} />
+                                        <span>减</span>
+                                        <input type="number" name="full_reduction_price" min="0.00" step="0.01" placeholder="满减金额" data-validation-message="请输入有效的满减金额" class="am-radius" {{if !empty($data['full_reduction_price']) and $data['full_reduction_price'] gt 0}} value="{{$data.full_reduction_price}}"{{/if}} />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="am-u-sm-12 am-u-md-6 am-padding-horizontal-0">
+                                <div class="am-form-group">
+                                    <label>折扣率<span class="am-form-group-label-tips">最大0.99</span></label>
+                                    <input type="number" name="discount_rate" placeholder="折扣率" min="0.00" max="0.99" step="0.01" data-validation-message="折扣率应输入 0.00~0.99 的数字,小数保留两位" class="am-radius" {{if !empty($data['discount_rate']) and $data['discount_rate'] gt 0}} value="{{$data.discount_rate}}"{{/if}} />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="am-cf">
+                            <div class="am-u-sm-12 am-u-md-6 am-padding-horizontal-0">
+                                <div class="am-form-group">
+                                    <label>满免运费</label>
+                                    <div class="double-input-value am-margin-top-sm">
+                                        <input type="number" name="free_shipping_price" min="0.00" step="0.01" placeholder="满额免运费" data-validation-message="请输入有效的满额免运费" class="am-radius" {{if !empty($data['free_shipping_price']) and $data['free_shipping_price'] gt 0}} value="{{$data.free_shipping_price}}"{{/if}} />
+                                        <label class="am-checkbox-inline am-margin-left-sm">
+                                            <input name="is_span_free_shipping_price" type="checkbox" value="1" {{if isset($data['is_span_free_shipping_price']) and $data['is_span_free_shipping_price'] eq 1}}checked{{/if}} data-am-ucheck /> 跨订单计算
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 付费会员 -->
+                <div class="am-panel am-panel-default am-radius">
+                    <div class="am-panel-hd">
+                        <h3 class="am-panel-title">付费会员</h3>
+                    </div>
+                    <div class="am-panel-bd">
+                        <div class="am-tips-card">
+                            <p>1. 需基础配置中 [ 付费会员->会员购买开启 ] 方可有效</p>
+                            <p>2. 当周期或者价格改变后、会员续费（原订单续费）还是使用原来购买时的周期和价格进行续费（除非用户会员已过期），仅新购买会员采用新的周期和价格进行购买。</p>
+                            <p>3. 会员过期只能重新按照新的周期和金额进行购买。</p>
+                        </div>
+                        <div class="am-cf">
+                            <div class="am-u-sm-6 am-padding-horizontal-0">
+                                <div class="am-form-group">
+                                    <label class="am-block">开启付费购买会员<span class="am-form-group-label-tips">用户可付费购买该会员组</span></label>
+                                    <input name="is_supported_pay_buy" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_supported_pay_buy']) and $data['is_supported_pay_buy'] eq 1}}checked="true"{{/if}} />
+                                </div>
+                            </div>
+                            <div class="am-u-sm-6 am-padding-horizontal-0">
+                                <div class="am-form-group">
+                                    <label class="am-block">不允许会员续费<span class="am-form-group-label-tips">开启后购买后在有效期内不允许续费，必须过期后方可重新购买会员</span></label>
+                                    <input name="is_supported_renew" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_supported_renew']) and $data['is_supported_renew'] eq 1}}checked="true"{{/if}} />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="am-form-group">
+                            <label>周期费用<span class="am-form-group-label-tips">购买周期对应的价格</span></label>
+                            <div class="am-alert am-margin-top-0">
+                                <p>1. 付费周期、填写规则值单位[ 天 ]，用户端会自动换算展示单位[ 年|天|时|分|秒|不限 ]，0或空 则表示无限</p>
+                                <p>2. 购买周期对应的价格</p>
+                                <p>3. 返佣规则1~3级，可设置比例或者固定金额，r 代表按照比例, s 代表固定金额 ( 以规则+竖线[ | ]+返佣值 )</p>
+                                <p class="am-margin-left-xs">3.1. 以英文分号[ ; ]区分[ 表示1~3级，超出3列则超出的行视为无效 ]</p>
+                                <p class="am-margin-left-xs">3.2. 跳级需要保留分隔符分号，规则内容留空即可</p>
+                                <p class="am-margin-left-xs">3.3. 列子：</p>
+                                <p class="am-margin-left-lg">3.3.1. 一级返佣5%, 二级返佣3%, 三级返佣2元 ( r|5;r|3;s|2 )</p>
+                                <p class="am-margin-left-lg">3.3.1. 一级返佣10%, 二级不返佣, 三级返佣5元 ( r|10;s|5 )</p>
+                                <p class="am-margin-left-lg">3.3.3. 一级返佣3元, 二级返佣5%, 三级不返佣 ( s|3;r|5 )</p>
+                                <p class="am-margin-top-sm">
+                                    <span class="business-operations-submit pay-period-container-add-submit">+ 添加一行</span>
+                                </p>
+                            </div>
+                            <ul class="am-list am-list-static am-list-border am-list-striped pay-period-container am-margin-top-xs am-margin-bottom-0">
+                                {{if !empty($data['pay_period_rules'])}}
+                                    {{foreach $data.pay_period_rules as $period}}
+                                        <li>
+                                            <span>周期</span>
+                                            <div class="am-input-group am-input-group-sm period-item period-item-number">
+                                                <input type="number" name="pay_period_number[]" placeholder="付费周期" min="0" data-validation-message="请输入有效的付费周期" class="am-form-field am-radius" value="{{if !empty($period['number'])}}{{$period.number}}{{/if}}" />
+                                                <span class="am-input-group-btn">
+                                                    <button type="button" class="am-btn am-btn-default am-radius">{{:MyLang('day_title')}}</button>
+                                                </span>
+                                            </div>
+                                            <span>费用</span>
+                                            <div class="am-input-group am-input-group-sm period-item period-item-price">
+                                                <input type="number" name="pay_period_price[]" min="0.01" step="0.01" placeholder="周期费用" data-validation-message="请输入有效的周期费用" class="am-form-field am-radius" value="{{if !empty($period['price'])}}{{$period.price}}{{/if}}" />
+                                                <span class="am-input-group-btn">
+                                                    <button type="button" class="am-btn am-btn-default am-radius">
+                                                        <span>元</span>
+                                                        <span class="am-color-grey-light am-margin-horizontal-xs">|</span>
+                                                        <label class="am-checkbox-inline" title="购买会员费用返现到钱包">
+                                                            <input type="checkbox" name="pay_period_is_cashback" value="1" data-am-ucheck {{if isset($period['is_cashback']) and $period['is_cashback'] eq 1}}checked{{/if}} /> 返现
+                                                        </label>
+                                                        <span class="am-color-grey-light am-margin-horizontal-xs">|</span>
+                                                        <label class="am-checkbox-inline" title="购买会员费用转为积分返给用户">
+                                                            <input type="checkbox" name="pay_period_is_points" value="1" data-am-ucheck {{if isset($period['is_points']) and $period['is_points'] eq 1}}checked{{/if}} /> 返积分
+                                                        </label>
+                                                    </button>
+                                                </span>
+                                            </div>
+                                            <span>返佣</span>
+                                            <div class="period-item">
+                                                <input type="text" name="pay_period_commission[]" placeholder="返佣规则" data-validation-message="请输入返佣规则" class="am-form-field am-radius" value="{{if !empty($period['commission'])}}{{$period.commission}}{{/if}}" />
+                                            </div>
+                                            <span class="am-margin-left">描述</span>
+                                            <div class="period-item">
+                                                <input type="text" name="pay_period_desc[]" placeholder="描述说明" data-validation-message="请输入描述说明" class="am-form-field am-radius" value="{{if !empty($period['desc'])}}{{$period.desc}}{{/if}}" required />
+                                            </div>
+                                            <div class="period-item period-item-coupon">
+                                                <input type="hidden" name="pay_period_give_coupon[]" value="{{if !empty($period['give_coupon'])}}{{:urlencode(base64_encode(json_encode($period.give_coupon)))}}{{/if}}" />
+                                                <a href="javascript:;" class="am-color-blue am-margin-left give-coupon-submit">赠送优惠券<span class="setup-unit am-color-green {{if empty($period['give_coupon'])}}am-hide{{/if}}">(已配置)</span></a>
+                                            </div>
+                                            <button type="button" class="am-close am-margin-bottom-xs">&times;</button>
+                                        </li>
+                                    {{/foreach}}
+                                {{/if}}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="am-form-popup-submit">
+                    <input type="hidden" name="id" {{if !empty($data['id'])}} value="{{$data.id}}"{{/if}} />
+                    <a href="{{:PluginsAdminUrl('membershiplevelvip', 'level', 'index', $params)}}" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg">
+                        <i class="am-icon-mail-reply"></i>
+                        <span>{{:MyLang('retreat_title')}}</span>
+                    </a>
+                    <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('save_title')}}'}">
+                        <i class="am-icon-save"></i>
+                        <span>{{:MyLang('save_title')}}</span>
+                    </button>
+                </div>
+            </form>
+            <!-- form end -->
+        </div>
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- 赠送优惠券配置弹窗  -->
+<div class="am-popup am-radius" id="plugins-vip-give-coupon-popup">
+    <div class="am-popup-inner">
+        <div class="am-popup-hd">
+            <h4 class="am-popup-title">赠送优惠券配置</h4>
+            <span data-am-modal-close class="am-close">&times;</span>
+        </div>
+        <div class="am-popup-bd">
+            {{if empty($coupon_list)}}
+                {{:ModuleInclude('public/not_data')}}
+            {{else /}}
+                <form class="am-form am-form-popup-fixed">
+                    <p class="am-color-yellow am-padding-bottom-sm">
+                        <i class="am-icon-exclamation-circle"></i>
+                        <span>勾选并设置数量则表示赠送</span>
+                    </p>
+                    <ul class="am-list am-list-static am-margin-bottom-0 choice-coupon-list">
+                        {{foreach $coupon_list as $v}}
+                            <li data-original-id="{{$v.id}}" data-original-name="{{$v.name}}">
+                                <label class="am-checkbox-inline name">
+                                    <input type="checkbox" value="1" data-am-ucheck />
+                                    <p class="am-inline-block">{{$v.name}}</p>
+                                </label>
+                                <p class="am-inline-block discount-value">{{$v.type_first}}{{$v.discount_value}}{{$v.type_unit}}</p>
+                                <p class="am-inline-block">
+                                    <input type="number" min="0" placeholder="赠送数量" data-validation-message="请输入赠送数量" class="am-form-field am-radius" value="" />
+                                </p>
+                            </li>
+                        {{/foreach}}
+                    </ul>
+                    <div class="am-form-popup-submit">
+                        <button type="button" class="am-btn am-btn-warning am-radius am-btn-xs" data-am-modal-close>
+                            <i class="am-icon-paint-brush"></i>
+                            <span>{{:MyLang('cancel_title')}}</span>
+                        </button>
+                        <button type="button" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example choice-coupon-confirm-submit" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('confirm_title')}}'}">
+                            <i class="am-icon-check"></i>
+                            <span>{{:MyLang('confirm_title')}}</span>
+                        </button>
+                    </div>
+                </form>
+            {{/if}}
+        </div>
+    </div>
+</div>
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

@@ -1,0 +1,9 @@
+<!-- 商品基础信息 -->
+{{if !empty($module_data)}}
+    <p class="am-text-truncate">
+        <a href="{{$module_data.goods_url}}" target="_blank" >
+            <img src="{{$module_data.images}}" class="am-img-thumbnail am-radius am-margin-right-xs am-vertical-align-middle" width="22" height="22" />
+            <span>{{$module_data.title}}</span>
+        </a>
+    </p>
+{{/if}}

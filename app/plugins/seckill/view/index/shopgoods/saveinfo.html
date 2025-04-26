@@ -1,0 +1,148 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- content start  -->
+<div class="am-padding-main am-background-white">
+    {{:ModuleInclude('public/admin_nav', [
+        'title'     => ('商品').(empty($goods) ? MyLang('created_title') : MyLang('edit_title')),
+        'back_url'  => $form_back_url
+    ])}}
+    <div class="seckill-content">
+        {{if empty($shop_id)}}
+            {{:ModuleInclude('public/not_data', [
+                'msg'  => '店铺信息有误',
+            ])}}
+        {{else /}}
+            <!-- form start -->
+            <form class="am-form form-validation am-form-full-screen am-form-popup-fixed" action="{{:PluginsHomeUrl('seckill', 'shopgoods', 'save')}}" method="POST" request-type="ajax-url" request-value="{{:PluginsHomeUrl('seckill', 'shopgoods', 'index')}}" enctype="multipart/form-data">
+                <div class="forth-selection-container">
+                    <div class="forth-selection-form" data-search-url="{{:PluginsHomeUrl('seckill', 'shopgoods', 'search')}}">
+                        <select class="am-radius chosen-select forth-selection-form-category" data-placeholder="{{:MyLang('optional_tips')}}" data-validation-message="{{:MyLang('form_goods_category_message')}}">
+                            <option value="">{{:MyLang('optional_tips')}}</option>
+                            {{if !empty($goods_category_list)}}
+                                {{foreach $goods_category_list as $v}}
+                                    <option value="{{$v.id}}">{{$v.name}}</option>
+                                {{/foreach}}
+                            {{/if}}
+                        </select>
+                        <input type="text" placeholder="{{:MyLang('goods_name')}}" class="am-radius forth-selection-form-keywords" />
+                        <button type="button" class="am-btn am-btn-primary-light am-radius am-btn-xs btn-loading-example search-submit" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('search_title')}}'}">
+                            <i class="iconfont icon-search"></i>
+                            <span>{{:MyLang('search_title')}}</span>
+                        </button>
+                    </div>
+                    <div class="am-form-group-refreshing forth-selection-list">
+                        <div class="forth-selection-items">
+                            <ul class="forth-selection-content am-list ul-left am-margin-top">
+                                {{:ModuleInclude('public/not_data')}}
+                            </ul>
+                        </div>
+                        <button type="button" class="am-btn am-btn-default am-btn-xs am-radius selected-all">全选 <i class="am-icon-angle-double-down"></i></button>
+                        <div class="am-margin-top-sm">
+                            <div class="am-alert am-alert-warning">
+                                <p>减金额比折扣优先级高、鼠标可点击商品数据行拖动排序</p>
+                            </div>
+                        </div>
+                        <div class="forth-selection-items-goods am-table-scrollable-horizontal am-radius am-border-0"
+                            data-json-periods-list='{{if !empty($periods_list)}}{{:json_encode($periods_list)}}{{/if}}'
+                            data-is-shop-text="{{:MyLang('periods.form_item_is_shop')}}" 
+                            data-periods-text="{{:MyLang('periods.base_nav_title')}}" 
+                            data-periods-message-text="{{:MyLang('periods.form_item_periods_id_message')}}" 
+                            data-start-time-text="{{:MyLang('form_time_start_title')}}" 
+                            data-start-time-message-text="{{:MyLang('form_time_start_message')}}" 
+                            data-end-time-text="{{:MyLang('form_time_end_title')}}" 
+                            data-end-time-message-text="{{:MyLang('form_time_end_message')}}" 
+                            data-discount-rate-text="{{:MyLang('periods.form_item_discount_rate')}}" 
+                            data-discount-rate-message-text="{{:MyLang('periods.form_item_discount_rate_message')}}" 
+                            data-dec-price-text="{{:MyLang('periods.form_item_dec_price')}}" 
+                            data-dec-price-message-text="{{:MyLang('periods.form_item_dec_price_message')}}" 
+                            data-off-text="{{:MyLang('no_title')}}" 
+                            data-on-text="{{:MyLang('yes_title')}}" 
+                        >
+                            <table class="am-table forth-selection-content am-margin-bottom-0">
+                                <thead>
+                                    <tr>
+                                        <th>商品信息</th>
+                                        <th>销售价</th>
+                                        <th>时段</th>
+                                        <th>活动时间</th>
+                                        <th>折扣/减金额</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {{if !empty($goods)}}
+                                        {{foreach $goods as $v}}
+                                            <tr class="items-li-{{$v.id}}">
+                                                <td class="base">
+                                                    <input type="hidden" name="data[{{$v.id}}][goods_id]" class="am-radius" value="{{$v.id}}" />
+                                                    <a href="{{$v.goods_url}}" target="_blank">
+                                                        <img src="{{$v.images}}" class="am-img-thumbnail am-radius" width="35" height="35" />
+                                                    </a>
+                                                    <div class="base-right">
+                                                        <p class="title am-text-truncate-2">
+                                                            <span>{{$v.title}}</span>
+                                                        </p>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <span class="price">{{$currency_symbol}}{{$v.price}}</span>
+                                                </td>
+                                                <td class="periods">
+                                                    <select name="data[{{$v.id}}][periods_id]" class="am-radius chosen-select forth-selection-form-category" data-placeholder="{{:MyLang('periods.base_nav_title')}}" data-validation-message="{{:MyLang('periods.form_item_periods_id_message')}}" data-is-clearout="0" required>
+                                                        <option value="">{{:MyLang('periods.base_nav_title')}}</option>
+                                                        {{if !empty($periods_list)}}
+                                                            {{foreach $periods_list as $pv}}
+                                                                <option value="{{$pv.id}}" {{if isset($v['periods_id']) and $v['periods_id'] eq $pv['id']}}selected{{/if}}>{{$pv.name}}</option>
+                                                            {{/foreach}}
+                                                        {{/if}}
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <div class="multiple-where-input">
+                                                        <input type="text" name="data[{{$v.id}}][time_start]" autocomplete="off" class="Wdate am-radius" placeholder="{{:MyLang('form_time_start_title')}}" data-validation-message="{{:MyLang('form_time_start_message')}}" onclick="WdatePicker({firstDayOfWeek:1,dateFmt:'yyyy-MM-dd', maxDate:'#F{$dp.$D(\'time-end-{{$v.id}}\');}'})" {{if !empty($v['time_start'])}}value="{{$v.time_start}}"{{/if}} data-is-clearout="0" id="time-start-{{$v.id}}" required />
+                                                        <span class="am-text-grey">~</span>
+                                                        <input type="text" name="data[{{$v.id}}][time_end]" autocomplete="off" class="Wdate am-radius" placeholder="{{:MyLang('form_time_end_title')}}" data-validation-message="{{:MyLang('form_time_end_message')}}" onclick="WdatePicker({firstDayOfWeek:1,dateFmt:'yyyy-MM-dd', minDate:'#F{$dp.$D(\'time-start-{{$v.id}}\');}'})" {{if !empty($v['time_end'])}}value="{{$v.time_end}}"{{/if}} data-is-clearout="0" id="time-end-{{$v.id}}" required />
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="multiple-where-input">
+                                                        <input type="number" name="data[{{$v.id}}][discount_rate]" placeholder="{{:MyLang('periods.form_item_discount_rate')}}" class="am-radius" min="0.00" max="0.99" step="0.01" data-validation-message="{{:MyLang('periods.form_item_discount_rate_message')}}" value="{{if isset($v['discount_rate']) and $v['discount_rate'] gt 0}}{{$v.discount_rate}}{{/if}}" data-is-clearout="0" />
+                                                        <span class="am-text-grey">/</span>
+                                                        <input type="number" placeholder="{{:MyLang('periods.form_item_dec_price')}}" name="data[{{$v.id}}][dec_price]" class="am-radius" min="0.00" step="0.01" data-validation-message="{{:MyLang('periods.form_item_dec_price_message')}}" value="{{if isset($v['dec_price']) and $v['dec_price'] gt 0}}{{$v.dec_price}}{{/if}}" data-is-clearout="0" />
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <a href="javascript:;" class="iconfont icon-delete am-text-danger"></a>
+                                                </td>
+                                            </tr>
+                                        {{/foreach}}
+                                    {{/if}}
+                                </tbody>
+                            </table>
+                            <div class="goods-choice-empty-tips {{if !empty($goods)}}am-hide{{/if}}">
+                                {{:ModuleInclude('public/not_data')}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="am-form-popup-submit am-text-left">
+                    <input type="hidden" name="id" {{if !empty($params['id'])}} value="{{$params.id}}"{{/if}} />
+                    <a href="{{:PluginsHomeUrl('seckill', 'shopgoods', 'index', $params)}}" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg">
+                        <i class="am-icon-mail-reply"></i>
+                        <span>{{:MyLang('retreat_title')}}</span>
+                    </a>
+                    <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('save_title')}}'}">
+                        <i class="am-icon-save"></i>
+                        <span>{{:MyLang('save_title')}}</span>
+                    </button>
+                </div>
+            </form>
+            <!-- form end -->
+        {{/if}}
+    </div>
+</div>
+<!-- content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

@@ -1,0 +1,417 @@
+{{include file="public/header" /}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <legend>
+            <span class="fs-16" style="font-size:13px">
+                参数配置
+            </span>
+            <a href="{{:MyUrl('admin/pluginsadmin/index')}}" class="fr fs-14 m-t-5 am-icon-mail-reply"  style="font-size:13px"> 返回</a>
+        </legend>
+
+        <div class="membershiplevel-content">
+            <!-- form start -->
+
+            <!--tab开始-->
+            <form id="form1" class="am-form form-validation view-save"
+                action="{{:PluginsAdminUrl('oss_1jian', 'admin', 'save')}}" method="POST" request-type="ajax-url"
+                request-value="{{:PluginsAdminUrl('oss_1jian', 'admin', 'index')}}">
+
+                <div id="TabForm" data-am-widget="tabs" class="am-tabs am-tabs-default" data-am-tabs-noswipe="1">
+                    <ul class="am-tabs-nav am-cf">
+                        <li class="am-active">
+                            <a href="[data-tab-panel-0]">阿里云OSS</a>
+                        </li>
+                        <li class="">
+                            <a href="[data-tab-panel-1]">七牛</a>
+                        </li>
+                        <li class="">
+                            <a href="[data-tab-panel-2]">腾讯云存储</a>
+                        </li>
+                    </ul>
+                    <div class="am-tabs-bd">
+                        <div data-tab-panel-0 class="am-tab-panel am-active">
+
+                            <div class="am-form-group">
+                                <div class="am-alert am-alert-warning" data-am-alert>
+                                    <a href="https://www.aliyun.com/product/oss?source=5176.11533457&userCode=73fmumzt&type=copy"
+                                        target="_blank">优惠阿里云oss折扣套餐立即申请</a>
+                                </div>
+                                <br />
+                                <label>阿里云ACCESS_KEY_ID</label>
+                                <input type="text" name="OSS_ACCESS_ID" placeholder="ACCESS_KEY_ID" minlength="0"
+                                    maxlength="130" class="am-radius" {{if !empty($data['OSS_ACCESS_ID'])}}
+                                    value="{{$data.OSS_ACCESS_ID}}" {{/if}} />
+                            </div>
+
+
+                            <div class="am-form-group">
+                                <label>阿里云ACCESS_KEY_SECRET</label>
+                                <input type="text" name="OSS_ACCESS_KEY" placeholder="OSS_ACCESS_KEY" minlength="0"
+                                    maxlength="130" class="am-radius" {{if !empty($data['OSS_ACCESS_KEY'])}}
+                                    value="{{$data.OSS_ACCESS_KEY}}" {{/if}} />
+                            </div>
+                            <div class="am-form-group">
+                                <label>阿里云ENDPOINT</label>
+                                <input type="text" name="OSS_ENDPOINT" placeholder="oss-cn-hangzhou.aliyuncs.com" minlength="0"
+                                    maxlength="130" class="am-radius" {{if !empty($data['OSS_ENDPOINT'])}}
+                                    value="{{$data.OSS_ENDPOINT}}" {{/if}} />
+                            </div>
+                            <div class="am-form-group">
+                                <label>阿里云BUCKET</label>
+                                <input type="text" name="OSS_TEST_BUCKET" placeholder="OSS_BUCKET" minlength="0"
+                                    maxlength="130" class="am-radius" {{if !empty($data['OSS_TEST_BUCKET'])}}
+                                    value="{{$data.OSS_TEST_BUCKET}}" {{/if}} />
+                            </div>
+                            <div class="am-form-group">
+                                <label>阿里云oss域名:如果为空将使用oss默认域名(以http开头)</label>
+                                <input type="text" name="OSS_DOMAIN" placeholder="http://bucket.oss-cn-hangzhou.aliyuncs.com"
+                                    maxlength="130" class="am-radius" {{if !empty($data['OSS_DOMAIN'])}}
+                                    value="{{$data.OSS_DOMAIN}}" {{/if}} />
+                            </div>
+
+                            <div class="am-form-group">
+                                <label class="block">是否保留文件在web服务器硬盘</label>
+                           
+
+                                    <label class="am-radio-inline am-margin-right-sm">
+                                        <input type="radio" name="is_keep_on_server" value="1"   {{if (isset($data['is_keep_on_server']) and $data['is_keep_on_server'] eq '1') or empty($data)}}checked="true"
+                                       {{/if}}/>是
+    </label>
+    <label class="am-radio-inline am-margin-right-sm">
+                                       <input type="radio" name="is_keep_on_server" value="0"   {{if (empty($data['is_keep_on_server']) || $data['is_keep_on_server'] neq '1') or empty($data)}}checked="true"
+                                        {{/if}}/>否
+                                    </label>
+                                        
+
+
+                            </div>
+
+
+                            <div class="am-form-group">
+                                <label class="block">是否启用</label>
+                         
+                                <label class="am-radio-inline am-margin-right-sm">
+                                    <input type="radio" name="storage_type" value="oss"   {{if (isset($data['storage_type']) and $data['storage_type'] eq 'oss') or empty($data)}}checked="true"
+                                   {{/if}}/>启用
+</label>
+<label class="am-radio-inline am-margin-right-sm">
+                                   <input type="radio" name="storage_type" value="0"   {{if (empty($data['storage_type']) || ($data['storage_type'] neq 'oss' and $data['storage_type'] neq 'tencent' and $data['storage_type'] neq 'qiniu')) or empty($data)}}checked="true"
+                                    {{/if}}/>停用
+                                </label>
+                                    
+                                 
+                                    
+                            </div>
+
+                            <div class="am-form-group">
+                                <label id="msg"></label><img  id="test_img" height="100" width="100"  /> </div>
+                            <div class="am-form-group am-form-group-refreshing" style="width:100%">
+<table border="0" style="width: 30%;">
+    <tr>
+        <td>
+                                <button type="submit" style="width:120px;"
+                                    class=" am-btn am-btn-primary am-radius btn-loading-example am-btn-sm "
+                                    data-am-loading="{loadingText:'处理中...'}">保存</button>
+        </td>
+        <td>
+                                <button type="button" id="test_oss" style="width:120px;margin-left:30px;"
+                                    class="am-btn am-btn-danger am-radius btn-loading-example am-btn-sm "
+                                    data-am-loading="{loadingText:'处理中...'}">测试</button>
+                                </td>
+                                </tr>
+                                </table>
+                                </div>
+
+                            <!-- form end -->
+
+                        </div>
+                        <div data-tab-panel-1 class="am-tab-panel ">
+
+
+
+
+                            <div class="am-form-group">
+                                <div class="am-alert am-alert-warning" data-am-alert>
+                                    <a href="https://portal.qiniu.com/signup?code=1hjd0zanwtm4y"
+                                        target="_blank">七牛对象存储新用户专享礼包申请</a>
+                                </div>
+                                <br />
+                                <label style="color:#f00">目前七牛官方的sdk仅支持php<8.1</label> 
+                              
+                               <label>七牛accessKey</label> 
+                                <input type="text" name="qiniu_accessKey" placeholder="accessKey" minlength="0"
+                                    maxlength="130" class="am-radius" {{if !empty($data['qiniu_accessKey'])}}
+                                    value="{{$data.qiniu_accessKey}}" {{/if}} />
+                            </div>
+                            <div class="am-form-group">
+                                <label>七牛secretKey</label>
+                                <input type="text" name="qiniu_secretKey" placeholder="secretKey" minlength="0"
+                                    maxlength="130" class="am-radius" {{if !empty($data['qiniu_secretKey'])}}
+                                    value="{{$data.qiniu_secretKey}}" {{/if}} />
+                            </div>
+                            <div class="am-form-group">
+                                <label>七牛bucket</label>
+                                <input type="text" name="qiniu_bucket" placeholder="bucket" minlength="0"
+                                    maxlength="130" class="am-radius" {{if !empty($data['qiniu_bucket'])}}
+                                    value="{{$data.qiniu_bucket}}" {{/if}} />
+                            </div>
+
+                            <div class="am-form-group">
+                                <label>七牛域名</label>
+                                <input type="text" name="qiniu_domain" placeholder="http://qiniu.1-jian.vip"
+                                    maxlength="130" class="am-radius" {{if !empty($data['qiniu_domain'])}}
+                                    value="{{$data.qiniu_domain}}" {{/if}} />
+                            </div>
+                            <div class="am-form-group">
+                                <label class="block">是否保留文件在web服务器硬盘</label>
+                            
+                            
+                                    <label class="am-radio-inline am-margin-right-sm">
+                                        <input type="radio" name="qiniu_is_keep_on_server" value="1"   {{if (isset($data['qiniu_is_keep_on_server']) and $data['qiniu_is_keep_on_server'] eq '1') or empty($data)}}checked="true"
+                                       {{/if}}/>是
+    </label>
+    <label class="am-radio-inline am-margin-right-sm">
+                                       <input type="radio" name="qiniu_is_keep_on_server" value="0"   {{if (empty($data['qiniu_is_keep_on_server']) || $data['qiniu_is_keep_on_server'] neq '1') or empty($data)}}checked="true"
+                                        {{/if}}/>否
+                                    </label>
+                            
+                            
+                                </div>
+
+
+                            <div class="am-form-group">
+                                <label class="block">是否启用</label>
+                                <label class="am-radio-inline am-margin-right-sm">
+                                    <input type="radio" name="storage_type" value="qiniu"   {{if (isset($data['storage_type']) and $data['storage_type'] eq 'qiniu') or empty($data)}}checked="true"
+                                   {{/if}}/>启用
+</label>
+
+                                    
+                            </div>
+
+                            <div class="am-form-group">
+                                <label id="qiniu_msg"></label><img  id="qiniu_test_img" height="100" width="100" /> </div>
+                            <div class="am-form-group am-form-group-refreshing" style="width:100%">
+                                <table border="0" style="width: 30%;">
+                                    <tr>
+                                        <td>
+                                <button type="submit" style="width:120px;"
+                                    class=" am-btn am-btn-primary am-radius btn-loading-example am-btn-sm "
+                                    data-am-loading="{loadingText:'处理中...'}">保存</button>
+</td><td>
+                                <button type="button" id="test_qiniu" style="width:120px;margin-left:30px;"
+                                    class="am-btn am-btn-danger am-radius btn-loading-example am-btn-sm "
+                                    data-am-loading="{loadingText:'处理中...'}">测试</button>
+                            </td>
+                                </tr>
+                                </table>
+                                </div>
+
+                            <!-- form end -->
+                        </div>
+                        <div data-tab-panel-2 class="am-tab-panel ">
+
+                            <div class="am-form-group">
+                                <div class="am-alert am-alert-warning" data-am-alert>
+                                    <a href="https://cloud.tencent.com/act/cps/redirect?redirect=1020&cps_key=30ec6d50fb8cb2e8d7328ae0f7eaad91&from=console"
+                                        target="_blank">腾讯云对象存储折扣申请</a>
+                                </div>
+                                <br />
+                                <label>腾讯云SecretId</label>
+                                <input type="text" name="TENCENT_APPID" placeholder="SecretId" minlength="0"
+                                    maxlength="130" class="am-radius" {{if !empty($data['TENCENT_APPID'])}}
+                                    value="{{$data.TENCENT_APPID}}" {{/if}} />
+                            </div>
+
+
+                            <div class="am-form-group">
+                                <label>腾讯云SecretKey</label>
+                                <input type="text" name="TENCENT_APPSECRET" placeholder="SecretKey" minlength="0"
+                                    maxlength="130" class="am-radius" {{if !empty($data['TENCENT_APPSECRET'])}}
+                                    value="{{$data.TENCENT_APPSECRET}}" {{/if}} />
+                            </div>
+                            <div class="am-form-group">
+                                <label>腾讯云存储区域</label>
+                                <input type="text" name="TENCENT_region" placeholder="region" minlength="0"
+                                    maxlength="130" class="am-radius" {{if !empty($data['TENCENT_region'])}}
+                                    value="{{$data.TENCENT_region}}" {{/if}} />
+                            </div>
+                            <div class="am-form-group">
+                                <label>腾讯云空间名称(存储桶)</label>
+                                <input type="text" name="TENCENT_BUCKET" placeholder="TENCENT_BUCKET" minlength="0"
+                                    maxlength="130" class="am-radius" {{if !empty($data['TENCENT_BUCKET'])}}
+                                    value="{{$data.TENCENT_BUCKET}}" {{/if}} />
+                            </div>
+
+                            <div class="am-form-group">
+                                <label>腾讯云域名</label>
+                                <input type="text" name="tencent_domain"
+                                    placeholder="https://1ijan-1252415397.cos.ap-chongqing.myqcloud.com" maxlength="130"
+                                    class="am-radius" {{if !empty($data['tencent_domain'])}}
+                                    value="{{$data.tencent_domain}}" {{/if}} />
+                            </div>
+                            <div class="am-form-group">
+                                <label class="block">是否保留文件在web服务器硬盘</label>
+                          
+
+                                    <label class="am-radio-inline am-margin-right-sm">
+                                        <input type="radio" name="tencent_is_keep_on_server" value="1"   {{if (isset($data['tencent_is_keep_on_server']) and $data['tencent_is_keep_on_server'] eq '1') or empty($data)}}checked="true"
+                                       {{/if}}/>是
+    </label>
+    <label class="am-radio-inline am-margin-right-sm">
+                                       <input type="radio" name="tencent_is_keep_on_server" value="0"   {{if (empty($data['tencent_is_keep_on_server']) || $data['tencent_is_keep_on_server'] neq '1') or empty($data)}}checked="true"
+                                        {{/if}}/>否
+                                    </label>
+                            </div>
+
+
+                            <div class="am-form-group">
+                                <label class="block">是否启用</label>
+                             
+
+                                    <label class="am-radio-inline am-margin-right-sm">
+                                        <input type="radio" name="storage_type" value="tencent"   {{if (isset($data['storage_type']) and $data['storage_type'] eq 'tencent') or empty($data)}}checked="true"
+                                       {{/if}}/>启用
+    </label>
+    
+
+
+                            </div>
+
+                            <div class="am-form-group">
+                                <label id="tencent_msg"></label><img  id="tencent_test_img" height="100" width="100"/>
+                            </div>
+                            <div class="am-form-group am-form-group-refreshing" style="width:100%">
+                                <table border="0" style="width: 30%;">
+                                    <tr>
+                                        <td>
+                                <button type="submit" style="width:120px;"
+                                    class=" am-btn am-btn-primary am-radius btn-loading-example am-btn-sm "
+                                    data-am-loading="{loadingText:'处理中...'}">保存</button>
+</td><td>
+                                <button type="button" id="test_tencent" style="width:120px;margin-left:30px;"
+                                    class="am-btn am-btn-danger am-radius btn-loading-example am-btn-sm "
+                                    data-am-loading="{loadingText:'处理中...'}">测试</button>
+                           </td>
+                                </tr>
+                                </table>
+                                </div>
+
+                            <!-- form end -->
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <!--tab结束-->
+
+
+        </div>
+    </div>
+</div>
+<!-- right content end  -->
+<script>
+
+    window.onload = function () {
+
+        $("#test_oss").click(function () {
+            $("#msg").html('');
+            $("#test_img").attr('src', "");
+            var url = "{{:PluginsAdminUrl('oss_1jian', 'admin', 'test_oss')}}";
+            $.ajax({
+                url: url,
+                type: 'POST',
+                cache: false,
+                data: $('#form1').serialize(),
+                dataType: "json",
+                processData: false,
+               // contentType: false,
+                success: function (json) {
+                    if (typeof (json.status) == "undefined") {
+                        $("#msg").html("上传出错，请检查配置参数:" + json.msg);
+                        return;
+                    }
+
+                    if (json.status != 1)
+                        $("#msg").html(json.msg);
+                    else {
+
+                        $("#msg").html('上传成功');
+                        $("#test_img").attr('src', json.url);;
+                    }
+                }
+            });
+
+
+        });
+
+
+        $("#test_qiniu").click(function () {
+            $("#msg").html('');
+            $("#test_img").attr('src', "");
+            var url = "{{:PluginsAdminUrl('oss_1jian', 'admin', 'test_qiniu')}}";
+            $.ajax({
+                url: url,
+                type: 'POST',
+                cache: false,
+                data: $('#form1').serialize(),
+                dataType: "json",
+                processData: false,
+               // contentType: false,
+                success: function (json) {
+                    if (typeof (json.status) == "undefined") {
+                        $("#qiniu_msg").html("上传出错，请检查配置参数:" + json.msg);
+                        return;
+                    }
+
+                    if (json.status != 1)
+                        $("#qiniu_msg").html(json.msg);
+                    else {
+
+                        $("#qiniu_msg").html('上传成功');
+                        $("#qiniu_test_img").attr('src', json.url);;
+                    }
+                }
+            });
+
+
+        });
+
+        $("#test_tencent").click(function () {
+            $("#msg").html('');
+            $("#test_img").attr('src', "");
+            var url = "{{:PluginsAdminUrl('oss_1jian', 'admin', 'test_tencent')}}";
+            $.ajax({
+                url: url,
+                type: 'POST',
+                cache: false,
+                data: $('#form1').serialize(),
+                dataType: "json",
+                processData: false,
+               // contentType: false,
+                success: function (json) {
+                    if (typeof (json.status) == "undefined") {
+                        $("#tencent_msg").html("上传出错，请检查配置参数:" + json.msg);
+                        return;
+                    }
+
+                    if (json.status != 1)
+                        $("#tencent_msg").html(json.msg);
+                    else {
+
+                        $("#tencent_msg").html('上传成功');
+                        $("#tencent_test_img").attr('src', json.url);;
+                    }
+                }
+            });
+
+
+        });
+
+    }
+
+</script>
+<!-- footer start -->
+{{include file="public/footer" /}}
+<!-- footer end -->

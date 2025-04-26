@@ -1,0 +1,214 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'seckill',
+            'nav_data'  => $plugins_nav_menu_list,
+        ])}}
+
+        <div class="seckill-content">
+            <!-- 基础数据 -->
+            <div class="am-panel am-panel-default seckill-content-base">
+                <div class="am-panel-hd">
+                    <span class="am-panel-title">{{:MyLang('form_base_data_title')}}</span>
+                    <a class="am-margin-left-lg" href="{{:PluginsAdminUrl('seckill', 'admin', 'saveinfo')}}">
+                        <i class="am-icon-edit"></i>
+                        <span>{{:MyLang('edit_title')}}</span>
+                    </a>
+                </div>
+                <div class="am-panel-bd">
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('admin.form_item_application_name')}}</label>
+                                <div>
+                                    {{if empty($data['application_name'])}}
+                                        <span class="am-text-grey">{{:MyLang('no_setup_tips')}}</span>
+                                    {{else /}}
+                                        {{$data.application_name}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('admin.form_item_goods_detail_icon')}}</label>
+                                <div>
+                                    {{if empty($data['goods_detail_icon'])}}
+                                        <span class="am-text-grey">{{:MyLang('no_setup_tips')}}</span>
+                                    {{else /}}
+                                        {{$data.goods_detail_icon}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('admin.form_item_goods_detail_title')}}</label>
+                                <div>
+                                    {{if empty($data['goods_detail_title'])}}
+                                        <span class="am-text-grey">{{:MyLang('no_setup_tips')}}</span>
+                                    {{else /}}
+                                        {{$data.goods_detail_title}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('admin.form_item_is_actas_price_original')}}</label>
+                                <div>
+                                    {{if isset($data['is_actas_price_original']) and $data['is_actas_price_original'] eq 1}}
+                                        {{:MyLang('yes_title')}}
+                                    {{else /}}
+                                        {{:MyLang('no_title')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('admin.form_item_is_home_show')}}</label>
+                                <div>
+                                    {{if isset($data['is_home_show']) and $data['is_home_show'] eq 1}}
+                                        {{:MyLang('yes_title')}}
+                                    {{else /}}
+                                        {{:MyLang('no_title')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('admin.form_item_is_home_auto_play')}}</label>
+                                <div>
+                                    {{if isset($data['is_home_auto_play']) and $data['is_home_auto_play'] eq 1}}
+                                        {{:MyLang('yes_title')}}
+                                    {{else /}}
+                                        {{:MyLang('no_title')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                         <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('admin.form_item_is_shop_seckill')}}</label>
+                                <div>
+                                    {{if isset($data['is_shop_seckill']) and $data['is_shop_seckill'] eq 1}}
+                                        {{:MyLang('yes_title')}}
+                                    {{else /}}
+                                        {{:MyLang('no_title')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('admin.form_item_content_notice')}}</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if empty($data['content_notice'])}}
+                                        <span class="am-text-grey">{{:MyLang('no_setup_tips')}}</span>
+                                    {{else /}}
+                                        {{:implode('<br />', $data['content_notice'])}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('admin.form_item_header_logo')}}</label>
+                                <div class="immages-tag">
+                                    {{if empty($data['header_logo'])}}
+                                        <span class="am-text-grey">{{:MyLang('no_setup_tips')}}</span>
+                                    {{else /}}
+                                        <img src="{{$data.header_logo}}" />
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('admin.form_item_header_bg')}}</label>
+                                <div class="immages-tag">
+                                    {{if empty($data['header_bg'])}}
+                                        <span class="am-text-grey">{{:MyLang('no_setup_tips')}}</span>
+                                    {{else /}}
+                                        <img src="{{$data.header_bg}}" />
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('admin.form_item_home_title_icon')}}</label>
+                                <div class="immages-tag">
+                                    {{if empty($data['home_title_icon'])}}
+                                        <span class="am-text-grey">{{:MyLang('no_setup_tips')}}</span>
+                                    {{else /}}
+                                        <img src="{{$data.home_title_icon}}" />
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('admin.form_item_home_bg')}}</label>
+                                <div class="immages-tag">
+                                    {{if empty($data['home_bg'])}}
+                                        <span class="am-text-grey">{{:MyLang('no_setup_tips')}}</span>
+                                    {{else /}}
+                                        <img src="{{$data.home_bg}}" />
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('form_seo_title_title')}}</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if empty($data['seo_title'])}}
+                                        <span class="am-text-grey">{{:MyLang('no_setup_tips')}}</span>
+                                    {{else /}}
+                                        {{$data.seo_title}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('form_seo_keywords_title')}}</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if empty($data['seo_keywords'])}}
+                                        <span class="am-text-grey">{{:MyLang('no_setup_tips')}}</span>
+                                    {{else /}}
+                                        {{$data.seo_keywords}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('form_seo_desc_title')}}</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if empty($data['seo_desc'])}}
+                                        <span class="am-text-grey">{{:MyLang('no_setup_tips')}}</span>
+                                    {{else /}}
+                                        {{$data.seo_desc}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

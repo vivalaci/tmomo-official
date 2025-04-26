@@ -1,0 +1,79 @@
+<!-- 商品详情问答内容接口返回数据 -->
+{{if !empty($data) and is_array($data)}}
+    <!-- 提问 -->
+    <div class="comment-base" data-comments-reply-url="{{:PluginsHomeUrl('ask', 'goods', 'commentsreplylist')}}">
+        {{foreach $data as $ask}}
+            <div class="comment-item">
+                <!-- 问 -->
+                <div class="ask-item am-flex am-flex-row am-margin-vertical-main" data-id="{{if !empty($ask)}}{{$ask.id}}{{/if}}">
+                    <div class="ask">问</div>
+                    <div class="am-flex am-flex-col am-flex-1 am-flex-width">
+                        <div class="am-flex am-flex-row am-flex-justify-between am-flex-items-center">
+                            <div class="title am-font-weight am-flex-1 am-flex-width">
+                                <a href="{{$ask.url}}" target="_blank" class="am-text-truncate am-block am-padding-right-sm">{{if empty($ask['title'])}}{{$ask.content}}{{else /}}{{$ask.title}}{{/if}}</a>
+                            </div>
+                            <div class="am-color-grey">
+                                <text>{{if empty($ask['name'])}}{{if !empty($ask['user']) and !empty($ask['user']['user_name_view'])}}{{$ask.user.user_name_view}}{{/if}}{{else /}}{{$ask.name}}{{/if}}</text>
+                                <text>{{$ask.add_time_time}}</text>
+                            </div>
+                        </div>
+                        {{if isset($ask.images)}}
+                            <ul data-am-widget="figure" class="am-cf comment-images am-figure am-inline-block" data-am-figure="{pureview: 'true'}">
+                                <li class="am-fl">
+                                    <img src="{{$ask.images}}" class="am-img-thumbnail am-radius" />
+                                </li>
+                            </ul>
+                        {{/if}}
+                    </div>
+                </div>
+                <!-- 答 -->
+                {{if !empty($ask.comments_list) and is_array($ask.comments_list)}}
+                    <div class="answer-content">
+                        <div class="am-flex am-flex-row am-margin-bottom-main ">
+                            <div class="answer">答</div>
+                            <div class="am-flex-1 am-flex-width am-color-grey-dark answer-list">
+                                {{foreach $ask.comments_list as $k=>$ask_comments}}
+                                    {{if $k lt 1}}
+                                        <div class="answer-item">
+                                            <div class="am-flex am-flex-col am-flex-1 am-border-bottom-grey-light am-padding-bottom-main">
+                                                <div class="am-flex am-flex-row am-flex-justify-between am-flex-items-center">
+                                                    <div class="title am-font-weight">{{$ask_comments.content}}</div>
+                                                    <div class="am-color-grey">
+                                                        <text>{{$ask_comments.user.username}}</text>
+                                                        <text>{{$ask_comments.add_time}}</text>
+                                                    </div>
+                                                </div>
+                                                {{if isset($ask_comments.images)}}
+                                                    <ul data-am-widget="figure" class="am-cf comment-images am-figure am-inline-block" data-am-figure="{pureview: 'true'}">
+                                                        <li class="am-fl">
+                                                            <img src="{{$ask_comments.images}}" class="am-img-thumbnail am-radius" />
+                                                        </li>
+                                                    </ul>
+                                                {{/if}}
+                                            </div>
+                                        </div>
+                                    {{/if}}
+                                {{/foreach}}
+                            </div>
+                        </div>
+                        {{if $ask.comments_count gt 1}}
+                            <div class="bottom-line am-flex am-flex-row am-gap-24">
+                                <div class="am-color-blue am-cursor-pointer am-margin-bottom-main view-more-open" data-page="0" data-page-total="1" data-hide-mark="0" data-id="{{if !empty($ask)}}{{$ask.id}}{{/if}}" data-text="查看更多">
+                                    继续查看{{$ask.comments_count}}条回答
+                                    <i class="am-icon-angle-down"></i>
+                                </div>
+                                <div class="am-color-blue am-cursor-pointer am-margin-bottom-main view-more-colse am-hide">
+                                    收起回答
+                                    <i class="am-icon-angle-up"></i>
+                                </div>
+                            </div>
+                        {{/if}}
+                    </div>
+                {{/if}}
+            </div>
+        {{/foreach}}
+    </div>
+{{/if}}
+{{if !empty($data) and is_array($data) and count($data) gt 0}}
+    <div class="ask-page-container"></div>
+{{/if}}

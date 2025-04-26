@@ -1,0 +1,9 @@
+{{if !empty($center_nav_menu_list) and is_array($center_nav_menu_list)}}
+    <ul class="am-nav am-nav-pills user-center-admin-nav am-margin-bottom-sm">
+        {{foreach $center_nav_menu_list as $v}}
+            <li {{if (!isset($plugins_controller_name) and $v['control'] eq 'user') or (isset($plugins_controller_name) and $plugins_controller_name eq $v['control'])}}class="am-active"{{/if}}>
+                <a href="{{:PluginsHomeUrl('invoice', $v['control'], 'index')}}">{{$v.name}}</a>
+            </li>
+        {{/foreach}}
+    </ul>
+{{/if}}

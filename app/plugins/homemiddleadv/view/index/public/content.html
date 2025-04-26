@@ -1,0 +1,17 @@
+{{if !empty($data_list)}}
+    <div class="plugins-homemiddleadv-home-adv">
+        <div class="am-container">
+            <ul class="am-gallery am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-overlay">
+                {{foreach $data_list as $k=>$v}}
+                    <li>
+                        <div class="am-gallery-item am-radius glideover-hover">
+                            <a href="{{if empty($v['url'])}}javascript:;{{else /}}{{$v.url}}{{/if}}" {{if isset($v['is_new_window_open']) and $v['is_new_window_open'] eq 1 and !empty($v['url'])}}target="_blank"{{/if}}>
+                                <img src="{{$v.images}}" alt="{{$v.name}}" class="am-block am-radius" />
+                            </a>
+                        </div>
+                    </li>
+                {{/foreach}}
+            </ul>
+        </div>
+    </div>
+{{/if}}

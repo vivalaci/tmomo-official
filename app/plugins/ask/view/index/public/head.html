@@ -1,0 +1,20 @@
+<div class="ask-head">
+    <img class="ask-bg" src="{{if empty($header_data['header_bg'])}}{{:StaticAttachmentUrl('header-bg.png')}}{{else /}}{{$header_data.header_bg}}{{/if}}" {{if isset($header_data['header_bg_vague'])}}style="filter: blur({{$header_data.header_bg_vague}}rem);"{{/if}}>
+    <div class="search ">
+        <a href="{{:PluginsHomeUrl('ask', 'index', 'index')}}" class="logo">
+            <img src="{{if empty($header_data['header_logo'])}}{{:AttachmentPathViewHandle(MyC('home_site_logo'))}}{{else /}}{{$header_data.header_logo}}{{/if}}" alt="{{:MyC('home_site_name')}}" />
+        </a>
+        <!-- 搜索 -->
+        <div class="content am-margin-top-main">
+            <form action="{{:PluginsHomeUrl('ask', 'index', 'search')}}" method="post">
+                <div class="am-input-group am-input-group-sm content">
+                    <input type="text" name="bwd" class="am-form-field am-radius" placeholder="其实搜索很简单^_^ !"
+                        autocomplete="off" {{if !empty($ask_keywords)}}value="{{$ask_keywords}}" {{/if}} />
+                    <span class="am-input-group-btn">
+                        <button class="am-btn am-btn-primary am-radius am-border-0" type="submit">搜索</button>
+                    </span>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,38 @@
+{{if !empty($data)}}
+    {{if empty($params['ask_comments_id'])}}
+        {{foreach $data as $comments}}
+            {{include file="../../../plugins/ask/view/index/index/public/comments_item" /}}
+        {{/foreach}}
+    {{else /}}
+        {{foreach $data as $comments}}
+            <div class="item am-margin-top-lg am-flex am-flex-justify-between">
+                <img src="{{$comments.user.avatar}}" class="am-img-thumbnail am-circle am-fl" />
+                <div class="am-fr right-content">
+                    <div class="comments-reply-base am-nbfc">
+                        <span class="username am-font-weight">{{$comments.user.user_name_view}}</span>
+                        <span class="am-color-grey am-margin-left-sm">{{$comments.add_time}}</span>
+                        <div class="am-fr right-content-operate">
+                            {{if isset($plugins_config['is_ask_comments_add']) and $plugins_config['is_ask_comments_add'] eq 1}}
+                                <a href="javascript:;" class="am-color-grey-dark {{if empty($user)}}login-event{{else /}} comments-submit{{/if}}" data-ask-id="{{$comments.ask_id}}" data-ask-comments-id="{{$comments.ask_comments_id}}" data-reply-comments-id="{{$comments.id}}" data-value="{{$comments.comments_count}}" data-text="回复"> 
+                                    <i class="iconfont icon-recover"></i>
+                                    回复(<font>{{$comments.comments_count}}</font>)
+                                </a>
+                            {{/if}}
+                            {{if isset($plugins_config['is_ask_give_thumbs']) and $plugins_config['is_ask_give_thumbs'] eq 1}}
+                                <a href="javascript:;" class="am-color-grey-dark am-fr {{if empty($user)}}login-event{{else /}} give-thumbs-submit{{/if}} {{if isset($comments['is_give_thumbs']) and $comments['is_give_thumbs'] eq 1}} am-active{{/if}}" data-ask-id="{{$comments.ask_id}}" data-ask-comments-id="{{$comments.id}}" data-reply-comments-id="{{$comments.ask_comments_id}}" data-text="点赞">
+                                    <i class="iconfont {{if isset($comments['is_give_thumbs']) and $comments['is_give_thumbs'] eq 1}}icon-a-givealike-tap-review{{else/}}icon-a-givealike-review{{/if}}"></i>
+                                    点赞(<font>{{$comments.give_thumbs_count}}</font>)
+                                </a>
+                            {{/if}}
+                        </div>
+                    </div>
+                    {{if !empty($comments['reply_comments_text'])}}
+                        <div class="am-alert am-radius reply-comments-text">{{$comments.reply_comments_text}}</div>
+                    {{/if}}
+                    <p class="am-margin-top-xs reply-content">{{$comments.content}}</p>
+                    <div class="am-ask-comments-input am-panel-collapse am-collapse"></div>
+                </div>
+            </div>
+        {{/foreach}}
+    {{/if}}
+{{/if}}

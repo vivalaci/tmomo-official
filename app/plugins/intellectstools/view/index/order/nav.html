@@ -1,0 +1,7 @@
+{{if !empty($order_edit_nav_list) and is_array($order_edit_nav_list)}}
+    <div class="detail-content-nav-switch-tabs">
+        {{foreach $order_edit_nav_list as $k=>$v}}
+            <a href="{{:PluginsAdminUrl('intellectstools', 'order', 'editinfo', ['nav_type'=>$k, 'id'=>$order_id])}}" class="item {{if $default_view['type'] eq $v['type']}}am-active{{/if}}">{{$v.name}}</a>
+        {{/foreach}}
+    </div>
+{{/if}}

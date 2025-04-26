@@ -1,0 +1,9 @@
+{{if !empty($order_edit_nav_list) and is_array($order_edit_nav_list)}}
+    <ul class="am-nav am-nav-pills table-nav edit-nav">
+        {{foreach $order_edit_nav_list as $k=>$v}}
+            <li {{if $default_view['type'] eq $v['type']}}class="am-active"{{/if}}>
+                <a href="{{:PluginsAdminUrl('intellectstools', 'order', 'editinfo', ['nav_type'=>$k, 'id'=>$order_id])}}">{{$v.name}}</a>
+            </li>
+        {{/foreach}}
+    </ul>
+{{/if}}

@@ -1,0 +1,59 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'weixinwebauthorization',
+            'title'     => MyLang('base_config_title'),
+            'back_url'  => PluginsAdminUrl('weixinwebauthorization', 'admin', 'index'),
+        ])}}
+
+        <!-- form start -->
+        <form class="am-form form-validation am-form-full-screen am-form-popup-sticky" action="{{:PluginsAdminUrl('weixinwebauthorization', 'admin', 'save')}}" method="POST" request-type="ajax-url" request-value="{{:PluginsAdminUrl('weixinwebauthorization', 'admin', 'index')}}" enctype="multipart/form-data">
+            <div class="am-form-group">
+                <label>appid<span class="am-form-group-label-tips">公众号/服务号AppID</span></label>
+                <input type="text" name="appid" placeholder="appid" maxlength="30" data-validation-message="appid格式最多 30 个字符" class="am-radius" {{if !empty($data['appid'])}} value="{{$data.appid}}"{{/if}} />
+            </div>
+
+            <div class="am-form-group">
+                <label>secret<span class="am-form-group-label-tips">公众号/服务号AppSecret</span></label>
+                <input type="text" name="secret" placeholder="secret" maxlength="60" data-validation-message="secret格式最多 60 个字符" class="am-radius" {{if !empty($data['secret'])}} value="{{$data.secret}}"{{/if}} />
+            </div>
+
+            <div class="am-form-group">
+                <label>登录入口名称<span class="am-form-group-label-tips">空则不显示</span></label>
+                <input type="text" name="login_name" placeholder="登录入口名称" maxlength="30" data-validation-message="登录入口名称格式最多 30 个字符" class="am-radius" value="{{if !empty($data['login_name'])}}{{$data.login_name}}{{/if}}" />
+            </div>
+
+            <div class="am-form-group">
+                <label>微信用户名前缀<span class="am-form-group-label-tips">默认 微信</span></label>
+                <input type="text" name="nickname" placeholder="微信用户名" maxlength="6" data-validation-message="微信用户名前缀格式最多 6 个字符" class="am-radius" value="{{if !empty($data['nickname'])}}{{$data.nickname}}{{else /}}微信{{/if}}" />
+            </div>
+
+            <div class="am-form-group">
+                <label class="am-block">自动登录<span class="am-form-group-label-tips">默认否，微信环境中未登录情况下自动请求授权登录</span></label>
+                <input name="is_weixin_env_auto_login" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_weixin_env_auto_login']) and $data['is_weixin_env_auto_login'] eq 1}}checked="true"{{/if}} />
+            </div>
+
+            <p class="am-text-danger am-margin-bottom">默认使用静默登录方式、如需要获取unionid请使用【第三方登录插件】</p>
+
+            <div class="am-form-popup-submit">
+                <a href="{{:PluginsAdminUrl('weixinwebauthorization', 'admin', 'index', $params)}}" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg">
+                    <i class="am-icon-mail-reply"></i>
+                    <span>{{:MyLang('retreat_title')}}</span>
+                </a>
+                <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('save_title')}}'}">
+                    <i class="am-icon-save"></i>
+                    <span>{{:MyLang('save_title')}}</span>
+                </button>
+            </div>
+        </form>
+        <!-- form end -->
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

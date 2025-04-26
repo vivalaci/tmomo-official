@@ -1,0 +1,45 @@
+<div class="plugins-intellectstools-search-right-cart" data-cart-ajax-url="{{:PluginsHomeUrl('intellectstools', 'index', 'cart')}}">
+    <a href="{{:MyUrl('index/cart/index')}}" class="search-right-cart-submit am-radius am-text-xs">
+        <span>我的购物车</span>
+        <i class="iconfont icon-shopping-cart"></i>
+        <strong class="am-badge am-badge-danger am-round common-cart-total">{{if $cart_base['cart_count'] gt 0}}{{$cart_base.cart_count}}{{/if}}</strong>
+    </a>
+    <div class="search-right-cart-content am-radius">
+        <div class="spacer"></div>
+        <div class="cart-content">
+            {{:ModuleInclude('../../../plugins/intellectstools/view/index/public/search_right_cart_content')}}
+        </div>
+    </div>
+    <script type="text/javascript">
+        // 返回处理
+        function PluginsIntellectstoolsCartViewDeleteBack(e)
+        {
+            if(e.code == 0)
+            {
+                $.AMUI.progress.done();
+                Prompt(e.msg, 'success');
+                $('#plugins-intellectstools-cart-data-list-'+e.data_id).remove();
+                HomeCartNumberTotalUpdate(e.data.buy_number);
+
+                // 为空的时候处理
+                if(e.data <= 0)
+                {
+                    var $obj = $('.plugins-intellectstools-search-right-cart');
+                    $obj.find('.mixed-tips').removeClass('none');
+                    $obj.find('.cart-nav').addClass('none');
+                    $obj.find('.cart-items').addClass('none');
+                    $obj.find('.cart-nav .selected-tips strong').text(0);
+                    $obj.find('.cart-nav .nav-total-price').text('{{$currency_symbol}}0.00');
+                    $obj.find('.cart-nav input[name="ids"]').val('');
+                    $obj.find('.common-cart-total').text('');
+                } else {
+                    // 获取购物车数据
+                    PluginIntellectstoolsCartData();
+                }
+            } else {
+                $.AMUI.progress.done();
+                Prompt(e.msg);
+            }
+        }
+    </script>
+</div>

@@ -1,0 +1,142 @@
+{{:ModuleInclude('public/header')}}
+
+<div class="am-padding-sm">
+    <!-- form start -->
+    <form class="am-form form-validation am-form-full-screen am-form-popup-fixed" action="{{:PluginsAdminUrl('intellectstools', 'order', 'aftersalesave')}}" method="POST" request-type="ajax-reload" request-value="parent">
+        {{if empty($order_data) or empty($order_data['items'])}}
+            <div class="table-no"><i class="am-icon-warning"></i> 没有可发起售后的的订单数据</div>
+        {{else /}}
+            <!-- 订单数据 -->
+            <table class="am-table am-table-centered am-table-bordered am-margin-bottom-sm goods-list">
+                <thead>
+                    <tr>
+                        <th>
+                            <strong>商品信息</strong>
+                        </th>
+                        <th>
+                            <strong>退款金额</strong>
+                            <a href="javascript:;" class="am-text-primary am-margin-left-sm price-all-submit" data-type="1">{{:MyLang('all_title')}}</a>
+                            <a href="javascript:;" class="am-text-danger am-margin-left-sm price-all-submit" data-type="0">{{:MyLang('clear_title')}}</a>
+                        </th>
+                        <th>
+                            <strong>退货数量</strong>
+                            <a href="javascript:;" class="am-text-primary am-margin-left-sm number-all-submit" data-type="1">{{:MyLang('all_title')}}</a>
+                            <a href="javascript:;" class="am-text-danger am-margin-left-sm number-all-submit" data-type="0">{{:MyLang('clear_title')}}</a>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{foreach $order_data.items as $v}}
+                        <tr>
+                            <td>
+                                <div class="am-padding-sm goods-container">
+                                    <input type="hidden" name="goods_data[{{$v.id}}][id]" value="{{$v.id}}" />
+                                    <div class="am-nbfc am-text-left">
+                                        <a href="{{$v.goods_url}}" target="_blank">
+                                            <img src="{{$v.images}}" class="am-img-thumbnail am-radius am-margin-right-sm am-fl" width="30" height="30" />
+                                        </a>
+                                        <div class="am-nbfc">
+                                            <a href="{{$v.goods_url}}" target="_blank" class="am-nowrap-initial">{{$v.title}}</a>
+                                            {{if !empty($v.spec_text)}}
+                                                <p class="am-text-grey">{{$v.spec_text}}</p>
+                                            {{/if}}
+                                        </div>
+                                    </div>
+                                    <div class="am-text-left am-margin-top-xs">
+                                        <strong>{{$order_data.currency_data.currency_symbol}}{{$v.price}}</strong>
+                                        <span>x{{$v.buy_number}}</span>
+                                        <div class="am-fr">
+                                            {{if $v['returned_quantity'] gt 0 or $v['refund_price'] gt 0}}
+                                                <span class="am-text-danger">{{:MyLang('already_retreat_title')}} {{$v.returned_quantity}} / {{$order_data.currency_data.currency_symbol}}{{$v.refund_price}}</span>
+                                            {{/if}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="am-padding-sm">
+                                    {{if $v['total_price'] gt $v['refund_price'] and $order_data['pay_price'] gt $order_data['refund_price']}}
+                                        <div class="am-input-group am-input-group-sm price-operate">
+                                            <input type="number" name="goods_data[{{$v.id}}][price]" step="0.01" data-original-price="{{$v.price}}" data-original-total-price="{{$v.total_price-$v.refund_price}}" class="am-form-field am-radius" value="" placeholder="退款金额" data-is-clearout="0" />
+                                            <span class="am-input-group-label am-radius am-cursor-pointer price-submit">全额</span>
+                                        </div>
+                                    {{else /}}
+                                        <p class="am-text-warning am-text-center">没有可退金额</p>
+                                    {{/if}}
+                                </div>
+                            </td>
+                            <td>
+                                <div class="am-padding-sm">
+                                    {{if $v['buy_number'] gt $v['returned_quantity'] and $order_data['buy_number_count'] gt $order_data['returned_quantity']}}
+                                        <div class="am-input-group am-input-group-sm number-operate">
+                                            <span class="am-input-group-label am-radius am-cursor-pointer stock-submit" data-type="min">-</span>
+                                            <input type="number" name="goods_data[{{$v.id}}][number]" class="am-form-field am-radius am-text-center" data-min="0" data-max="{{$v.buy_number-$v.returned_quantity}}" value="" placeholder="退货数量" data-is-clearout="0" />
+                                            <span class="am-input-group-label am-radius am-cursor-pointer stock-submit" data-type="add">+</span>
+                                        </div>
+                                    {{else /}}
+                                        <p class="am-text-warning am-text-center">没有可退数量</p>
+                                    {{/if}}
+                                </div>
+                            </td>
+                        </tr>
+                    {{/foreach}}
+                </tbody>
+            </table>
+            <div class="am-margin-bottom-sm am-padding-right-xs am-nbfc goods-buttom-total">
+                <div class="am-fl">
+                    <span>已退货数量</span>
+                    <strong>{{$order_data.returned_quantity}}</strong>
+                    <span class="am-margin-left-lg">支付金额</span>
+                    <strong class="am-text-sm">{{$order_data.currency_data.currency_symbol}}{{$order_data.pay_price}}</strong>
+                    <span class="am-margin-left-lg">已退金额</span>
+                    <strong class="am-text-sm am-color-yellow">{{$order_data.currency_data.currency_symbol}}{{$order_data.refund_price}}</strong>
+                    <span class="am-margin-left-lg">还可退金额</span>
+                    <strong class="am-text-sm am-color-price">{{$order_data.currency_data.currency_symbol}}{{$order_data.pay_price-$order_data.refund_price}}</strong>
+                </div>
+                <div class="am-fr">
+                    <span>当前退货数量：</span><strong class="count am-text-sm">0</strong>
+                    <span class="am-margin-left-lg">当前退款金额：</span><strong class="total-price am-text-sm am-color-price">￥0.00</strong>
+                </div>
+            </div>
+            <div class="am-color-red am-margin-bottom-lg">
+                <p>1. 商品退款金额默认为当前[ <span class="am-color-blue">商品单价 x 数量</span> ]（数量不是必须的）</p>
+                <p>2. 商品退款金额可以自定义输入，没有上限限制，请自行确认总退款金额不能超过支付金额</p>
+            </div>
+
+            <div class="am-form-group am-nbfc">
+                <label class="am-block">退款方式</label>
+                {{foreach $common_order_aftersale_refundment_list as $v}}
+                    <label class="am-radio-inline am-margin-right-sm">
+                        <input type="radio" name="refundment" value="{{$v.value}}" data-validation-message="请选择退款方式" data-am-ucheck required /> {{$v.name}}
+                    </label>
+                {{/foreach}}
+            </div>
+
+            <div class="am-tips-card">
+                <p>1. 操作后不可恢复、请谨慎操作！</p>
+                {{if !empty($common_order_aftersale_type_list)}}
+                    {{foreach $common_order_aftersale_type_list as $k=>$v}}
+                        <p>{{$k+2}}. {{$v.name}}：{{$v.desc}}。</p>
+                    {{/foreach}}
+                {{/if}}
+            </div>
+
+            <div class="am-form-popup-submit">
+                <input type="hidden" name="order_id" value="{{$order_data.id}}" />
+                <input type="hidden" name="user_id" value="{{$order_data.user_id}}" />
+                <button type="button" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg" data-am-modal-close>
+                    <i class="am-icon-paint-brush"></i>
+                    <span>{{:MyLang('cancel_title')}}</span>
+                </button>
+                <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('submit_title')}}'}">
+                    <i class="am-icon-save"></i>
+                    <span>{{:MyLang('submit_title')}}</span>
+                </button>
+            </div>
+        {{/if}}
+    </form>
+    <!-- form end -->
+</div>
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

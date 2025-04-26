@@ -1,0 +1,107 @@
+#!/usr/bin/env php
+<?php
+/**
+ * User: sy-records
+ * Email: lufei@php.net
+ * Usage: php bin/format
+ */
+
+$directories = ['src', 'tests', 'sample'];
+$rootDirectoryPath = realpath(dirname(__DIR__));
+
+foreach ($directories as $directory) {
+    $directoryPath = $rootDirectoryPath . '/' . $directory;
+
+    $directoryIterator = new RecursiveDirectoryIterator($directoryPath, RecursiveDirectoryIterator::SKIP_DOTS);
+    $iterator = new RecursiveIteratorIterator($directoryIterator, RecursiveIteratorIterator::SELF_FIRST);
+
+    $phpFiles = findPhpFiles($iterator);
+
+    foreach ($phpFiles as $file) {
+        $formattedContent = formatFile($file);
+        writeToFile($file, $formattedContent, $directory);
+    }
+}
+
+echo 'Formatting completed', PHP_EOL;
+
+/**
+ * Returns an array of PHP file paths from the directory iterator.
+ *
+ * @param  RecursiveIteratorIterator $iterator The iterator of the directory to search through.
+ * @return array An array of PHP file paths.
+ */
+function findPhpFiles($iterator)
+{
+    $phpFiles = [];
+    foreach ($iterator as $file) {
+        if ($file->getExtension() !== 'php' || $file->isDir()) {
+            continue;
+        }
+        $phpFiles[] = $file->getPathname();
+    }
+    return $phpFiles;
+}
+
+/**
+ * Returns the formatted content of a file.
+ *
+ * @param  string $file The path to the file to format.
+ * @return string The formatted content.
+ */
+function formatFile($file)
+{
+    $content = file_get_contents($file);
+    return formatLineEndings($content);
+}
+
+/**
+ * Returns the content with formatted line endings.
+ *
+ * @param  string $content The content to format.
+ * @return string The content with formatted line endings.
+ */
+function formatLineEndings($content)
+{
+    return trim($content) . "\n";
+}
+
+/**
+ * Returns the content with all occurrences of 'schema' replaced with 'scheme'.
+ *
+ * @param  string $content The content to perform replacements on.
+ * @return string The content with all occurrences of 'schema' replaced with 'scheme'.
+ */
+function replaceSchemaWithScheme($content)
+{
+    return str_replace(['schema', 'Schema'], ['scheme', 'Scheme'], $content);
+}
+
+/**
+ * Writes the provided content to a file if it differs from the original content of the file.
+ * Also checks the directory and if it's not 'src', replaces 'schema' with 'scheme' in the content.
+ *
+ * @param  string $file The path to the file to write.
+ * @param  string $content The content to write to the file.
+ * @param  string $directory The directory the file resides in.
+ */
+function writeToFile($file, $content, $directory)
+{
+    $originalContent = file_get_contents($file);
+    $changed = false;
+    if ($originalContent !== $content) {
+        echo "Formatted empty lines in {$file}", PHP_EOL;
+        $changed = true;
+    }
+    if ($directory != 'src') {
+        $_content = replaceSchemaWithScheme($content);
+        if ($content !== $_content) {
+            echo "Use scheme instead of schema in {$file}", PHP_EOL;
+            $content = $_content;
+            $changed = true;
+        }
+    }
+    if ($changed) {
+        file_put_contents($file, $content);
+    }
+}

@@ -1,0 +1,57 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- content start -->
+<div class="am-g am-container plugins-ask" 
+    data-ask-id="{{if !empty($data)}}{{$data.id}}{{/if}}" 
+    data-ask-comments-id="0" 
+    data-reply-comments-id="0" 
+    data-is-give-thumbs="{{if isset($plugins_config['is_ask_give_thumbs']) and $plugins_config['is_ask_give_thumbs'] eq 1}}1{{else /}}0{{/if}}" 
+    data-givethumbs-url="{{:PluginsHomeUrl('ask', 'index', 'givethumbs')}}" 
+    data-comments-url="{{:PluginsHomeUrl('ask', 'index', 'comments')}}" 
+    data-comments-reply-url="{{:PluginsHomeUrl('ask', 'index', 'commentsreplylist')}}" 
+    data-text-reply-name="回复" 
+    data-text-give-thumbs-name="点赞" 
+    data-text-comments-input-tips="请先输入评论内容" 
+>
+    <div class="am-cf">
+        <!-- 轮播 -->
+        <div class="am-padding-module">
+            {{if !empty($data)}}
+                <!-- 评论回复 -->
+                {{:ModuleInclude('../../../plugins/ask/view/index/index/public/comments_form')}}
+
+                <!-- 评论内容 -->
+                {{:ModuleInclude('../../../plugins/ask/view/index/index/public/comments_list')}}
+            {{else /}}
+                {{:ModuleInclude('public/not_data')}}
+            {{/if}}
+        </div>
+    </div>
+</div>
+<!-- content end -->
+
+<!-- 评论回复弹窗 -->
+{{:ModuleInclude('../../../plugins/ask/view/index/index/public/comments_reply_modal')}}
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}
+<script>
+{{if !empty($data['video_url']) and isset($plugins_config['is_require_aliplayer']) and $plugins_config['is_require_aliplayer'] eq 1}}
+    // 视频初始化
+    var player = new Aliplayer({
+        id: "player-container",
+        source: "{{$data.video_url}}",
+        width: "100%",
+        height: "450px",
+        autoplay: false,
+        isLive: {{if isset($data['is_live_play']) and $data['is_live_play'] eq 1}}true{{else /}}false{{/if}},
+        rePlay: false,
+        playsinline: true,
+        preload: true,
+        controlBarVisibility: "hover",
+        useH5Prism: true
+    }, function (player) {
+        console.log("The player is created");
+    });
+{{/if}}
+</script>

@@ -1,0 +1,388 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- form start -->
+        <form class="am-form form-validation am-form-full-screen am-form-popup-sticky" action="{{:PluginsAdminUrl('ask', 'admin', 'save')}}" method="POST" request-type="ajax-url" request-value="{{:PluginsAdminUrl('ask', 'admin', 'index')}}" enctype="multipart/form-data">
+            <!-- nav -->
+            {{:ModuleInclude('public/plugins_admin_nav', [
+                'plugins'   => 'ask',
+                'title'     => MyLang('base_config_title'),
+                'back_url'  => PluginsAdminUrl('ask', 'admin', 'index'),
+            ])}}
+
+            <!-- 基础配置 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">{{:MyLang('base_config_title')}}</h3>
+                </div>
+                <div class="am-panel-bd am-padding-vertical-xs">
+                    <div class="am-cf">
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label>{{:MyLang('admin.form_item_application_name')}}<span class="am-form-group-label-tips">{{:MyLang('admin.form_item_application_name_tips')}}</span></label>
+                                <input type="text" name="application_name" placeholder="{{:MyLang('admin.form_item_application_name')}}" maxlength="60" data-validation-message="{{:MyLang('admin.form_item_application_name_message')}}" class="am-radius" {{if !empty($data['application_name'])}} value="{{$data.application_name}}"{{/if}} />
+                            </div>
+                        </div>
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label class="am-block">{{:MyLang('admin.form_item_is_user_menu')}}</label>
+                                <input name="is_user_menu" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_user_menu']) and $data['is_user_menu'] eq 1}}checked="true"{{/if}} />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="am-cf">
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label>{{:MyLang('admin.form_item_user_center_left_name')}}<span class="am-form-group-label-tips">{{:MyLang('admin.form_item_user_center_left_name_tips')}}</span></label>
+                                <input type="text" name="user_center_left_name" placeholder="{{:MyLang('admin.form_item_user_center_left_name')}}" maxlength="60" data-validation-message="{{:MyLang('admin.form_item_user_center_left_name_message')}}" class="am-radius" {{if !empty($data['user_center_left_name'])}} value="{{$data.user_center_left_name}}"{{/if}} />
+                            </div>
+                        </div>
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label>{{:MyLang('admin.form_item_right_top_rec_name')}}<span class="am-form-group-label-tips">{{:MyLang('admin.form_item_right_top_rec_name_tips')}}</span></label>
+                                <input type="text" name="right_top_rec_name" placeholder="{{:MyLang('admin.form_item_right_top_rec_name')}}" maxlength="30" data-validation-message="{{:MyLang('admin.form_item_right_top_rec_name_message')}}" class="am-radius" {{if !empty($data['right_top_rec_name'])}} value="{{$data.right_top_rec_name}}"{{/if}} />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="am-cf">
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label>{{:MyLang('admin.form_item_middle_new_name')}}<span class="am-form-group-label-tips">{{:MyLang('admin.form_item_middle_new_name_tips')}}</span></label>
+                                <input type="text" name="middle_new_name" placeholder="{{:MyLang('admin.form_item_middle_new_name')}}" maxlength="30" data-validation-message="{{:MyLang('admin.form_item_middle_new_name_message')}}" class="am-radius" {{if !empty($data['middle_new_name'])}} value="{{$data.middle_new_name}}"{{/if}} />
+                            </div>
+                        </div>
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label>{{:MyLang('admin.form_item_middle_new_page_number')}}<span class="am-form-group-label-tips">{{:MyLang('admin.form_item_middle_new_page_number_tips')}}</span></label>
+                                <input type="number" min="0" name="middle_new_page_number" placeholder="{{:MyLang('admin.form_item_middle_new_page_number')}}" data-validation-message="{{:MyLang('admin.form_item_middle_new_page_number_message')}}" class="am-radius" value="{{if !empty($data['middle_new_page_number'])}}{{$data.middle_new_page_number}}{{else /}}20{{/if}}" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="am-cf">
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label>{{:MyLang('admin.form_item_hot_name')}}<span class="am-form-group-label-tips">{{:MyLang('admin.form_item_hot_name_tips')}}</span></label>
+                                <input type="text" name="hot_name" placeholder="{{:MyLang('admin.form_item_hot_name')}}" maxlength="30" data-validation-message="{{:MyLang('admin.form_item_hot_name_message')}}" class="am-radius" {{if !empty($data['hot_name'])}} value="{{$data.hot_name}}"{{/if}} />
+                            </div>
+                        </div>
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label>{{:MyLang('admin.form_item_hot_page_number')}}<span class="am-form-group-label-tips">{{:MyLang('admin.form_item_hot_page_number_tips')}}</span></label>
+                                <input type="number" min="0" name="hot_page_number" placeholder="{{:MyLang('admin.form_item_hot_page_number')}}" data-validation-message="{{:MyLang('admin.form_item_hot_page_number_message')}}" class="am-radius" value="{{if !empty($data['hot_page_number'])}}{{$data.hot_page_number}}{{else /}}10{{/if}}" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="am-cf">
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label>{{:MyLang('admin.form_item_right_top_goods_name')}}<span class="am-form-group-label-tips">{{:MyLang('admin.form_item_right_top_goods_name_tips')}}</span></label>
+                                <input type="text" name="right_top_goods_name" placeholder="{{:MyLang('admin.form_item_right_top_goods_name')}}" maxlength="30" data-validation-message="{{:MyLang('admin.form_item_right_top_goods_name_message')}}" class="am-radius" {{if !empty($data['right_top_goods_name'])}} value="{{$data.right_top_goods_name}}"{{/if}} />
+                            </div>
+                        </div>
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label>{{:MyLang('admin.form_item_search_page_number')}}<span class="am-form-group-label-tips">{{:MyLang('admin.form_item_search_page_number_tips')}}</span></label>
+                                <input type="number" min="0" name="search_page_number" placeholder="{{:MyLang('admin.form_item_search_page_number')}}" data-validation-message="{{:MyLang('admin.form_item_search_page_number_message')}}" class="am-radius" value="{{if !empty($data['search_page_number'])}}{{$data.search_page_number}}{{else /}}30{{/if}}" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="am-cf">
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group am-form-file">
+                                <label class="am-block">{{:MyLang('admin.form_item_header_logo')}}<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="{{:MyLang('admin.form_item_header_logo_tips')}}"></a></label>
+                                <div class="am-form-file-upload-container">
+                                    <ul class="plug-file-upload-view admin-header-logo-images-view" data-form-name="header_logo" data-max-number="1" data-dialog-type="images">
+                                        {{if !empty($data['header_logo'])}}
+                                            <li>
+                                                <input type="text" name="header_logo" value="{{$data.header_logo}}" data-validation-message="{{:MyLang('admin.form_item_header_logo_message')}}" required />
+                                                <img src="{{$data.header_logo}}" />
+                                                <i class="iconfont icon-close"></i>
+                                            </li>
+                                        {{/if}}
+                                    </ul>
+                                    <div class="plug-file-upload-submit" data-view-tag="ul.admin-header-logo-images-view">
+                                        <i class="iconfont icon-upload-add"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group am-form-file">
+                                <label class="am-block">{{:MyLang('admin.form_item_header_bg')}}<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="{{:MyLang('admin.form_item_header_bg_tips')}}"></a></label>
+                                <div class="am-form-file-upload-container">
+                                    <ul class="plug-file-upload-view admin-header-bg-images-view" data-form-name="header_bg" data-max-number="1" data-dialog-type="images">
+                                        {{if !empty($data['header_bg'])}}
+                                            <li>
+                                                <input type="text" name="header_bg" value="{{$data.header_bg}}" data-validation-message="{{:MyLang('admin.form_item_header_bg_message')}}" required />
+                                                <img src="{{$data.header_bg}}" />
+                                                <i class="iconfont icon-close"></i>
+                                            </li>
+                                        {{/if}}
+                                    </ul>
+                                    <div class="plug-file-upload-submit" data-view-tag="ul.admin-header-bg-images-view">
+                                        <i class="iconfont icon-upload-add"></i>
+                                    </div>
+                                </div>
+                                <div class="am-input-group am-input-group-sm am-fr header-bg-vague">
+                                    <input type="number" name="header_bg_vague" placeholder="{{:MyLang('admin.form_item_header_bg_vague')}}" min="0" max="100" step="0.01" data-validation-message="{{:MyLang('admin.form_item_header_bg_vague_message')}}" class="am-form-field am-radius" value="{{if isset($data['header_bg_vague'])}}{{$data.header_bg_vague}}{{/if}}" />
+                                    <span class="am-input-group-btn">
+                                        <button type="button" class="am-btn am-btn-default am-radius">rem</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 用户发布问答 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">用户发布问答</h3>
+                </div>
+                <div class="am-panel-bd am-padding-vertical-xs">
+                    <div class="am-cf">
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label class="am-block">开启用户发布问答</label>
+                                <div class="am-margin-top-sm">
+                                    <input name="is_user_add_ask" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_user_add_ask']) and $data['is_user_add_ask'] eq 1}}checked="true"{{/if}} />
+                                    <label class="am-checkbox-inline am-margin-left-lg">
+                                        <input type="checkbox" name="is_user_add_ask_audit" value="1" data-am-ucheck {{if isset($data['is_user_add_ask_audit']) and $data['is_user_add_ask_audit'] eq 1}}checked{{/if}} /> 需要审核
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label class="am-block">商品详情页展示问答和发布问答入口</label>
+                                <input name="is_goods_user_add_ask" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_goods_user_add_ask']) and $data['is_goods_user_add_ask'] eq 1}}checked="true"{{/if}} />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="am-cf">
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label class="am-block">发布问答展示邮箱通知</label>
+                                <input name="is_show_email_notice" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_show_email_notice']) and $data['is_show_email_notice'] eq 1}}checked="true"{{/if}} />
+                            </div>
+                        </div>
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label class="am-block">发布问答展示手机通知</label>
+                                <input name="is_show_mobile_notice" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_show_mobile_notice']) and $data['is_show_mobile_notice'] eq 1}}checked="true"{{/if}} />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 评论配置 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">评论配置</h3>
+                </div>
+                <div class="am-panel-bd am-padding-vertical-xs">
+                    <div class="am-cf">
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label class="am-block">开启点赞</label>
+                                <input name="is_ask_give_thumbs" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_ask_give_thumbs']) and $data['is_ask_give_thumbs'] eq 1}}checked="true"{{/if}} />
+                            </div>
+                        </div>
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label class="am-block">开启评论展示</label>
+                                <input name="is_ask_comments_show" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_ask_comments_show']) and $data['is_ask_comments_show'] eq 1}}checked="true"{{/if}} />
+                            </div>
+                        </div>                        
+                    </div>
+
+                    <div class="am-cf">
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label class="am-block">开启评论添加</label>
+                                <input name="is_ask_comments_add" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_ask_comments_add']) and $data['is_ask_comments_add'] eq 1}}checked="true"{{/if}} />
+                                <label class="am-checkbox-inline am-margin-left-lg">
+                                    <input type="checkbox" name="is_ask_comments_add_audit" value="1" data-am-ucheck {{if isset($data['is_ask_comments_add_audit']) and $data['is_ask_comments_add_audit'] eq 1}}checked{{/if}} /> 需要审核
+                                </label>
+                            </div>
+                        </div>
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label>详情展示评论条数<span class="am-form-group-label-tips">默认3</span></label>
+                                <input type="number" name="ask_detail_comments_number" min="0" placeholder="详情展示评论条数" data-validation-message="请填写详情展示评论条数" class="am-radius" {{if !empty($data['ask_detail_comments_number'])}} value="{{$data.ask_detail_comments_number}}"{{/if}} />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="am-cf">
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label>评论展示回复条数<span class="am-form-group-label-tips">默认3</span></label>
+                                <input type="number" name="ask_detail_comments_reply_number" min="0" placeholder="评论展示回复条数" data-validation-message="请填写评论展示回复条数" class="am-radius" {{if !empty($data['ask_detail_comments_reply_number'])}} value="{{$data.ask_detail_comments_reply_number}}"{{/if}} />
+                            </div>
+                        </div>
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label>查看更多评论每页条数<span class="am-form-group-label-tips">默认20</span></label>
+                                <input type="number" name="ask_detail_comments_more_page_number" min="0" placeholder="查看更多评论每页条数" data-validation-message="请填写查看更多评论每页条数" class="am-radius" {{if !empty($data['ask_detail_comments_more_page_number'])}} value="{{$data.ask_detail_comments_more_page_number}}"{{/if}} />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 奖励积分配置 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">奖励积分配置</h3>
+                </div>
+                <div class="am-panel-bd am-padding-vertical-xs">
+                    <div class="am-cf">
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label class="am-block">发布问答奖励积分</label>
+                                <input name="is_ask_add_give_integral" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_ask_add_give_integral']) and $data['is_ask_add_give_integral'] eq 1}}checked="true"{{/if}} />
+                            </div>
+                        </div>
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label>发布问答单次奖励积分数量<span class="am-form-group-label-tips">0或空则不奖励</span></label>
+                                <input type="number" name="ask_add_give_integral_value" min="0" placeholder="发布问答单次奖励积分数量" data-validation-message="请填写发布问答单次奖励积分数量" class="am-radius" {{if !empty($data['ask_add_give_integral_value'])}} value="{{$data.ask_add_give_integral_value}}"{{/if}} />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="am-cf">
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label>发布问答当日限奖励积分数量<span class="am-form-group-label-tips">0或空则不限制</span></label>
+                                <input type="number" name="ask_add_day_limit_give_integral_value" min="0" placeholder="发布问答当日限奖励积分数量" data-validation-message="请填写发布问答当日限奖励积分数量" class="am-radius" {{if !empty($data['ask_add_day_limit_give_integral_value'])}} value="{{$data.ask_add_day_limit_give_integral_value}}"{{/if}} />
+                            </div>
+                        </div>
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label class="am-block">问答评论奖励积分</label>
+                                <input name="is_ask_comments_give_integral" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_ask_comments_give_integral']) and $data['is_ask_comments_give_integral'] eq 1}}checked="true"{{/if}} />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="am-cf">
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label>问答评论单次奖励积分数量<span class="am-form-group-label-tips">0或空则不奖励</span></label>
+                                <input type="number" name="ask_comments_give_integral_value" min="0" placeholder="问答评论单次奖励积分数量" data-validation-message="请填写问答评论单次奖励积分数量" class="am-radius" {{if !empty($data['ask_comments_give_integral_value'])}} value="{{$data.ask_comments_give_integral_value}}"{{/if}} />
+                            </div>
+                        </div>
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label>问答评论当日限奖励积分数量<span class="am-form-group-label-tips">0或空则不限制</span></label>
+                                <input type="number" name="ask_comments_day_limit_give_integral_value" min="0" placeholder="问答评论当日限奖励积分数量" data-validation-message="请填写问答评论当日限奖励积分数量" class="am-radius" {{if !empty($data['ask_comments_day_limit_give_integral_value'])}} value="{{$data.ask_comments_day_limit_give_integral_value}}"{{/if}} />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="am-cf">
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label class="am-block">点赞奖励积分</label>
+                                <input name="is_give_thumbs_give_integral" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_give_thumbs_give_integral']) and $data['is_give_thumbs_give_integral'] eq 1}}checked="true"{{/if}} />
+                            </div>
+                        </div>
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label>点赞单次奖励积分数量<span class="am-form-group-label-tips">0或空则不奖励</span></label>
+                                <input type="number" name="give_thumbs_give_integral_value" min="0" placeholder="点赞单次奖励积分数量" data-validation-message="请填写点赞单次奖励积分数量" class="am-radius" {{if !empty($data['give_thumbs_give_integral_value'])}} value="{{$data.give_thumbs_give_integral_value}}"{{/if}} />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="am-cf">
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label>点赞当日限奖励积分数量<span class="am-form-group-label-tips">0或空则不限制</span></label>
+                                <input type="number" name="give_thumbs_day_limit_give_integral_value" min="0" placeholder="点赞当日限奖励积分数量" data-validation-message="请填写点赞当日限奖励积分数量" class="am-radius" {{if !empty($data['give_thumbs_day_limit_give_integral_value'])}} value="{{$data.give_thumbs_day_limit_give_integral_value}}"{{/if}} />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 推荐问答 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">{{:MyLang('admin.form_item_recommend')}}</h3>
+                </div>
+                <div class="am-panel-bd am-padding-vertical-xs">
+                    <div class="forth-selection-container" data-form-name="recommend_ids">
+                        <div class="am-form-group">
+                            <div class="forth-selection-form" data-search-url="{{:PluginsAdminUrl('ask', 'admin', 'asksearch')}}">
+                                <input type="text" placeholder="{{:MyLang('admin.form_item_recommend_placeholder')}}" class="am-radius forth-selection-form-keywords" />
+                                <button type="button" class="am-btn am-btn-primary-light am-radius am-btn-xs btn-loading-example search-submit">{{:MyLang('search_title')}}</button>
+                            </div>
+                        </div>
+                        <div class="am-form-group-refreshing forth-selection-list">
+                            <input type="hidden" name="recommend_ids" value="{{if !empty($data['recommend_ids'])}}{{$data.recommend_ids}}{{/if}}" data-validation-message="请选择问答" />
+                            <div class="forth-selection-items am-fl">
+                                <div class="title">可选</div>
+                                <ul class="forth-selection-content am-list ul-left">
+                                    <div class="table-no">没有相关数据</div>
+                                </ul>
+                            </div>
+                            <button type="button" class="am-btn am-btn-default am-btn-xs am-radius selected-all">全选 <i class="am-icon-angle-double-right"></i></button>
+                            <div class="forth-selection-items am-fr">
+                                <div class="title">已选</div>
+                                <ul class="forth-selection-content am-list ul-right">
+                                    <div class="table-no {{if !empty($recommend_ask)}}none{{/if}}">没有相关数据</div>
+                                    {{if !empty($recommend_ask)}}
+                                        {{foreach $recommend_ask as $v}}
+                                            <li class="am-animation-slide-bottom items-li-{{$v.id}}">
+                                                <span class="name" data-value="{{$v.id}}">{{if empty($v['title'])}}{{$v.content}}{{else /}}{{$v.title}}{{/if}}</span>
+                                                <i class="iconfont icon-delete am-fr"></i>
+                                            </li>
+                                        {{/foreach}}
+                                    {{/if}}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEO -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">{{:MyLang('form_seo_data_title')}}</h3>
+                </div>
+                <div class="am-panel-bd am-padding-vertical-xs">
+                    {{:ModuleInclude('lib/seo')}}
+                </div>
+            </div>
+
+            <div class="am-form-popup-submit">
+                <a href="{{:PluginsAdminUrl('ask', 'admin', 'index', $params)}}" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg">
+                    <i class="am-icon-mail-reply"></i>
+                    <span>{{:MyLang('retreat_title')}}</span>
+                </a>
+                <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('save_title')}}'}">
+                    <i class="am-icon-save"></i>
+                    <span>{{:MyLang('save_title')}}</span>
+                </button>
+            </div>
+        </form>
+        <!-- form end -->
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

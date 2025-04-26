@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="{{:MyConfig('shopxo.default_charset', 'utf-8')}}" />
+        <link rel="shortcut icon" type="image/x-icon" href="{{$public_host}}favicon.ico" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>{{if empty($base_data['logo_name'])}}商城智能看板{{else /}}{{$base_data.logo_name}}{{/if}}</title>
+        <link rel="stylesheet" type="text/css" href="{{$public_host}}static/common/lib/assets/css/amazeui.css?v={{$static_cache_version}}" />
+        <link rel="stylesheet" type="text/css" href="{{$public_host}}static/common/css/common.css?v={{$static_cache_version}}" />
+        <link rel="stylesheet" type="text/css" href="{{$public_host}}/static/plugins/databoard/css/admin/template1/fonts/icomoon.css?v={{$static_cache_version}}" />
+        <link rel="stylesheet" type="text/css" href="{{$public_host}}/static/plugins/databoard/css/admin/template1/index.css?v={{$static_cache_version}}" />
+    </head>
+    <body data-url="{{:PluginsAdminUrl('databoard', 'template1', 'stats')}}" {{if isset($base_data['is_full_screen']) and $base_data['is_full_screen'] eq 1}}class="full-screen"{{/if}} data-public-host="{{$public_host}}">
+        <!-- loading -->
+        <div class="loading-dimmer">
+            <div class="loading">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+
+        <!-- header -->
+        <div class="header">
+            <div class="logo">{{if empty($base_data['logo_name'])}}商城智能看板{{else /}}{{$base_data.logo_name}}{{/if}}</div>
+            <a href="javascript:;" class="fullscreen-event" data-fulltext-open="全屏" data-fulltext-exit="退出"><span class="fullscreen-text">全屏</span></a>
+        </div>
+
+        <!-- content -->
+        <div class="viewport">
+            <div class="column">
+                <!--概览-->
+                <div class="overview panel">
+                    <div class="inner"></div>
+                </div>
+                <!--监控-->
+                <div class="monitor panel">
+                    <div class="inner">
+                        <div class="tabs"></div>
+                        <div class="content" style="display: block;">
+                            <div class="head"></div>
+                            <div class="marquee-view">
+                                <div class="marquee"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 热销商品 -->
+                <div class="goods-hot panel">
+                    <div class="inner">
+                        <h3>热销商品</h3>
+                        <div class="chart">
+                            <div class="pie"></div>
+                            <div class="data">
+                                <div class="item">
+                                    <h4>0</h4>
+                                    <span>
+                                        <i class="icon-dot" style="color: #ed3f35"></i> 商品总数
+                                    </span>
+                                </div>
+                                <div class="item">
+                                    <h4>0</h4>
+                                    <span>
+                                        <i class="icon-dot" style="color: #eacf19"></i> 售出总数
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <!-- 地图 -->
+                <div class="map">
+                    <h3>
+                        <span class="icon-cube"></span> 全国数据统计
+                    </h3>
+                    <div class="chart">
+                        <div class="geo"></div>
+                    </div>
+                </div>
+                <!-- 订单类型 -->
+                <div class="order-type panel">
+                    <div class="inner">
+                        <h3>订单类型总量</h3>
+                        <div class="chart">
+                            <div class="bar">
+                            </div>
+                            <div class="data">
+                                <div class="item">
+                                    <h4>0</h4>
+                                    <span>
+                                        <i class="icon-dot" style="color: #ed3f35"></i> 订单总量
+                                    </span>
+                                </div>
+                                <div class="item">
+                                    <h4>0</h4>
+                                    <span>
+                                        <i class="icon-dot" style="color: #eacf19"></i> 用户总量
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <!-- 订单 -->
+                <div class="order panel">
+                    <div class="inner">
+                        <!-- 筛选 -->
+                        <div class="filter">
+                            <a href="javascript:;" data-key="day365" class="active">365天</a>
+                            <a href="javascript:;" data-key="day90">90天</a>
+                            <a href="javascript:;" data-key="day30">30天</a>
+                            <a href="javascript:;" data-key="day1">24小时</a>
+                        </div>
+                        <!-- 数据 -->
+                        <div class="data">
+                            <div class="item">
+                                <h4>0</h4>
+                                <span>
+                                    <i class="icon-dot" style="color: #ed3f35;"></i> 订单量
+                                </span>
+                            </div>
+                            <div class="item">
+                                <h4>0</h4>
+                                <span>
+                                    <i class="icon-dot" style="color: #eacf19;"></i> 销售额
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 销售额 -->
+                <div class="sales panel">
+                    <div class="inner">
+                        <div class="caption">
+                            <h3>销售额统计</h3>
+                            <a href="javascript:;" class="active" data-type="year">年</a>
+                            <a href="javascript:;" data-type="quarter">季</a>
+                            <a href="javascript:;" data-type="month">月</a>
+                            <a href="javascript:;" data-type="week">周</a>
+                        </div>
+                        <div class="chart">
+                            <div class="line"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 渠道 季度 -->
+                <div class="wrap">
+                    <div class="channel panel">
+                        <div class="inner">
+                            <h3>支付分布</h3>
+                            <div class="data"></div>
+                        </div>
+                    </div>
+                    <div class="quarter panel">
+                        <div class="inner">
+                            <h3>
+                                当月销售进度
+                            </h3>
+                            <div class="chart">
+                                <div class="box">
+                                    <div class="gauge">
+                                    </div>
+                                    <div class="label speed">0 <small>%</small>
+                                    </div>
+                                </div>
+                                <div class="data">
+                                    <div class="item">
+                                        <h4 class="sales-price">0</h4>
+                                        <span>
+                                            <i class="icon-dot" style="color: #6acca3"></i> 销售额(万)
+                                        </span>
+                                    </div>
+                                    <div class="item">
+                                        <h4 class="increase">0%</h4>
+                                        <span>
+                                            <i class="icon-dot" style="color: #ed3f35"></i> 同比增长
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 全国热榜模块制作 -->
+                <div class="top panel">
+                    <div class="inner">
+                        <div class="all">
+                            <h3>全国热榜</h3>
+                            <ul></ul>
+                        </div>
+                        <div class="province">
+                            <h3>
+                                各省热销(万) <i class="date">// 近30日 //</i>
+                            </h3>
+                            <div class="data">
+                                <ul class="sup"></ul>
+                                <ul class="sub"></ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+<script src="{{$public_host}}/static/common/lib/jquery/jquery-2.2.4.min.js?v={{$static_cache_version}}"></script>
+<script type='text/javascript' src="{{$public_host}}static/common/lib/assets/js/amazeui.min.js?v={{$static_cache_version}}"></script>
+<script src="{{$public_host}}/static/common/lib/echarts/echarts.min.js?v={{$static_cache_version}}"></script>
+<script src="{{$public_host}}/static/common/lib/echarts/macarons.js?v={{$static_cache_version}}"></script>
+<script type='text/javascript' src="{{$public_host}}static/common/js/common.js?v={{$static_cache_version}}"></script>
+<script src="{{$public_host}}/static/plugins/databoard/js/admin/template1/china.js?v={{$static_cache_version}}"></script>
+<script src="{{$public_host}}/static/plugins/databoard/js/admin/template1/stats.js?v={{$static_cache_version}}"></script>
+<script type="text/javascript">
+window.onresize = function() {
+    var html_width = document.documentElement.clientWidth;
+    if (html_width < 1024) html_width = 1024;
+    if (html_width > 1920) html_width = 1920; 
+    // 限制住html获取的宽度(只是为了适配不会影响html的宽度)
+    document.documentElement.style.fontSize = html_width / 80 + "px";
+}
+window.onresize();
+
+$(function()
+{
+    // 初始化
+    stats();
+
+    // 定时执行
+    setInterval(() => {
+        stats();
+    }, {{if empty($base_data['interval_time'])}}30{{else /}}{{$base_data.interval_time}}{{/if}}*1000);
+});
+</script>

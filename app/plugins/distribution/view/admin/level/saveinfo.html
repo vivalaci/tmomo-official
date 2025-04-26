@@ -1,0 +1,308 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'distribution',
+            'title'     => '分销等级'.(empty($data['id']) ? MyLang('created_title') : MyLang('edit_title')),
+            'back_url'  => PluginsAdminUrl('distribution', 'level', 'index', $params),
+        ])}}
+
+        <div class="distribution-content">
+            <!-- form start -->
+            <form class="am-form form-validation am-form-full-screen am-form-popup-sticky" action="{{:PluginsAdminUrl('distribution', 'level', 'save')}}" method="POST" request-type="ajax-url" request-value="{{:PluginsAdminUrl('distribution', 'level', 'index')}}" enctype="multipart/form-data">
+                <div class="am-alert" data-am-alert>
+                    <button type="button" class="am-close">&times;</button>
+                    <p class="am-text-danger am-margin-bottom-xs">如果商品规格中配置了返佣规则、则优先使用商品规格配置的返佣规则。如未配置则再使用当前1~3规则中的值。</p>
+                    <div>
+                        <p>用户层级规则模式</p>
+                        <div class="am-padding-left-sm">
+                            <span class="mini-tips-text">
+                                <p>我自己是 A 用户</p>
+                                <p>A 邀请了 B 用户注册, B 用户就是 A 的一级分销</p>
+                                <p>B 用户邀请了 C 用户注册, C 用户就是 A 的二级分销</p>
+                                <p>C 用户邀请了 D 用户注册, D 用户就是 A 的三级分销</p>
+                            </span>
+                        </div>
+                    </div>
+                     <div class="am-margin-top-xs">
+                        <p>订单交易成功后返佣的比例0 - 100, 例:5 = 返订单金额的5%, 0则不返佣、返佣举例</p>
+                        <div class="am-padding-left-sm">
+                            <span class="mini-tips-text">
+                                <p>D 用户消费后</p>
+                                <p>C 用户获得一级返佣</p>
+                                <p>B 用户获得二级返佣</p>
+                                <p>A 用户获得三级返佣</p>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 基础 -->
+                <div class="am-panel am-panel-default am-radius">
+                    <div class="am-panel-hd">
+                        <h3 class="am-panel-title">{{:MyLang('base_title')}}</h3>
+                    </div>
+                    <div class="am-panel-bd am-padding-vertical-xs">
+                        <div class="am-cf">
+                            <div class="am-u-sm-6 am-padding-horizontal-0">
+                                <div class="am-form-group">
+                                    <label>名称</label>
+                                    <input type="text" name="name" placeholder="名称" minlength="1" maxlength="30" data-validation-message="名称格式 1~30 个字符" class="am-radius" {{if !empty($data['name'])}} value="{{$data.name}}"{{/if}} required />
+                                </div>
+                                <div class="am-form-group am-form-file">
+                                    <label class="am-block">图标<span class="am-form-group-label-tips">建议50*50px</span></label>
+                                    <div class="am-form-file-upload-container">
+                                        <ul class="plug-file-upload-view images_url-images-view" data-form-name="images_url" data-max-number="1" data-delete="1" data-dialog-type="images">
+                                            {{if !empty($data['images_url'])}}
+                                                <li>
+                                                    <input type="text" name="images_url" value="{{$data.images_url}}" data-validation-message="请上传图标" />
+                                                    <img src="{{$data.images_url}}" />
+                                                    <i class="iconfont icon-close"></i>
+                                                </li>
+                                            {{/if}}
+                                        </ul>
+                                        <div class="plug-file-upload-submit" data-view-tag="ul.images_url-images-view">
+                                            <i class="iconfont icon-upload-add"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="am-u-sm-6 am-padding-horizontal-0">
+                                <div class="am-form-group">
+                                    <label class="am-block">自动分配等级<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" data-am-popover="{content: '参与自动计算用户等级，默认 是', trigger: 'hover focus', theme: 'sm'}"></a></label>
+                                    <input name="is_level_auto" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if empty($data) or !isset($data['is_level_auto']) or $data['is_level_auto'] eq 1}}checked="true"{{/if}} />
+                                </div>
+                                {{:ModuleInclude('lib/is_enable')}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 等级规则 -->
+                <div class="am-panel am-panel-default am-radius">
+                    <div class="am-panel-hd">
+                        <h3 class="am-panel-title">等级规则</h3>
+                    </div>
+                    <div class="am-panel-bd am-padding-vertical-xs">
+                        <div class="am-alert am-alert-warning am-margin-top-sm" data-am-alert>
+                            <button type="button" class="am-close">&times;</button>
+                            <div class="am-text-danger am-margin-bottom-xs">
+                                <p>1. 如果单独为用户指定了分销等级、则优先使用用户配置的分销等级。如未配置则使用当前规则自动分配。</p>
+                                <p>2. 勾选则表示启用该条件（如对应规则未配置表示没有条件限制）</p>
+                                <p>3. 如全部未勾选则标识没有条件限制</p>
+                            </div>
+                            <p>
+                                <p>规则数值自动分配分销等级举例：</p>
+                                <span class="mini-tips-text">
+                                    最小规则0 - 最大规则0 / 则是 无限制<br>
+                                    最小规则0 - 最大规则100 / 则是 小于100<br>
+                                    最小规则100 - 最大规则500 / 则是 大于等于100并且小于500<br>
+                                    最小规则500 - 最大规则0 / 则是 大于等于500
+                                </span>
+                            </p>
+                        </div>
+                        <div>
+                            {{foreach $auto_level_type_list as $v}}
+                                <label class="am-radio-inline am-margin-right-sm">
+                                    <input type="radio" name="auto_level_type" value="{{$v.value}}" {{if isset($data['auto_level_type']) and $data['auto_level_type'] eq $v['value']}}checked="checked"{{else /}}{{if !isset($data['auto_level_type']) and isset($v['checked']) and $v['checked'] eq true}}checked="checked"{{/if}}{{/if}} data-am-ucheck /> {{$v.name}}
+                                </label>
+                            {{/foreach}}
+                        </div>
+                        <div class="am-margin-top am-margin-bottom">
+                            {{foreach $auto_level_type_where_list as $k=>$v}}
+                                <div class="am-cf {{if $k gt 0}}am-margin-top-sm{{/if}}">
+                                    <div class="am-u-sm-2 am-padding-0 am-text-right">
+                                        <label class="am-margin-bottom-0 am-text-right">{{$v.name}}</label>
+                                        <label class="am-checkbox-inline am-margin-left-sm am-fr">
+                                            <input type="checkbox" name="auto_level_type_where" value="{{$v.value}}" {{if !empty($data['auto_level_type_where']) and in_array($v['value'], $data['auto_level_type_where'])}}checked="checked"{{/if}} data-am-ucheck />
+                                        </label>
+                                    </div>
+                                    <div class="am-u-sm-10 rules-value">
+                                        {{switch $v.value}}
+                                            {{case 0}}
+                                                <input type="number" placeholder="最小金额" name="auto_level_self_consume_price_rules_min" min="0" step="0.01" data-validation-message="请填写消费最小金额" class="am-radius" value="{{if isset($data['auto_level_self_consume_price_rules_min']) and $data['auto_level_self_consume_price_rules_min'] gt 0}}{{$data.auto_level_self_consume_price_rules_min}}{{/if}}" />
+                                                <span class="am-text-grey">~</span>
+                                                <input type="number" placeholder="最大金额" min="0" step="0.01" name="auto_level_self_consume_price_rules_max" data-validation-message="请填写消费最大金额" class="am-radius" value="{{if isset($data['auto_level_self_consume_price_rules_max']) and $data['auto_level_self_consume_price_rules_max'] gt 0}}{{$data.auto_level_self_consume_price_rules_max}}{{/if}}" />
+                                            {{/case}}
+                                            {{case 1}}
+                                                <input type="number" placeholder="最小单数" name="auto_level_self_consume_number_rules_min" min="0" data-validation-message="请填写消费最小单数" class="am-radius" value="{{if isset($data['auto_level_self_consume_number_rules_min']) and $data['auto_level_self_consume_number_rules_min'] gt 0}}{{$data.auto_level_self_consume_number_rules_min}}{{/if}}" />
+                                                <span class="am-text-grey">~</span>
+                                                <input type="number" placeholder="最大单数" min="0" name="auto_level_self_consume_number_rules_max" data-validation-message="请填写消费最大单数" class="am-radius" value="{{if isset($data['auto_level_self_consume_number_rules_max']) and $data['auto_level_self_consume_number_rules_max'] gt 0}}{{$data.auto_level_self_consume_number_rules_max}}{{/if}}" />
+                                            {{/case}}
+                                            {{case 2}}
+                                                <input type="number" placeholder="最小金额" name="auto_level_promotion_income_order_price_rules_min" min="0" step="0.01" data-validation-message="请填写推广收益最小金额" class="am-radius" value="{{if isset($data['auto_level_promotion_income_order_price_rules_min']) and $data['auto_level_promotion_income_order_price_rules_min'] gt 0}}{{$data.auto_level_promotion_income_order_price_rules_min}}{{/if}}" />
+                                                <span class="am-text-grey">~</span>
+                                                <input type="number" placeholder="最大金额" min="0" step="0.01" name="auto_level_promotion_income_order_price_rules_max" data-validation-message="请填写推广收益最大金额" class="am-radius" value="{{if isset($data['auto_level_promotion_income_order_price_rules_max']) and $data['auto_level_promotion_income_order_price_rules_max'] gt 0}}{{$data.auto_level_promotion_income_order_price_rules_max}}{{/if}}" />
+                                            {{/case}}
+                                            {{case 3}}
+                                                <input type="number" placeholder="最小单数" name="auto_level_promotion_income_order_number_rules_min" min="0" data-validation-message="请填写推广收益最小单数" class="am-radius" value="{{if isset($data['auto_level_promotion_income_order_number_rules_min']) and $data['auto_level_promotion_income_order_number_rules_min'] gt 0}}{{$data.auto_level_promotion_income_order_number_rules_min}}{{/if}}" />
+                                                <span class="am-text-grey">~</span>
+                                                <input type="number" placeholder="最大单数" min="0" name="auto_level_promotion_income_order_number_rules_max" data-validation-message="请填写推广收益最大单数" class="am-radius" value="{{if isset($data['auto_level_promotion_income_order_number_rules_max']) and $data['auto_level_promotion_income_order_number_rules_max'] gt 0}}{{$data.auto_level_promotion_income_order_number_rules_max}}{{/if}}" />
+                                            {{/case}}
+                                            {{case 4}}
+                                                <input type="number" placeholder="最小数量" name="auto_level_promotion_income_team_number_rules_min" min="0" data-validation-message="请填写推广人数最小数量" class="am-radius" value="{{if isset($data['auto_level_promotion_income_team_number_rules_min']) and $data['auto_level_promotion_income_team_number_rules_min'] gt 0}}{{$data.auto_level_promotion_income_team_number_rules_min}}{{/if}}" />
+                                                <span class="am-text-grey">~</span>
+                                                <input type="number" placeholder="最大数量" min="0" name="auto_level_promotion_income_team_number_rules_max" data-validation-message="请填写推广人数最大数量" class="am-radius" value="{{if isset($data['auto_level_promotion_income_team_number_rules_max']) and $data['auto_level_promotion_income_team_number_rules_max'] gt 0}}{{$data.auto_level_promotion_income_team_number_rules_max}}{{/if}}" />
+                                            {{/case}}
+                                            {{case 5}}
+                                                <input type="number" placeholder="最小数量" name="auto_level_promotion_income_team_consume_rules_min" min="0" data-validation-message="请填写推广消费人数最小数量" class="am-radius" value="{{if isset($data['auto_level_promotion_income_team_consume_rules_min']) and $data['auto_level_promotion_income_team_consume_rules_min'] gt 0}}{{$data.auto_level_promotion_income_team_consume_rules_min}}{{/if}}" />
+                                                <span class="am-text-grey">~</span>
+                                                <input type="number" placeholder="最大数量" min="0" name="auto_level_promotion_income_team_consume_rules_max" data-validation-message="请填写推广消费人数最大数量" class="am-radius" value="{{if isset($data['auto_level_promotion_income_team_consume_rules_max']) and $data['auto_level_promotion_income_team_consume_rules_max'] gt 0}}{{$data.auto_level_promotion_income_team_consume_rules_max}}{{/if}}" />
+                                            {{/case}}
+                                            {{case 6}}
+                                                <input type="number" placeholder="最小数量" name="auto_level_user_points_number_rules_min" min="0" data-validation-message="请填写有效积分最小数量" class="am-radius" value="{{if isset($data['auto_level_user_points_number_rules_min']) and $data['auto_level_user_points_number_rules_min'] gt 0}}{{$data.auto_level_user_points_number_rules_min}}{{/if}}" />
+                                                <span class="am-text-grey">~</span>
+                                                <input type="number" placeholder="最大数量" min="0" name="auto_level_user_points_number_rules_max" data-validation-message="请填写有效积分最大数量" class="am-radius" value="{{if isset($data['auto_level_user_points_number_rules_max']) and $data['auto_level_user_points_number_rules_max'] gt 0}}{{$data.auto_level_user_points_number_rules_max}}{{/if}}" />
+                                            {{/case}}
+                                        {{/switch}}
+                                    </div>
+                                </div>
+                            {{/foreach}}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 向上返佣 -->
+                <div class="am-panel am-panel-default am-radius">
+                    <div class="am-panel-hd">
+                        <h3 class="am-panel-title">向上返佣</h3>
+                    </div>
+                    <div class="am-panel-bd am-padding-vertical-xs">
+                        <div class="am-cf">
+                            <div class="am-u-sm-4 am-padding-horizontal-0">
+                                <div class="am-form-group">
+                                    <label>向上一级返佣比例</label>
+                                    <div class="am-input-group am-input-group-sm">
+                                        <input type="number" name="level_rate_one" placeholder="向上一级返佣比例" min="0" max="100" step="0.01" data-validation-message="向上一级返佣比例 0~100 的数字" class="am-form-field am-radius" {{if !empty($data['level_rate_one']) and $data['level_rate_one'] gt 0}} value="{{$data.level_rate_one}}"{{/if}} />
+                                        <span class="am-input-group-btn">
+                                            <button type="button" class="am-btn am-btn-default am-radius">%</button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="am-u-sm-4 am-padding-horizontal-0">
+                                <div class="am-form-group">
+                                    <label>向上二级返佣比例</label>
+                                    <div class="am-input-group am-input-group-sm">
+                                        <input type="number" name="level_rate_two" placeholder="向上二级返佣比例" min="0" max="100" step="0.01" data-validation-message="向上二级返佣比例 0~100 的数字" class="am-form-field am-radius" {{if !empty($data['level_rate_two']) and $data['level_rate_two'] gt 0}} value="{{$data.level_rate_two}}"{{/if}} />
+                                        <span class="am-input-group-btn">
+                                            <button type="button" class="am-btn am-btn-default am-radius">%</button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="am-u-sm-4 am-padding-horizontal-0">
+                                <div class="am-form-group">
+                                    <label>向上三级返佣比例</label>
+                                    <div class="am-input-group am-input-group-sm">
+                                        <input type="number" name="level_rate_three" placeholder="向上三级返佣比例" min="0" max="100" step="0.01" data-validation-message="向上三级返佣比例 0~100 的数字" class="am-form-field am-radius" {{if !empty($data['level_rate_three']) and $data['level_rate_three'] gt 0}} value="{{$data.level_rate_three}}"{{/if}} />
+                                        <span class="am-input-group-btn">
+                                            <button type="button" class="am-btn am-btn-default am-radius">%</button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 向下/内购返佣 -->
+                <div class="am-panel am-panel-default am-radius">
+                    <div class="am-panel-hd">
+                        <h3 class="am-panel-title">向下/内购返佣</h3>
+                    </div>
+                    <div class="am-panel-bd am-padding-vertical-xs">
+                        <div class="am-cf">
+                            <div class="am-u-sm-6 am-padding-horizontal-0">
+                                <div class="am-form-group">
+                                    <label>向下返佣比例<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="向消费者邀请的下级发放佣金"></a></label>
+                                    <div class="am-input-group am-input-group-sm am-margin-top-xs">
+                                        <input type="number" name="down_return_rate" placeholder="向下返佣比例" min="0" max="100" step="0.01" data-validation-message="向下返佣比例 0~100 的数字" class="am-form-field am-radius" {{if !empty($data['down_return_rate']) and $data['down_return_rate'] gt 0}} value="{{$data.down_return_rate}}"{{/if}} />
+                                        <span class="am-input-group-btn">
+                                            <button type="button" class="am-btn am-btn-default am-radius">%</button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="am-u-sm-6 am-padding-horizontal-0">
+                                <div class="am-form-group">
+                                    <label>内购返佣比例</label>
+                                    <div class="am-input-group am-input-group-sm am-margin-top-xs">
+                                        <input type="number" name="self_buy_rate" placeholder="内购返佣比例" min="0" max="100" step="0.01" data-validation-message="内购返佣比例 0~100 的数字" class="am-form-field am-radius" {{if !empty($data['self_buy_rate']) and $data['self_buy_rate'] gt 0}} value="{{$data.self_buy_rate}}"{{/if}} />
+                                        <span class="am-input-group-btn">
+                                            <button type="button" class="am-btn am-btn-default am-radius">%</button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 取货点返佣 -->
+                <div class="am-panel am-panel-default am-radius">
+                    <div class="am-panel-hd">
+                        <h3 class="am-panel-title">取货点返佣</h3>
+                    </div>
+                    <div class="am-panel-bd am-padding-vertical-xs">
+                        <div class="am-cf">
+                            <div class="am-u-sm-4 am-padding-horizontal-0">
+                                <div class="am-form-group">
+                                    <label>取货点返佣一级比例</label>
+                                    <div class="am-input-group am-input-group-sm">
+                                        <input type="number" name="force_current_user_rate_one" placeholder="取货点返佣一级比例" min="0" max="100" step="0.01" data-validation-message="取货点返佣一级比例 0~100 的数字" class="am-form-field am-radius" {{if !empty($data['force_current_user_rate_one']) and $data['force_current_user_rate_one'] gt 0}} value="{{$data.force_current_user_rate_one}}"{{/if}} />
+                                        <span class="am-input-group-btn">
+                                            <button type="button" class="am-btn am-btn-default am-radius">%</button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="am-u-sm-4 am-padding-horizontal-0">
+                                <div class="am-form-group">
+                                    <label>取货点返佣二级比例</label>
+                                    <div class="am-input-group am-input-group-sm">
+                                        <input type="number" name="force_current_user_rate_two" placeholder="取货点返佣二级比例" min="0" max="100" step="0.01" data-validation-message="取货点返佣二级比例 0~100 的数字" class="am-form-field am-radius" {{if !empty($data['force_current_user_rate_two']) and $data['force_current_user_rate_two'] gt 0}} value="{{$data.force_current_user_rate_two}}"{{/if}} />
+                                        <span class="am-input-group-btn">
+                                            <button type="button" class="am-btn am-btn-default am-radius">%</button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="am-u-sm-4 am-padding-horizontal-0">
+                                <div class="am-form-group">
+                                    <label>取货点返佣三级比例</label>
+                                    <div class="am-input-group am-input-group-sm">
+                                        <input type="number" name="force_current_user_rate_three" placeholder="取货点返佣三级比例" min="0" max="100" step="0.01" data-validation-message="取货点返佣三级比例 0~100 的数字" class="am-form-field am-radius" {{if !empty($data['force_current_user_rate_three']) and $data['force_current_user_rate_three'] gt 0}} value="{{$data.force_current_user_rate_three}}"{{/if}} />
+                                        <span class="am-input-group-btn">
+                                            <button type="button" class="am-btn am-btn-default am-radius">%</button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="am-form-popup-submit">
+                    <input type="hidden" name="id" {{if !empty($data['id'])}} value="{{$data.id}}"{{/if}} />
+                    <a href="{{:PluginsAdminUrl('distribution', 'level', 'index', $params)}}" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg">
+                        <i class="am-icon-mail-reply"></i>
+                        <span>{{:MyLang('retreat_title')}}</span>
+                    </a>
+                    <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('save_title')}}'}">
+                        <i class="am-icon-save"></i>
+                        <span>{{:MyLang('save_title')}}</span>
+                    </button>
+                </div>
+            </form>
+            <!-- form end -->
+        </div>
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

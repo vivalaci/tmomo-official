@@ -1,0 +1,24 @@
+{{block name="form_header"}}
+    {{:ModuleInclude('public/header')}}
+    <div class="popup-pure-page am-padding-main">
+{{/block}}
+
+<!-- 继承公共的 form -->
+{{extend name="../../../module/view/form_table/base_form" /}}
+
+<!-- 表单顶部操作栏 -->
+{{block name="form_operate_top"}}
+    <a href="{{:PluginsHomeUrl('seckill', 'shopgoods', 'saveinfo')}}" class="am-btn am-btn-primary am-radius am-btn-xs">
+        <i class="am-icon-plus am-show-sm-only">/</i><i class="am-icon-edit am-show-sm-only"></i>
+        <span>{{:MyLang('add_title')}}</span>
+        <span>/</span>
+        <span>{{:MyLang('edit_title')}}</span>
+    </a>
+    <!-- 父级内容 -->
+    {__block__}
+{{/block}}
+
+{{block name="form_footer"}}
+    </div>
+    {{:ModuleInclude('public/footer')}}
+{{/block}}

@@ -1,0 +1,40 @@
+{{if !empty($module_data['coupon_list']) and is_array($module_data['coupon_list'])}}
+    <div class="plugins-coupon-receive-container">
+        <ul class="
+            am-avg-sm-{{if empty($module_data['sm'])}}1{{else /}}{{$module_data.sm}}{{/if}}
+            am-avg-md-{{if empty($module_data['md'])}}2{{else /}}{{$module_data.md}}{{/if}}
+            am-avg-lg-{{if empty($module_data['lg'])}}3{{else /}}{{$module_data.lg}}{{/if}}
+            plugins-coupon-items plugins-coupon-url" data-receive-url="{{:PluginsHomeUrl('coupon', 'index', 'receive')}}">
+            {{foreach $module_data.coupon_list as $v}}
+                <li data-is-operable="{{if $v['status_type'] eq 0}}1{{else /}}{{/if}}" data-operable-name="{{$v.status_operable_name}}" data-coupon-id="{{$v.id}}">
+                    <div class="item am-cf {{if !isset($v['status_type']) or $v['status_type'] neq 0}}coupon-disabled{{/if}}" {{if !empty($v['bg_color_value'])}}style="border:1px solid {{$v.bg_color_value}}"{{/if}}>
+                        <div class="v-left-border" {{if !empty($v['bg_color_value'])}}style="background: linear-gradient(135deg, transparent, transparent 40%, {{$v.bg_color_value}}, transparent 60%, transparent 100%), linear-gradient(45deg, transparent, transparent 40%, {{$v.bg_color_value}}, transparent 60%, transparent 100%);background-size: 1rem 1.5rem;
+                        "{{/if}}></div>
+                        <div class="v-left-point v-point-background-{{if empty($module_data['color'])}}white{{else /}}{{$module_data.color}}{{/if}}"></div>
+                        <div class="v-left am-fl am-padding-left-sm am-padding-top-sm am-padding-bottom-sm">
+                            <div class="v-left-center-border" {{if !empty($v['bg_color_value'])}}style="background-image: radial-gradient(circle at right top, {{$v.bg_color_value}}, {{$v.bg_color_value}} 1.15rem, transparent 1.18rem), radial-gradient(circle at right bottom, {{$v.bg_color_value}}, {{$v.bg_color_value}} 1.15rem, transparent 1.18rem)"{{/if}}></div>
+                            <div class="v-left-center-point v-left-center-point-background-{{if empty($module_data['color'])}}white{{else /}}{{$module_data.color}}{{/if}}"></div>
+                            <div class="base am-text-truncate">
+                                {{if $v['type'] eq 0}}
+                                    <span class="symbol">{{$currency_symbol}}</span>
+                                {{/if}}
+                                <span class="price">{{$v.discount_value}}</span>
+                                <span class="unit">{{$v.type_unit}}</span>
+                                {{if !empty($v['desc'])}}
+                                    <span class="desc am-margin-left-sm">{{$v.desc}}</span>
+                                {{/if}}
+                            </div>
+                            {{if !empty($v['use_limit_type_name'])}}
+                                <p class="tips am-text-truncate">{{$v.use_limit_type_name}}</p>
+                            {{/if}}
+                        </div>
+                        <div class="v-right am-fr am-text-center {{if empty($user) and $v['status_type'] eq 0}}login-event{{/if}}" {{if !empty($v['bg_color_value'])}}style="background:{{$v.bg_color_value}}"{{/if}}>
+                            <div class="v-right-center-point v-right-center-point-background-{{if empty($module_data['color'])}}white{{else /}}{{$module_data.color}}{{/if}}">{{$v.status_operable_name}}</div>
+                        </div>
+                        <div class="v-right-point v-point-background-{{if empty($module_data['color'])}}white{{else /}}{{$module_data.color}}{{/if}}"></div>
+                    </div>
+                </li>
+            {{/foreach}}
+        </ul>
+    </div>                                                                      
+{{/if}}

@@ -1,0 +1,46 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content form-popup-container">
+        {{if empty($data)}}
+            {{:ModuleInclude('public/not_data')}}
+        {{else /}}
+            <!-- form start -->
+            <form class="am-form form-validation am-form-full-screen am-form-popup-sticky" action="{{:PluginsAdminUrl('seckill', 'goods', 'audit')}}" method="POST" request-type="ajax-reload" request-value="parent">
+                <div class="am-form-group am-form-group-refreshing">
+                    <label>拒绝原因<span class="am-form-group-label-tips-must">拒绝操作则必填</span></label>
+                    <textarea class="am-radius" name="msg" rows="3" maxlength="200" placeholder="拒绝原因最多 200 个字符" data-validation-message="请填写拒绝原因、最多200个字符"></textarea>
+                </div>
+                <div class="am-alert am-alert-secondary">
+                    <p class="am-text-warning">审核通过可以设置以下数据</p>
+                    <div class="am-form-group">
+                        <label class="am-block">是否推荐</label>
+                        <input name="is_recommend" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_recommend']) and $data['is_recommend'] eq 1}} checked="true"{{/if}} />
+                    </div>
+                </div>
+                <div class="am-form-popup-submit">
+                    <input type="hidden" name="id" value="{{$data.id}}" />
+                    <input type="hidden" name="opt_type" value="0" />
+                    <button type="button" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg" data-am-modal-close>
+                        <i class="am-icon-paint-brush"></i>
+                        <span>{{:MyLang('cancel_title')}}</span>
+                    </button>
+                    <button type="submit" class="am-btn am-btn-danger am-radius am-btn-xs btn-loading-example am-margin-right-lg" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('refuse_title')}}'}" data-type="0">
+                        <i class="am-icon-warning"></i>
+                        <span>{{:MyLang('refuse_title')}}</span>
+                    </button>
+                    <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('pass_title')}}'}" data-type="1">
+                        <i class="am-icon-check"></i>
+                        <span>{{:MyLang('pass_title')}}</span>
+                    </button>
+                </div>
+            </form>
+        {{/if}}
+        <!-- form end -->
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

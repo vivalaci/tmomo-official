@@ -1,0 +1,104 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    {{:ModuleInclude('../../../plugins/intellectstools/view/index/order/nav')}}
+    <div class="content am-padding-horizontal-sm">
+        {{if !empty($data)}}
+            <!-- form start -->
+            <form class="am-form form-validation am-form-full-screen am-form-popup-fixed intellectstools-order-address-container" action="{{:PluginsHomeUrl('intellectstools', 'order', $default_view['type'].'save')}}" method="POST" request-type="ajax-reload" request-value="parent">
+                <div class="am-form-group row">
+                    <label>别名</label>
+                    <input type="text" name="alias" placeholder="别名" minlength="0" maxlength="16" data-validation-message="别名格式最多 16 个字符" class="am-radius" {{if !empty($data['alias'])}} value="{{$data.alias}}"{{/if}} />
+                </div>
+                <div class="am-form-group row">
+                    <label>姓名<span class="am-form-group-label-tips-must">*</span></label>
+                    <input type="text" name="name" placeholder="姓名" minlength="2" maxlength="16" data-validation-message="姓名格式 2~16 个字符之间" class="am-radius" {{if !empty($data['name'])}} value="{{$data.name}}"{{/if}} required />
+                </div>
+                <div class="am-form-group row">
+                    <label>电话<span class="am-form-group-label-tips-must">*</span></label>
+                    <input type="text" name="tel" placeholder="电话" minlength="6" maxlength="30" data-validation-message="电话格式有误" class="am-radius" {{if !empty($data['tel'])}} value="{{$data.tel}}"{{/if}} required />
+                </div>
+
+                {{:ModuleInclude('lib/region_linkage', ['is_row'=>1])}}
+                <div class="am-form-group row">
+                    <label>详细地址<span class="am-form-group-label-tips-must">*</span></label>
+                    <div class="am-flex am-flex-items-center am-width am-pr">
+                        <input type="hidden" name="lng" id="form-lng" {{if !empty($data['lng'])}} value="{{$data.lng}}"{{/if}} />
+                        <input type="hidden" name="lat" id="form-lat" {{if !empty($data['lat'])}} value="{{$data.lat}}"{{/if}} />
+                        <input type="text" name="address" id="form-address" placeholder="详细地址" minlength="2" maxlength="80" data-validation-message="详细地址格式 1~80 个字符之间" class="am-form-field am-radius" {{if !empty($data['address'])}} value="{{$data.address}}"{{/if}} required />
+                        <i class="iconfont icon-map-position am-map-positioning-icon" id="map-location-submit"></i>
+                    </div>
+                </div>
+                <div class="am-form-group">
+                    <div id="map" data-level="17" class="am-radius"></div>
+                </div>
+                <div class="am-form-group row">
+                    <label>身份证姓名<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" data-am-popover="{content: '选填，请务必与上传的身份证件姓名保持一致', trigger: 'hover focus', theme: 'sm'}"></a></label>
+                    <input type="text" name="idcard_name" placeholder="身份证姓名" minlength="0" maxlength="16" data-validation-message="身份证姓名格式最多 16 个字符" class="am-radius" {{if !empty($data['idcard_name'])}} value="{{$data.idcard_name}}"{{/if}} />
+                </div>
+                <div class="am-form-group row">
+                    <label>身份证号码<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" data-am-popover="{content: '选填，请务必与上传的身份证件号码保持一致', trigger: 'hover focus', theme: 'sm'}"></a></label>
+                    <input type="text" name="idcard_number" placeholder="身份证号码" minlength="0" maxlength="18" data-validation-message="身份证号码格式最多 18 个字符" class="am-radius" {{if !empty($data['idcard_number'])}} value="{{$data.idcard_number}}"{{/if}} />
+                </div>
+                <div class="am-form-group plug-file-upload-view row">
+                    <label class="am-flex-align-self-start">身份证照片<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" data-am-popover="{content: '选填，请使用身份证原件拍摄，图片要清晰', trigger: 'hover focus', theme: 'sm'}"></a></label>
+                    <div class="am-nbfc user-address-idcard-images am-flex">
+                        <div class="item am-margin-right-main">
+                            <ul class="plug-file-upload-view images-idcard_front" data-form-name="idcard_front" data-max-number="1" data-dialog-type="images" data-is-eye="1">
+                                <li>
+                                    {{if !empty($data['idcard_front_old'])}}
+                                        <input type="text" name="idcard_front" value="{{$data.idcard_front_old}}" />
+                                    {{/if}}
+                                    <img src="{{if empty($data['idcard_front'])}}{{:StaticAttachmentUrl('default-idcard-front.jpg')}}{{else /}}{{$data.idcard_front}}{{/if}}" />
+                                    <i class="iconfont icon-close"></i>
+                                    <i class="iconfont icon-eye"></i>
+                                </li>
+                            </ul>
+                            <div class="plug-file-upload-submit am-margin-top-sm" data-view-tag="ul.images-idcard_front">+上传人像面图片</div>
+                        </div>
+                        <div class="item am-margin-right-main">
+                            <ul class="plug-file-upload-view images-idcard_back" data-form-name="idcard_back" data-max-number="1" data-dialog-type="images" data-is-eye="1">
+                                <li>
+                                    {{if !empty($data['idcard_back_old'])}}
+                                        <input type="text" name="idcard_back" value="{{$data.idcard_back_old}}" />
+                                    {{/if}}
+                                    <img src="{{if empty($data['idcard_back'])}}{{:StaticAttachmentUrl('default-idcard-back.jpg')}}{{else /}}{{$data.idcard_back}}{{/if}}" />
+                                    <i class="iconfont icon-close"></i>
+                                    <i class="iconfont icon-eye"></i>
+                                </li>
+                            </ul>
+                            <div class="plug-file-upload-submit am-margin-top-sm" data-view-tag="ul.images-idcard_back">+上传国微面图片</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="am-form-popup-submit">
+                    <input type="hidden" name="id" {{if !empty($order_id)}} value="{{$order_id}}"{{/if}} />
+                    <button type="button" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg" data-am-modal-close>
+                        <i class="am-icon-paint-brush"></i>
+                        <span>{{:MyLang('cancel_title')}}</span>
+                    </button>
+                    <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('save_title')}}'}">
+                        <i class="am-icon-save"></i>
+                        <span>{{:MyLang('save_title')}}</span>
+                    </button>
+                </div>
+            </form>
+            <!-- form end -->
+        {{else /}}
+            <div class="table-no"><i class="am-icon-warning"></i> {{:MyLang('order_info_incorrect_tips')}}</div>
+        {{/if}}
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}
+<script type="text/javascript">
+$(function()
+{
+    // 百度地图初始化
+    MapInit({{if !empty($data['lng'])}}{{$data['lng']}}{{else /}}114.182783{{/if}},{{if !empty($data['lat'])}}{{$data['lat']}}{{else /}}22.300275{{/if}});
+});
+</script>

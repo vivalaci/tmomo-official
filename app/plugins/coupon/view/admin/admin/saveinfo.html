@@ -1,0 +1,194 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'coupon',
+            'title'     => MyLang('base_config_title'),
+            'back_url'  => PluginsAdminUrl('coupon', 'admin', 'index'),
+        ])}}
+
+        <!-- form start -->
+        <form class="am-form form-validation am-form-full-screen am-form-popup-sticky" action="{{:PluginsAdminUrl('coupon', 'admin', 'save')}}" method="POST" request-type="ajax-url" request-value="{{:PluginsAdminUrl('coupon', 'admin', 'index')}}">
+            <!-- 基础配置 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">{{:MyLang('base_config_title')}}</h3>
+                </div>
+                <div class="am-panel-bd am-padding-vertical-xs">
+                    <div class="am-form-group">
+                        <label>{{:MyLang('application_nav_name_text')}}<span class="am-form-group-label-tips">{{:MyLang('empty_hide_tips')}}</span></label>
+                        <input type="text" name="application_name" placeholder="{{:MyLang('application_nav_name_text')}}" maxlength="60" data-validation-message="{{:MyLang('application_nav_name_max_message')}}" class="am-radius" {{if !empty($data['application_name'])}} value="{{$data.application_name}}"{{/if}} />
+                    </div>
+
+                    <div class="am-form-group am-form-file">
+                        <label class="am-block">{{:MyLang('coupon_index_top_app_img_text')}}<span class="am-form-group-label-tips">{{:MyLang('suggest_text')}}780*454px</span></label>
+                        <div class="am-form-file-upload-container">
+                            <ul class="plug-file-upload-view plugins-app_banner_images-view" data-form-name="app_banner_images" data-max-number="1" data-dialog-type="images">
+                                {{if !empty($data['app_banner_images'])}}
+                                    <li>
+                                        <input type="text" name="app_banner_images" value="{{$data.app_banner_images}}" data-validation-message="{{:MyLang('upload_top_img_message')}}" />
+                                        <img src="{{$data.app_banner_images}}" />
+                                        <i class="iconfont icon-close"></i>
+                                    </li>
+                                {{/if}}
+                            </ul>
+                            <div class="plug-file-upload-submit" data-view-tag="ul.plugins-app_banner_images-view">
+                                <i class="iconfont icon-upload-add"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="am-form-group am-form-file">
+                        <label class="am-block">{{:MyLang('coupon_index_top_img_text')}}<span class="am-form-group-label-tips">{{:MyLang('suggest_text')}}1200*320px</span></label>
+                        <div class="am-form-file-upload-container">
+                            <ul class="plug-file-upload-view plugins-banner_images-view" data-form-name="banner_images" data-max-number="1" data-dialog-type="images">
+                                {{if !empty($data['banner_images'])}}
+                                    <li>
+                                        <input type="text" name="banner_images" value="{{$data.banner_images}}" data-validation-message="{{:MyLang('upload_top_img_message')}}" />
+                                        <img src="{{$data.banner_images}}" />
+                                        <i class="iconfont icon-close"></i>
+                                    </li>
+                                {{/if}}
+                            </ul>
+                            <div class="plug-file-upload-submit" data-view-tag="ul.plugins-banner_images-view">
+                                <i class="iconfont icon-upload-add"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label>{{:MyLang('coupon_index_top_img_backgound_text')}}</label>
+                        <div class="colorpicker-container">
+                            <input type="hidden" name="banner_bg_color" value="{{if !empty($data['banner_bg_color'])}}{{$data.banner_bg_color}}{{/if}}" />
+                            <div class="colorpicker-submit" data-color="{{if !empty($data['banner_bg_color'])}}{{$data.banner_bg_color}}{{/if}}" data-color-tag="input[name='banner_bg_color']" data-color-style="background-color"></div>
+                            <img class="imitate-colorpicker-submit" src="{{:StaticAttachmentUrl('colorpicker.png')}}" width="24" height="24" />
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label>{{:MyLang('coupon_index_top_img_address_text')}}</label>
+                        <div class="am-alert am-radius am-margin-top-0" data-am-alert>
+                            <div>
+                                <p><strong>{{:MyLang('web_pc_h5_text')}}</strong></p>
+                                <div class="am-padding-left-lg">
+                                    <p>1. {{:MyLang('start_with_http_text')}}</p>
+                                </div>
+                            </div>
+                            <div class="am-margin-top-xs">
+                                <p><strong>{{:MyLang('mini_program_or_app_text')}}</strong></p>
+                                <div class="am-padding-left-lg">
+                                    <p>1. {{:MyLang('mini_program_or_app_address_text')}}</p>
+                                    <p>2. {{:MyLang('mini_program_or_pages_start_text')}}</p>
+                                    <p>3. {{:MyLang('for_example_text')}}：/pages/user/user</p>
+                                    <p>4. {{:MyLang('suggest_params_text')}}</p>
+                                    {{if !empty($site_store_links) and !empty($site_store_links['app_mini_pages'])}}
+                                    <p>
+                                        <a href="{{$site_store_links.app_mini_pages}}" target="_blank">{{:MyLang('mini_prograam_address_config_text')}} <i class="am-icon-external-link"></i></a>
+                                    </p>
+                                {{/if}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="url-container am-margin-top-sm">
+                            {{if !empty($common_platform_type)}}
+                                {{foreach $common_platform_type as $v}}
+                                    <div class="am-input-group am-input-group-sm">
+                                        <span class="am-input-group-btn">
+                                            <button type="button" class="am-btn am-btn-default am-radius">{{$v.name}}</button>
+                                        </span>
+                                        <input type="text" name="url_rules[{{$v.value}}]" placeholder="{{$v.name}}" class="am-form-field am-radius" value="{{if !empty($data['url_rules']) and is_array($data['url_rules']) and array_key_exists($v['value'], $data['url_rules'])}}{{$data['url_rules'][$v['value']]}}{{/if}}" />
+                                    </div>
+                                {{/foreach}}
+                            {{/if}}
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label class="am-block">{{:MyLang('coupon_station_email_notification_text')}}</label>
+                        <input name="is_user_coupon_send_site_notice" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_user_coupon_send_site_notice']) and $data['is_user_coupon_send_site_notice'] eq 1}}checked="true"{{/if}} />
+                    </div>
+
+                    <div class="am-form-group">
+                        <label class="am-block">{{:MyLang('limit_time_shop_order_not_available_text')}}</label>
+                        <input name="is_exclude_seckill_goods_order" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_exclude_seckill_goods_order']) and $data['is_exclude_seckill_goods_order'] eq 1}}checked="true"{{/if}} />
+                    </div>
+                    <div class="am-form-group">
+                        <label class="am-block">{{:MyLang('is_default_use_coupon')}}<span class="am-form-group-label-tips">{{:MyLang('is_default_use_coupon_tips')}}</span></label>
+                        <div class="am-margin-top-sm">
+                            <input name="is_default_use_coupon" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_default_use_coupon']) and $data['is_default_use_coupon'] eq 1}}checked="true"{{/if}} />
+                            <label class="am-radio-inline am-margin-left-sm">
+                                <input type="radio" name="is_default_use_coupon_type" value="0" data-am-ucheck {{if !isset($data['is_default_use_coupon_type']) or (isset($data['is_default_use_coupon_type']) and $data['is_default_use_coupon_type'] eq 0)}}checked{{/if}} /> {{:MyLang('is_default_use_coupon_type_0')}}
+                            </label>
+                            <label class="am-radio-inline">
+                                <input type="radio" name="is_default_use_coupon_type" value="1" data-am-ucheck {{if isset($data['is_default_use_coupon_type']) and $data['is_default_use_coupon_type'] eq 1}}checked{{/if}} /> {{:MyLang('is_default_use_coupon_type_1')}}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 短信配置 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">{{:MyLang('sms_config_text')}}</h3>
+                </div>
+                <div class="am-panel-bd am-padding-vertical-xs">
+                    <div class="am-form-group">
+                        <label class="am-block">{{:MyLang('coupon_sms_notification_text')}}</label>
+                        <input name="is_user_coupon_send_sms_notice" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_user_coupon_send_sms_notice']) and $data['is_user_coupon_send_sms_notice'] eq 1}}checked="true"{{/if}} />
+                    </div>
+                    <div class="am-form-group">
+                        <label>{{:MyLang('sms_signature_text')}}<span class="am-form-group-label-tips">{{:MyLang('empty_use_sys_default_name_tips')}}</span></label>
+                        <input type="text" name="sms_sign" placeholder="{{:MyLang('sms_signature_text')}}" maxlength="30" data-validation-message="{{:MyLang('sms_name_max_30_message')}}" class="am-radius" {{if !empty($data['sms_sign'])}} value="{{$data.sms_sign}}"{{/if}} />
+                    </div>
+                    <div class="am-form-group">
+                        <label>{{:MyLang('coupon_signature_temp_text')}}<span class="am-form-group-label-tips">{{:MyLang('empty_no_send_message')}}</span></label>
+                        <input type="text" name="user_coupon_send_notice_sms_template" placeholder="{{:MyLang('order_pay_sms_template_id_placeholder')}}" maxlength="30" data-validation-message="{{:MyLang('order_pay_sms_template_id_max_30_message')}}" class="am-radius" {{if !empty($data['user_coupon_send_notice_sms_template'])}} value="{{$data.user_coupon_send_notice_sms_template}}"{{/if}} />
+                        <div class="am-alert">
+                            <p><strong class="am-text-warning">{{:MyLang('reference_template_content_tips')}}：</strong></p>
+                            <p>{{:MyLang('dear_sir_tips')}}${coupon_desc}{{:MyLang('coupon_value_tips')}}${coupon_value}{{:MyLang('we_program_or_pc_use_tips')}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 支持多商户 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">{{:MyLang('support_multiple_merchants_text')}}</h3>
+                </div>
+                <div class="am-panel-bd am-padding-vertical-xs">
+                    <div class="am-form-group">
+                        <label class="am-block">{{:MyLang('open_support_multiple_merchants_text')}}</label>
+                        <input name="is_shop_coupon" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_shop_coupon']) and $data['is_shop_coupon'] eq 1}}checked="true"{{/if}} />
+                    </div>
+                    <div class="am-form-group">
+                        <label class="am-block">{{:MyLang('open_multiple_merchants_coupon_nav_text')}}</label>
+                        <input name="is_shop_nav_coupon" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_shop_nav_coupon']) and $data['is_shop_nav_coupon'] eq 1}}checked="true"{{/if}} />
+                    </div>
+                    <div class="am-form-group">
+                        <label>{{:MyLang('shop_nav_name_text')}}<span class="am-form-group-label-tips">{{:MyLang('default_tips')}} 优惠券{{:MyLang('coupon_name')}}</span></label>
+                        <input type="text" name="shop_application_name" placeholder="{{:MyLang('shop_nav_name_text')}}" maxlength="16" data-validation-message="{{:MyLang('retreat_title')}}" class="am-radius" {{if !empty($data['shop_application_name'])}} value="{{$data.shop_application_name}}"{{/if}} />
+                    </div>
+                </div>
+            </div>
+
+            <div class="am-form-popup-submit">
+                <a href="{{:PluginsAdminUrl('coupon', 'admin', 'index', $params)}}" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg">
+                    <i class="am-icon-mail-reply"></i>
+                    <span>{{:MyLang('retreat_title')}}</span>
+                </a>
+                <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('save_title')}}'}">
+                    <i class="am-icon-save"></i>
+                    <span>{{:MyLang('save_title')}}</span>
+                </button>
+            </div>
+        </form>
+        <!-- form end -->
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

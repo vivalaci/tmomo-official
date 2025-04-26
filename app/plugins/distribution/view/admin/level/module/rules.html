@@ -1,0 +1,17 @@
+{{if !empty($module_data['rules_msg_list'])}}
+    <p>{{$module_data.rules_msg_list.name}}</p>
+    {{if !empty($module_data['rules_msg_list']) and !empty($module_data['rules_msg_list']['data']) and is_array($module_data['rules_msg_list']['data'])}}
+        <table class="am-table am-table-bordered am-table-striped am-table-compact am-margin-top-xs">
+            <tbody>
+                {{foreach $module_data.rules_msg_list.data as $rv}}
+                    <tr>
+                        <td>{{$rv.name}}</td>
+                        <td>{{$rv.value}}</td>
+                    </tr>
+                {{/foreach}}
+            </tbody>
+        </table>
+    {{else /}}
+        <p class="am-text-grey am-padding-left-xs">无条件</p>
+    {{/if}}
+{{/if}}

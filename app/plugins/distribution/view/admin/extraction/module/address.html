@@ -1,0 +1,28 @@
+<div class="am-nbfc">
+    {{if !empty($module_data['logo'])}}
+        <div class="am-fl am-margin-right-xs am-hide-sm-only">
+            <img src="{{$module_data.logo}}" alt="{{$module_data.name}}" class="am-img-thumbnail am-radius" width="55" height="55" />
+        </div>
+    {{/if}}
+    <div class="am-fl">
+        <p>
+            {{if !empty($module_data['alias'])}}
+                <span class="am-badge am-badge-secondary am-radius">{{$module_data.alias}}</span>
+            {{/if}}
+            <span>{{$module_data.name}}</span>
+        </p>
+        <p>{{$module_data.tel}}</p>
+        <p>
+            <span>{{$module_data.province_name}}</span>
+            <span>{{$module_data.city_name}}</span>
+            <span>{{$module_data.county_name}}</span>
+            <span>{{$module_data.address}}</span>
+            {{if isset($module_data['lng']) and isset($module_data['lat']) and $module_data['lng'] neq 0 and $module_data['lat'] neq 0}}
+                <a href="javascript:;" class="submit-map-popup am-text-blue am-text-xs" data-lng="{{$module_data.lng}}" data-lat="{{$module_data.lat}}">
+                    <i class="iconfont icon-map-position"></i>
+                    <span>{{:MyLang('view_map_title')}}</span>
+                </a>
+            {{/if}}
+        </p>
+    </div>
+</div>

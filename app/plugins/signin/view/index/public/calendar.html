@@ -1,0 +1,70 @@
+<div class="am-container plugins-signin-calendar">
+    <!-- 提示信息 -->
+    {{if !empty($plugins_config['signin_desc'])}}
+        <div class="am-text-right am-padding-bottom-sm signin-help-tips">
+            <div class="am-dropdown" data-am-dropdown>
+                <a href="javascript:;" class="am-icon-question-circle am-text-warning am-dropdown-toggle"></a>
+                <div class="am-dropdown-content">
+                    <p>{{:implode("<br />", $plugins_config['signin_desc'])}}</p>
+                </div>
+            </div>
+        </div>
+    {{/if}}
+
+    <div class="signin-container">
+        <div class="signin-head">
+            <div class="signin-left"></div>
+            <div class="signin-right">
+                {{if isset($plugins_config['is_share']) and $plugins_config['is_share'] eq 1}}
+                    <div class="am-dropdown" data-am-dropdown>
+                        <a href="javascript:;" class="am-dropdown-toggle"><i class="iconfont icon-share-square"></i>分享</a>
+                        <div class="am-dropdown-content">
+                            {{if !empty($data['share_data']) and !empty($data['share_data']['qrcode'])}}
+                                <img src="{{$data.share_data.qrcode}}" alt="二维码分享" width="168" height="168" class="am-margin-bottom-xs" />
+                            {{/if}}
+                            <div class="plugins-share-view" data-pic="{{$data.bg_images}}"></div>
+                        </div>
+                    </div>
+                {{/if}}
+                {{if isset($plugins_config['is_team']) and $plugins_config['is_team'] eq 1 and !empty($user) and $data['user_id'] neq $user['id']}}
+                    <a href="{{:PluginsHomeUrl('signin', 'userqrcode', 'team', ['rid'=>$data['id']])}}" target="_blank" class="signin-line"><i class="iconfont icon-team_qd"></i>组队</a>
+                {{/if}}
+                {{if isset($plugins_config['is_user_menu']) and $plugins_config['is_user_menu'] eq 1}}
+                    <a href="{{:PluginsHomeUrl('signin', 'usersignin', 'index')}}" target="_blank" class="signin-user-menu-submit signin-line"><i class="iconfont icon-sign_qd"></i>我的签到</a>
+                {{/if}}
+            </div>
+        </div>
+        <div class="signin-week" data-tody-signin="{{if !empty($user_signin_data) and !empty($user_signin_data['current_day'])}}true{{else/}}false{{/if}}" data-history-signin='{{if !empty($user_signin_data) and !empty($user_signin_data['history_day'])}}{{:json_encode($user_signin_data['history_day'], JSON_NUMERIC_CHECK)}}{{/if}}'>
+            <ul class="am-flex am-flex-justify-around am-flex-items-center">
+                <li>日</li>
+                <li>一</li>
+                <li>二</li>
+                <li>三</li>
+                <li>四</li>
+                <li>五</li>
+                <li>六</li>
+            </ul>
+        </div>
+        <div class="signin-content"></div>
+        <div class="signin-footer am-color-main am-text-right">
+            <!-- 队长 -->
+            {{if !empty($team_signin_data) and isset($user['id']) and $user['id'] eq $data['user_id']}}
+                <p class="coming-title">
+                    <span>今日{{$team_signin_data.day}}人签到，共{{$team_signin_data.total}}人</span>
+                    {{if isset($plugins_config['is_team_show_coming_user']) and $plugins_config['is_team_show_coming_user'] eq 1}}
+                        <a href="javascript:;" class="am-color-main submit-popup" data-url="{{:PluginsHomeUrl('signin', 'Usercoming', 'index', ['id'=>$data['id']])}}" data-title="{{:MyLang('signin_title')}}"><i class="iconfont iconfont icon-angle-right"></i></a>
+                    {{/if}}
+                </p>
+            {{else/}}
+                {{if !empty($user_signin_data) and !empty($user_signin_data['integral'])}}
+                    <p class="coming-title">
+                        <span>今日已签到，获得{{$user_signin_data.integral}}积分，共{{$user_signin_data.total}}次</span>
+                        {{if isset($plugins_config['is_user_menu']) and $plugins_config['is_user_menu'] eq 1}}
+                            <a href="{{:PluginsHomeUrl('signin', 'usersignin', 'index')}}" class="am-color-main signin-user-menu-submit"><i class="iconfont iconfont icon-angle-right"></i></a>
+                        {{/if}}
+                    </p>
+                {{/if}}
+            {{/if}}
+        </div>
+    </div>
+</div> 

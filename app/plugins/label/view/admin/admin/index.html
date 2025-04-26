@@ -1,0 +1,142 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'label',
+            'nav_data'  => $plugins_nav_menu_list,
+        ])}}
+
+        <div class="label-content am-padding-bottom-xs">
+            <!-- 基础配置 -->
+            <div class="am-panel am-panel-default am-radius label-content-base">
+                <div class="am-panel-hd">
+                    <span class="am-panel-title">{{:MyLang('base_config_title')}}</span>
+                    <a class="am-margin-left-lg" href="{{:PluginsAdminUrl('label', 'admin', 'saveinfo')}}">
+                        <i class="am-icon-edit"></i>
+                        <span>{{:MyLang('edit_title')}}</span>
+                    </a>
+                </div>
+                <div class="am-panel-bd">
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>后台用户管理列表（关联标签）</label>
+                                <div>
+                                    {{if isset($data['is_admin_user_label']) and $data['is_admin_user_label'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>后台商品管理列表（关联标签）</label>
+                                <div>
+                                    {{if isset($data['is_admin_goods_label']) and $data['is_admin_goods_label'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>后台订单管理列表（展示用户标签）</label>
+                                <div>
+                                    {{if isset($data['is_admin_order_user_label']) and $data['is_admin_order_user_label'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>商品展示标签位置</label>
+                                <div>
+                                    {{if isset($data['user_goods_show_style']) and $label_style_list[$data['user_goods_show_style']]}}
+                                        {{:MyLang('already_setup_tips')}}[ {{$label_style_list[$data['user_goods_show_style']]}} ]
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 上左 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>采用图标展示</label>
+                                <div>
+                                    {{if isset($data['is_user_goods_label_icon']) and $data['is_user_goods_label_icon'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>商品展示标签开启标签入口</label>
+                                <div>
+                                    {{if isset($data['is_user_goods_label_url']) and $data['is_user_goods_label_url'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>首页商品展示标签</label>
+                                <div>
+                                    {{if isset($data['is_user_goods_home_label']) and $data['is_user_goods_home_label'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>搜索页商品展示标签</label>
+                                <div>
+                                    {{if isset($data['is_user_goods_search_label']) and $data['is_user_goods_search_label'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>分类页商品展示标签</label>
+                                <div>
+                                    {{if isset($data['is_user_goods_category_label']) and $data['is_user_goods_category_label'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>商品详情页相册展示标签 - web端</label>
+                                <div>
+                                    {{if isset($data['is_user_goods_detail_photo_label']) and $data['is_user_goods_detail_photo_label'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>商品详情页标题展示标签 - web端</label>
+                                <div>
+                                    {{if isset($data['is_user_goods_detail_title_label']) and $data['is_user_goods_detail_title_label'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>商品详情页相册展示标签 - 手机端</label>
+                                <div>
+                                    {{if isset($data['is_app_user_goods_detail_photo_label']) and $data['is_app_user_goods_detail_photo_label'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>商品详情页标题展示标签 - 手机端</label>
+                                <div>
+                                    {{if isset($data['is_app_user_goods_detail_title_label']) and $data['is_app_user_goods_detail_title_label'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

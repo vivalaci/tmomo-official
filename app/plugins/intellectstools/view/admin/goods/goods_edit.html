@@ -1,0 +1,14 @@
+<div class="card-grey">
+    <h2 class="am-margin-vertical-0">智能工具插件数据美化</h2>
+    <p class="am-color-red">不建议过分夸张的修改访问量与销量数据、提倡数据真实性</p>
+    <div>
+        <div class="am-form-group row">
+            <label>访问量</label>
+            <input type="number" name="access_count" placeholder="访问量" min="0" max="1000000000" data-validation-message="请填写访问量、最大1000000000" class="am-radius" value="{{if !empty($plugins_data) and !empty($plugins_data['access_count'])}}{{$plugins_data.access_count}}{{/if}}" />
+        </div>
+        <div class="am-form-group row">
+            <label>销量</label>
+            <input type="number" name="sales_count" placeholder="销量" min="0" max="1000000000" data-validation-message="请填写销量、最大1000000000" class="am-radius" value="{{if !empty($plugins_data) and !empty($plugins_data['sales_count'])}}{{$plugins_data.sales_count}}{{/if}}" />
+        </div>
+    </div>
+</div>

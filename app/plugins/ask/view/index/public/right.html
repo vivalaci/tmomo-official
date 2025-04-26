@@ -1,0 +1,44 @@
+<!-- 操作 -->
+{{:ModuleInclude('../../../plugins/ask/view/index/public/operation')}}
+
+<!-- 推荐问答和商品 -->
+{{if !empty($recommend_ask_list) or !empty($recommend_goods_list)}}
+    <div class="am-u-md-4 ask-sidebar">
+        <!-- 右侧推荐问答 -->
+        {{if !empty($recommend_ask_list) and is_array($recommend_ask_list)}}
+            {{:ModuleInclude('../../../plugins/ask/view/index/module/list', [
+                'ask_list'  => $recommend_ask_list,
+                'type'          => 'index',
+                'icon'          => 'icon-ask_tw',
+                'title'         => empty($plugins_config['right_top_rec_name']) ? '推荐问答' : $plugins_config['right_top_rec_name'],
+                'is_more'       => false,
+                'mini_reply'    => '1'
+            ])}}
+        {{/if}}
+
+        <!-- 推荐商品 -->
+        {{if !empty($recommend_goods_list) and is_array($recommend_goods_list)}}
+            <div class="ask-goods">
+                <div class="title am-margin-top-main am-flex am-flex-justify-between am-flex-warp am-flex-items-center">
+                    <h2>
+                        <i class="iconfont icon-recommend_tw am-vertical-align-middle"></i>
+                        <span class="am-vertical-align-middle">
+                            {{if !empty($plugins_config['right_top_goods_name'])}}
+                                {{$plugins_config.right_top_goods_name}}
+                            {{else/}}
+                                推荐商品
+                            {{/if}}
+                        </span>
+                    </h2>
+                    <a href="{{:MyUrl('index/search/index')}}" target="_blank" class="">更多<i class="iconfont icon-angle-right am-text-default am-padding-left-xs"></i></a>
+                </div>
+                {{:ModuleInclude('module/goods/grid/base', [
+                    'goods_list'  => $recommend_goods_list,
+                    'type'        => 'index',
+                    'lg'          => '2',
+                    'md'          => '2',
+                ])}}
+            </div>
+        {{/if}}
+    </div>
+{{/if}}

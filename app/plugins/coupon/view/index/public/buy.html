@@ -1,0 +1,84 @@
+{{if !empty($coupon_list)}}
+<div id="buy-items-plugins-coupon-{{$warehouse_id}}" class="plugins-coupon-buy-container">
+    <div class="am-panel plugins-coupon-buy-choice">
+        <div class="am-panel-bd am-padding-0">
+            <div class="coupon-content">
+                <span>{{:MyLang('coupon_name', null, null, 'coupon')}}:</span>
+                {{if !empty($coupon_choice)}}
+                    <div class="choice-selected confirm-selected am-margin-right-sm am-radius am-border-main" {{if !empty($coupon_choice['coupon']['bg_color_value'])}}style="border-color:{{$coupon_choice.coupon.bg_color_value}}"{{/if}}>
+                        <span class="coupon-price" {{if !empty($coupon_choice['coupon']['bg_color_value'])}}style="color:{{$coupon_choice.coupon.bg_color_value}}"{{/if}}>
+                            {{if $coupon_choice['coupon']['type'] eq 0}}
+                                <em>{{$currency_symbol}}</em>
+                            {{/if}}
+                            <strong class="am-text-sm">{{$coupon_choice.coupon.discount_value}}</strong>
+                            <em>{{if $coupon_choice['coupon']['type'] eq 0}}{{:MyLang('price_unit_text', null, null, 'coupon')}}{{else /}}{{:MyLang('break_name', null, null, 'coupon')}}{{/if}}</em>
+                        </span>
+                        <span class="am-margin-left-xs">{{$coupon_choice.coupon.desc}}</span>
+                        <i class="icon-active"></i>
+                    </div>
+                {{/if}}
+                <span class="am-margin-right-sm">
+                    <span>{{:MyLang('available_name', null, null, 'coupon')}}</span>
+                    <strong class="am-color-main">{{:count($coupon_list)}}</strong>
+                    <span>{{:MyLang('sheet_name', null, null, 'coupon')}}</span>
+                </span>
+                <div class="chice-popup">
+                    <span class="choice-view-submit am-margin-right-sm" data-warehouse-id="{{$warehouse_id}}">{{:MyLang('choose_coupon_tips', null, null, 'coupon')}}</span>
+                    {{if !empty($coupon_choice)}}
+                    <span class="am-text-warning cancel-view-submit" data-warehouse-id="{{$warehouse_id}}">{{:MyLang('not_use_coupon_name', null, null, 'coupon')}}</span>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 优惠劵内容 -->
+    <div class="am-popup plugins-coupon-buy-popup" id="plugins-coupon-buy-popup-{{$warehouse_id}}" data-warehouse-id="{{$warehouse_id}}">
+        <div class="am-popup-inner">
+            <div class="am-popup-hd">
+                <h4 class="am-popup-title">{{:MyLang('coupon_selection_tips', null, null, 'coupon')}}</h4>
+                <span data-am-modal-close class="am-close">&times;</span>
+            </div>
+            <div class="am-popup-bd plugins-coupon">
+                <ul class="am-avg-sm-1 am-avg-md-2 am-avg-lg-2 plugins-coupon-items">
+                    {{foreach $coupon_list as $v}}
+                        <li data-coupon-id="{{$v.id}}">
+                            <div class="item am-cf {{if !empty($coupon_choice) and $coupon_choice['id'] eq $v['id']}}coupon-disabled{{/if}}" {{if !empty($v['coupon']['bg_color_value'])}}style="border:1px solid {{$v.coupon.bg_color_value}}"{{/if}}>
+                                <div class="v-left-border" {{if !empty($v.coupon['bg_color_value'])}}style="background: linear-gradient(135deg, transparent, transparent 40%, {{$v.coupon.bg_color_value}}, transparent 60%, transparent 100%), linear-gradient(45deg, transparent, transparent 40%, {{$v.coupon.bg_color_value}}, transparent 60%, transparent 100%);background-size: 1rem 1.5rem;
+                                "{{/if}}></div>
+                                <div class="v-left-point v-point-background-white"></div>
+                                <div class="v-left am-fl am-padding-left-sm am-padding-top-sm am-padding-bottom-sm">
+                                    <div class="v-left-center-border" {{if !empty($v.coupon['bg_color_value'])}}style="background-image: radial-gradient(circle at right top, {{$v.coupon.bg_color_value}}, {{$v.coupon.bg_color_value}} 1.15rem, transparent 1.18rem), radial-gradient(circle at right bottom, {{$v.coupon.bg_color_value}}, {{$v.coupon.bg_color_value}} 1.15rem, transparent 1.18rem)"{{/if}}></div>
+                                    <div class="v-left-center-point v-left-center-point-background-white"></div>
+                                    <div class="base am-text-truncate">
+                                        {{if $v['coupon']['type'] eq 0}}
+                                            <span class="symbol">{{$currency_symbol}}</span>
+                                        {{/if}}
+                                        <span class="price">{{$v.coupon.discount_value}}</span>
+                                        <span class="unit">{{if $v['coupon']['type'] eq 0}}{{:MyLang('price_unit_text', null, null, 'coupon')}}{{else /}}{{:MyLang('break_name', null, null, 'coupon')}}{{/if}}</span>
+                                        <p>
+                                            {{if !empty($v['coupon']['desc'])}}
+                                            <span class="desc am-text-truncate">{{$v.coupon.desc}}</span>
+                                            {{/if}}
+                                            {{if !empty($v['coupon']['use_limit_type_name'])}}
+                                            <span class="tips am-text-truncate">{{$v.coupon.use_limit_type_name}}</span>
+                                            {{/if}}
+                                        </p>
+                                    </div>
+                                    <p class="time am-text-truncate am-margin-top-sm">{{$v.time_start_show_text}}-{{$v.time_end_show_text}}</p>
+                                </div>
+                                <div class="v-right am-fr am-text-center" {{if !empty($v['coupon']['bg_color_value'])}}style="background:{{$v.coupon.bg_color_value}}"{{/if}}>
+                                    <div class="am-vertical-align-middle v-right-center-point v-right-center-point-background-white">
+                                        {{if !empty($coupon_choice) and $coupon_choice['id'] eq $v['id']}}{{:MyLang('selected_text', null, null, 'coupon')}}{{else /}}{{:MyLang('select_text', null, null, 'coupon')}}{{/if}}
+                                    </div>
+                                </div>
+                                <div class="v-right-point v-point-background-white"></div>
+                            </div>
+                        </li>
+                    {{/foreach}}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{{/if}}

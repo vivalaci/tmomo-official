@@ -1,0 +1,13 @@
+{{if !empty($module_data) and !empty($module_data['url']) and is_array($module_data['url']) and strlen(implode('', $module_data['url'])) gt 0}}
+    <table class="am-table am-table-bordered">
+        {{foreach $module_data.url as $uk=>$uv}}
+            {{if !empty($uv)}}
+                <tr>
+                    <td class="am-padding-0">
+                        <span>{{if isset($common_platform_type[$uk])}}{{$common_platform_type[$uk]['name']}}{{else /}}{$uk}}{{/if}}：</span><span>{{$uv}}</span>
+                    </td>
+                </tr>
+            {{/if}}
+        {{/foreach}}
+    </table>
+{{/if}}

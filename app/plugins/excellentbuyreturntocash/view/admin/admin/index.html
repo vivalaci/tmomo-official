@@ -1,0 +1,427 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'excellentbuyreturntocash',
+            'title'     => '优购返现',
+        ])}}
+
+        <div class="excellentbuyreturntocash-content">
+            <!-- 操作提示 -->
+            <div class="am-operate-stretch-tips">
+                <div class="title">
+                    <i class="iconfont icon-tips"></i>
+                    <strong title="{{:MyLang('operate_list_tips_msg')}}">{{:MyLang('operate_list_tips_button_text')}}</strong>
+                    <i class="iconfont icon-contract contract" title="{{:MyLang('operate_list_tips_retract_text')}}"></i> 
+                </div>
+                <p>依赖插件[ 钱包、优惠券 ]</p>
+                <p>1. 分销依赖插件有[ 钱包 、优惠券 ]，插件可在应用商店下载安装，安装不分先后顺序。</p>
+                <p>2. 返现金额返至用户钱包余额需要脚本定时执行，访问优购返现后台也会自动执行一次。</p>
+                <p>3. 订单提交的同时自动创建返现订单，届时被返现用户将可在返现明细查看、同时发送站内信，可配置是否强制订单仅使用已配置的优惠券订单才进行返现。</p>
+                <p>4. 当订单发生售后金额改变，返现订单也会重新计算、所以不用担心返现被多计算问题（注意：仅处理待结算的返现订单）。</p>
+                <p>5. 返现结算请配置[基础数据->返现结算周期]的配置，默认订单收货时间开始计算30天后结算返现。</p>
+                <p>6. 建议在返现结算周期之后不要再发生订单售后，以免造成资金损失。</p>
+                <p>7. 在订单支付成功后、根据配置发放相关优惠券。</p>
+                <p>8. 取消或关闭订单也会同时关闭返现订单和已发放优惠券。</p>
+                <p>9. 配置了自动返现后，将会在订单完成后开始计算，如果指定分类下所有商品销量已达到自动返现基准数值则会提前返现，不受返现时长的限制。</p>
+                <p>10. 自动返现商品销量计算规则以用户当前订单收货时间开始计算（包含用户当前的订单）之后的订单销量（必须也是已收货完成）</p>
+            </div>
+
+            <!-- 管理 -->
+            <div class="am-panel am-panel-default am-radius card-nav-content">
+                <div class="am-panel-hd">
+                    <span class="am-panel-title">{{:MyLang('admin_title')}}</span>
+                </div>
+                <div class="am-panel-bd">
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-8 am-gallery-default">
+                        <li>
+                            <div class="nav-item">
+                                <a href="{{:PluginsAdminUrl('excellentbuyreturntocash', 'profit', 'index')}}" class="am-block am-text-sm am-padding-horizontal-sm am-padding-vertical">返现明细管理 <i class="iconfont icon-angle-right"></i></a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 基础配置 -->
+            <div class="am-panel am-panel-default am-radius excellentbuyreturntocash-content-base">
+                <div class="am-panel-hd">
+                    <span class="am-panel-title">{{:MyLang('base_config_title')}}</span>
+                    <a class="am-margin-left-lg" href="{{:PluginsAdminUrl('excellentbuyreturntocash', 'admin', 'saveinfo')}}">
+                        <i class="am-icon-edit"></i>
+                        <span>{{:MyLang('edit_title')}}</span>
+                    </a>
+                </div>
+                <div class="am-panel-bd">
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>商品详情面板返券名称</label>
+                                <div>
+                                    {{if !empty($data['goods_detail_panel_title'])}}
+                                        {{$data.goods_detail_panel_title}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 返卡劵 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>商品详情标题返券icon</label>
+                                <div>
+                                    {{if !empty($data['goods_detail_title_coupon_icon'])}}
+                                        {{$data.goods_detail_title_coupon_icon}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 不展示 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>商品详情标题返现icon</label>
+                                <div>
+                                    {{if !empty($data['goods_detail_title_cash_icon'])}}
+                                        {{$data.goods_detail_title_cash_icon}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 不展示 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>使用指定优惠券订单返现</label>
+                                <div>
+                                    {{if isset($data['is_appoint_coupon_cach']) and $data['is_appoint_coupon_cach'] eq 1}}
+                                        开启
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 不强制 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>结算转换订单货币汇率</label>
+                                <div>
+                                    {{if isset($data['is_profit_transform_currency_rate']) and $data['is_profit_transform_currency_rate'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>限制分类购买数量</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if !empty($data['limit_buy_category_ids_names'])}}
+                                        {{:implode('、', $data['limit_buy_category_ids_names'])}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 不限制 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>限制单件购买最大数量</label>
+                                <div>
+                                    {{if !empty($data['limit_goods_buy_bumber_max'])}}
+                                        {{$data.limit_goods_buy_bumber_max}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 不限制 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>限制总购买最大数量</label>
+                                <div>
+                                    {{if !empty($data['limit_order_buy_bumber_max'])}}
+                                        {{$data.limit_order_buy_bumber_max}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 不限制 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>返券类型</label>
+                                <div>
+                                    {{if isset($data['return_coupon_type']) and isset($return_coupon_type_list[$data['return_coupon_type']])}}
+                                        {{$return_coupon_type_list[$data['return_coupon_type']]['name']}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 购买数量倍数 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>返券数量倍数</label>
+                                <div>
+                                    {{if !empty($data['return_coupon_multiple'])}}
+                                        {{$data.return_coupon_multiple}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 1倍 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>指定分类下购买返劵</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if !empty($data['return_category_coupon_ids_all'])}}
+                                        <ul class="am-list am-list-static am-list-border am-list-striped">
+                                            {{foreach $data.return_category_coupon_ids_all as $v}}
+                                                <li>{{$v.category_name}} / {{$v.coupon_name}}{{if !empty($v['order_total_price']) and $v['order_total_price'] gt 0}} / {{$v.order_total_price}}{{/if}}</li>
+                                            {{/foreach}}
+                                        </ul>
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 不发放 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>返现分类</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if !empty($data['return_to_cash_category_ids_names'])}}
+                                        {{:implode('、', $data['return_to_cash_category_ids_names'])}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 不返现 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>返现比例</label>
+                                <div>
+                                    {{if !empty($data['return_to_cash_rate'])}}
+                                        {{$data.return_to_cash_rate}}%
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 不返现 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>返现周期</label>
+                                <div>
+                                    {{if !empty($data['return_to_cash_time'])}}
+                                        {{$data.return_to_cash_time}} 分钟
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 43200 分钟 ]
+                                    {{/if}}
+                                    <div>
+                                        <a href="{{:PluginsHomeUrl('excellentbuyreturntocash', 'crontab', 'profit')}}" target="_blank" class="">定时脚本地址 <i class="am-icon-external-link"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>自动返现分类</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if !empty($data['return_auto_cash_category_ids_names'])}}
+                                        {{:implode('、', $data['return_auto_cash_category_ids_names'])}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 不自动返现 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>自动返现比例</label>
+                                <div>
+                                    {{if !empty($data['return_auto_cash_rate'])}}
+                                        {{$data.return_auto_cash_rate}}%
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 不自动返现 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>自动返现基数</label>
+                                <div>
+                                    {{if !empty($data['return_auto_cash_number'])}}
+                                        {{$data.return_auto_cash_number}} 件
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 不自动返现 ]
+                                    {{/if}}
+                                    <div>
+                                        <a href="{{:PluginsHomeUrl('excellentbuyreturntocash', 'crontab', 'auto')}}" target="_blank" class="">定时脚本地址 <i class="am-icon-external-link"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启用户返现订单列表</label>
+                                <div>
+                                    {{if isset($data['is_enable_cach_order']) and $data['is_enable_cach_order'] eq 1}}
+                                        开启
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 不开启 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>用户返现订单页面公告</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if !empty($data['user_cach_order_notice'])}}
+                                        {{:implode('<br />', $data['user_cach_order_notice'])}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 不展示 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 返现概况 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <span class="am-panel-title">返现概况</span>
+                </div>
+                <div class="am-panel-bd am-padding-sm">
+                    <ul class="am-margin-top-xs am-cf am-avg-sm-2 am-avg-md-3 am-avg-lg-3">
+                        <li class="am-fl am-text-center am-padding-vertical-sm">
+                            <p>返佣总额</p>
+                            <p class="am-text-truncate am-text-primary">
+                                <span>{{$currency_symbol}}</span>
+                                <strong class="am-text-lg">{{$profit_total_price}}</strong>
+                            </p>
+                        </li>
+                        <li class="am-fl am-text-center am-padding-vertical-sm">
+                            <p>待生效</p>
+                            <p class="am-text-truncate am-text-warning">
+                                <span>{{$currency_symbol}}</span>
+                                <strong class="am-text-lg">{{$profit_price0}}</strong>
+                            </p>
+                        </li>
+                        <li class="am-fl am-text-center am-padding-vertical-sm">
+                            <p>生效中</p>
+                            <p class="am-text-truncate am-text-warning">
+                                <span>{{$currency_symbol}}</span>
+                                <strong class="am-text-lg">{{$profit_price1}}</strong>
+                            </p>
+                        </li>
+                        <li class="am-fl am-text-center am-padding-vertical-sm">
+                            <p>待结算</p>
+                            <p class="am-text-truncate am-text-secondary">
+                                <span>{{$currency_symbol}}</span>
+                                <strong class="am-text-lg">{{$profit_price2}}</strong>
+                            </p>
+                        </li>
+                        <li class="am-fl am-text-center am-padding-vertical-sm">
+                            <p>已结算</p>
+                            <p class="am-text-truncate am-text-success">
+                                <span>{{$currency_symbol}}</span>
+                                <strong class="am-text-lg">{{$profit_price3}}</strong>
+                            </p>
+                        </li>
+                        <li class="am-fl am-text-center am-padding-vertical-sm">
+                            <p>已失效</p>
+                            <p class="am-text-truncate">
+                                <span>{{$currency_symbol}}</span>
+                                <strong class="am-text-lg">{{$profit_price4}}</strong>
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 近15日返现走势 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <span class="am-panel-title">近15日返现走势</span>
+                </div>
+                <div class="am-panel-bd am-padding-sm">
+                    <div id="echarts-profit"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}
+
+<script type="text/javascript">
+$(function()
+{
+    // 近7日订单交易走势
+    var profit_chart = echarts.init(document.getElementById('echarts-profit'), 'macarons');
+    var option = {
+        tooltip : {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross',
+                    label: {
+                        backgroundColor: '#6a7985'
+                    }
+                }
+            },
+        grid: {
+            top: '13%',
+            left: '3%',
+            right: '5%',
+            bottom: '3%',
+            containLabel: true
+        },
+        toolbox: {
+            show : true,
+            feature : {
+                mark : {show: true},
+                dataView : {show: true, readOnly: false},
+                magicType : {show: true, type: ['line', 'bar']},
+                restore : {show: false},
+                saveAsImage : {name:'近15日收益走势', show: true}
+            }
+        },
+        xAxis: {
+            type: 'category',
+            boundaryGap : false,
+            data: {{:json_encode($profit_chart.name_arr)}}
+        },
+        yAxis: {
+            type: 'value'
+        },
+        series: [{
+            data: {{:json_encode($profit_chart.data)}},
+            type: 'line'
+        }]
+    };
+    profit_chart.setOption(option);
+
+    // 浏览器大小改变则实时更新图表大小
+    window.onresize = function ()
+    {
+        profit_chart.resize();
+        user_chart.resize();
+    };
+});
+</script>

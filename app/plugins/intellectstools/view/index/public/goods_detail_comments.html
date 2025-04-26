@@ -1,0 +1,3 @@
+<div class="comment-btn evaluate {{if isset($goods_score['avg']) and $goods_score['avg'] gt 0 and !empty($goods_score['rating'])}} shifting{{/if}}">
+    <button type="submit" class="am-btn am-btn-primary-plain am-radius box-shadow-hover {{if empty($user)}}login-event{{else /}}submit-modal{{/if}}" data-url="{{:PluginsHomeUrl('intellectstools', 'goodscomments', 'saveinfo', ['goods_id'=>$goods_id])}}" data-width="600" data-height="410" data-close-via-dimmer="0" data-title="评价">我要评价</button>
+</div>

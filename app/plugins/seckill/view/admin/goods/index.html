@@ -1,0 +1,19 @@
+<!-- 继承公共的 form -->
+{{extend name="../../../module/view/form_table/form" /}}
+
+<!-- 表单顶部操作栏 -->
+{{block name="form_operate_top"}}
+    <!-- nav -->
+    {{:ModuleInclude('public/plugins_admin_nav', [
+        'plugins'   => 'seckill',
+        'nav_data'  => $plugins_nav_menu_list,
+    ])}}
+
+    <a href="{{:PluginsAdminUrl('seckill', 'goods', 'saveinfo')}}" class="am-btn am-btn-secondary am-radius am-btn-xs">
+        <span class="am-icon-plus"> {{:MyLang('add_title')}}</span>
+        <span>/</span>
+        <span class="am-icon-edit"> {{:MyLang('edit_title')}}</span>
+    </a>
+    <!-- 父级内容 -->
+    {__block__}
+{{/block}}

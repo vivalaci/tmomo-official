@@ -1,0 +1,73 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'orderpdf',
+            'title'     => '新订单语音提醒',
+        ])}}
+
+        <!-- 基础配置 -->
+        <div class="orderremind-content">
+            <!-- 操作提示 -->
+            <div class="am-operate-stretch-tips">
+                <div class="title">
+                    <i class="iconfont icon-tips"></i>
+                    <strong title="{{:MyLang('operate_list_tips_msg')}}">{{:MyLang('operate_list_tips_button_text')}}</strong>
+                    <i class="iconfont icon-contract contract" title="{{:MyLang('operate_list_tips_retract_text')}}"></i> 
+                </div>
+                <p>由于浏览器限制，默认关闭声音自动播放的，需要用户自己手动打开声音权限。教程：<a href="https://bbs.csdn.net/topics/600486023" target="_blank">教程一（CSDN）</a><a href="https://my.oschina.net/gongfuxiang/blog/5216595" target="_blank" class="am-margin-left-sm">教程二（开源中国）</a></p>
+                <p>1. 默认[ 30 ]秒监听一次新订单。</p>
+                <p>2. 如有新订单将停止监听、开始播报新订单提醒，后台并提示新订单。</p>
+                <p>3. 关闭提示信息后[ 30 ]秒后重新开始监听新订单。</p>
+                <p>4. 仅提醒订单时间[ 1 ]分钟内的订单提醒。</p>
+            </div>
+
+            <div class="am-panel am-panel-default am-radius orderpdf-content-base">
+                <div class="am-panel-hd">
+                    <span class="am-panel-title">{{:MyLang('base_config_title')}}</span>
+                    <a class="am-margin-left-lg" href="{{:PluginsAdminUrl('orderremind', 'admin', 'saveinfo')}}">
+                        <i class="am-icon-edit"></i>
+                        <span>{{:MyLang('edit_title')}}</span>
+                    </a>
+                </div>
+                <div class="am-panel-bd">
+                    <!-- 基础配置 -->
+                    <h2 class="am-margin-0">{{:MyLang('base_config_title')}}</h2>
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>语言提醒</label>
+                                <div>
+                                    {{if isset($data['is_voice_notice']) and $data['is_voice_notice'] eq 1}}
+                                        已开启
+                                    {{else /}}
+                                        未开启
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>监听动作</label>
+                                <div>
+                                    {{if isset($data['monitor_action']) and isset($monitor_action_list[$data['monitor_action']])}}
+                                        {{$monitor_action_list[$data['monitor_action']]['name']}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 订单创建 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

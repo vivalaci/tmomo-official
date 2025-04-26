@@ -1,0 +1,35 @@
+{{block name="form_header"}}
+    {{:ModuleInclude('public/header')}}
+    <div class="popup-pure-page am-padding-main am-background-white">
+{{/block}}
+
+<!-- 继承公共的 form -->
+{{extend name="../../../module/view/form_table/base_form" /}}
+
+<!-- 表单顶部导航 -->
+{{block name="form_navigation"}}
+    {{:ModuleInclude('public/plugins_admin_nav', [
+        'plugins'   => 'distribution',
+        'nav_data'  => [
+            [
+                'name'       => '佣金订单',
+                'plugins'    => 'distribution',
+                'control'    => 'shopprofit',
+                'action'     => 'index',
+                'is_active'  => 1,
+            ],
+            [
+                'name'       => '返佣配置',
+                'plugins'    => 'distribution',
+                'control'    => 'shoplevel',
+                'action'     => 'index',
+                'is_active'  => 0,
+            ],
+        ],
+    ])}}
+{{/block}}
+
+{{block name="form_footer"}}
+    </div>
+    {{:ModuleInclude('public/footer')}}
+{{/block}}

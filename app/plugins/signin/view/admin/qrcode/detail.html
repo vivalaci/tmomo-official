@@ -1,0 +1,139 @@
+<!-- 继承公共的 form -->
+{{extend name="../../../module/view/form_table/detail" /}}
+
+<!-- 重写数据模块 -->
+{{block name="detail_data"}}
+    <div class="am-padding">
+        <!-- 父级内容 -->
+        {__block__}
+
+        <!-- 连续签到翻倍奖励配置 -->
+        <div class="am-panel am-panel-default am-radius">
+            <div class="am-panel-hd">连续签到翻倍奖励配置</div>
+            <div class="am-panel-bd am-padding-vertical-xs">
+                {{if !empty($data['continuous_rules'])}}
+                    <dl class="dl-content dl-content-dd-only">
+                        {{foreach $data.continuous_rules as $v}}
+                            <dd>连续{{$v.number}}天、翻{{$v.value}}倍</dd>
+                        {{/foreach}}
+                    </dl>
+                {{else /}}
+                    {{:ModuleInclude('public/not_data')}}
+                {{/if}}
+            </div>
+        </div>
+
+        <!-- 指定时段额外奖励 -->
+        <div class="am-panel am-panel-default am-radius">
+            <div class="am-panel-hd">指定时段额外奖励</div>
+            <div class="am-panel-bd">
+                {{if !empty($data['specified_time_reward']) and !empty($data['specified_time_reward']['time_start']) and !empty($data['specified_time_reward']['time_end']) and !empty($data['specified_time_reward']['value'])}}
+                    时段 {{$data.specified_time_reward.time_start}} ~ {{$data.specified_time_reward.time_end}}、额外奖励 {{$data.specified_time_reward.value}}
+                {{else /}}
+                    {{:ModuleInclude('public/not_data')}}
+                {{/if}}
+            </div>
+        </div>
+
+        <!-- 关联商品 -->
+        <div class="am-panel am-panel-default am-radius">
+            <div class="am-panel-hd">关联商品</div>
+            <div class="am-panel-bd am-padding-xs">
+                {{if !empty($data['goods_list'])}}
+                    <ul data-am-widget="gallery" class="am-gallery am-avg-sm-6 am-avg-md-8 am-avg-lg-12 am-gallery-bordered">
+                        {{foreach $data.goods_list as $goods}}
+                            <li>
+                                <div class="am-gallery-item am-radius">
+                                    <a href="{{$goods.goods_url}}" target="_blank">
+                                        <img src="{{$goods.images}}"  alt="{{$goods.title}}"/>
+                                        <h3 class="am-gallery-title">{{$goods.title}}</h3>
+                                    </a>
+                                </div>
+                            </li>
+                        {{/foreach}}
+                    </ul>
+                {{else /}}
+                    {{:ModuleInclude('public/not_data')}}
+                {{/if}}
+            </div>
+        </div>
+
+        <!-- 背景图片/logo -->
+        <div class="am-panel am-panel-default am-radius">
+            <div class="am-panel-hd">背景图片/logo</div>
+            <div class="am-panel-bd">
+                {{if !empty($data['bg_images']) or !empty($data['logo'])}}
+                    {{if !empty($data['bg_images'])}}
+                        <figure data-am-widget="figure" class="am-figure am-inline-block" data-am-figure="{pureview: 'true'}">
+                            <img src="{{$data['bg_images']}}" class="am-radius am-block" width="260" />
+                        </figure>
+                        <p>背景图片</p>
+                    {{/if}}
+
+                    {{if !empty($data['logo'])}}
+                        <figure data-am-widget="figure" class="am-figure am-inline-block" data-am-figure="{pureview: 'true'}">
+                            <img src="{{$data['logo']}}" class="am-radius am-block" width="260" />
+                        </figure>
+                        <p>logo</p>
+                    {{/if}}
+                {{else /}}
+                    {{:ModuleInclude('public/not_data')}}
+                {{/if}}
+            </div>
+        </div>
+
+        <!-- 底部代码 -->
+        <div class="am-panel am-panel-default am-radius">
+            <div class="am-panel-hd">底部代码</div>
+            <div class="am-panel-bd">
+                {{if !empty($data['footer_code'])}}
+                    <pre class="am-padding-sm">{{$data.footer_code}}</pre>
+                {{else /}}
+                    {{:ModuleInclude('public/not_data')}}
+                {{/if}}
+            </div>
+        </div>
+
+        <!-- 推广 -->
+        <div class="am-panel am-panel-default am-radius">
+            <div class="am-panel-hd">推广</div>
+            <div class="am-panel-bd">
+                {{if !empty($data['share_data'])}}
+                    <label class="am-block">url地址</label>
+                    <pre class="am-padding-sm text-copy-submit" data-value="{{$data.share_data.url}}"><span>{{$data.share_data.url}}</span><a href="javascript:;" class="am-badge am-badge-secondary am-radius am-margin-left-sm am-icon-copy"> 复制</a></pre>
+
+                    <!-- 二维码 -->
+                    {{if !empty($data['share_data']['qrcode_all'])}}
+                        <label class="am-block am-margin-top-lg">二维码</label>
+                        <ul data-am-widget="gallery" class="am-gallery am-avg-sm-3 am-avg-md-3 am-avg-lg-6 am-gallery-bordered am-padding-0" data-am-gallery="{}">
+                            {{foreach $data.share_data.qrcode_all as $v}}
+                                <li>
+                                    <div class="am-gallery-item am-radius">
+                                        {{if isset($v['res']) and isset($v['res']['code']) and $v['res']['code'] eq 0}}
+                                            <img src="{{$v.res.data}}" alt="{{$v.name}}"/>
+                                            <div class="am-margin-top-xs am-padding-horizontal-xs">
+                                                <span>{{$v.name}}</span>
+                                                <a href="{{:MyUrl('index/qrcode/download', ['url'=>urlencode(base64_encode($v['res']['data']))])}}" target="_blank" class="am-badge am-badge-secondary am-radius am-margin-left-sm am-icon-download"> 下载</a>
+                                            </div>
+                                        {{else /}}
+                                            <p class="am-text-danger am-padding-vertical-sm am-text-center">{{if empty($v['res']['msg'])}}异常错误{{else /}}{{$v.res.msg}}{{/if}}</p>
+                                            <div class="am-margin-top-xs am-padding-horizontal-xs">
+                                                <span>{{$v.name}}</span>
+                                                <a href="javascript:;" class="am-badge am-radius am-margin-left-sm am-icon-download"> 下载</a>
+                                            </div>
+                                        {{/if}}
+                                    </div>
+                                </li>
+                            {{/foreach}}
+                        </ul>
+                    {{/if}}
+                {{else /}}
+                    {{:ModuleInclude('public/not_data')}}
+                {{/if}}
+            </div>
+        </div>
+
+        <!-- SEO信息 -->
+        {{:ModuleInclude('lib/seo_data')}}
+    </div>
+{{/block}}

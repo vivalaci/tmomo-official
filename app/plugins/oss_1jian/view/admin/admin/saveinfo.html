@@ -1,0 +1,74 @@
+{{include file="public/header" /}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <legend>
+            <span class="fs-16">
+                oss参数配置
+            </span>
+            <a href="{{:PluginsAdminUrl('oss_1jian', 'admin', 'index')}}" class="fr fs-14 m-t-5 am-icon-mail-reply">
+                返回</a>
+        </legend>
+
+        <div class="membershiplevel-content">
+            <!-- form start -->
+            <form class="am-form form-validation view-save" action="{{:PluginsAdminUrl('oss_1jian', 'admin', 'save')}}"
+                method="POST" enctype="multipart/form-data" request-type="ajax-url"
+                request-value="{{:PluginsAdminUrl('oss_1jian', 'admin', 'index')}}">
+
+                <div class="am-form-group">
+                    <label>阿里云ACCESS_ID</label>
+                    <input type="text" name="OSS_ACCESS_ID" placeholder="ACCESS_ID" minlength="1" maxlength="130"
+                        class="am-radius" required {{if !empty($data['OSS_ACCESS_ID'])}} value="{{$data.OSS_ACCESS_ID}}"
+                        {{/if}} />
+                </div>
+
+
+                <div class="am-form-group">
+                    <label>阿里云OSS_ACCESS_KEY</label>
+                    <input type="text" name="OSS_ACCESS_KEY" placeholder="OSS_ACCESS_KEY" minlength="1" maxlength="130"
+                        class="am-radius" required {{if !empty($data['OSS_ACCESS_KEY'])}}
+                        value="{{$data.OSS_ACCESS_KEY}}" {{/if}} />
+                </div>
+                <div class="am-form-group">
+                    <label>阿里云ENDPOINT</label>
+                    <input type="text" name="OSS_ENDPOINT" placeholder="OSS_ENDPOINT" minlength="1" maxlength="130"
+                        class="am-radius" required {{if !empty($data['OSS_ENDPOINT'])}} value="{{$data.OSS_ENDPOINT}}"
+                        {{/if}} />
+                </div>
+                <div class="am-form-group">
+                    <label>阿里云BUCKET</label>
+                    <input type="text" name="OSS_TEST_BUCKET" placeholder="OSS_BUCKET" minlength="1" maxlength="130"
+                        class="am-radius" required {{if !empty($data['OSS_TEST_BUCKET'])}}
+                        value="{{$data.OSS_TEST_BUCKET}}" {{/if}} />
+                </div>
+                <div class="am-form-group">
+                    <label>阿里云oss域名:如果为空将使用oss默认域名</label>
+                    <input type="text" name="OSS_DOMAIN" placeholder="http://oss-cn-beijing.aliyuncs.com"
+                        maxlength="130" class="am-radius" {{if !empty($data['OSS_DOMAIN'])}}
+                        value="{{$data.OSS_DOMAIN}}" {{/if}} />
+                </div>
+
+                <div class="am-form-group">
+                    <label class="block">是否保留文件在web服务器硬盘</label>
+                    <input name="is_keep_on_server" value="1" type="checkbox" data-off-text="否" data-on-text="是"
+                        data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50"
+                        data-am-switch
+                        {{if (isset($data['is_keep_on_server']) and $data['is_keep_on_server'] eq 1) or empty($data)}}checked="true"
+                        {{/if}} />
+                </div>
+
+                <div class="am-form-group am-form-group-refreshing">
+	<button type="submit" class="am-btn am-btn-primary am-radius btn-loading-example am-btn-sm am-btn-block" data-am-loading="{loadingText:'处理中...'}">保存</button>
+                </div>
+            </form>
+            <!-- form end -->
+        </div>
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{include file="public/footer" /}}
+<!-- footer end -->

@@ -1,0 +1,10 @@
+{{if !empty($platform_user) and is_array($platform_user) and !empty($platform_name)}}
+    <div class="am-alert">
+        {{if !empty($platform_user['avatar'])}}
+            <img src="{{$platform_user.avatar}}" alt="{{$platform_user.nickname}}" width="20" height="20" class="am-circle" />
+        {{/if}}
+        <span>{{$platform_user.nickname}}</span>
+        <span class="am-text-warning am-margin-left-sm">{{$view_login_name}}帐号将自动绑定{{$platform_name}}用户</span>
+        <a href="javascript:;" class="submit-ajax am-margin-left-xs" data-url="{{:PluginsHomeUrl('thirdpartylogin', 'index', 'cancel')}}" data-id="1" data-view="reload" data-msg="取消将清除授权信息、确认操作吗？"> 取消</a>
+    </div>
+{{/if}}

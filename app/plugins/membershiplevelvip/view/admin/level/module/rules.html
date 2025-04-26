@@ -1,0 +1,11 @@
+{{if !empty($module_data['rules_min']) or !empty($module_data['rules_max'])}}
+    {{if !empty($module_data['rules_min']) and empty($module_data['rules_max'])}}
+        {{$module_data.rules_min}}~不限
+    {{elseif empty($module_data['rules_min']) and !empty($module_data['rules_max']) /}}
+        0-{{$module_data.rules_max}}
+    {{else /}}
+        {{$module_data.rules_min}}~{{$module_data.rules_max}}
+    {{/if}}
+{{else /}}
+    未配置
+{{/if}}

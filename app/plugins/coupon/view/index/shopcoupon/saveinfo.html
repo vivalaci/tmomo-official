@@ -1,0 +1,241 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- content start  -->
+<div class="am-padding-main am-background-white">
+    <!-- form start -->
+    <form class="am-form form-validation am-form-full-screen am-form-popup-fixed" action="{{:PluginsHomeUrl('coupon', 'shopcoupon', 'save')}}" method="POST" request-type="ajax-url" request-value="{{:PluginsHomeUrl('coupon', 'shopcoupon', 'index', $params)}}">
+        <!-- nav start -->
+        {{:ModuleInclude('public/admin_nav', [
+            'title'     => MyLang('coupon_name').(empty($data['id']) ? MyLang('created_title') : MyLang('edit_title')),
+            'back_url'  => $form_back_url
+        ])}}
+        <!-- nav end -->
+        <!-- tips -->
+        <div class="am-operate-stretch-tips">
+            <div class="title">
+                <i class="iconfont icon-tips"></i>
+                <strong title="{{:MyLang('operate_list_tips_msg')}}">{{:MyLang('operate_list_tips_button_text')}}</strong>
+                <i class="iconfont icon-contract contract" title="{{:MyLang('operate_list_tips_retract_text')}}"></i> 
+            </div>
+            <p>{{:MyLang('discounted_coupons_not_opration_data_text')}}</p>
+        </div>
+        {{:ModuleInclude('public/plugins_admin_nav_btn', [
+            'plugins' => 'shop',
+            'nav_data' => [
+                [
+                    'name' => MyLang('base_title'),
+                    'type'  => 'base',
+                ],
+                [
+                    'name' => MyLang('form_time_valid_title'),
+                    'type'  => 'times',
+                    'is_show' => (!isset($data['id']) || $data['already_send_count'] <= 0) ? 1 : 0
+                ],
+                [
+                    'name' => MyLang('use_condition_text'),
+                    'type'  => 'usage',
+                    'is_show' => (!isset($data['id']) || $data['already_send_count'] <= 0) ? 1 : 0
+                ],
+                [
+                    'name' => MyLang('distribution_restrictions_text'),
+                    'type'  => 'distribution',
+                ]
+            ]
+        ])}}
+        <div class="nav-content">
+            <!-- 基础信息 -->
+            <div data-key="base" class="item am-active">
+                <div class="am-form-group">
+                    <label>{{:MyLang('coupon_name_text')}}<span class="am-form-group-label-tips">{{:MyLang('if_text')}} {{:MyLang('reduce_10_reaching_300_text')}}</span></label>
+                    <input type="text" name="name" placeholder="{{:MyLang('input_coupon_name_placeholder')}}" maxlength="30" data-validation-message="{{:MyLang('coupon_name_max_30_message')}}" class="am-radius" {{if !empty($data['name'])}} value="{{$data.name}}"{{/if}} required />
+                </div>
+
+                <div class="am-form-group">
+                    <label>{{:MyLang('coupon_desc_message')}}</label>
+                    <input type="text" name="desc" placeholder="{{:MyLang('input_coupon_desc_placeholder')}}" maxlength="60" data-validation-message="{{:MyLang('coupon_name_max_60_message')}}" class="am-radius" {{if !empty($data['desc'])}} value="{{$data.desc}}"{{/if}} />
+                </div>
+
+                <div class="am-form-group">
+                    <label>{{:MyLang('input_coupon_color_message')}}<span class="am-form-group-label-tips">{{:MyLang('default_color_message')}}</span></label>
+                    <div class="am-radio-group">
+                        {{foreach $coupon_bg_color_list as $v}}
+                            <label class="am-radio-inline am-margin-right-sm">
+                                <input type="radio" name="bg_color" value="{{$v.value}}" {{if isset($data['bg_color']) and $data['bg_color'] eq $v['value']}}checked="checked"{{else /}}{{if !isset($data['bg_color']) and isset($v['checked']) and $v['checked'] eq true}}checked="checked"{{/if}}{{/if}} data-am-ucheck /> {{$v.name}}
+                            </label>
+                        {{/foreach}}
+                    </div>
+                </div>
+
+                {{if !isset($data['id']) or $data['already_send_count'] elt 0}}
+                    <div class="am-form-group">
+                        <label>{{:MyLang('coupon_type_name')}}</label>
+                        <div class="am-radio-group">
+                            {{foreach $coupon_type_list as $v}}
+                                <label class="am-radio-inline am-margin-right-sm">
+                                    <input type="radio" name="type" value="{{$v.value}}" {{if isset($data['type']) and $data['type'] eq $v['value']}}checked="checked"{{else /}}{{if !isset($data['type']) and isset($v['checked']) and $v['checked'] eq true}}checked="checked"{{/if}}{{/if}} data-am-ucheck /> {{$v.name}}
+                                </label>
+                            {{/foreach}}
+                        </div>
+                    </div>
+
+                    <div class="am-form-group coupon-form-discount-price" {{if isset($data['type']) and $data['type'] neq 0}}style="display: none;"{{/if}}>
+                        <label>{{:MyLang('reduce_amount_name')}}</label>
+                        <input type="number" name="discount_price" min="0.01" step="0.01" placeholder="{{:MyLang('input_reduce_amount_placeholder')}}" data-validation-message="{{:MyLang('input_reduce_ffective_amount_message')}}" class="am-radius" {{if !empty($data['discount_value'])}} value="{{$data.discount_value}}"{{/if}} />
+                    </div>
+
+                    <div class="am-form-group coupon-form-discount-rate" {{if !isset($data['type']) or $data['type'] neq 1}}style="display: none;"{{/if}}>
+                        <label>{{:MyLang('discount_rate_name')}}<span class="am-form-group-label-tips">{{:MyLang('discount_rate_range_tips')}}</span></label>
+                        <input type="number" name="discount_rate" placeholder="{{:MyLang('input_discount_rate_placeholder')}}" min="0.01" max="10.00" step="0.01" data-validation-message="{{:MyLang('discount_rate_limitation_message')}}" class="am-radius" {{if !empty($data['discount_value'])}} value="{{$data.discount_value}}"{{/if}} />
+                    </div>
+                {{/if}}
+
+                {{:ModuleInclude('lib/sort')}}
+                {{:ModuleInclude('lib/is_enable')}}
+            </div>
+            <!-- 时间 -->
+            {{if !isset($data['id']) or $data['already_send_count'] elt 0}}
+                <div data-key="times" class="item">
+                    <div class="am-form-group">
+                        <label>{{:MyLang('expire_type_text')}}</label>
+                        <div class="am-radio-group">
+                            {{foreach $coupon_expire_type_list as $v}}
+                                <label class="am-radio-inline am-margin-right-sm">
+                                    <input type="radio" name="expire_type" value="{{$v.value}}" {{if isset($data['expire_type']) and $data['expire_type'] eq $v['value']}}checked="checked"{{else /}}{{if !isset($data['expire_type']) and isset($v['checked']) and $v['checked'] eq true}}checked="checked"{{/if}}{{/if}} data-am-ucheck /> {{$v.name}}
+                                </label>
+                            {{/foreach}}
+                        </div>
+                    </div>
+
+                    <div class="am-form-group coupon-form-expire-hour coupon-form-no-bottom-style" {{if isset($data['expire_type']) and $data['expire_type'] neq 0}}style="display: none;"{{/if}}>
+                        <label>{{:MyLang('effective_hour_text')}}<span class="am-form-group-label-tips">{{:MyLang('unit_text')}} {{:MyLang('hour_text')}}</span></label>
+                        <input type="number" name="expire_hour" placeholder="{{:MyLang('input_effective_hour_placeholder')}}" min="1" data-validation-message="{{:MyLang('effective_1_hour')}}" class="am-radius" {{if !empty($data['expire_hour'])}} value="{{$data.expire_hour}}"{{/if}} required />
+                    </div>
+
+                    <div class="am-form-group coupon-form-fixed-time" {{if !isset($data['expire_type']) or $data['expire_type'] neq 1}}style="display: none;"{{/if}}>
+                        <label>{{:MyLang('limited_time_text')}}</label>
+                        <div>
+                            <input type="text" autocomplete="off" name="fixed_time_start" class="Wdate am-radius" placeholder="{{:MyLang('form_time_start_title')}}" data-validation-message="{{:MyLang('choose_limited_time_start_time_message')}}" onclick="WdatePicker({firstDayOfWeek:1,dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'%y-%M-%d %H:%m:%s',maxDate:'#F{$dp.$D(\'input-fixed-time-end\');}'})" {{if !empty($data['fixed_time_start'])}}value="{{$data.fixed_time_start}}"{{/if}} id="input-fixed-time-start" required />
+                            <span class="am-text-grey">~</span>
+                            <input type="text" autocomplete="off" class="Wdate am-radius" placeholder="{{:MyLang('form_time_end_title')}}" data-validation-message="{{:MyLang('choose_limited_time_end_time_message')}}" name="fixed_time_end" onclick="WdatePicker({firstDayOfWeek:1,dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'#F{$dp.$D(\'input-fixed-time-start\')||\'{{:date(\'Y-m-d H:i:s\')}}\';}'})" {{if !empty($data['fixed_time_end'])}}value="{{$data.fixed_time_end}}"{{/if}} id="input-fixed-time-end" required />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 使用条件 -->
+                <div data-key="usage" class="item">
+                    <div class="am-form-group">
+                        <label>{{:MyLang('minimum_order_amount_text')}}<span class="am-form-group-label-tips">{{:MyLang('minimum_order_amount_limit_tips')}}</span></label>
+                        <input type="number" name="where_order_price" min="0.00" step="0.01" placeholder="{{:MyLang('input_minimum_order_amount_placeholder')}}" data-validation-message="{{:MyLang('input_limit_minimum_order_amount_message')}}" class="am-radius" {{if !empty($data['where_order_price'])}} value="{{$data.where_order_price}}"{{/if}} required />
+                    </div>
+
+                    <div class="am-form-group coupon-form-no-bottom-style">
+                        <label>{{:MyLang('use_limit_text')}}</label>
+                        <div class="am-radio-group">
+                            {{foreach $coupon_use_limit_type_list as $v}}
+                                <label class="am-radio-inline am-margin-right-sm">
+                                    <input type="radio" name="use_limit_type" value="{{$v.value}}" {{if isset($data['use_limit_type']) and $data['use_limit_type'] eq $v['value']}}checked="checked"{{else /}}{{if !isset($data['use_limit_type']) and isset($v['checked']) and $v['checked'] eq true}}checked="checked"{{/if}}{{/if}} data-am-ucheck /> {{$v.name}}
+                                </label>
+                            {{/foreach}}
+                        </div>
+                    </div>
+
+                    <div class="am-form-group coupon-use-goods-category coupon-form-no-bottom-style" {{if !isset($data['use_limit_type']) or $data['use_limit_type'] neq 1}}style="display: none;"{{/if}}>
+                        <label class="am-block">{{:MyLang('association_user_shop_type_text')}}<span class="am-form-group-label-tips">{{:MyLang('empty_type_use_tips')}}</span></label>
+                        <select name="category_ids" class="am-radius chosen-select" multiple="multiple" minchecked="1" data-placeholder="{{:MyLang('please_select_tips')}}" data-validation-message="{{:MyLang('form_goods_category_message')}}">
+                            {{if !empty($category_list)}}
+                                {{foreach $category_list as $v}}
+                                    <option value="{{$v.id}}" {{if isset($data['use_limit_type']) and $data['use_limit_type'] eq 1 and !empty($data['use_value_ids_all']) and in_array($v['id'], $data['use_value_ids_all'])}}selected{{/if}}>{{$v.name}}</option>
+                                {{/foreach}}
+                            {{/if}}
+                        </select>
+                    </div>
+
+                    <div class="am-form-group coupon-use-goods-content" {{if !isset($data['use_limit_type']) or $data['use_limit_type'] neq 2}}style="display: none;"{{/if}}>
+                        <label class="am-block">{{:MyLang('association_user_shop_text')}}</label>
+                        <div class="forth-selection-container">
+                            <div class="forth-selection-form" data-search-url="{{:PluginsHomeUrl('coupon', 'shopcoupon', 'search')}}">
+                                <select class="am-radius chosen-select forth-selection-form-category" data-placeholder="{{:MyLang('optional_tips')}}" data-validation-message="{{:MyLang('form_goods_category_message')}}">
+                                    <option value="">{{:MyLang('optional_tips')}}</option>
+                                    {{if !empty($category_list)}}
+                                        {{foreach $category_list as $v}}
+                                            <option value="{{$v.id}}">{{$v.name}}</option>
+                                        {{/foreach}}
+                                    {{/if}}
+                                </select>
+                                <input type="text" placeholder="{{:MyLang('goods_name')}}" class="am-radius forth-selection-form-keywords" />
+                                <button type="button" class="am-btn am-btn-primary-light am-radius am-btn-xs btn-loading-example search-submit" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('search_title')}}'}">
+                                    <i class="iconfont icon-search"></i>
+                                    <span>{{:MyLang('search_title')}}</span>
+                                </button>
+                            </div>
+                            <div class="forth-selection-list">
+                                <input type="hidden" name="goods_ids" value="{{if isset($data['use_limit_type']) and $data['use_limit_type'] eq 2 and !empty($data['use_value_ids_str'])}}{{$data.use_value_ids_str}}{{/if}}" />
+                                <div class="forth-selection-items am-fl">
+                                    <div class="title">{{:MyLang('optional_text')}}</div>
+                                    <ul class="forth-selection-content am-list ul-left">
+                                        <div class="table-no">{{:MyLang('not_data_tips')}}</div>
+                                    </ul>
+                                </div>
+                                <button type="button" class="am-btn am-btn-default am-radius am-btn-xs selected-all">{{:MyLang('select_all_text')}} <i class="am-icon-angle-double-right"></i></button>
+                                <div class="forth-selection-items am-fr">
+                                    <div class="title">{{:MyLang('selected_text')}}</div>
+                                    <ul class="forth-selection-content am-list ul-right">
+                                        <div class="table-no {{if !empty($data['goods_items'])}}none{{/if}}">{{:MyLang('not_data_tips')}}</div>
+                                        {{if !empty($data['goods_items'])}}
+                                            {{foreach $data.goods_items as $v}}
+                                                <li class="am-animation-slide-bottom items-li-{{$v.id}}">
+                                                    <span class="name" data-value="{{$v.id}}">{{$v.title}}</span>
+                                                    <i class="iconfont icon-delete am-fr"></i>
+                                                </li>
+                                            {{/foreach}}
+                                        {{/if}}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {{/if}}
+
+            <!-- 发放限制 -->
+            <div data-key="distribution" class="item">
+                <div class="am-form-group">
+                    <label>{{:MyLang('total_quantity_distributed_text')}}<span class="am-form-group-label-tips">{{:MyLang('empty_unlimited_tips')}}</span></label>
+                    <input type="number" name="limit_send_count" placeholder="{{:MyLang('input_total_quantity_distributed_placeholder')}}" data-validation-message="{{:MyLang('input_effective_total_quantity_distributed_message')}}" class="am-radius" {{if !empty($data['limit_send_count'])}} value="{{$data.limit_send_count}}"{{/if}} />
+                </div>
+
+                <div class="am-form-group">
+                    <label class="am-block">{{:MyLang('open_user_claim_text')}}<span class="am-form-group-label-tips">{{:MyLang('default_no_tips')}}</span></label>
+                    <input name="is_user_receive" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_user_receive']) and $data['is_user_receive'] eq 1}}checked="true"{{/if}} />
+                </div>
+
+                <div class="am-form-group">
+                    <label class="am-block">{{:MyLang('repeat_receive_text')}}<span class="am-form-group-label-tips">{{:MyLang('default_no_tips')}}</span></label>
+                    <input name="is_repeat_receive" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_repeat_receive']) and $data['is_repeat_receive'] eq 1}}checked="true"{{/if}} />
+                </div>
+
+                <div class="am-form-group">
+                    <label class="am-block">{{:MyLang('register_grant_text')}}<span class="am-form-group-label-tips">{{:MyLang('default_no_tips')}}</span></label>
+                    <input name="is_regster_send" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_regster_send']) and $data['is_regster_send'] eq 1}}checked="true"{{/if}} />
+                </div>
+            </div>
+        </div>
+        <div class="am-form-popup-submit am-text-left">
+            <input type="hidden" name="id" {{if !empty($data['id'])}} value="{{$data.id}}"{{/if}} />
+            <input type="hidden" name="shop_id" {{if !empty($data['shop_id'])}} value="{{$data.shop_id}}"{{/if}} />
+            <a href="{{:PluginsHomeUrl('coupon', 'shopcoupon', 'index', $params)}}" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg">
+                <i class="am-icon-mail-reply"></i>
+                <span>{{:MyLang('retreat_title')}}</span>
+            </a>
+            <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('save_title')}}'}">
+                <i class="am-icon-save"></i>
+                <span>{{:MyLang('save_title')}}</span>
+            </button>
+        </div>
+    </form>
+    <!-- form end -->
+</div>
+<!-- content end  -->
+        
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

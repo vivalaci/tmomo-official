@@ -1,0 +1,223 @@
+<script type="text/javascript">
+$(function()
+{
+    var multilingual_stop_page_request_number = {{$stop_page_request_number}};
+    var multilingual_current_request_number = 0;
+    var multilingual_intervalid = null;
+    {{if $multilingual_default_code neq 'zh'}}
+        function TransFormLanguage(new_language)
+        {
+            var transform_str = '';
+            var re = /[\u4e00-\u9fa5]/g;
+            function DocumentChildHandle(dom, type, data = {})
+            {
+                [...dom.children].forEach(v => {
+                    if(v.tagName != 'SCRIPT')
+                    {
+                        // 表单搜索占位的input vlaue
+                        if(v.tagName == 'INPUT' && $(v).context.classList.contains('default') && ($(v).context.attributes.value || null) != null && ($(v).context.attributes.value.nodeValue || null) != null)
+                        {
+                            if(re.test($(v).context.attributes.value.nodeValue))
+                            {
+                                var value = $(v).context.attributes.value.nodeValue;
+                                if(type == 'read')
+                                {
+                                    transform_str += value+`\n`;
+                                } else {
+                                    var key = hex_md5(value);
+                                    if((data[key] || null) != null)
+                                    {
+                                        $(v).context.attributes.value.nodeValue = data[key]['dst'];
+                                        $(v).context.value = data[key]['dst'];
+                                    }
+                                }
+                            }
+                        }
+
+                        // 搜素表单select placeholder占位信息
+                        if(v.tagName == 'SELECT')
+                        {
+                            var value = $(v).context.getAttribute('data-placeholder') || null;
+                            if(value != null && re.test(value))
+                            {
+                                if(type == 'read')
+                                {
+                                    transform_str += value+`\n`;
+                                } else {
+                                    var key = hex_md5(value);
+                                    if((data[key] || null) != null)
+                                    {
+                                        $(v).context.setAttribute('data-placeholder', data[key]['dst']);
+                                    }
+                                }
+                            }
+                        }
+
+                        // input placeholder
+                        if((v.tagName == 'INPUT' || v.tagName == 'TEXTAREA') && ($(v).context.attributes.placeholder || null) != null && ($(v).context.attributes.placeholder.nodeValue || null) != null)
+                        {
+                            if(re.test($(v).context.attributes.placeholder.nodeValue))
+                            {
+                                var value = $(v).context.attributes.placeholder.nodeValue;
+                                if(type == 'read')
+                                {
+                                    transform_str += value+`\n`;
+                                } else {
+                                    var key = hex_md5(value);
+                                    if((data[key] || null) != null)
+                                    {
+                                        $(v).context.attributes.placeholder.nodeValue = data[key]['dst'];
+                                    }
+                                }
+                            }
+                        }
+
+                        // img alt
+                        if(v.tagName == 'IMG' && ($(v).context.attributes.alt || null) != null && ($(v).context.attributes.alt.nodeValue || null) != null)
+                        {
+                            if(re.test($(v).context.attributes.alt.nodeValue))
+                            {
+                                var value = $(v).context.attributes.alt.nodeValue;
+                                if(type == 'read')
+                                {
+                                    transform_str += value+`\n`;
+                                } else {
+                                    var key = hex_md5(value);
+                                    if((data[key] || null) != null)
+                                    {
+                                        $(v).context.attributes.alt.nodeValue = data[key]['dst'];
+                                    }
+                                }
+                            }
+                        }
+
+                        // 元素 title
+                        if(($(v).context.attributes.title || null) != null && ($(v).context.attributes.title.nodeValue || null) != null)
+                        {
+                            if(re.test($(v).context.attributes.title.nodeValue))
+                            {
+                                var value = $(v).context.attributes.title.nodeValue;
+                                if(type == 'read')
+                                {
+                                    transform_str += value+`\n`;
+                                } else {
+                                    var key = hex_md5(value);
+                                    if((data[key] || null) != null)
+                                    {
+                                        $(v).context.attributes.title.nodeValue = data[key]['dst'];
+                                    }
+                                }
+                            }
+                        }
+
+                        // 元素里面内容
+                        var v_html = $(v).contents().filter(function(index, content) {
+                            return content.nodeType === 3;
+                        }).text().trim();
+                        if(re.test(v_html))
+                        {
+                            if(type == 'read')
+                            {
+                                // 排除 页面样式变量
+                                if(v_html.indexOf(':root') == -1) {
+                                    transform_str += `${v_html}\n`;
+                                }
+                            } else {
+                                // 是否存换行
+                                if(v_html.indexOf("\n") != -1)
+                                {
+                                    var arr = v_html.split("\n");
+                                    for(var i in arr)
+                                    {
+                                        if((arr[i] || null) != null)
+                                        {
+                                            var key = hex_md5(arr[i]);
+                                            if((data[key] || null) != null)
+                                            {
+                                                var trans_old = data[key]['src'];
+                                                var trans_new = data[key]['dst'];
+                                                $(v).html(
+                                                    $(v).html().replace(trans_old, trans_new)
+                                                )
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    var key = hex_md5(v_html);
+                                    if((data[key] || null) != null)
+                                    {
+                                        var trans_old = data[key]['src'];
+                                        var trans_new = data[key]['dst'];
+                                        $(v).html(
+                                            $(v).html().replace(trans_old, trans_new)
+                                        )
+                                        // 特殊字符转义处理
+                                        trans_old = trans_old.replace(/&/g, '&amp;').replace(/>/g, '&gt;').replace(/</g, '&lt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;');
+                                        $(v).html(
+                                            $(v).html().replace(trans_old, trans_new)
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                        DocumentChildHandle(v, type, data);
+
+                        // select标签数据更新
+                        if(type == 'write' && v.tagName == 'SELECT' && $(v).context.classList.contains('chosen-select'))
+                        {
+                            $('select.chosen-select').trigger('chosen:updated');
+                        }
+                    }
+                });
+            }
+            DocumentChildHandle(document, 'read');
+
+            if((transform_str || null) != null)
+            {
+                if(multilingual_current_request_number <= multilingual_stop_page_request_number)
+                {
+                    multilingual_current_request_number++;
+
+                    var query = transform_str.substr(0, transform_str.length-1);
+                    var to = new_language;
+                    $.ajax({
+                        url: '{{$request_url}}',
+                        type: 'post',
+                        dataType: 'json',
+                        data: {
+                            q: query,
+                            to: to
+                        },
+                        success: function(res) {
+                            if(res.code == 0)
+                            {
+                                if((res.data.trans_result || null) != null)
+                                {
+                                    DocumentChildHandle(document, 'write', res.data.trans_result);
+                                }
+                                {{if !empty($real_time_monitoring)}}
+                                    multilingual_intervalid = setInterval(function()
+                                    {
+                                        TransFormLanguage('{{$multilingual_default_code}}');
+                                    }, {{$real_time_monitoring}});
+                                {{/if}}
+                            } else {
+                                Prompt(res.msg);
+                            }
+                        }
+                    });
+                } else {
+                    if(multilingual_intervalid !== null)
+                    {
+                        clearInterval(multilingual_intervalid);
+                    }
+                }
+            }
+        }
+
+        window.onload = function () {
+            TransFormLanguage('{{$multilingual_default_code}}');
+        };
+    {{/if}}
+});
+</script>

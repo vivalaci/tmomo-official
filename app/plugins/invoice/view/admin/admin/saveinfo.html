@@ -1,0 +1,120 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'invoice',
+            'title'     => MyLang('base_config_title'),
+            'back_url'  => PluginsAdminUrl('invoice', 'admin', 'index'),
+        ])}}
+
+        <!-- form start -->
+        <form class="am-form form-validation am-form-full-screen am-form-popup-sticky" action="{{:PluginsAdminUrl('invoice', 'admin', 'save')}}" method="POST" request-type="ajax-url" request-value="{{:PluginsAdminUrl('invoice', 'admin', 'index')}}" enctype="multipart/form-data">
+            <div class="am-form-group">
+                <label class="am-block">快捷导航-开启发票管理入口<span class="am-form-group-label-tips">默认否、开启后用户可直接进入发票管理</span></label>
+                <input name="is_user_quick_select" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_user_quick_select']) and $data['is_user_quick_select'] eq 1}}checked="true"{{/if}} />
+            </div>
+
+            <div class="am-form-group">
+                <label class="am-block">开启购物订单开票</label>
+                <input name="is_invoice_order" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_invoice_order']) and $data['is_invoice_order'] eq 1}}checked="true"{{/if}} />
+            </div>
+
+            <div class="am-form-group">
+                <label class="am-block">开启钱包充值开票</label>
+                <input name="is_invoice_recharge" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_invoice_recharge']) and $data['is_invoice_recharge'] eq 1}}checked="true"{{/if}} />
+            </div>
+
+            <div class="am-form-group">
+                <label class="am-block">下单即可开票</label>
+                <input name="is_order_submit_invoice" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_order_submit_invoice']) and $data['is_order_submit_invoice'] eq 1}}checked="true"{{/if}} />
+                <div class="am-alert am-alert-warning am-margin-0">
+                    PS：开启后，以下[ <strong class="am-text-danger">订单完成起始时间</strong> ]的限制将失效
+                </div>
+            </div>
+
+            <div class="am-form-group">
+                <label class="am-block">订单完成起始时间<span class="am-form-group-label-tips">默认43200分钟/30天</span></label>
+                <div class="am-input-group am-input-group-sm am-margin-top-xs">
+                    <input type="number" name="order_success_start_time" placeholder="订单完成起始时间" min="0" data-validation-message="订单完成起始时间" class="am-form-field am-radius" {{if !empty($data['order_success_start_time'])}} value="{{$data.order_success_start_time}}"{{/if}} />
+                    <span class="am-input-group-btn">
+                        <button type="button" class="am-btn am-btn-default am-radius">{{:MyLang('minute_title')}}</button>
+                    </span>
+                </div>
+            </div>
+
+            <div class="am-form-group">
+                <label class="am-block">可开具多久时间的购物订单<span class="am-form-group-label-tips">默认525600分钟/365天</span></label>
+                <div class="am-input-group am-input-group-sm am-margin-top-xs">
+                    <input type="number" name="order_add_max_time" placeholder="可开具多久时间的购物订单" min="0" data-validation-message="可开具多久时间的购物订单" class="am-form-field am-radius" {{if !empty($data['order_add_max_time'])}} value="{{$data.order_add_max_time}}"{{/if}} />
+                    <span class="am-input-group-btn">
+                        <button type="button" class="am-btn am-btn-default am-radius">{{:MyLang('minute_title')}}</button>
+                    </span>
+                </div>
+            </div>
+
+            <div class="am-form-group">
+                <label class="am-block">可开具多久时间的充值订单<span class="am-form-group-label-tips">默认525600分钟/365天</span></label>
+                <div class="am-input-group am-input-group-sm am-margin-top-xs">
+                    <input type="number" name="recharge_add_max_time" placeholder="可开具多久时间的充值订单" min="0" data-validation-message="可开具多久时间的充值订单" class="am-form-field am-radius" {{if !empty($data['recharge_add_max_time'])}} value="{{$data.recharge_add_max_time}}"{{/if}} />
+                    <span class="am-input-group-btn">
+                        <button type="button" class="am-btn am-btn-default am-radius">{{:MyLang('minute_title')}}</button>
+                    </span>
+                </div>
+            </div>
+
+            <div class="am-form-group">
+                <label class="am-block">可开具发票类型<span class="am-form-group-label-tips">空则表示全部可用</span></label>
+                <select name="can_invoice_type" class="am-radius chosen-select" data-placeholder="{{:MyLang('please_select_tips')}}" data-validation-message="请选择可开具发票类型" multiple="multiple">
+                    {{if !empty($invoice_type_list)}}
+                        {{foreach $invoice_type_list as $v}}
+                            <option value="{{$v.id}}" {{if !empty($data['can_invoice_type']) and in_array($v['id'], $data['can_invoice_type'])}}selected{{/if}}>{{$v.name}}</option>
+                        {{/foreach}}
+                    {{/if}}
+                </select>
+            </div>
+
+            <div class="am-form-group am-form-file">
+                <label class="am-block">开具发票内容<span class="am-form-group-label-tips">可供用户选择，可换行、一行一个</span></label>
+                <textarea rows="4" name="invoice_content_type" class="am-radius am-field-valid" placeholder="开具发票内容" data-validation-message="请填写开具发票内容">{{if !empty($data['invoice_content_type'])}}{{:implode("\\n", $data['invoice_content_type'])}}{{/if}}</textarea>
+            </div>
+
+            <div class="am-form-group am-form-file">
+                <label class="am-block">提示信息<span class="am-form-group-label-tips">可换行、一行一个</span></label>
+                <textarea rows="4" name="invoice_desc" class="am-radius am-field-valid" placeholder="提示信息" data-validation-message="请填写提示信息">{{if !empty($data['invoice_desc'])}}{{:implode("\\n", $data['invoice_desc'])}}{{/if}}</textarea>
+            </div>
+
+            <div class="am-form-group">
+                <label class="am-block">开票默认上一次开票信息（web端）</label>
+                <div class="am-margin-top-xs">
+                    <input name="is_web_invoice_default_last_info" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_web_invoice_default_last_info']) and $data['is_web_invoice_default_last_info'] eq 1}}checked="true"{{/if}} />
+                </div>
+            </div>
+
+            <div class="am-form-group">
+                <label class="am-block">开票默认上一次开票信息（手机端）</label>
+                <div class="am-margin-top-xs">
+                    <input name="is_app_invoice_default_last_info" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_app_invoice_default_last_info']) and $data['is_app_invoice_default_last_info'] eq 1}}checked="true"{{/if}} />
+                </div>
+            </div>
+
+            <div class="am-form-popup-submit">
+                <a href="{{:PluginsAdminUrl('invoice', 'admin', 'index', $params)}}" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg">
+                    <i class="am-icon-mail-reply"></i>
+                    <span>{{:MyLang('retreat_title')}}</span>
+                </a>
+                <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('save_title')}}'}">
+                    <i class="am-icon-save"></i>
+                    <span>{{:MyLang('save_title')}}</span>
+                </button>
+            </div>
+        </form>
+        <!-- form end -->
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

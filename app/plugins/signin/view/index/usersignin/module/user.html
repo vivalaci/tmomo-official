@@ -1,0 +1,8 @@
+{{if !empty($module_data['user'])}}
+    <img src="{{$module_data.user.avatar}}" alt="{{if !empty($module_data['user']['user_name_view'])}}{{$module_data.user.user_name_view}}{{else /}}用户头像{{/if}}" class="am-img-thumbnail am-radius am-align-left am-margin-right-xs am-margin-bottom-0" width="35" height="35" />
+    {{if !empty($module_data['user']['user_name_view'])}}
+        <p>{{$module_data.user.user_name_view}}</p>
+    {{/if}}
+{{else /}}
+    {{:MyLang('user_info_abnormal_tips')}}
+{{/if}}

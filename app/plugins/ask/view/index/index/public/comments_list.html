@@ -1,0 +1,34 @@
+{{if isset($plugins_config['is_ask_comments_show']) and $plugins_config['is_ask_comments_show'] eq 1}}
+    <div class="plugins-ask-padding-container am-margin-top-main comments-list {{if empty($data['comments_list'])}}am-hide{{/if}}">
+        <div class="am-radius">
+            <ul>
+                {{if !empty($data['comments_list'])}}
+                    {{foreach $data.comments_list as $comments}}
+                        {{include file="../../../plugins/ask/view/index/index/public/comments_item" /}}
+                    {{/foreach}}
+                {{/if}}
+            </ul>
+            {{if isset($is_show_view_all_comments_submit) and $is_show_view_all_comments_submit eq 1}}
+                <p class="am-padding-vertical-sm am-text-center more-comments am-radius">
+                    <a href="javascript:;" class="view-all-comments-submit am-text-sm" data-value="{{$data.comments_count}}">
+                        <strong>查看全部</strong>
+                        <strong class="comments-num">{{$data.comments_count}}</strong>
+                        <strong>条评论</strong>
+                        <strong><i class="iconfont icon-angle-right"></i></strong>
+                    </a>
+                </p>
+            {{/if}}
+            {{if isset($is_show_view_more_comments_submit) and $is_show_view_more_comments_submit eq 1}}
+                {{if (empty($plugins_config['ask_detail_comments_more_page_number']) and $data['comments_count'] gt 20) or (!empty($plugins_config['ask_detail_comments_more_page_number']) and $data['comments_count'] gt $plugins_config['ask_detail_comments_more_page_number'])}}
+                    <p class="am-padding-vertical-sm am-text-center more-comments am-radius">
+                        <a href="javascript:;" class="view-more-comments-submit am-text-sm" data-page="{{$comments_page_value}}">
+                            <strong>查看更多评论</strong>
+                            <i class="am-icon-angle-down"></i>
+                        </a>
+                    </p>
+                {{/if}}
+            {{/if}}
+            </p>
+        </div>
+    </div>
+{{/if}}

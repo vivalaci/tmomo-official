@@ -1,0 +1,62 @@
+<!-- 继承公共的 form -->
+{{extend name="../../../module/view/form_table/detail" /}}
+
+<!-- 重写数据模块 -->
+{{block name="detail_data"}}
+    {{:ModuleInclude('public/detail_nav_switch_tabs', [
+        'nav_data' => [
+            [
+                'name' => MyLang('form_base_data_title'),
+                'key'  => 'base',
+            ],
+            [
+                'name' => $data['invoice_type'] == 0 ? '发票附件' : '快递信息',
+                'key'  => 'invoice-data',
+            ],
+        ]
+    ])}}
+    <div class="detail-content-switch-data-item">
+        <!-- 父级内容 -->
+        <div class="item am-active" data-key="base">
+            {__block__}
+        </div>
+
+        <!-- 发票信息 -->
+        <div class="item" data-key="invoice-data">
+            {{if isset($data['invoice_type'])}}
+                {{if $data['invoice_type'] eq 0}}
+                    {{if !empty($data['electronic_invoice'])}}
+                        <ul class="plug-file-upload-view plug-file-upload-view-file">
+                            {{if !empty($data['electronic_invoice']) and is_array($data['electronic_invoice'])}}
+                                {{foreach $data.electronic_invoice as $k=>$v}}
+                                    <li>
+                                        <a href="{{$v.url}}" title="{{$v.title}}" target="_blank">{{$v.title}}</a>
+                                    </li>
+                                {{/foreach}}
+                            {{/if}}
+                        </ul>
+                    {{else /}}
+                        {{:ModuleInclude('public/not_data')}}
+                    {{/if}}
+                {{else /}}
+                    <table class="am-table">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <strong>快递名称</strong>
+                                </td>
+                                <td>{{$data.express_name}}</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>快递单号</strong>
+                                </td>
+                                <td>{{$data.express_number}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                {{/if}}
+            {{/if}}
+        </div>
+    </div>
+{{/block}}

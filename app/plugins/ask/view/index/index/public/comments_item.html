@@ -1,0 +1,70 @@
+
+<li class="am-padding-vertical-main am-flex am-flex-justify-between">
+    <img src="{{$comments.user.avatar}}" class="am-img-thumbnail am-circle" />
+    <div class="right-content am-text-sm">
+        <div class="comments-base am-nbfc">
+            <span class="username am-font-weight">{{$comments.user.user_name_view}}</span>
+            <span class="am-color-grey am-margin-left-sm">{{$comments.add_time}}</span>
+            <div class="am-fr right-content-operate">
+                {{if isset($plugins_config['is_ask_comments_add']) and $plugins_config['is_ask_comments_add'] eq 1}}
+                    <a href="javascript:;" class="am-color-grey-dark {{if empty($user)}}login-event{{else /}} comments-submit{{/if}}" data-ask-id="{{$comments.ask_id}}" data-ask-comments-id="{{$comments.id}}" data-value="{{$comments.comments_count}}" data-text="回复">
+                        <i class="iconfont icon-recover"></i>
+                        回复(<font>{{$comments.comments_count}}</font>)
+                    </a>
+                {{/if}}
+                {{if isset($plugins_config['is_ask_give_thumbs']) and $plugins_config['is_ask_give_thumbs'] eq 1}}
+                    <a href="javascript:;" class="am-color-grey-dark am-fr {{if empty($user)}}login-event{{else /}} give-thumbs-submit{{/if}} {{if isset($comments['is_give_thumbs']) and $comments['is_give_thumbs'] eq 1}} am-active{{/if}}" data-ask-id="{{$comments.ask_id}}" data-ask-comments-id="{{$comments.id}}" data-text="点赞"> 
+                        <i class="iconfont {{if isset($comments['is_give_thumbs']) and $comments['is_give_thumbs'] eq 1}}icon-a-givealike-tap-review{{else/}}icon-a-givealike-review{{/if}}"></i>
+                        点赞(<font>{{$comments.give_thumbs_count}}</font>)
+                    </a>
+                {{/if}}
+            </div>
+        </div>
+        <p class="am-margin-top-sm comments-content">{{$comments.content}}</p>
+        <div class="am-ask-comments-input am-panel-collapse am-collapse"></div>
+        <div class="reply-comments-list">
+            {{if !empty($comments['comments_list'])}}
+                {{foreach $comments.comments_list as $v}}
+                    <div class="item am-margin-top-lg am-flex am-flex-justify-between">
+                        <img src="{{$v.user.avatar}}" class="am-img-thumbnail am-circle am-fl" />
+                        <div class="am-fr right-content">
+                            <div class="comments-reply-base am-nbfc">
+                                <span class="username">{{$v.user.user_name_view}}</span>
+                                <span class="am-color-grey am-margin-left-sm">{{$v.add_time}}</span>
+                                <div class="am-fr right-content-operate">
+                                    {{if isset($plugins_config['is_ask_comments_add']) and $plugins_config['is_ask_comments_add'] eq 1}}
+                                        <a href="javascript:;" class="am-color-grey-dark {{if empty($user)}}login-event{{else /}} comments-submit{{/if}}" data-ask-id="{{$v.ask_id}}" data-ask-comments-id="{{$comments.id}}" data-reply-comments-id="{{$v.id}}" data-value="{{$v.comments_count}}" data-text="回复">
+                                            <i class="iconfont icon-recover"></i>
+                                            回复(<font>{{$v.comments_count}}</font>)
+                                        </a>
+                                    {{/if}}
+                                    {{if isset($plugins_config['is_ask_give_thumbs']) and $plugins_config['is_ask_give_thumbs'] eq 1}}
+                                        <a href="javascript:;" class="am-color-grey-dark am-fr {{if empty($user)}}login-event{{else /}} give-thumbs-submit{{/if}} {{if isset($v['is_give_thumbs']) and $v['is_give_thumbs'] eq 1}} am-active{{/if}}" data-ask-id="{{$v.ask_id}}" data-ask-comments-id="{{$comments.id}}" data-reply-comments-id="{{$v.id}}" data-text="点赞"> 
+                                            <i class="iconfont {{if isset($v['is_give_thumbs']) and $v['is_give_thumbs'] eq 1}}icon-a-givealike-tap-review{{else/}}icon-a-givealike-review{{/if}}"></i>
+                                            点赞(<font>{{$v.give_thumbs_count}}</font>)
+                                        </a>
+                                    {{/if}}
+                                </div>
+                            </div>
+                            {{if !empty($v.reply_comments_text)}}
+                                <div class="am-alert am-radius reply-comments-text">{{$v.reply_comments_text}}</div>
+                            {{/if}}
+                            <p class="am-margin-top-xs reply-content">{{$v.content}}</p>
+                            <div class="am-ask-comments-input am-panel-collapse am-collapse"></div>
+                        </div>
+                    </div>
+                {{/foreach}}
+            {{/if}}
+        </div>
+        {{if !empty($comments['comments_list']) and $comments['comments_count'] gt count($comments['comments_list'])}}
+            <p class="am-margin-top-sm am-text-xs">
+                <a href="javascript:;" class="view-comments-reply-submit am-color-grey" data-ask-id="{{$comments.ask_id}}" data-ask-comments-id="{{$comments.id}}" data-value="{{$comments.comments_count}}" data-text="查看更多回复">
+                    <span>查看全部</span>
+                    <span class="num">{{$comments.comments_count}}</span>
+                    <span>条回复</span>
+                    <i class="am-icon-angle-down"></i>
+                </a>
+            </p>
+        {{/if}}
+    </div>
+</li>

@@ -1,0 +1,81 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'backgroundad',
+            'nav_data'  => $plugins_nav_menu_list,
+        ])}}
+
+        <div class="backgroundad-content">
+            <!-- 基础配置 -->
+            <div class="am-panel am-radius am-panel-default backgroundad-content-base">
+                <div class="am-panel-hd">
+                    <span class="am-panel-title">{{:MyLang('base_config_title')}}</span>
+                    <a class="am-margin-left-lg" href="{{:PluginsAdminUrl('backgroundad', 'admin', 'saveinfo')}}">
+                        <i class="am-icon-edit"></i>
+                        <span>{{:MyLang('edit_title')}}</span>
+                    </a>
+                </div>
+                <div class="am-panel-bd">
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>背景图片</label>
+                                <div>
+                                    {{if empty($data['bg_images'])}}
+                                        {{:MyLang('no_setup_tips')}} 
+                                    {{else /}}
+                                        <img src="{{$data.bg_images}}" height="40" />
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>顶部点击链接地址</label>
+                                <div>
+                                    {{if empty($data['top_url'])}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{else /}}
+                                        <a href="{{$data.top_url}}" target="_blank">{{$data.top_url}}</a>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>是否新窗口打开</label>
+                                <div>
+                                    {{if isset($data['is_new_window_open']) and $data['is_new_window_open'] eq 1}}
+                                        {{:MyLang('yes_title')}}
+                                    {{else /}}
+                                        {{:MyLang('no_title')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启广告</label>
+                                <div>
+                                    {{if isset($data['is_open']) and $data['is_open'] eq 1}}
+                                        {{:MyLang('yes_title')}}
+                                    {{else /}}
+                                        {{:MyLang('no_title')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

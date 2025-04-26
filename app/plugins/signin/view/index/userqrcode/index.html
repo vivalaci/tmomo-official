@@ -1,0 +1,17 @@
+<!-- 继承公共的 form -->
+{{extend name="../../../module/view/form_table/user_form" /}}
+
+<!-- 导航 -->
+{{block name="form_content_top"}}
+    {{:ModuleInclude('../../../plugins/signin/view/index/public/nav')}}
+{{/block}}
+
+<!-- 表单顶部操作栏 -->
+{{block name="form_operate_top"}}
+    {{if empty($data_list) and isset($plugins_config['is_team']) and $plugins_config['is_team'] eq 1}}
+        <!-- 组队功能，用户仅在没有数据的情况下可以自行组队 -->
+        <a href="{{:PluginsHomeUrl('signin', 'userqrcode', 'saveinfo')}}" class="am-btn am-btn-secondary am-radius am-btn-xs am-icon-users"> 组队</a>
+    {{/if}}
+    <!-- 父级内容 -->
+    {__block__}
+{{/block}}

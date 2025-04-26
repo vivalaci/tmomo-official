@@ -1,0 +1,91 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- header top nav -->
+{{:ModuleInclude('public/header_top_nav')}}
+
+<!-- header simple nav -->
+{{:ModuleInclude('public/header_nav_simple', [
+    'search' => 1,
+])}}
+
+<!-- content -->
+<div class="am-container user-main">
+
+    <!-- user menu start -->
+    {{:ModuleInclude('public/user_menu')}}
+    <!-- user menu end -->
+
+    <!-- content start -->
+    <div class="user-content">
+        <div class="user-content-body">
+            <!-- user center title -->
+            {{:ModuleInclude('public/user_center_main_title')}}
+            
+            {{:ModuleInclude('../../../plugins/distribution/view/index/public/nav')}}
+
+            {{if !empty($plugins_config['user_center_level_desc'])}}
+                <!-- 等级说明 -->
+                <div class="am-alert level-desc">
+                    {{:implode('<br />', $plugins_config['user_center_level_desc'])}}
+                </div>
+            {{/if}}
+
+            {{if (!isset($plugins_config['is_show_introduce']) or $plugins_config['is_show_introduce'] eq 1) and !empty($level_list)}}
+                <!-- 等级列表 -->
+                <div class="level-table">
+                    <table class="am-table am-table-bordered am-table-centered am-margin-top-sm">
+                        <tr>
+                            <th>等级证书</th>
+                            <th>返佣比例</th>
+                            <th>等级规则</th>
+                        </tr>
+                        {{foreach $level_list as $v}}
+                            {{if $v['is_enable'] eq 1}}
+                                <tr>
+                                    <td class="am-text-middle">
+                                        <div class="certificate am-text-center am-inline-block am-padding-sm am-radius">
+                                            <img src="{{$v.images_url}}" alt="{{$v.name}}" width="35" />
+                                            <p class="name">{{$v.name}}</p>
+                                        </div>
+                                    </td>
+                                    <td class="commission am-text-middle">
+                                        <span class="am-badge am-badge-primary am-radius am-margin-bottom-xs">一级 {{$v.level_rate_one}}%</span>
+                                        {{if !isset($plugins_config['level']) or $plugins_config['level'] gt 0}}
+                                            <br /><span class="am-badge am-badge-secondary am-radius am-margin-bottom-xs">二级 {{$v.level_rate_two}}%</span>
+                                        {{/if}}
+                                        {{if !isset($plugins_config['level']) or $plugins_config['level'] gt 1}}
+                                            <br /><span class="am-badge am-badge-success am-radius am-margin-bottom-xs">三级 {{$v.level_rate_three}}%</span>
+                                        {{/if}}
+                                    </td>
+                                    <td class="am-text-middle am-text-left">
+                                        {{if !empty($v['rules_msg_list'])}}
+                                            <p>{{$v.rules_msg_list.name}}</p>
+                                            <div class="am-padding-left-lg">
+                                                {{if !empty($v['rules_msg_list']['data']) and is_array($v['rules_msg_list']['data'])}}
+                                                    {{foreach $v.rules_msg_list.data as $rv}}
+                                                        <p>
+                                                            <span>{{$rv.name}}</span>
+                                                            <strong class="am-fr">{{$rv.value}}</strong>
+                                                        </p>
+                                                    {{/foreach}}
+                                                {{else /}}
+                                                    <p class="am-text-grey">无条件</p>
+                                                {{/if}}
+                                            </div>
+                                        {{/if}}
+                                    </td>
+                                </tr>
+                            {{/if}}
+                        {{/foreach}}
+                    </table>
+                </div>
+            {{else /}}
+                <div class="table-no"><i class="am-icon-warning"></i> 没有相关数据</div>
+            {{/if}}
+        </div>
+    </div>
+    <!-- content end -->
+</div>
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

@@ -1,0 +1,473 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'ask',
+            'nav_data'  => $plugins_nav_menu_list,
+        ])}}
+
+        <div class="ask-content">
+            <!-- 操作提示 -->
+            <div class="am-operate-stretch-tips">
+                <div class="title">
+                    <i class="iconfont icon-tips"></i>
+                    <strong title="{{:MyLang('operate_list_tips_msg')}}">{{:MyLang('operate_list_tips_button_text')}}</strong>
+                    <i class="iconfont icon-contract contract" title="{{:MyLang('operate_list_tips_retract_text')}}"></i> 
+                </div>
+                <p>可以在【消息通知】插件中配置问答审核、评论、回复通知</p>
+            </div>
+
+            <!-- 基础配置 -->
+            <div class="am-panel am-panel-default am-radius ask-content-base">
+                <div class="am-panel-hd">
+                    <span class="am-panel-title">{{:MyLang('base_config_title')}}</span>
+                    <a class="am-margin-left-lg" href="{{:PluginsAdminUrl('ask', 'admin', 'saveinfo')}}">
+                        <i class="am-icon-edit"></i>
+                        <span>{{:MyLang('edit_title')}}</span>
+                    </a>
+                </div>
+                <div class="am-panel-bd">
+                    <!-- 基础配置 -->
+                    <h2 class="am-margin-top-sm">{{:MyLang('base_config_title')}}</h2>
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('admin.form_item_application_name')}}</label>
+                                <div>
+                                    {{if empty($data['application_name'])}}
+                                        {{:MyLang('no_setup_tips')}}应用导航名称
+                                    {{else /}}
+                                        {{$data.application_name}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('admin.form_item_is_user_menu')}}</label>
+                                <div>
+                                    {{if isset($data['is_user_menu']) and $data['is_user_menu'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('admin.form_item_user_center_left_name')}}</label>
+                                <div>
+                                    {{if empty($data['user_center_left_name'])}}
+                                        {{:MyLang('no_setup_tips')}}用户中心菜单名称
+                                    {{else /}}
+                                        {{$data.user_center_left_name}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('admin.form_item_right_top_rec_name')}}</label>
+                                <div>
+                                    {{if empty($data['right_top_rec_name'])}}
+                                        {{:MyLang('no_setup_tips')}} 
+                                    {{else /}}
+                                        {{$data.right_top_rec_name}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('admin.form_item_middle_new_name')}}</label>
+                                <div>
+                                    {{if empty($data['middle_new_name'])}}
+                                        {{:MyLang('no_setup_tips')}} 
+                                    {{else /}}
+                                        {{$data.middle_new_name}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('admin.form_item_middle_new_page_number')}}</label>
+                                <div>
+                                    {{if empty($data['middle_new_page_number'])}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 20 ]
+                                    {{else /}}
+                                        {{$data.middle_new_page_number}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('admin.form_item_hot_name')}}</label>
+                                <div>
+                                    {{if empty($data['hot_name'])}}
+                                        {{:MyLang('no_setup_tips')}} 
+                                    {{else /}}
+                                        {{$data.hot_name}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('admin.form_item_hot_page_number')}}</label>
+                                <div>
+                                    {{if empty($data['hot_page_number'])}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 10 ]
+                                    {{else /}}
+                                        {{$data.hot_page_number}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('admin.form_item_right_top_goods_name')}}</label>
+                                <div>
+                                    {{if empty($data['right_top_goods_name'])}}
+                                        {{:MyLang('no_setup_tips')}} 
+                                    {{else /}}
+                                        {{$data.right_top_goods_name}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('admin.form_item_search_page_number')}}</label>
+                                <div>
+                                    {{if empty($data['search_page_number'])}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 30 ]
+                                    {{else /}}
+                                        {{$data.search_page_number}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('admin.form_item_header_logo')}}</label>
+                                <div class="immages-tag">
+                                    {{if empty($data['header_logo'])}}
+                                        <span class="am-text-grey">{{:MyLang('no_setup_tips')}}</span>
+                                    {{else /}}
+                                        <img src="{{$data.header_logo}}" />
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('admin.form_item_header_bg')}}</label>
+                                <div class="immages-tag">
+                                    {{if empty($data['header_bg'])}}
+                                        <span class="am-text-grey">{{:MyLang('no_setup_tips')}}</span>
+                                    {{else /}}
+                                        <img src="{{$data.header_bg}}" />
+                                    {{/if}}
+                                    {{if isset($data['header_bg_vague']) and $data['header_bg_vague'] neq ''}}
+                                        <span class="am-badge am-badge-success am-radius am-margin-left-sm">{{:MyLang('admin.form_item_header_bg_vague')}}（{{$data.header_bg_vague}}rem）</span>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <!-- 用户发布问答 -->
+                    <h2 class="am-margin-top-sm">用户发布问答</h2>
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启用户发布问答</label>
+                                <div>
+                                    {{if isset($data['is_user_add_ask']) and $data['is_user_add_ask'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                    {{if isset($data['is_user_add_ask_audit']) and $data['is_user_add_ask_audit'] eq 1}}
+                                        <span class="am-badge am-badge-success am-radius am-margin-left-xs">需要审核</span>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>商品详情页展示问答和发布问答入口</label>
+                                <div>
+                                    {{if isset($data['is_goods_user_add_ask']) and $data['is_goods_user_add_ask'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>发布问答展示邮箱通知</label>
+                                <div>
+                                    {{if isset($data['is_show_email_notice']) and $data['is_show_email_notice'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>发布问答展示手机通知</label>
+                                <div>
+                                    {{if isset($data['is_show_mobile_notice']) and $data['is_show_mobile_notice'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <!-- 评论配置 -->
+                    <h2 class="am-margin-top-sm">评论配置</h2>
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启点赞</label>
+                                <div>
+                                    {{if isset($data['is_ask_give_thumbs']) and $data['is_ask_give_thumbs'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启评论展示</label>
+                                <div>
+                                    {{if isset($data['is_ask_comments_show']) and $data['is_ask_comments_show'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启评论添加</label>
+                                <div>
+                                    {{if isset($data['is_ask_comments_add']) and $data['is_ask_comments_add'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                    {{if isset($data['is_ask_comments_add_audit']) and $data['is_ask_comments_add_audit'] eq 1}}
+                                        <span class="am-badge am-badge-success am-radius am-margin-left-xs">需要审核</span>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>详情默认展示评论条数</label>
+                                <div>
+                                    {{if empty($data['ask_detail_comments_number'])}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 3 ]
+                                    {{else /}}
+                                        {{:MyLang('already_setup_tips')}}[ {{$data.ask_detail_comments_number}} ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>查看更多评论每页条数</label>
+                                <div>
+                                    {{if empty($data['ask_detail_comments_more_page_number'])}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 20 ]
+                                    {{else /}}
+                                        {{:MyLang('already_setup_tips')}}[ {{$data.ask_detail_comments_more_page_number}} ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>评论展示回复条数</label>
+                                <div>
+                                    {{if empty($data['ask_detail_comments_reply_number'])}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 3 ]
+                                    {{else /}}
+                                        {{:MyLang('already_setup_tips')}}[ {{$data.ask_detail_comments_reply_number}} ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>查看更多评论回复每页条数</label>
+                                <div>
+                                    {{if empty($data['ask_detail_comments_more_page_reply_number'])}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 20 ]
+                                    {{else /}}
+                                        {{:MyLang('already_setup_tips')}}[ {{$data.ask_detail_comments_more_page_reply_number}} ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <!-- 奖励积分配置 -->
+                    <h2 class="am-margin-top-sm">奖励积分配置</h2>
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>发布问答奖励积分</label>
+                                <div>
+                                    {{if isset($data['is_ask_add_give_integral']) and $data['is_ask_add_give_integral'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>发布问答单次奖励积分数量</label>
+                                <div>
+                                    {{if empty($data['ask_add_give_integral_value'])}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 不奖励 ]
+                                    {{else /}}
+                                        {{:MyLang('already_setup_tips')}}[ {{$data.ask_add_give_integral_value}} ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>发布问答当日限奖励积分数量</label>
+                                <div>
+                                    {{if empty($data['ask_add_day_limit_give_integral_value'])}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 不限制 ]
+                                    {{else /}}
+                                        {{:MyLang('already_setup_tips')}}[ {{$data.ask_add_day_limit_give_integral_value}} ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>问答评论奖励积分</label>
+                                <div>
+                                    {{if isset($data['is_ask_comments_give_integral']) and $data['is_ask_comments_give_integral'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>问答评论单次奖励积分数量</label>
+                                <div>
+                                    {{if empty($data['ask_comments_give_integral_value'])}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 不奖励 ]
+                                    {{else /}}
+                                        {{:MyLang('already_setup_tips')}}[ {{$data.ask_comments_give_integral_value}} ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>问答评论当日限奖励积分数量</label>
+                                <div>
+                                    {{if empty($data['ask_comments_day_limit_give_integral_value'])}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 不限制 ]
+                                    {{else /}}
+                                        {{:MyLang('already_setup_tips')}}[ {{$data.ask_comments_day_limit_give_integral_value}} ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>点赞奖励积分</label>
+                                <div>
+                                    {{if isset($data['is_give_thumbs_give_integral']) and $data['is_give_thumbs_give_integral'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>点赞单次奖励积分数量</label>
+                                <div>
+                                    {{if empty($data['give_thumbs_give_integral_value'])}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 不奖励 ]
+                                    {{else /}}
+                                        {{:MyLang('already_setup_tips')}}[ {{$data.give_thumbs_give_integral_value}} ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>点赞当日限奖励积分数量</label>
+                                <div>
+                                    {{if empty($data['give_thumbs_day_limit_give_integral_value'])}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 不限制 ]
+                                    {{else /}}
+                                        {{:MyLang('already_setup_tips')}}[ {{$data.give_thumbs_day_limit_give_integral_value}} ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <!-- SEO信息 -->
+                    <h2 class="am-margin-top-sm">{{:MyLang('form_seo_data_title')}}</h2>
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('form_seo_title_title')}}</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if empty($data['seo_title'])}}
+                                        {{:MyLang('no_setup_tips')}}SEO标题
+                                    {{else /}}
+                                        {{$data.seo_title}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('form_seo_keywords_title')}}</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if empty($data['seo_keywords'])}}
+                                        {{:MyLang('no_setup_tips')}}SEO关键字
+                                    {{else /}}
+                                        {{$data.seo_keywords}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('form_seo_desc_title')}}</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if empty($data['seo_desc'])}}
+                                        {{:MyLang('no_setup_tips')}}SEO描述
+                                    {{else /}}
+                                        {{$data.seo_desc}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 推荐问答 -->
+            <div class="am-panel am-panel-default am-radius ask-recommend-list">
+                <div class="am-panel-hd">
+                    <span class="am-panel-title">{{:MyLang('admin.form_item_recommend')}}</span>
+                    <a class="am-margin-left-lg" href="{{:PluginsAdminUrl('ask', 'admin', 'saveinfo')}}">
+                        <i class="am-icon-edit"></i>
+                        <span>{{:MyLang('edit_title')}}</span>
+                    </a>
+                </div>
+                <div class="am-panel-bd">
+                    {{if !empty($recommend_ask)}}
+                        <ul class="am-list am-margin-0">
+                            {{foreach $recommend_ask as $v}}
+                                <li><a href="{{$v.url}}" target="_blank">{{$v.title}}</a></li>
+                            {{/foreach}}
+                        </ul>
+                    {{else /}}
+                        {{:ModuleInclude('public/not_data')}}
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

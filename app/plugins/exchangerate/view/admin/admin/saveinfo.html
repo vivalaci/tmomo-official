@@ -1,0 +1,108 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'exchangerate',
+            'title'     => MyLang('base_config_title'),
+            'back_url'  => PluginsAdminUrl('exchangerate', 'admin', 'index'),
+        ])}}
+
+        <!-- form start -->
+        <form class="am-form form-validation am-form-full-screen am-form-popup-sticky" action="{{:PluginsAdminUrl('exchangerate', 'admin', 'save')}}" method="POST" request-type="ajax-url" request-value="{{:PluginsAdminUrl('exchangerate', 'admin', 'index')}}" enctype="multipart/form-data">
+            <div class="am-form-group">
+                <label class="am-block">手机端快捷导航<span class="am-form-group-label-tips">开启后用户可切换货币</span></label>
+                <input name="is_user_quick_select" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_user_quick_select']) and $data['is_user_quick_select'] eq 1}}checked="true"{{/if}} />
+            </div>
+
+            <div class="am-form-group">
+                <label class="am-block">web端顶部小导航右侧<span class="am-form-group-label-tips">开启后用户可切换货币</span></label>
+                <input name="is_user_header_top_right_select" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_user_header_top_right_select']) and $data['is_user_header_top_right_select'] eq 1}}checked="true"{{/if}} />
+            </div>
+
+            <div class="am-form-group">
+                <label class="am-block">商品金额转换<span class="am-form-group-label-tips">默认否</span></label>
+                <input name="is_goods_to_rate" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_goods_to_rate']) and $data['is_goods_to_rate'] eq 1}}checked="true"{{/if}} />
+            </div>
+            <div class="am-form-group">
+                <label class="am-block">商品原始金额转换<span class="am-form-group-label-tips">默认否</span><span class="am-form-group-label-tips-must">需要先开启商品金额转换、建议开启</span></label>
+                <input name="is_goods_od_to_rate" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_goods_od_to_rate']) and $data['is_goods_od_to_rate'] eq 1}}checked="true"{{/if}} />
+            </div>
+
+            <div class="am-form-group">
+                <label class="am-block">仅使用默认货币下单<span class="am-form-group-label-tips">默认否</span></label>
+                <div class="am-margin-top-sm">
+                    <input name="is_use_default_currency_buy" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_use_default_currency_buy']) and $data['is_use_default_currency_buy'] eq 1}}checked="true"{{/if}} />
+                    <label class="am-checkbox-inline am-margin-left-lg">
+                        <input type="checkbox" name="is_only_buy_order_use_currency" value="1" data-am-ucheck {{if isset($data['is_only_buy_order_use_currency']) and $data['is_only_buy_order_use_currency'] eq 1}}checked{{/if}} /> 仅订单使用货币
+                    </label>
+                </div>
+                <div class="am-alert">
+                    <p>1. 开启【仅使用默认货币下单】后下单页面用户选择的货币将失效，但是【支付方式默认货币】的配置不受影响</p>
+                    <p>2. 如需要取消【支付方式默认货币】则需要勾选【仅订单使用货币】</p>
+                    <p>3. 开启【仅订单使用货币】则仅处理订单总价为货币价格、需要先开启【仅使用默认货币下单】</p>
+                </div>
+            </div>
+
+            <div class="am-form-group">
+                <label class="am-block">支付方式默认货币<span class="am-form-group-label-tips-must">优先级高于用户选择</span></label>
+                <div class="group-currency-list">
+                    {{if !empty($payment_list)}}
+                        {{foreach $payment_list as $v}}
+                            <div class="am-input-group am-input-group-sm am-margin-bottom-xs">
+                                <span class="am-input-group-label">{{$v.name}}</span>
+                                <select name="payment_currency_data[{{$v.id}}]" class="am-radius chosen-select" data-placeholder="{{:MyLang('please_select_tips')}}" data-validation-message="请选择支付默认方式货币">
+                                    <option value="">{{:MyLang('please_select_tips')}}</option>
+                                    {{if !empty($currency_list)}}
+                                        {{foreach $currency_list as $ck=>$cv}}
+                                            <option value="{{$ck}}" {{if !empty($data['payment_currency_data']) and isset($data['payment_currency_data'][$v['id']]) and $data['payment_currency_data'][$v['id']] eq $ck}}selected{{/if}}>{{$cv}}</option>
+                                        {{/foreach}}
+                                    {{/if}}
+                                </select>
+                            </div>
+                        {{/foreach}}
+                    {{/if}}
+                </div>
+            </div>
+
+            <div class="am-form-group">
+                <label class="am-block">跟随语言自动识别<span class="am-form-group-label-tips-must">优先级低于用户选择</span></label>
+                <div class="group-currency-list">
+                    {{if !empty($multilingual_list)}}
+                        {{foreach $multilingual_list as $k=>$v}}
+                            <div class="am-input-group am-input-group-sm am-margin-bottom-xs">
+                                <span class="am-input-group-label">{{$v}}</span>
+                                <select name="multilingual_currency_data[{{$k}}]" class="am-radius chosen-select" data-placeholder="{{:MyLang('please_select_tips')}}" data-validation-message="请选择跟随语言自动识别货币">
+                                    <option value="">{{:MyLang('please_select_tips')}}</option>
+                                    {{if !empty($currency_list)}}
+                                        {{foreach $currency_list as $ck=>$cv}}
+                                            <option value="{{$ck}}" {{if !empty($data['multilingual_currency_data']) and isset($data['multilingual_currency_data'][$k]) and $data['multilingual_currency_data'][$k] eq $ck}}selected{{/if}}>{{$cv}}</option>
+                                        {{/foreach}}
+                                    {{/if}}
+                                </select>
+                            </div>
+                        {{/foreach}}
+                    {{/if}}
+                </div>
+            </div>
+
+            <div class="am-form-popup-submit">
+                <a href="{{:PluginsAdminUrl('exchangerate', 'admin', 'index', $params)}}" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg">
+                    <i class="am-icon-mail-reply"></i>
+                    <span>{{:MyLang('retreat_title')}}</span>
+                </a>
+                <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('save_title')}}'}">
+                    <i class="am-icon-save"></i>
+                    <span>{{:MyLang('save_title')}}</span>
+                </button>
+            </div>
+        </form>
+        <!-- form end -->
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

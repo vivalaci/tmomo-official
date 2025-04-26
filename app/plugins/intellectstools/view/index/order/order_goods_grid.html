@@ -1,0 +1,12 @@
+{{if !empty($plugins_note_data) and !empty($plugins_note_data['content']) and !empty($plugins_order_data)}}
+    <div class="am-alert am-alert-warning am-margin-bottom-0">
+        {{foreach $plugins_note_data.content as $v}}
+            <p>{{$v}}</p>
+        {{/foreach}}
+        {{if isset($plugins_config['is_order_note']) and $plugins_config['is_order_note'] eq 1}}
+            <p class="am-text-right">
+                <a href="javascript:;" class="am-icon-edit submit-popup" data-url="{{:PluginsHomeUrl('intellectstools', 'order', 'noteinfo', ['id'=>$plugins_order_data['id']])}}" data-title="{{:MyLang('note_title')}}"></a>
+            </p>
+        {{/if}}
+    </div>
+{{/if}}

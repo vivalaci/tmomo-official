@@ -1,0 +1,43 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- header top nav -->
+{{:ModuleInclude('public/header_top_nav')}}
+
+<!-- search -->
+{{:ModuleInclude('public/nav_search')}}
+
+<!-- header nav -->
+{{:ModuleInclude('public/header_nav')}}
+
+<!-- goods category -->
+{{:ModuleInclude('public/goods_category')}}
+
+<!-- content start -->
+{{if !empty($data['banner'])}}
+    <div class="detail-base-img" {{if !empty($data['color'])}}style="background: {{$data.color}};"{{/if}}>
+        <img src="{{$data.banner}}" alt="{{$data.title}}" class="am-width" />
+    </div>
+{{/if}}
+<div class="am-container plugins-activity">
+    <!-- 关联商品 -->
+    {{if !empty($data['goods_list'])}}
+        <div class="goods-list am-margin-top-module">
+            {{:ModuleInclude('module/goods/grid/base', [
+                'goods_list'         => $data['goods_list'],
+                'type'               => 'detail',
+                'value_type'         => '1',
+                'button_text'        => '抢购中',
+                'is_disabled'        => 'false',
+                'price_key'          => 'min_price',
+                'original_price_key' => 'min_original_price',
+                
+            ])}}
+        </div>
+    {{else /}}
+        {{:ModuleInclude('public/not_data')}}
+    {{/if}}
+</div>
+<!-- content end -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

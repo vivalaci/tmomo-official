@@ -1,0 +1,6 @@
+<!-- 规格 -->
+{{if !empty($module_data) and !empty($module_data['spec'])}}
+    {{foreach $module_data.spec as $spec}}
+        <p>{{$spec.type}}：{{$spec.value}}</p>
+    {{/foreach}}
+{{/if}}

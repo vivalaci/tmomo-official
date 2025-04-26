@@ -1,0 +1,84 @@
+<!-- 继承公共的 form -->
+{{extend name="../../../module/view/form_table/detail" /}}
+
+<!-- 重写数据模块 -->
+{{block name="detail_data"}}
+    {{:ModuleInclude('public/detail_nav_switch_tabs', [
+        'nav_data' => [
+            [
+                'name' => MyLang('form_base_data_title'),
+                'key'  => 'base',
+            ],
+            [
+                'name' => '周期费用配置',
+                'key'  => 'period-rules',
+            ],
+        ]
+    ])}}
+    <div class="detail-content-switch-data-item">
+        <!-- 父级内容 -->
+        <div class="item am-active" data-key="base">
+            {__block__}
+        </div>
+
+        <!-- 周期费用配置 -->
+        <div class="item" data-key="period-rules">
+            {{if empty($data['pay_period_rules'])}}
+                {{:ModuleInclude('public/not_data')}}
+            {{else /}}
+                <ul class="am-list am-list-static am-list-border am-list-striped pay-period-container am-margin-bottom-0">
+                    {{foreach $data.pay_period_rules as $period}}
+                        <li>
+                            <span>周期</span>
+                            {{if empty($period['number'])}}
+                                <span>终身</span>
+                            {{else /}}
+                                <span>{{$period.number}}</span>
+                                <span>{{:MyLang('day_title')}}</span>
+                                <span>（{{$period.value}}{{$period.unit}}）</span>
+                            {{/if}}
+                            <span class="am-margin-left-xl">费用</span>
+                            <span>{{$period.price}}</span>
+                            {{if isset($period['is_cashback']) and $period['is_cashback'] eq 1}}
+                                <span>返现</span>
+                            {{else /}}
+                                <span class="am-text-grey">不返现</span>
+                            {{/if}}
+                            {{if isset($period['is_points']) and $period['is_points'] eq 1}}
+                                <span>返积分</span>
+                            {{else /}}
+                                <span class="am-text-grey">不返积分</span>
+                            {{/if}}
+                            {{if empty($period['give_coupon'])}}
+                                <span class="am-text-grey">不赠送优惠券</span>
+                            {{else /}}
+                                <div class="am-dropdown" data-am-dropdown>
+                                    <a href="javascript:;" class="am-dropdown-toggle">赠送优惠券({{:count($period['give_coupon'])}}张) <i class="am-icon-caret-down"></i></a>
+                                    <div class="am-dropdown-content am-radius am-padding-sm">
+                                        <ul>
+                                            {{foreach $period.give_coupon as $cv}}
+                                                <li class="am-padding-vertical-xs">{{$cv.name}} ({{$cv.number}}张)</li>
+                                            {{/foreach}}
+                                        </ul>
+                                    </div>
+                                </div>
+                            {{/if}}
+                            <span class="am-margin-left-xl">返佣</span>
+                            {{if empty($period['commission'])}}
+                                <span class="am-text-grey">不返佣</span>
+                            {{else /}}
+                                <span>{{$period.commission}}</span>
+                            {{/if}}
+                            <span class="am-margin-left-xl">描述</span>
+                            {{if empty($period['desc'])}}
+                                <span class="am-text-grey">未配置</span>
+                            {{else /}}
+                                <span>{{$period.desc}}</span>
+                            {{/if}}
+                        </li>
+                    {{/foreach}}
+                </ul>
+            {{/if}}
+        </div>
+    </div>
+{{/block}}

@@ -1,0 +1,146 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content distribution-content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'distribution',
+            'nav_data'  => $plugins_nav_menu_list,
+        ])}}
+
+        <!-- form start -->
+        <form class="am-form form-validation am-form-full-screen am-form-popup-sticky" action="{{:PluginsAdminUrl('distribution', 'postergoods', 'save')}}" method="POST" request-type="ajax-url" request-value="{{:PluginsAdminUrl('distribution', 'postergoods', 'index')}}">
+            <div class="am-alert" data-am-alert>
+                <p>修改后如需生效，请清除用户已生成的海报<button type="button" class="am-btn am-btn-danger am-radius am-btn-xs am-margin-left-xs submit-ajax" data-url="{{:PluginsAdminUrl('distribution', 'postergoods', 'delete')}}" data-id="1">清除海报</button></p>
+            </div>
+
+            <div class="am-cf">
+                <!-- 左侧海报 -->
+                <div class="postergoods-images am-fl am-margin-bottom-sm">
+                    <img src="{{:StaticAttachmentUrl('goods-backdrop.jpg')}}" class="backdrop" />
+     
+                    <p class="text goods-title"
+                    style="{{if !empty($data['goods_title_text_color'])}}color:{{$data.goods_title_text_color}};{{/if}}">商品名称</p>
+
+                    <p class="text goods-simple-desc"
+                    style="color:{{if empty($data['goods_simple_text_color'])}}#a9a9a9{{else /}}{{$data.goods_simple_text_color}}{{/if}};">商品简述</p>
+
+                    <p class="text price-text"
+                    style="{{if !empty($data['price_custom_text']) and !empty($data['price_custom_text_color'])}}color:{{$data.price_custom_text_color}};{{/if}}">
+                        {{if empty($data['price_custom_text'])}}<span>销售价：<span class="am-text-danger">￥0.00</span></span><br /><span class="am-text-grey">原价：0.00</span>{{else /}}{{$data.price_custom_text}}{{/if}}
+                    </p>
+
+                    <p class="text bottom-left am-text-center"
+                    style="{{if !empty($data['bottom_left_text_color'])}}color:{{$data.bottom_left_text_color}};{{/if}}">长按识别或保存到相册</p>
+
+                    <p class="text bottom-right am-text-center"
+                    style="{{if !empty($data['bottom_right_text_color'])}}color:{{$data.bottom_right_text_color}};{{/if}}">扫码购买</p>
+                </div>
+
+                <!-- 右侧表单 -->
+                <div class="postergoods-right am-fr">
+                    <div class="am-panel am-panel-default am-radius">
+                        <div class="am-panel-bd am-cf">
+                            <div class="am-u-sm-6 am-padding-horizontal-0">
+                                <div class="am-form-group">
+                                    <label>商品标题颜色<span class="am-form-group-label-tips">默认 黑色</span></label>
+                                    <div class="colorpicker-container">
+                                        <input type="hidden" name="goods_title_text_color" value="{{if !empty($data['goods_title_text_color'])}}{{$data.goods_title_text_color}}{{/if}}" />
+                                        <div class="colorpicker-submit" data-color="{{if !empty($data['goods_title_text_color'])}}{{$data.goods_title_text_color}}{{/if}}" data-color-tag="input[name='goods_title_text_color']" data-color-style="background-color"></div>
+                                        <img class="imitate-colorpicker-submit" src="{{:StaticAttachmentUrl('colorpicker.png')}}" width="24" height="24" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="am-u-sm-6 am-padding-horizontal-0">
+                                <div class="am-form-group">
+                                    <label>商品简述颜色<span class="am-form-group-label-tips">默认 灰色</span></label>
+                                    <div class="colorpicker-container">
+                                        <input type="hidden" name="goods_simple_text_color" value="{{if !empty($data['goods_simple_text_color'])}}{{$data.goods_simple_text_color}}{{/if}}" />
+                                        <div class="colorpicker-submit" data-color="{{if !empty($data['goods_simple_text_color'])}}{{$data.goods_simple_text_color}}{{/if}}" data-color-tag="input[name='goods_simple_text_color']" data-color-style="background-color"></div>
+                                        <img class="imitate-colorpicker-submit" src="{{:StaticAttachmentUrl('colorpicker.png')}}" width="24" height="24" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="am-panel am-panel-default am-radius">
+                        <div class="am-panel-bd am-cf">
+                            <div class="am-u-sm-6 am-padding-horizontal-0">
+                                <div class="am-form-group">
+                                    <label>价格自定义信息<span class="am-form-group-label-tips">默认 空、则覆盖价格</span></label>
+                                    <input type="text" name="price_custom_text" placeholder="价格自定义信息" maxlength="30" data-validation-message="价格自定义信息不超过 30 个字符" class="am-radius" value="{{if !empty($data['price_custom_text'])}}{{$data.price_custom_text}}{{/if}}" />
+                                </div>
+                            </div>
+                            <div class="am-u-sm-6 am-padding-horizontal-0">
+                                <div class="am-form-group">
+                                    <label>价格自定义信息颜色<span class="am-form-group-label-tips">默认 黑色</span></label>
+                                    <div class="colorpicker-container">
+                                        <input type="hidden" name="price_custom_text_color" value="{{if !empty($data['price_custom_text_color'])}}{{$data.price_custom_text_color}}{{/if}}" />
+                                        <div class="colorpicker-submit" data-color="{{if !empty($data['price_custom_text_color'])}}{{$data.price_custom_text_color}}{{/if}}" data-color-tag="input[name='price_custom_text_color']" data-color-style="background-color"></div>
+                                        <img class="imitate-colorpicker-submit" src="{{:StaticAttachmentUrl('colorpicker.png')}}" width="24" height="24" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="am-panel am-panel-default am-radius">
+                        <div class="am-panel-bd am-cf">
+                            <div class="am-u-sm-6 am-padding-horizontal-0">
+                                <div class="am-form-group">
+                                    <label>底部左侧文本<span class="am-form-group-label-tips">默认 长按识别或保存到相册</span></label>
+                                    <input type="text" name="bottom_left_text" placeholder="底部左侧文本" maxlength="10" data-validation-message="底部左侧文本不超过 10 个字符" class="am-radius" value="{{if !empty($data['bottom_left_text'])}}{{$data.bottom_left_text}}{{else /}}长按识别或保存到相册{{/if}}" />
+                                </div>
+                            </div>
+                            <div class="am-u-sm-6 am-padding-horizontal-0">
+                                <div class="am-form-group">
+                                    <label>底部左侧文本颜色<span class="am-form-group-label-tips">默认 黑色</span></label>
+                                    <div class="colorpicker-container">
+                                        <input type="hidden" name="bottom_left_text_color" value="{{if !empty($data['bottom_left_text_color'])}}{{$data.bottom_left_text_color}}{{/if}}" />
+                                        <div class="colorpicker-submit" data-color="{{if !empty($data['bottom_left_text_color'])}}{{$data.bottom_left_text_color}}{{/if}}" data-color-tag="input[name='bottom_left_text_color']" data-color-style="background-color"></div>
+                                        <img class="imitate-colorpicker-submit" src="{{:StaticAttachmentUrl('colorpicker.png')}}" width="24" height="24" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="am-panel am-panel-default am-radius">
+                        <div class="am-panel-bd am-cf">
+                            <div class="am-u-sm-6 am-padding-horizontal-0">
+                                <div class="am-form-group">
+                                    <label>底部右侧文本<span class="am-form-group-label-tips">默认 扫码购买</span></label>
+                                    <input type="text" name="bottom_right_text" placeholder="底部右侧文本" maxlength="6" data-validation-message="底部右侧文本不超过 6 个字符" class="am-radius" value="{{if !empty($data['bottom_right_text'])}}{{$data.bottom_right_text}}{{else /}}扫码购买{{/if}}" />
+                                </div>
+                            </div>
+                            <div class="am-u-sm-6 am-padding-horizontal-0">
+                                <div class="am-form-group">
+                                    <label>底部右侧文本颜色<span class="am-form-group-label-tips">默认 红色</span></label>
+                                    <div class="colorpicker-container">
+                                        <input type="hidden" name="bottom_right_text_color" value="{{if !empty($data['bottom_right_text_color'])}}{{$data.bottom_right_text_color}}{{/if}}" />
+                                        <div class="colorpicker-submit" data-color="{{if !empty($data['bottom_right_text_color'])}}{{$data.bottom_right_text_color}}{{/if}}" data-color-tag="input[name='bottom_right_text_color']" data-color-style="background-color"></div>
+                                        <img class="imitate-colorpicker-submit" src="{{:StaticAttachmentUrl('colorpicker.png')}}" width="24" height="24" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="am-form-popup-submit">
+                <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('save_title')}}'}">
+                    <i class="am-icon-save"></i>
+                    <span>{{:MyLang('save_title')}}</span>
+                </button>
+            </div>
+        </form>
+        <!-- form end -->
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

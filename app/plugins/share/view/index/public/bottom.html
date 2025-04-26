@@ -1,0 +1,77 @@
+<script type="text/javascript">
+    // 公共配置
+    var share_referrer = '{{$share_referrer}}';
+
+    // url、未配置则使用当前页面url地址
+    var share_url = '{{if !empty($data["url"])}}{{$data.url}}{{/if}}';
+        if((share_url || null) == null)
+        {
+            share_url = window.location.href;
+        }
+        // 分享标记
+        if((share_referrer || null) != null)
+        {
+            share_url = UrlFieldReplace('referrer', share_referrer, share_url);
+        }
+
+    // 标题、未配置则读取站点标题
+    var share_title = '{{if !empty($data["title"])}}{{$data.title}}{{/if}}';
+        if((share_title || null) == null)
+        {
+            share_title = document.title;
+        }
+
+    // 描述、未配置则读取站点seo描述
+    var share_desc = '{{if !empty($data["desc"])}}{{$data.desc}}{{/if}}';
+        if((share_desc || null) == null)
+        {
+            var meta = document.getElementsByTagName('meta');
+            for(i in meta)
+            {
+                if(typeof meta[i].name != 'undefined' && meta[i].name.toLowerCase() == 'description')
+                {
+                    share_desc = meta[i].content;
+                }
+            }
+        }
+
+    // 是否指定页面图片、默认封面图
+    var share_pic = '{{if !empty($custom_cover_pic)}}{{$custom_cover_pic}}{{else /}}{{if !empty($data["pic"])}}{{$data.pic}}{{/if}}{{/if}}';
+
+    // 微信配置
+    {{if !empty($package)}}
+        // 配置初始化
+        wx.config({
+            debug: false,
+            appId: '{{$package.appId}}',
+            timestamp: {{$package.timestamp}},
+            nonceStr: '{{$package.nonceStr}}',
+            signature: '{{$package.signature}}',
+            jsApiList: [
+                'updateAppMessageShareData',
+                'updateTimelineShareData'
+            ]
+        });
+
+        // 微信接口使用
+        wx.ready(function()
+        {
+            // 自定义“分享给朋友”及“分享到QQ”按钮的分享内容
+            wx.updateAppMessageShareData({
+                title: share_title,
+                desc: share_desc,
+                link: share_url,
+                imgUrl: share_pic,
+                success: function(){}
+            });
+
+            // 自定义“分享到朋友圈”及“分享到QQ空间”按钮的分享内容
+            wx.updateTimelineShareData({
+                title: share_title,
+                link: share_url,
+                imgUrl: share_pic,
+                success: function(){}
+            });
+        }); 
+    {{/if}}
+</script>

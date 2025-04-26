@@ -1,0 +1,131 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'weixinwebauthorization',
+            'title'     => '微信网页授权',
+        ])}}
+
+        <div class="weixinwebauthorization-content">
+            <!-- 操作提示 -->
+            <div class="am-operate-stretch-tips">
+                <div class="title">
+                    <i class="iconfont icon-tips"></i>
+                    <strong title="{{:MyLang('operate_list_tips_msg')}}">{{:MyLang('operate_list_tips_button_text')}}</strong>
+                    <i class="iconfont icon-contract contract" title="{{:MyLang('operate_list_tips_retract_text')}}"></i> 
+                </div>
+                <p>1. 该插件主要是配合在微信环境中、微信公众号支付获取openid使用。</p>
+                <p>2. 当用户发起支付的时候会调用当前插件获取用户openid并绑定当前用户。</p>
+                <p>3. 采用静默登录方式、如需要获取unionid请使用【第三方登录插件】</p>
+                <p>4. 也可以开启登录入口，让用户使用微信直接登录（<span class="am-text-danger">需要注意的是如果用户首次使用该功能进行登录且在当前没有帐号登录的情况下会创建新的帐号</span>）。</p>
+                <p>5. 优先1、调用支付之前可种session[ plugins_weixinwebauth_pay_callback_view_url ]回调url地址，网页授权成功后（<span class="am-text-danger">如存在session回调地址直接跳转至地址，则默认提示页面</span>）</p>
+                <p>6. 优先2、来源页面的地址[ plugins_weixinwebauth_pay_callback_view_url ]回调url地址，网页授权成功后（<span class="am-text-danger">如存在session回调地址直接跳转至地址，则默认提示页面</span>）</p>
+            </div>
+
+            <!-- 基础配置 -->
+            <div class="am-panel am-panel-default am-radius weixinwebauthorization-content-base">
+                <div class="am-panel-hd">
+                    <span class="am-panel-title">{{:MyLang('base_config_title')}}</span>
+                    <a class="am-margin-left-lg" href="{{:PluginsAdminUrl('weixinwebauthorization', 'admin', 'saveinfo')}}">
+                        <i class="am-icon-edit"></i>
+                        <span>{{:MyLang('edit_title')}}</span>
+                    </a>
+                </div>
+                <div class="am-panel-bd">
+                    <!-- 基础配置 -->
+                    <h2 class="am-margin-top-sm am-padding-left-xs">{{:MyLang('base_config_title')}}</h2>
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>AppID</label>
+                                <div>
+                                    {{if !empty($data['appid'])}}
+                                        {{$data.appid}}
+                                    {{else /}}
+                                        未填写
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>AppSecret</label>
+                                <div>
+                                    {{if !empty($data['secret'])}}
+                                        {{$data.secret}}
+                                    {{else /}}
+                                        未填写
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>登录入口名称</label>
+                                <div>
+                                    {{if !empty($data['login_name'])}}
+                                        {{$data.login_name}}
+                                    {{else /}}
+                                        未填写（不显示）
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>微信用户名前缀</label>
+                                <div>
+                                    {{if !empty($data['nickname'])}}
+                                        {{$data.nickname}}
+                                    {{else /}}
+                                        微信
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>自动登录</label>
+                                <div>
+                                    {{if isset($data['is_weixin_env_auto_login']) and $data['is_weixin_env_auto_login'] eq 1}}
+                                        是
+                                    {{else /}}
+                                        否
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>登录授权地址</label>
+                                <div>
+                                    <a href="{{:PluginsHomeUrl('weixinwebauthorization', 'auth', 'index')}}" target="_blank">{{:PluginsHomeUrl('weixinwebauthorization', 'auth', 'index')}}</a>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>公众号/服务号支付目录</label>
+                                <div>
+                                    <a href="{{$Think.__MY_URL__}}" target="_blank">
+                                        {{$Think.__MY_URL__}}
+                                    </a><br />
+                                    <a href="{{$Think.__MY_URL__}}index/order/" target="_blank">
+                                        {{$Think.__MY_URL__}}index/order/
+                                    </a>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

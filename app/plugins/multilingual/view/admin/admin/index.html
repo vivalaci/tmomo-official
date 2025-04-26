@@ -1,0 +1,174 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'multilingual',
+            'nav_data'  => $plugins_nav_menu_list,
+        ])}}
+
+        <div class="multilingual-content">
+            <!-- 基础配置 -->
+            <div class="am-panel am-panel-default am-radius multilingual-content-base">
+                <div class="am-panel-hd">
+                    <span class="am-panel-title">{{:MyLang('base_config_title')}}</span>
+                    <a class="am-margin-left-lg" href="{{:PluginsAdminUrl('multilingual', 'admin', 'saveinfo')}}">
+                        <i class="am-icon-edit"></i>
+                        <span>{{:MyLang('edit_title')}}</span>
+                    </a>
+                </div>
+                <div class="am-panel-bd">
+                    <!-- 基础配置 -->
+                    <h2 class="am-padding-left-xs">{{:MyLang('base_config_title')}}</h2>
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>使用数据库存储模式</label>
+                                <div>
+                                    {{if isset($data['is_db_storage']) and $data['is_db_storage'] eq 1}}{{:MyLang('yes_title')}}{{else /}}<span class="am-text-grey">{{:MyLang('no_title')}}</span>{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>搜索关键字跟随语言转换</label>
+                                <div>
+                                    {{if isset($data['is_search_auto_switch']) and $data['is_search_auto_switch'] eq 1}}{{:MyLang('yes_title')}}{{else /}}<span class="am-text-grey">{{:MyLang('no_title')}}</span>{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <!-- web后端翻译配置 -->
+                    <h2 class="am-margin-top-lg am-padding-left-xs">web后端翻译配置</h2>
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>模板fetch视图数据</label>
+                                <div>
+                                    {{if isset($data['is_translate_web_fetch_view']) and $data['is_translate_web_fetch_view'] eq 1}}{{:MyLang('yes_title')}}{{else /}}<span class="am-text-grey">{{:MyLang('no_title')}}</span>{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>模板assign数据</label>
+                                <div>
+                                    {{if isset($data['is_translate_web_assign']) and $data['is_translate_web_assign'] eq 1}}{{:MyLang('yes_title')}}{{else /}}<span class="am-text-grey">{{:MyLang('no_title')}}</span>{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>翻译基础公共数据</label>
+                                <div>
+                                    {{if isset($data['is_translate_web_ajax_base']) and $data['is_translate_web_ajax_base'] eq 1}}{{:MyLang('yes_title')}}{{else /}}<span class="am-text-grey">{{:MyLang('no_title')}}</span>{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>Ajax异步接口数据</label>
+                                <div>
+                                    {{if isset($data['is_translate_web_ajax']) and $data['is_translate_web_ajax'] eq 1}}
+                                        <span>{{:MyLang('yes_title')}}</span>
+                                        {{if isset($data['is_translate_web_ajax_msg']) and $data['is_translate_web_ajax_msg'] eq 1}}
+                                            <span class="am-badge am-badge-success am-radius">仅msg提示信息</span>
+                                        {{/if}}
+                                    {{else /}}
+                                        <span class="am-text-grey">{{:MyLang('no_title')}}</span>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <!-- web前端js翻译配置 -->
+                    <h2 class="am-margin-top-lg am-padding-left-xs">web前端js翻译配置</h2>
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启web前端js翻译</label>
+                                <div>
+                                    {{if isset($data['is_enable_frontend']) and $data['is_enable_frontend'] eq 1}}{{:MyLang('yes_title')}}{{else /}}<span class="am-text-grey">{{:MyLang('no_title')}}</span>{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>实时监听间隔时间</label>
+                                <div>
+                                    {{if empty($data['real_time_monitoring'])}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 不监听 ]
+                                    {{else /}}
+                                        {{$data.real_time_monitoring}} 秒
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>停留页面翻译接口最多请求次数</label>
+                                <div>
+                                    {{if empty($data['stop_page_request_number'])}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 不请求 ]
+                                    {{else /}}
+                                        {{$data.stop_page_request_number}} 次
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <!-- 手机端翻译配置 -->
+                    <h2 class="am-margin-top-lg am-padding-left-xs">手机端翻译配置</h2>
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启手机端翻译</label>
+                                <div>
+                                    {{if isset($data['is_translate_app']) and $data['is_translate_app'] eq 1}}{{:MyLang('yes_title')}}{{else /}}<span class="am-text-grey">{{:MyLang('no_title')}}</span>{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <!-- API配置 -->
+                    <h2 class="am-margin-top-lg am-padding-left-xs">API配置</h2>
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>appid</label>
+                                <div>
+                                    {{if empty($data['appid'])}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{else /}}
+                                        {{$data.appid}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>appkey密钥</label>
+                                <div>
+                                    {{if empty($data['appkey'])}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{else /}}
+                                        {{$data.appkey}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

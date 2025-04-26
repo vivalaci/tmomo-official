@@ -1,0 +1,29 @@
+{{if !empty($coupon_list)}}
+    <!-- 优惠劵面板 -->
+    <div class="items plugins-coupon-goods-detail-panel am-margin-top-sm am-padding-left-main">
+        <dt>{{:MyLang('coupon_name', null, null, 'coupon')}}</dt>
+        <dd data-am-offcanvas="{target: '#plugins-coupon-offcanvas-goods-detail'}">
+            {{foreach $coupon_list as $v}}
+                <div class="am-coupon am-margin-right-xs am-margin-bottom-xs">
+                    <span class="am-badge am-radius">{{if empty($v['desc'])}}{{$v.name}}{{else /}}{{$v.desc}}{{/if}}</span>
+                </div>
+            {{/foreach}}
+        </dd>
+    </div>
+
+    <!-- 优惠劵侧边栏内容 -->
+    <div id="plugins-coupon-offcanvas-goods-detail" class="am-offcanvas">
+        <div class="am-offcanvas-bar am-offcanvas-bar-flip">
+            <div class="am-offcanvas-content plugins-coupon">
+                {{if !empty($coupon_list) and is_array($coupon_list)}}
+                    {{:ModuleInclude('../../../plugins/coupon/view/index/module/coupon', [
+                        'coupon_list'   => $coupon_list,
+                        'color'         => 'black',
+                        'lg'            => '1',
+                        'md'            => '1',
+                    ])}}
+                {{/if}}
+            </div>
+        </div>
+    </div>
+{{/if}}

@@ -1,0 +1,372 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'signin',
+            'title'     => '签到码'.(empty($data['id']) ? MyLang('created_title') : MyLang('edit_title')),
+            'back_url'  => PluginsAdminUrl('signin', 'qrcode', 'index', $form_back_params),
+        ])}}
+
+        <!-- form start -->
+        <form class="am-form form-validation am-form-full-screen am-form-popup-sticky" action="{{:PluginsAdminUrl('signin', 'qrcode', 'save')}}" method="POST" request-type="ajax-url" request-value="{{:PluginsAdminUrl('signin', 'qrcode', 'index', $form_back_params)}}" enctype="multipart/form-data">
+            <!-- 积分奖励 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">积分奖励</h3>
+                </div>
+                <div class="am-panel-bd am-padding-vertical-xs">
+                    <div class="am-cf">
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label>邀请人奖励积分<span class="am-form-group-label-tips">空则不奖励</span></label>
+                                <input type="number" name="reward_master" placeholder="邀请人奖励积分" min="0" maxlength="8" data-validation-message="请填写邀请人奖励积分、长度不超过8位" class="am-radius" value="{{if !empty($data['reward_master'])}}{{$data.reward_master}}{{/if}}" />
+                            </div>
+                        </div>
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label>受邀人奖励积分<span class="am-form-group-label-tips">空则不奖励</span></label>
+                                <input type="number" name="reward_invitee" placeholder="受邀人奖励积分" min="0" maxlength="8" data-validation-message="请填写受邀人奖励积分、长度不超过8位" class="am-radius" value="{{if !empty($data['reward_invitee'])}}{{$data.reward_invitee}}{{/if}}" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 连续翻倍奖励配置 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">连续翻倍奖励配置</h3>
+                </div>
+                <div class="am-panel-bd">
+                    <div class="am-form-group">
+                        <div class="am-alert am-margin-top-0">
+                            <p>1. 0或者空则不翻倍</p>
+                            <p>2. 翻倍的原始值根据配置的邀请人和受邀人配置的奖励积分值</p>
+                            <p>3. 配置例如：连续3天翻2倍、连续7天翻3倍</p>
+                            <p>4. 当满足一个翻倍后连续期间都按照满足的倍数进行奖励、例如以上：第3~6天期间按照两倍奖励</p>
+                            <p class="am-padding-bottom-xs">
+                                <span class="business-operations-submit continuous-container-add-submit am-margin-top-xs">+ 添加一行</span>
+                            </p>
+                        </div>
+                        <ul class="am-list am-list-static am-list-border am-list-striped continuous-container am-margin-bottom-0 am-margin-top-sm">
+                            {{if !empty($data['continuous_rules'])}}
+                                {{foreach $data.continuous_rules as $rules}}
+                                    <li>
+                                        <span>连续</span>
+                                        <div class="am-input-group am-input-group-sm rules-item">
+                                            <input type="number" name="continuous_number[]" placeholder="连续天数" min="0" data-validation-message="请输入有效的连续天数" class="am-form-field am-radius" value="{{if !empty($rules['number'])}}{{$rules.number}}{{/if}}" />
+                                            <span class="am-input-group-btn">
+                                                <button type="button" class="am-btn am-btn-default am-radius">{{:MyLang('day_title')}}</button>
+                                            </span>
+                                        </div>
+                                        <span>翻</span>
+                                        <div class="am-input-group am-input-group-sm rules-item">
+                                            <input type="number" name="continuous_value[]" min="0" placeholder="翻倍数量" data-validation-message="请输入有效的翻倍数量" class="am-form-field am-radius" value="{{if !empty($rules['value'])}}{{$rules.value}}{{/if}}" />
+                                            <span class="am-input-group-btn">
+                                                <button type="button" class="am-btn am-btn-default am-radius">倍</button>
+                                            </span>
+                                        </div>
+                                        <button type="button" class="am-close">&times;</button>
+                                    </li>
+                                {{/foreach}}
+                            {{/if}}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 指定时段额外奖励 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">指定时段额外奖励</h3>
+                </div>
+                <div class="am-panel-bd am-padding-vertical-xs">
+                    <div class="am-cf">
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label>时段<span class="am-form-group-label-tips">空则无奖励</span></label>
+                                <div class="specified-time-reward-container">
+                                    <input type="text" autocomplete="off" name="specified_time_start" class="Wdate am-radius" placeholder="{{:MyLang('form_time_start_title')}}" onclick="WdatePicker({firstDayOfWeek:1,dateFmt:'HH:mm:ss'})" {{if !empty($data) and !empty($data['specified_time_reward']) and !empty($data['specified_time_reward']['time_start'])}}value="{{$data.specified_time_reward.time_start}}"{{/if}} />
+                                    <span class="am-text-grey">~</span>
+                                    <input type="text" autocomplete="off" class="Wdate am-radius" placeholder="{{:MyLang('form_time_end_title')}}" name="specified_time_end" onclick="WdatePicker({firstDayOfWeek:1,dateFmt:'HH:mm:ss'})" {{if !empty($data) and !empty($data['specified_time_reward']) and !empty($data['specified_time_reward']['time_end'])}}value="{{$data.specified_time_reward.time_end}}"{{/if}} />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label>奖励积分<span class="am-form-group-label-tips">空则不奖励</span></label>
+                                <input type="number" name="specified_value" placeholder="奖励积分" min="0" data-validation-message="请填写指定时段奖励积分、长度不超过8位" class="am-radius" value="{{if !empty($data) and !empty($data['specified_time_reward']) and !empty($data['specified_time_reward']['value'])}}{{$data.specified_time_reward.value}}{{/if}}" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 奖励限制 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">奖励限制</h3>
+                </div>
+                <div class="am-panel-bd am-padding-vertical-xs">
+                    <div class="am-cf">
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label>最大奖励数量限制<span class="am-form-group-label-tips">空则不限制</span></label>
+                                <input type="number" name="max_number_limit" placeholder="最大奖励数量限制" min="0" data-validation-message="请填写最大奖励数量限制、长度不超过8位" class="am-radius" value="{{if !empty($data['max_number_limit'])}}{{$data.max_number_limit}}{{/if}}" />
+                            </div>
+                        </div>
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label>一天奖励数量限制<span class="am-form-group-label-tips">空则不限制</span></label>
+                                <input type="number" name="day_number_limit" placeholder="一天奖励数量限制" min="0" maxlength="8" data-validation-message="请填写一天奖励数量限制、长度不超过8位" class="am-radius" value="{{if !empty($data['day_number_limit'])}}{{$data.day_number_limit}}{{/if}}" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 用户信息 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">用户信息</h3>
+                </div>
+                <div class="am-panel-bd am-padding-vertical-xs">
+                    <!-- 用户 -->
+                    <div class="user-info am-margin-top-sm">
+                        <img src="{{if empty($data) or empty($data['user']) or empty($data['user']['avatar'])}}{{:UserDefaultAvatar()}}{{else /}}{{$data.user.avatar}}{{/if}}" class="am-img-thumbnail am-radius am-align-left am-margin-right-xs am-margin-bottom-0 user-base-avatar" width="75" height="75" />
+                        <ul class="user-base">
+                            <li>
+                                <span class="base-name">名称：</span>
+                                <span class="base-value">{{if empty($data) or empty($data['user']) or empty($data['user']['username'])}}<span class="am-text-grey">无</span>{{else /}}{{$data.user.username}}{{/if}}</span>
+                            </li>
+                            <li>
+                                <span class="base-name">昵称：</span>
+                                <span class="base-value">{{if empty($data) or empty($data['user']) or empty($data['user']['nickname'])}}<span class="am-text-grey">无</span>{{else /}}{{$data.user.nickname}}{{/if}}</span>
+                            </li>
+                            <li>
+                                <span class="base-name">手机：</span>
+                                <span class="base-value">{{if empty($data) or empty($data['user']) or empty($data['user']['mobile'])}}<span class="am-text-grey">无</span>{{else /}}{{$data.user.mobile}}{{/if}}</span>
+                            </li>
+                            <li>
+                                <span class="base-name">邮箱：</span>
+                                <span class="base-value">{{if empty($data) or empty($data['user']) or empty($data['user']['email'])}}<span class="am-text-grey">无</span>{{else /}}{{$data.user.email}}{{/if}}</span>
+                            </li>
+                        </ul>
+                        <input type="hidden" name="user_id" {{if !empty($data)}} value="{{$data.user_id}}"{{/if}} />
+                    </div>
+                    <button type="button" class="am-btn am-btn-default am-radius am-btn-xs am-margin-top-xs am-margin-bottom" data-am-modal="{target: '#user-list-popup'}">配置用户</button>
+
+                    <div class="am-cf">
+                        <div class="am-u-sm-4 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label>联系人<span class="am-form-group-label-tips-must">*</span></label>
+                                <input type="text" name="name" placeholder="联系人" maxlength="30" data-validation-message="请填写联系人、最多30个字符" class="am-radius" value="{{if !empty($data['name'])}}{{$data.name}}{{/if}}" />
+                            </div>
+                        </div>
+                        <div class="am-u-sm-4 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label>联系电话<span class="am-form-group-label-tips-must">*</span></label>
+                                <input type="text" name="tel" placeholder="联系电话" maxlength="15" data-validation-message="请填写联电话、最多15个字符" class="am-radius" value="{{if !empty($data['tel'])}}{{$data.tel}}{{/if}}" />
+                            </div>
+                        </div>
+                        <div class="am-u-sm-4 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label>联系地址<span class="am-form-group-label-tips-must">*</span></label>
+                                <input type="text" name="address" placeholder="联系地址" maxlength="230" data-validation-message="请填写联系地址、最多230个字符" class="am-radius" value="{{if !empty($data['address'])}}{{$data.address}}{{/if}}" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 关联商品 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">关联商品</h3>
+                </div>
+                <div class="am-panel-bd am-padding-vertical-xs">
+                    <div class="am-form-group am-padding-right-0">
+                        <div class="forth-view-selection-container">
+                            <div class="forth-view-selection-form" data-search-url="{{:PluginsAdminUrl('signin', 'qrcode', 'goodssearch')}}">
+                                <select class="am-radius chosen-select forth-view-selection-form-category" data-placeholder="{{:MyLang('form_goods_category_placeholder')}}" data-validation-message="{{:MyLang('form_goods_category_message')}}">
+                                    <option value="">{{:MyLang('form_goods_category_placeholder')}}</option>
+                                    {{if !empty($goods_category_list)}}
+                                        {{foreach $goods_category_list as $v}}
+                                            <option value="{{$v.id}}">{{$v.name}}</option>
+                                            {{if !empty($v['items'])}}
+                                                {{foreach $v.items as $vs}}
+                                                    <option style="padding-left: 15px;" value="{{$vs.id}}">{{if empty($vs['items'])}}├{{else /}}└{{/if}}² {{$vs.name}}</option>
+                                                    {{if !empty($vs['items'])}}
+                                                        {{foreach $vs.items as $kss=>$vss}}
+                                                            <option style="padding-left: 30px;" value="{{$vss.id}}">{{if $kss eq count($vs['items'])-1}}└{{else /}}├{{/if}}³ {{$vss.name}}</option>
+                                                        {{/foreach}}
+                                                    {{/if}}
+                                                {{/foreach}}
+                                            {{/if}}
+                                        {{/foreach}}
+                                    {{/if}}
+                                </select>
+                                <input type="text" placeholder="{{:MyLang('goods_name')}}" class="am-radius forth-view-selection-form-keywords" />
+                                <button type="button" class="am-btn am-btn-primary-light am-radius am-btn-xs search-submit" data-am-loading="{spinner: 'circle-o-notch', loadingText: ' {{:MyLang('search_title')}}'}">
+                                    <i class="iconfont icon-search"></i>
+                                    <span>{{:MyLang('search_title')}}</span>
+                                </button>
+                            </div>
+                            <div class="forth-view-selection-list am-margin-top-sm">
+                                <input type="hidden" name="goods_ids" value="{{if !empty($goods['goods_ids'])}}{{:implode(',', $goods['goods_ids'])}}{{/if}}" data-validation-message="请选择商品" />
+                                <div class="forth-view-selection-items am-fl">
+                                    <div class="title">可选</div>
+                                    <ul class="forth-view-selection-content am-list ul-left">
+                                        <div class="table-no">没有相关数据</div>
+                                    </ul>
+                                </div>
+                                <button type="button" class="am-btn am-btn-default am-btn-xs am-radius selected-all">全选 <i class="am-icon-angle-double-right"></i></button>
+                                <div class="forth-view-selection-items am-fr">
+                                    <div class="title">已选</div>
+                                    <ul class="forth-view-selection-content am-list ul-right">
+                                        <div class="table-no {{if !empty($goods['goods'])}}none{{/if}}">没有相关数据</div>
+                                        {{if !empty($goods['goods'])}}
+                                            {{foreach $goods['goods'] as $v}}
+                                                <li class="am-animation-slide-bottom items-li-{{$v.id}}">
+                                                    <span class="name" data-value="{{$v.id}}">{{$v.title}}</span>
+                                                    <i class="iconfont icon-delete am-fr"></i>
+                                                </li>
+                                            {{/foreach}}
+                                        {{/if}}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 基础信息 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">{{:MyLang('form_base_data_title')}}</h3>
+                </div>
+                <div class="am-panel-bd am-padding-vertical-xs">
+                    <div class="am-cf">
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group am-form-file">
+                                <label class="am-block">指定背景图片<span class="am-form-group-label-tips">建议3840*1312px</span></label>
+                                <div class="am-form-file-upload-container">
+                                    <ul class="plug-file-upload-view signin-bg-images-view" data-form-name="bg_images" data-max-number="1" data-dialog-type="images">
+                                        {{if !empty($data['bg_images'])}}
+                                            <li>
+                                                <input type="text" name="bg_images" value="{{$data.bg_images}}" data-validation-message="请上传指定背景图片" />
+                                                <img src="{{$data.bg_images}}" />
+                                                <i class="iconfont icon-close"></i>
+                                            </li>
+                                        {{/if}}
+                                    </ul>
+                                    <div class="plug-file-upload-submit" data-view-tag="ul.signin-bg-images-view">
+                                        <i class="iconfont icon-upload-add"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group am-form-file">
+                                <label class="am-block">指定logo<span class="am-form-group-label-tips">建议800*342px</span></label>
+                                <div class="am-form-file-upload-container">
+                                    <ul class="plug-file-upload-view signin-logo-view" data-form-name="logo" data-max-number="1" data-dialog-type="images">
+                                        {{if !empty($data['logo'])}}
+                                            <li>
+                                                <input type="text" name="logo" value="{{$data.logo}}" data-validation-message="请上传指定logo" />
+                                                <img src="{{$data.logo}}" />
+                                                <i class="iconfont icon-close"></i>
+                                            </li>
+                                        {{/if}}
+                                    </ul>
+                                    <div class="plug-file-upload-submit" data-view-tag="ul.signin-logo-view">
+                                        <i class="iconfont icon-upload-add"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="am-cf">
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group am-form-file">
+                                <label class="am-block">底部代码<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" data-am-popover="{content: '一般用于第三方广告平台的广告代码或者统计代码', trigger: 'hover focus', theme: 'sm'}"></a></label>
+                                <textarea rows="6" name="footer_code" class="am-radius" placeholder="底部代码" data-validation-message="请填写底部代码">{{if !empty($data['footer_code'])}}{{$data.footer_code}}{{/if}}</textarea>
+                            </div>
+                        </div>
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label>备注</label>
+                                <input type="text" name="note" placeholder="备注" maxlength="30" data-validation-message="请填写备注、最多30个字符" class="am-radius" value="{{if !empty($data['note'])}}{{$data.note}}{{/if}}" />
+                            </div>
+                            {{:ModuleInclude('lib/is_enable')}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEO配置 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">SEO配置</h3>
+                </div>
+                <div class="am-panel-bd am-padding-vertical-xs">
+                    {{:ModuleInclude('lib/seo')}}
+                </div>
+            </div>
+
+            <div class="am-form-popup-submit">
+                <input type="hidden" name="id" {{if !empty($data['id'])}} value="{{$data.id}}"{{/if}} />
+                <a href="{{:PluginsAdminUrl('signin', 'qrcode', 'index', $form_back_params)}}" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg">
+                    <i class="am-icon-mail-reply"></i>
+                    <span>{{:MyLang('retreat_title')}}</span>
+                </a>
+                <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('save_title')}}'}">
+                    <i class="am-icon-save"></i>
+                    <span>{{:MyLang('save_title')}}</span>
+                </button>
+            </div>
+        </form>
+        <!-- form end -->
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- 用户弹窗 -->
+<div class="am-popup am-radius" id="user-list-popup">
+    <div class="am-popup-inner">
+        <div class="am-popup-hd">
+          <h4 class="am-popup-title">用户信息</h4>
+          <span data-am-modal-close class="am-close">&times;</span>
+        </div>
+        <div class="am-popup-bd am-padding-0">
+            <form class="am-form am-padding-sm user-info-container">
+                <!-- 搜索 -->
+                <div class="forth-selection-container" data-search-url="{{:PluginsAdminUrl('signin', 'qrcode', 'usersearch')}}">
+                    <input type="text" placeholder="用户名/昵称/手机/邮箱" class="am-radius forth-selection-form-keywords" />
+                    <button type="button" class="am-btn am-btn-primary-light am-radius am-btn-xs search-submit" data-am-loading="{loadingText: ' {{:MyLang('search_title')}}'}">
+                        <i class="iconfont icon-search"></i>
+                        <span>{{:MyLang('search_title')}}</span>
+                    </button>
+                </div>
+
+                <!-- 商品列表 -->
+                <div class="am-scrollable-vertical am-margin-top-sm am-padding-bottom-xs am-radius user-list-container" data-loading-msg="{{:MyLang('searching_tips')}}">
+                    <ul class="am-gallery am-avg-sm-3 am-avg-md-4 am-avg-lg-5 am-gallery-bordered">
+                        <div class="table-no"><i class="am-icon-warning"></i> 请搜索用户</div>
+                    </ul>
+                </div>
+
+                <!-- 分页 -->
+                <div class="am-margin-top-sm am-text-center user-page-container"></div>
+            </form>
+        </div>
+    </div>
+</div>
+        
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

@@ -1,0 +1,77 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- content start -->
+<div class="am-padding-sm right-content">
+    {{if empty($level_data['level'])}}
+        <div class="table-no"><i class="am-icon-warning"></i> 没有分销等级数据</div>
+    {{else /}}
+        <!-- form start -->
+        <form class="am-form form-validation am-form-popup-fixed" action="{{:PluginsHomeUrl('distribution', 'shoplevel', 'save')}}" method="POST" request-type="ajax-url" request-value="{{:PluginsHomeUrl('distribution', 'shoplevel', 'index', $params)}}">
+            <!-- nav start -->
+            {{:ModuleInclude('public/admin_nav', [
+                'title'     => '返佣配置',
+                'back_url'  => $form_back_url
+            ])}}
+            <!-- nav end -->
+
+            <div class="am-form-group">
+                <label class="am-block">启用分销</label>
+                <input name="is_enable" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if !empty($level_data['data']) and isset($level_data['data']['is_enable']) and $level_data['data']['is_enable'] eq 1}}checked="true"{{/if}} />
+            </div>
+            <div class="am-form-group">
+                <section data-am-widget="accordion" class="am-accordion am-accordion-default am-margin-0" data-am-accordion='{"multiple": true}'>
+                    {{foreach $level_data.level as $v}}
+                        <dl class="am-accordion-item am-active">
+                            <dt class="am-accordion-title">{{$v.name}}</dt>
+                            <dd class="am-accordion-bd am-collapse am-in">
+                                <div class="am-accordion-content">
+                                    <!-- 向上返佣 -->
+                                    <div class="am-form-group">
+                                        <label class="am-margin-top-xs">向上返佣比例(一级/二级/三级)(%)</label>
+                                        <input type="number" name="config[{{$v.id}}][level_rate_one]]" placeholder="向上一级返佣比例(%)" min="0" max="100" step="0.01" data-validation-message="向上一级返佣比例 0~100 的数字" class="am-form-field am-radius" {{if !empty($v['level_rate_one']) and $v['level_rate_one'] gt 0}} value="{{$v.level_rate_one}}"{{/if}} />
+                                        <input type="number" name="config[{{$v.id}}][level_rate_two]" placeholder="向上二级返佣比例(%)" min="0" max="100" step="0.01" data-validation-message="向上二级返佣比例 0~100 的数字" class="am-form-field am-radius" {{if !empty($v['level_rate_two']) and $v['level_rate_two'] gt 0}} value="{{$v.level_rate_two}}"{{/if}} />
+                                        <input type="number" name="config[{{$v.id}}][level_rate_three]" placeholder="向上三级返佣比例(%)" min="0" max="100" step="0.01" data-validation-message="向上三级返佣比例 0~100 的数字" class="am-form-field am-radius" {{if !empty($v['level_rate_three']) and $v['level_rate_three'] gt 0}} value="{{$v.level_rate_three}}"{{/if}} />
+                                    </div>
+    
+                                    <!-- 向下返佣 -->
+                                    {{if isset($plugins_config['is_profit_down_return_shop']) and $plugins_config['is_profit_down_return_shop'] eq 1}}
+                                        <div class="am-form-group">
+                                            <label>向下返佣比例(%)</label>
+                                            <input type="number" name="config[{{$v.id}}][down_return_rate]" placeholder="向下返佣比例(%)" min="0" max="100" step="0.01" data-validation-message="向下返佣比例 0~100 的数字" class="am-form-field am-radius" {{if !empty($v['down_return_rate']) and $v['down_return_rate'] gt 0}} value="{{$v.down_return_rate}}"{{/if}} />
+                                            <div class="am-tips-card">
+                                                <p class="am-margin-bottom-xs">向消费者邀请的下级发放佣金</p>
+                                            </div>
+                                        </div>
+                                    {{/if}}
+    
+                                    <!-- 内购返佣 -->
+                                    {{if isset($plugins_config['is_profit_self_buy_shop']) and $plugins_config['is_profit_self_buy_shop'] eq 1}}
+                                        <div class="am-form-group">
+                                            <label>内购返佣比例(%)</label>
+                                            <input type="number" name="config[{{$v.id}}][self_buy_rate]" placeholder="内购返佣比例(%)" min="0" max="100" step="0.01" data-validation-message="内购返佣比例 0~100 的数字" class="am-form-field am-radius" {{if !empty($v['self_buy_rate']) and $v['self_buy_rate'] gt 0}} value="{{$v.self_buy_rate}}"{{/if}} />
+                                        </div>
+                                    {{/if}}
+                                </div>
+                            </dd>
+                        </dl>
+                    {{/foreach}}
+                </section>
+            </div>
+            <div class="am-form-popup-submit am-text-left">
+                <a href="{{:PluginsHomeUrl('distribution', 'shoplevel', 'index', $params)}}" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg">
+                    <i class="am-icon-mail-reply"></i>
+                    <span>{{:MyLang('retreat_title')}}</span>
+                </a>
+                <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('save_title')}}'}">
+                    <i class="am-icon-save"></i>
+                    <span>{{:MyLang('save_title')}}</span>
+                </button>
+            </div>
+        </form>
+        <!-- form end -->
+    {{/if}}
+</div>
+<!-- content end -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

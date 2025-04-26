@@ -1,0 +1,121 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content am-margin-0 am-padding-0">
+        <!-- form start -->
+        <form class="am-form form-validation am-form-full-screen am-form-popup-fixed" action="{{:PluginsAdminUrl('customdevelop', 'admin', 'save')}}" method="POST" request-type="ajax-reload">
+            <!-- 编辑器容器 -->
+            <ace-playground></ace-playground>
+
+            <!-- 隐藏表单 -->
+            <div class="am-hide">
+                <textarea name="html_content" id="html_content">{{if !empty($data['html_content'])}}{{$data.html_content}}{{/if}}</textarea>
+                <textarea name="css_content" id="css_content">{{if !empty($data['css_content'])}}{{$data.css_content}}{{/if}}</textarea>
+                <textarea name="js_content" id="js_content">{{if !empty($data['js_content'])}}{{$data.js_content}}{{/if}}</textarea>
+            </div>
+
+            <div class="am-form-popup-submit am-text-left">
+                <a href="{{:MyUrl('admin/pluginsadmin/index')}}" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg">
+                    <i class="am-icon-mail-reply"></i>
+                    <span>{{:MyLang('retreat_title')}}</span>
+                </a>
+                <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('save_title')}}'}">
+                    <i class="am-icon-save"></i>
+                    <span>{{:MyLang('save_title')}}</span>
+                </button>
+                <a href="javascript:;" class="am-icon-question-circle am-text-warning am-text-sm am-margin-left-sm" data-am-popover="{content: '1. html不需要写html结构体<br />2. css不需要写style包裹标签<br />3. js不需要写script包裹标签', trigger: 'hover focus', theme: 'sm'}"></a>
+            </div>
+        </form>
+        <!-- form end -->
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}
+<script type="text/javascript">
+// 代码编辑器初始化
+var dom = require('ace/lib/dom');
+// 公共配置
+var ace_editor_config = {
+    // 自动滚动
+    autoScrollEditorIntoView: true,
+    // 编辑器内字体大小
+    fontSize: 14,
+    // 制表符设置为4个空格大小
+    tabSize: 4,
+    // 只读
+    readOnly: false,
+    // 高亮激活线
+    highlightActiveLine: true,
+    // 自动换行
+    wrap: 'free'
+};
+class AcePlayground extends HTMLElement
+{
+    constructor()
+    {
+        super();
+        var shadow = this.attachShadow({mode: 'open'});
+        var dom = require('ace/lib/dom');
+        dom.buildDom(['div', {id: 'host'},
+            ['div', {id: 'html'}],
+            ['div', {id: 'css'}], 
+            ['div', {id: 'js'}], 
+            ['style', `
+                #host {
+                    display: grid;
+                    grid-template-areas: "html css js";
+                    height: calc(100vh - 7rem);
+                }
+                #html {
+                    grid-area: html;
+                    height: 100%;
+                }
+                #css {
+                    grid-area: css;
+                    height: 100%;
+                }
+                #js {
+                    grid-area: js;
+                    height: 100%;
+                }
+            `]
+        ], shadow);
+
+        this.htmlEditor = ace.edit(shadow.querySelector('#html'), {...ace_editor_config, ...{
+            theme: 'ace/theme/monokai',
+            mode: 'ace/mode/html',
+            value: `{{if empty($data["html_content"])}}<!-- html -->{{else /}}{{$data.html_content|raw}}{{/if}}`,
+        }});
+        this.cssEditor = ace.edit(shadow.querySelector('#css'), {...ace_editor_config, ...{
+            theme: 'ace/theme/tomorrow_night_eighties',
+            mode: 'ace/mode/css',
+            value: `{{if empty($data["css_content"])}}/* css */{{else /}}{{$data.css_content|raw}}{{/if}}`,
+        }});
+        this.jsEditor = ace.edit(shadow.querySelector('#js'), {...ace_editor_config, ...{
+            theme: 'ace/theme/twilight',
+            mode: 'ace/mode/javascript',
+            value: `{{if empty($data["js_content"])}}/* javascript */{{else /}}{{$data.js_content|raw}}{{/if}}`,
+        }});
+        this.htmlEditor.renderer.attachToShadowRoot();
+        this.updateSync = this.updateSync.bind(this);
+        this.htmlEditor.on('input', this.updateSync);
+        this.cssEditor.on('input', this.updateSync);
+        this.jsEditor.on('input', this.updateSync);
+        this.updateSync();
+    }
+    updateSync() {
+        // 代码值
+        var html = this.htmlEditor.getValue();
+        var css = this.cssEditor.getValue();
+        var js = this.jsEditor.getValue();
+        // 同步表单
+        document.getElementById('html_content').value = html;
+        document.getElementById('css_content').value = css;
+        document.getElementById('js_content').value = js;
+    }
+}
+customElements.define('ace-playground', AcePlayground);
+</script>

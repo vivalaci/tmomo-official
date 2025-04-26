@@ -1,0 +1,39 @@
+{{if !empty($activity_data_list)}}
+    {{foreach $activity_data_list as $v}}
+        {{if !empty($v['goods_list'])}}
+            <div class="plugins-activity-floor">
+                <div class="am-g am-container">
+                    {{switch $v.style_type}}
+                        {{case 0}}
+                            <div class="plugins-activity-data-list-container">
+                                {{:ModuleInclude('module/goods/list/base', [
+                                    'goods_list'  => $v.goods_list,
+                                    'type'        => 'activity',
+                                    'base_nav'    => $v,
+                                ])}}
+                            </div>
+                        {{/case}}
+                        {{case 1}}
+                            <div class="plugins-activity-squares-container">
+                                {{:ModuleInclude('module/goods/grid/base', [
+                                    'goods_list'  => $v.goods_list,
+                                    'type'        => 'activity',
+                                    'base_nav'    => $v,
+                                ])}}
+                            </div>
+                        {{/case}}
+                        {{case 2}}
+                            <div class="am-nbfc am-radius">
+                                {{:ModuleInclude('module/goods/slider/base', [
+                                    'goods_list'  => $v.goods_list,
+                                    'type'        => 'activity',
+                                    'base_nav'    => $v,
+                                ])}}
+                            </div>
+                        {{/case}}
+                    {{/switch}}
+                </div>
+            </div>
+        {{/if}}
+    {{/foreach}}
+{{/if}}

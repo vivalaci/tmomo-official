@@ -1,0 +1,10 @@
+<ul class="am-nav am-nav-pills user-center-admin-nav am-margin-bottom-sm">
+    <li {{if !isset($plugins_controller_name) or (isset($plugins_controller_name) and $plugins_controller_name eq 'usersignin')}}class="am-active"{{/if}}>
+        <a href="{{:PluginsHomeUrl('signin', 'usersignin', 'index')}}">签到记录</a>
+    </li>
+    {{if isset($plugins_config['is_team']) and $plugins_config['is_team'] eq 1}}
+        <li {{if isset($plugins_controller_name) and $plugins_controller_name eq 'userqrcode'}}class="am-active"{{/if}}>
+            <a href="{{:PluginsHomeUrl('signin', 'userqrcode', 'index')}}">签到码管理</a>
+        </li>
+    {{/if}}
+</ul>

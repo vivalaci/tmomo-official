@@ -1,0 +1,15 @@
+{{if isset($module_data['status']) and !empty($module_data['status_name'])}}
+    {{switch $module_data.status}}
+        {{case 1}}
+            <span class="am-badge am-badge-success am-radius">{{$module_data.status_name}}</span>
+        {{/case}}
+        {{case 2}}
+            <span class="am-badge am-badge-danger am-radius">{{$module_data.status_name}}</span>
+        {{/case}}
+        {{default /}}
+            <span class="am-badge am-radius">{{$module_data.status_name}}</span>
+    {{/switch}}
+    {{if !empty($module_data['reason'])}}
+        <p class="am-text-danger am-margin-top-sm">{{$module_data.reason}}</p>
+    {{/if}}
+{{/if}}

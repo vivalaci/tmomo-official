@@ -1,0 +1,12 @@
+{{if !empty($plugins_config['images'])}}
+    <div class="plugins-popupscreen-ad am-text-center">
+        <div class="plugins-popupscreen-ad-content am-center">
+            <a href="{{if empty($plugins_config['images_url'])}}javascript:;{{else /}}{{$plugins_config.images_url}}{{/if}}" {{if !empty($plugins_config['images_url']) and isset($plugins_config['is_new_window_open']) and $plugins_config['is_new_window_open'] eq 1}}target="_blank"{{/if}} class="am-block">
+                <img src="{{$plugins_config.images}}" alt="首页弹屏广告" />
+            </a>
+            <div class="am-text-center am-margin-top-lg">
+                <a href="javascript:;" class="am-close am-close-alt am-icon-times submit-ajax" data-url="{{:PluginsHomeUrl('popupscreen', 'index', 'close')}}" data-id="1" data-value="PluginsPopupscreenCloseBack" data-view="fun" data-is-confirm="0"></a>
+            </div>
+        </div>
+    </div>
+{{/if}}

@@ -1,0 +1,18 @@
+<div class="items plugins-membershiplevelvip-items-goods-price am-padding-sm am-hide-sm-only">
+    {{if isset($goods_data['price_container']['original_price']) and $goods_data['price_container']['original_price'] gt 0}}
+        <p class="am-text-truncate">
+            <span>{{$goods_data.show_field_original_price_text}}</span>
+            <span class="original-price">{{$currency_symbol}}{{$goods_data.price_container.original_price}}</span>
+        </p>
+    {{/if}}
+    {{if !empty($goods_data['price_container']['price']) and $is_membershiplevelvip}}
+        <p class="am-text-truncate">
+            <span>{{:MyLang('goods_sales_price_title')}}</span>
+            <span class="original-price">{{$currency_symbol}}{{$goods_data.price_container.price}}</span>
+        </p>
+    {{/if}}
+    <p class="am-text-truncate">
+        <span>{{$goods_data.show_field_price_text}}</span>
+        <span class="goods-price">{{$currency_symbol}}{{$goods_data.price}}</span>
+    </p>
+</div>

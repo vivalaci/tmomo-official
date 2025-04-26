@@ -1,0 +1,59 @@
+<!-- 继承公共的 form -->
+{{extend name="../../../module/view/form_table/form" /}}
+
+<!-- 表单顶部操作栏 -->
+{{block name="form_operate_top"}}
+    {{if empty($params['referrer_id'])}}
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'distribution',
+            'nav_data'  => $plugins_nav_menu_list,
+        ])}}        
+    {{/if}}
+
+    <!-- 额外搜索条件 -->
+    <div class="search-team-container am-fl am-margin-bottom-sm">
+        <div class="multiple-where-input">
+            <span class="am-vertical-align-middle">注册时间：</span>
+            <input type="text" name="team_search_user_time_start" autocomplete="off" class="Wdate am-radius" placeholder="{{:MyLang('form_time_start_title')}}" data-validation-message="{{:MyLang('form_time_start_message')}}" onclick="WdatePicker({firstDayOfWeek:1,dateFmt:'yyyy-MM-dd H:mm:ss', maxDate:'#F{$dp.$D(\'search-team-user-time-end\');}'})" {{if !empty($params['team_search_user_time_start'])}}value="{{$params.team_search_user_time_start}}"{{/if}} id="search-team-user-time-start" />
+            <span class="am-text-grey am-margin-horizontal-xs">~</span>
+            <input type="text" name="team_search_user_time_end" autocomplete="off" class="Wdate am-radius" placeholder="{{:MyLang('form_time_end_title')}}" data-validation-message="{{:MyLang('form_time_end_message')}}" onclick="WdatePicker({firstDayOfWeek:1,dateFmt:'yyyy-MM-dd H:mm:ss', minDate:'#F{$dp.$D(\'search-team-user-time-start\');}'})" {{if !empty($params['team_search_user_time_end'])}}value="{{$params.team_search_user_time_end}}"{{/if}} id="search-team-user-time-end" />
+            <label class="am-checkbox-inline am-margin-left-sm">
+                <input type="checkbox" name="team_search_user_time_reverse" value="1" data-am-ucheck {{if isset($params['team_search_user_time_reverse']) and $params['team_search_user_time_reverse'] eq 1}}checked{{/if}} /> 反向
+            </label>
+        </div>
+        <div class="multiple-where-input am-margin-top-xs">
+            <span class="am-vertical-align-middle">下单时间：</span>
+            <input type="text" name="team_search_order_time_start" autocomplete="off" class="Wdate am-radius" placeholder="{{:MyLang('form_time_start_title')}}" data-validation-message="{{:MyLang('form_time_start_message')}}" onclick="WdatePicker({firstDayOfWeek:1,dateFmt:'yyyy-MM-dd H:mm:ss', maxDate:'#F{$dp.$D(\'search-team-order-time-end\');}'})" {{if !empty($params['team_search_order_time_start'])}}value="{{$params.team_search_order_time_start}}"{{/if}} id="search-team-order-time-start" />
+            <span class="am-text-grey am-margin-horizontal-xs">~</span>
+            <input type="text" name="team_search_order_time_end" autocomplete="off" class="Wdate am-radius" placeholder="{{:MyLang('form_time_end_title')}}" data-validation-message="{{:MyLang('form_time_end_message')}}" onclick="WdatePicker({firstDayOfWeek:1,dateFmt:'yyyy-MM-dd H:mm:ss', minDate:'#F{$dp.$D(\'search-team-order-time-start\');}'})" {{if !empty($params['team_search_order_time_end'])}}value="{{$params.team_search_order_time_end}}"{{/if}} id="search-team-order-time-end" />
+            <label class="am-checkbox-inline am-margin-left-sm">
+                <input type="checkbox" name="team_search_order_time_reverse" value="1" data-am-ucheck {{if isset($params['team_search_order_time_reverse']) and $params['team_search_order_time_reverse'] eq 1}}checked{{/if}} /> 反向
+            </label>
+        </div>
+        <div class="am-flex am-flex-items-center am-gap-1 am-margin-top-xs">
+            <span class="am-vertical-align-middle">是否下单：</span>
+            <label class="am-checkbox-inline">
+                <input type="checkbox" name="team_search_buy_type" value="0" data-am-ucheck {{if isset($params['team_search_buy_type']) and $params['team_search_buy_type'] neq '' and in_array(0, explode(',', $params['team_search_buy_type']))}}checked{{/if}} /> 未下单
+            </label>
+            <label class="am-checkbox-inline">
+                <input type="checkbox" name="team_search_buy_type" value="1" data-am-ucheck {{if isset($params['team_search_buy_type']) and $params['team_search_buy_type'] neq '' and in_array(1, explode(',', $params['team_search_buy_type']))}}checked{{/if}} /> 已下单
+            </label>
+        </div>
+    </div>
+
+    {{if empty($params['referrer_id'])}}
+        <button type="button" class="am-btn am-btn-primary am-radius am-btn-xs submit-popup" data-url="{{:PluginsAdminUrl('distribution', 'team', 'saveinfo')}}">
+            <i class="iconfont icon-btn-add am-show-sm-only"></i>
+            <span>{{:MyLang('add_title')}}</span>
+        </button>
+    {{/if}}
+
+    <button type="button" class="am-btn am-btn-success am-radius am-btn-xs am-margin-right-0 submit-popup" data-url="{{:PluginsAdminUrl('distribution', 'stats', 'index')}}" data-full="1">
+        <i class="am-icon-pie-chart"></i>
+        <span>{{:MyLang('stats_title')}}</span>
+    </button>
+
+    <!-- 父级内容 -->
+    {__block__}
+{{/block}}

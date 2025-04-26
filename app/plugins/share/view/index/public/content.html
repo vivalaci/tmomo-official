@@ -1,0 +1,61 @@
+{{if !empty($base_shar_type_list) and !empty($plugins_config['share_type'])}}
+    <!-- 分享组件 -->
+    <div class="plugins-share-container"
+        data-title="{{if !empty($plugins_config['title'])}}{{$plugins_config.title}}{{/if}}"
+        data-desc="{{if !empty($plugins_config['desc'])}}{{$plugins_config.desc}}{{/if}}"
+        data-url="{{if !empty($plugins_config['url'])}}{{$plugins_config.url}}{{/if}}"
+        data-pic="{{if !empty($plugins_config['pic'])}}{{$plugins_config.pic}}{{/if}}"
+    >
+        <div class="plugins-share">
+            <ul>
+                {{foreach($plugins_config.share_type as $v)}}
+                    {{if isset($base_shar_type_list[$v])}}
+                        <li class="share-{{$v}}" data-type="{{$v}}" title="{{$base_shar_type_list[$v]['tips']}}">
+                            <span class="icon iconfont icon-{{$v}}"></span>
+                        </li>
+                    {{/if}}
+                {{/foreach}}
+            </ul>
+        </div>
+    </div>
+
+    {{if in_array('weixin', $plugins_config['share_type'])}}
+        <!-- 微信二维码弹出框 -->
+        <div class="am-modal am-modal-no-btn" tabindex="-1" id="plugins-share-weixin-modal">
+            <div class="am-modal-dialog">
+                <div class="am-modal-hd">
+                    <span>微信</span>
+                    <a href="javascript: void(0)" class="am-close" data-am-modal-close>&times;</a>
+                </div>
+                <div class="am-modal-bd">
+                    <div class="am-text-center weixin-qrcode am-margin-top-sm"></div>
+                    <p>打开微信，点击底部的“发现”</p>
+                    <p>使用“扫一扫”即可将网页分享至朋友圈</p>
+                </div>
+            </div>
+        </div>
+    {{/if}}
+
+    <!-- 弹层提示分享 -->
+    <div id="plugins-share-layer">
+        <img src="{{:StaticAttachmentUrl('share-layer.png')}}" />
+    </div>
+
+    {{if in_array('url', $plugins_config['share_type'])}}
+        <!-- 复制 -->
+        <div class="am-modal am-modal-no-btn" tabindex="-1" id="plugins-share-copy-modal">
+            <div class="am-modal-dialog">
+                <div class="am-modal-hd">
+                    <span>链接</span>
+                    <a href="javascript: void(0)" class="am-close" data-am-modal-close>&times;</a>
+                </div>
+                <div class="am-modal-bd am-modal-bd am-padding-lg">
+                    <div class="am-input-group am-input-group-sm am-margin-top-lg">
+                        <input type="text" class="am-form-field" />
+                        <span class="am-input-group-label am-icon-copy am-cursor-pointer"> 复制</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {{/if}}
+{{/if}}

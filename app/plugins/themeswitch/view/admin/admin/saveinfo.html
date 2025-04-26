@@ -1,0 +1,54 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'themeswitch',
+            'title'     => MyLang('base_config_title'),
+            'back_url'  => PluginsAdminUrl('themeswitch', 'admin', 'index', $params),
+        ])}}
+
+        <!-- form start -->
+        <form class="am-form form-validation am-form-full-screen am-form-popup-sticky" action="{{:PluginsAdminUrl('themeswitch', 'admin', 'save')}}" method="POST" request-type="ajax-url" request-value="{{:PluginsAdminUrl('themeswitch', 'admin', 'index', $params)}}" enctype="multipart/form-data">
+            <div class="am-form-group">
+                <label>H5自定义地址<span class="am-form-group-label-tips">请以斜杠结尾[ / ]、uniapp端则写h5地址加/#/，如：https://shopxo.net/h5/#/，未设置则使用系统h5配置的地址</span></label>
+                <input type="text" name="h5_url" placeholder="H5自定义地址" maxlength="200" data-validation-message="H5自定义地址格式最多 200 个字符" class="am-radius" value="{{if !empty($data['h5_url'])}}{{$data.h5_url}}{{/if}}" />
+            </div>
+
+            <div class="am-form-group">
+                <label class="am-block">是否手机模式下<span class="am-form-group-label-tips">默认否</span></label>
+                <input name="is_mobile" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_mobile']) and $data['is_mobile'] eq 1}}checked="true"{{/if}} />
+            </div>
+            <div class="am-form-group">
+                <label class="am-block">是否微信环境中<span class="am-form-group-label-tips">默认否</span></label>
+                <input name="is_wechat_env" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_wechat_env']) and $data['is_wechat_env'] eq 1}}checked="true"{{/if}} />
+            </div>
+            <div class="am-form-group">
+                <label class="am-block">微信环境中-是否需要登录<span class="am-form-group-label-tips">默认否</span></label>
+                <input name="is_wechat_env_login" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_wechat_env_login']) and $data['is_wechat_env_login'] eq 1}}checked="true"{{/if}} />
+            </div>
+            <div class="am-form-group">
+                <label class="am-block">跳转带上referrer参数<span class="am-form-group-label-tips">默认否</span></label>
+                <input name="js_jump_referrer" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['js_jump_referrer']) and $data['js_jump_referrer'] eq 1}}checked="true"{{/if}} />
+            </div>
+
+            <div class="am-form-popup-submit">
+                <a href="{{:PluginsAdminUrl('themeswitch', 'admin', 'index', $params)}}" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg">
+                    <i class="am-icon-mail-reply"></i>
+                    <span>{{:MyLang('retreat_title')}}</span>
+                </a>
+                <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('save_title')}}'}">
+                    <i class="am-icon-save"></i>
+                    <span>{{:MyLang('save_title')}}</span>
+                </button>
+            </div>
+        </form>
+        <!-- form end -->
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

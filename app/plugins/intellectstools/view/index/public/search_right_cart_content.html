@@ -1,0 +1,66 @@
+<!-- 商品列表 -->
+<div class="cart-items am-padding-sm {{if empty($cart_list)}}none{{/if}}">
+    {{if !empty($cart_list)}}
+        <table class="am-table">
+            {{foreach $cart_list as $goods}}
+                <tr id="plugins-intellectstools-cart-data-list-{{$goods.id}}" data-id="{{$goods.id}}" data-goods-id="{{$goods.goods_id}}" class="{{if $goods['is_shelves'] neq 1}}am-warning{{/if}} {{if $goods['is_delete_time'] neq 0}}am-danger{{/if}}">
+                    <td class="base">
+                        <div class="goods-detail">
+                            <a href="{{$goods.goods_url}}" target="_blank">
+                                <img class="am-radius am-border-grey-light" src="{{$goods.images}}">
+                            </a>
+                            <div class="goods-base">
+                                <a href="{{$goods.goods_url}}" target="_blank" class="goods-title">{{$goods.title}}</a>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="total-price">
+                        <strong class="total-price-content">{{$currency_symbol}}{{$goods.total_price}}</strong>
+                        <span class="cart-number">x{{$goods.stock}}</span>
+                    </td>
+                    <td class="operation">
+                        <a href="javascript:;" class="submit-delete" data-url="{{:MyUrl('index/cart/delete')}}" data-id="{{$goods.id}}" data-view="fun" data-value="PluginsIntellectstoolsCartViewDeleteBack" data-is-confirm="0">删除</a>
+                    </td>
+                </tr>
+            {{/foreach}}
+        </table>
+    {{/if}}
+</div>
+
+<!-- 导航 -->
+<div class="cart-nav {{if empty($cart_list)}}none{{/if}}">
+    <form action="{{:MyUrl('index/buy/index')}}" method="post">
+        <div class="cart-sub">
+            <div class="cart-sub-detail">
+                <strong class="nav-total-price">{{$currency_symbol}}{{$cart_base.total_price}}</strong>
+                <span class="total-price-tips">共计：</span>
+                <span class="selected-tips">
+                    <span>共</span>
+                    <strong>{{$cart_base.cart_count}}</strong>
+                    <span>种商品</span>
+                </span>
+                <input type="hidden" name="ids" value="{{$cart_base.ids}}" />
+                <input type="hidden" name="buy_type" value="cart" />
+            </div>
+            <button type="submit" class="am-btn am-btn-primary separate-submit am-radius">结算</button>
+        </div>
+    </form>
+</div>
+
+<!-- 空购物车 -->
+<div class="mixed-tips {{if !empty($cart_list)}}none{{/if}}">
+    <img class="am-fl" src="{{:StaticAttachmentUrl('cart.png')}}" />
+    <div class="mixed-tips-content">
+        <h1>您的购物车还是空的，您可以</h1>
+        <ul>
+            <li>
+               <span>看看</span>
+                <a href="{{if empty($user)}}javascript:;{{else /}}{{:MyUrl('index/usergoodsfavor/index')}}{{/if}}" class="{{if empty($user)}}login-event{{/if}}">我的收藏夹</a> 
+            </li>
+            <li>
+               <span>看看</span>
+                <a href="{{if empty($user)}}javascript:;{{else /}}{{:MyUrl('index/order/index')}}{{/if}}" class="{{if empty($user)}}login-event{{/if}}">我的订单</a> 
+            </li>
+        </ul>
+    </div>
+</div>

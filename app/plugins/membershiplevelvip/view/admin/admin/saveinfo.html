@@ -1,0 +1,523 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'membershiplevelvip',
+            'title'     => MyLang('base_config_title'),
+            'back_url'  => PluginsAdminUrl('membershiplevelvip', 'admin', 'index'),
+        ])}}
+
+        <!-- form start -->
+        <form class="am-form form-validation am-form-full-screen am-form-popup-sticky" action="{{:PluginsAdminUrl('membershiplevelvip', 'admin', 'save')}}" method="POST" request-type="ajax-url" request-value="{{:PluginsAdminUrl('membershiplevelvip', 'admin', 'index')}}" enctype="multipart/form-data">
+            <!-- 基础配置 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">{{:MyLang('base_config_title')}}</h3>
+                </div>
+                <div class="am-panel-bd am-padding-vertical-xs">
+                    <div class="am-cf">
+                        <div class="am-u-sm-6">
+                            <div class="am-form-group">
+                                <label>应用导航名称<span class="am-form-group-label-tips">空则不显示</span></label>
+                                <input type="text" name="application_name" placeholder="应用导航名称" maxlength="60" data-validation-message="应用导航名称格式最多 60 个字符" class="am-radius" {{if !empty($data['application_name'])}} value="{{$data.application_name}}"{{/if}} />
+                            </div>
+                        </div>
+                        <div class="am-u-sm-6">
+                            <div class="am-form-group">
+                                <label class="am-block">等级规则模式<span class="am-form-group-label-tips">默认积分</span></label>
+                                {{foreach $members_level_rules_list as $v}}
+                                    <label class="am-radio-inline">
+                                        <input type="radio" name="level_rules" value="{{$v.value}}" {{if isset($data['level_rules']) and $data['level_rules'] eq $v['value']}}checked="checked"{{else /}}{{if !isset($data['level_rules']) and isset($v['checked']) and $v['checked'] eq true}}checked="checked"{{/if}}{{/if}} data-am-ucheck /> {{$v.name}}
+                                    </label>
+                                {{/foreach}}
+                                <div class="am-tips-card">
+                                    等级权重 [ 手动设定 -> 付费购买 -> 自动分配（使用以下规则） ]
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="am-cf">
+                        <div class="am-u-sm-6">
+                            <div class="am-form-group">
+                                <label class="am-block">后台用户列表展示等级<span class="am-form-group-label-tips">默认否</span></label>
+                                <input name="is_admin_user_level_show" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_admin_user_level_show']) and $data['is_admin_user_level_show'] eq 1}}checked="true"{{/if}} />
+                            </div>
+                        </div>
+                        <div class="am-u-sm-6">
+                            <div class="am-form-group">
+                                <label class="am-block">开启用户中心菜单入口</label>
+                                <input name="is_user_menu" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_user_menu']) and $data['is_user_menu'] eq 1}}checked="true"{{/if}} />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="am-cf">
+                        <div class="am-u-sm-6">
+                            <div class="am-form-group">
+                                <label class="am-block">不显示原价</label>
+                                <input name="is_user_hide_original_price" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_user_hide_original_price']) and $data['is_user_hide_original_price'] eq 1}}checked="true"{{/if}} />
+                            </div>
+                        </div>
+                        <div class="am-u-sm-6">
+                            <div class="am-form-group">
+                                <label class="am-block">不显示售价（仅web端）</label>
+                                <input name="is_user_hide_sales_price" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_user_hide_sales_price']) and $data['is_user_hide_sales_price'] eq 1}}checked="true"{{/if}} />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="am-cf">
+                        <div class="am-u-sm-6">
+                            <div class="am-form-group">
+                                <label class="am-block">用户端商品鼠标悬停展示价格</label>
+                                <input name="is_user_goods_hover_price" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_user_goods_hover_price']) and $data['is_user_goods_hover_price'] eq 1}}checked="true"{{/if}} />
+                            </div>
+                        </div>
+                        <div class="am-u-sm-6">
+                            <div class="am-form-group am-form-file">
+                                <label class="am-block">默认等级图标<span class="am-form-group-label-tips">建议50*50px</span></label>
+                                <div class="am-form-file-upload-container">
+                                    <ul class="plug-file-upload-view plugins-default_level_images-view" data-form-name="default_level_images" data-max-number="1" data-dialog-type="images">
+                                        {{if !empty($data['default_level_images'])}}
+                                            <li>
+                                                <input type="text" name="default_level_images" value="{{$data.default_level_images}}" data-validation-message="请上传默认等级图标" />
+                                                <img src="{{$data.default_level_images}}" />
+                                                <i class="iconfont icon-close"></i>
+                                            </li>
+                                        {{/if}}
+                                    </ul>
+                                    <div class="plug-file-upload-submit" data-view-tag="ul.plugins-default_level_images-view">
+                                        <i class="iconfont icon-upload-add"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 仅参加会员统一折扣商品 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">仅参加会员统一折扣商品</h3>
+                </div>
+                <div class="am-panel-bd">
+                    <div class="am-form-group">
+                        <label>开启仅参加会员统一折扣商品<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="开启后，配置的商品仅参与会员统一折扣，其他商品则不参与会员统一折扣"></a></label>
+                        <input name="is_only_join_vip_discount_goods" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_only_join_vip_discount_goods']) and $data['is_only_join_vip_discount_goods'] eq 1}}checked="true"{{/if}} />
+                    </div>
+                    <div class="am-form-group">
+                        <label>仅参加会员统一折扣的商品</label>
+                        <ul class="am-list am-list-border am-margin-top-sm appoint-goods-container appoint-only-join-vip-discount-goods-container">
+                            {{if !empty($data['appoint_only_join_vip_discount_goods_list']) and is_array($data['appoint_only_join_vip_discount_goods_list'])}}
+                                {{foreach $data.appoint_only_join_vip_discount_goods_list as $g}}
+                                    <li class="appoint-goods-{{$g.id}}">
+                                        <input type="hidden" name="appoint_only_join_vip_discount_goods_ids[]" value="{{$g.id}}" />
+                                        <a href="{{$g.goods_url}}" target="_blank" class="am-text-truncate">
+                                            <img src="{{$g.images}}" alt="{{$g.title}}" class="am-fl am-radius am-margin-right-xs" width="20" height="20" />
+                                            <span>{{$g.title}}</span>
+                                        </a>
+                                        <button type="button" class="am-close am-fr">&times;</button>
+                                    </li>
+                                {{/foreach}}
+                            {{/if}}
+                        </ul>
+                        <span class="business-operations-submit goods-popup-add" data-tag=".appoint-only-join-vip-discount-goods-container" data-form-name="appoint_only_join_vip_discount_goods_ids[]">+添加商品</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 不参加会员统一折扣商品 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">不参加会员统一折扣商品</h3>
+                </div>
+                <div class="am-panel-bd">
+                    <div class="am-form-group">
+                        <label>开启不参加会员统一折扣商品<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="开启后，配置的商品不参与会员统一折扣"></a></label>
+                        <input name="is_not_join_vip_discount_goods" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_not_join_vip_discount_goods']) and $data['is_not_join_vip_discount_goods'] eq 1}}checked="true"{{/if}} />
+                    </div>
+                    <div class="am-form-group">
+                        <label>不参加会员统一折扣的商品</label>
+                        <ul class="am-list am-list-border am-margin-top-sm appoint-goods-container appoint-not-join-vip-discount-goods-container">
+                            {{if !empty($data['appoint_not_join_vip_discount_goods_list']) and is_array($data['appoint_not_join_vip_discount_goods_list'])}}
+                                {{foreach $data.appoint_not_join_vip_discount_goods_list as $g}}
+                                    <li class="appoint-goods-{{$g.id}}">
+                                        <input type="hidden" name="appoint_not_join_vip_discount_goods_ids[]" value="{{$g.id}}" />
+                                        <a href="{{$g.goods_url}}" target="_blank" class="am-text-truncate">
+                                            <img src="{{$g.images}}" alt="{{$g.title}}" class="am-fl am-radius am-margin-right-xs" width="20" height="20" />
+                                            <span>{{$g.title}}</span>
+                                        </a>
+                                        <button type="button" class="am-close am-fr">&times;</button>
+                                    </li>
+                                {{/foreach}}
+                            {{/if}}
+                        </ul>
+                        <span class="business-operations-submit goods-popup-add" data-tag=".appoint-not-join-vip-discount-goods-container" data-form-name="appoint_not_join_vip_discount_goods_ids[]">+添加商品</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 会员付费 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">会员付费</h3>
+                </div>
+                <div class="am-panel-bd am-padding-vertical-xs">
+                    <div class="am-cf">
+                        <div class="am-u-sm-6">
+                            <div class="am-form-group">
+                                <label class="am-block">开启购买会员<span class="am-form-group-label-tips">默认否</span></label>
+                                <input name="is_user_buy" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_user_buy']) and $data['is_user_buy'] eq 1}}checked="true"{{/if}} />
+                                <div class="am-tips-card">
+                                    开启后、用户可主动购买已支持付费购买的会员等级
+                                </div>
+                            </div>
+                        </div>
+                        <div class="am-u-sm-6">
+                            <div class="am-form-group">
+                                <label class="am-block">用户续费采用原订单<span class="am-form-group-label-tips">默认否</span></label>
+                                <div>
+                                    <input name="is_supported_renew_old_order" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_supported_renew_old_order']) and $data['is_supported_renew_old_order'] eq 1}}checked="true"{{/if}} />
+                                </div>
+                                <div class="am-tips-card">
+                                    开启后、用户中心续费则采用原来购买订单自动生成新的订单续费，则直接从新选择会员购买（注：不管是续费还是从新购买都是累加过期时间的）
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="am-cf">
+                        <div class="am-u-sm-6">
+                            <div class="am-form-group">
+                                <label class="am-block">会员费购买返佣<span class="am-form-group-label-tips">默认否</span></label>
+                                <div>
+                                    <input name="is_commission" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_commission']) and $data['is_commission'] eq 1}}checked="true"{{/if}} />
+                                </div>
+                                <div class="am-tips-card">
+                                    <p>1. 开启后、根据会员等级中开通时常的返佣规则自动返佣给上（1~3）级用户</p>
+                                    <p>2. 关闭后、不再生成返佣订单（已生成返佣订单的不受影响）</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="am-u-sm-6">
+                            <div class="am-form-group">
+                                <label>订单超时关闭时间<span class="am-form-group-label-tips">单位 分钟，默认30分钟</span></label>
+                                <input type="number" name="order_close_time" placeholder="订单超时关闭时间" data-validation-message="请填写订单超时关闭时间" class="am-radius" value="{{if !empty($data['order_close_time'])}}{{$data.order_close_time}}{{else /}}30{{/if}}" required />
+                                <div class="am-tips-card">
+                                    <p class="am-text-warning">建议将该地址添加到linux定时任务定时请求即可（结果 count:0  冒号后面则是处理的数据条数）</p>
+                                    <p class="am-text-secondary">插件已经做了兼容处理，访问会员管理后台也会自动运行一次</p>
+                                    <a href="{{:PluginsHomeUrl('membershiplevelvip', 'crontab', 'orderclose')}}" target="_blank">{{:PluginsHomeUrl('membershiplevelvip', 'crontab', 'orderclose')}}</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="am-cf">
+                        <div class="am-u-sm-6">
+                            <div class="am-form-group">
+                                <label>佣金订单创建间隔时间<span class="am-form-group-label-tips">单位 分钟，默认5分钟</span></label>
+                                <input type="number" name="profit_order_create_time" placeholder="佣金订单创建间隔时间" data-validation-message="请填写佣金订单创建间隔时间" class="am-radius" value="{{if !empty($data['profit_order_create_time'])}}{{$data.profit_order_create_time}}{{else /}}5{{/if}}" required />
+                                <div class="am-tips-card">
+                                    <p class="am-text-warning">建议将该地址添加到linux定时任务定时请求即可（结果 sucs:0, fail:0 冒号后面则是处理的数据条数，sucs成功，fali失败）</p>
+                                    <p class="am-text-secondary">插件已经做了兼容处理，访问会员管理后台也会自动运行一次</p>
+                                    <a href="{{:PluginsHomeUrl('membershiplevelvip', 'crontab', 'profitcreate')}}" target="_blank">{{:PluginsHomeUrl('membershiplevelvip', 'crontab', 'profitcreate')}}</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="am-u-sm-6">
+                            <div class="am-form-group">
+                                <label>佣金订单结算周期<span class="am-form-group-label-tips">单位 分钟，默认10080分钟/7天</span></label>
+                                <input type="number" name="profit_order_settlement_time" placeholder="佣金订单结算周期" data-validation-message="请填写佣金订单结算周期" class="am-radius" value="{{if !empty($data['profit_order_settlement_time'])}}{{$data.profit_order_settlement_time}}{{else /}}10080{{/if}}" required />
+                                <div class="am-tips-card">
+                                    <p class="am-text-warning">建议将该地址添加到linux定时任务定时请求即可（结果 sucs:0, fail:0 冒号后面则是处理的数据条数，sucs成功，fali失败）</p>
+                                    <p class="am-text-secondary">插件已经做了兼容处理，访问会员管理后台也会自动运行一次</p>
+                                    <a href="{{:PluginsHomeUrl('membershiplevelvip', 'crontab', 'profitsettlement')}}" target="_blank">{{:PluginsHomeUrl('membershiplevelvip', 'crontab', 'profitsettlement')}}</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="am-cf">
+                        <div class="am-u-sm-6">
+                            <div class="am-form-group">
+                                <label>购买会员可选支付方式<span class="am-form-group-label-tips">空则不限制</span></label>
+                                <select name="user_buy_can_payment" class="am-radius chosen-select" multiple="multiple" data-placeholder="{{:MyLang('optional_tips')}}" data-validation-message="请选择一个购买会员可选支付方式">
+                                    {{foreach $payment_list as $v}}
+                                        <option value="{{$v.payment}}" {{if isset($data['user_buy_can_payment']) and is_array($data['user_buy_can_payment']) and in_array($v['payment'], $data['user_buy_can_payment'])}}selected{{/if}}>{{$v.name}}</option>
+                                    {{/foreach}}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 用户推广 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">用户推广</h3>
+                </div>
+                <div class="am-panel-bd am-padding-vertical-xs">
+                    <div class="am-cf">
+                        <div class="am-u-sm-6">
+                            <div class="am-form-group">
+                                <label class="am-block">开启用户推广工具<span class="am-form-group-label-tips">默认否</span></label>
+                                <input name="is_propaganda" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_propaganda']) and $data['is_propaganda'] eq 1}}checked="true"{{/if}} />
+                                <div class="am-tips-card">
+                                    开启后、用户可分享推广用户注册成为下级会员
+                                </div>
+                            </div>
+                        </div>
+                        <div class="am-u-sm-6">
+                            <div class="am-form-group am-form-file">
+                                <label class="am-block">用户分享封面图片</label>
+                                <div class="am-form-file-upload-container">
+                                    <ul class="plug-file-upload-view plugins-user_poster_share_images-view" data-form-name="user_poster_share_images" data-max-number="1" data-dialog-type="images">
+                                        {{if !empty($data['user_poster_share_images'])}}
+                                            <li>
+                                                <input type="text" name="user_poster_share_images" value="{{$data.user_poster_share_images}}" data-validation-message="请上传用户分享封面图片" />
+                                                <img src="{{$data.user_poster_share_images}}" />
+                                                <i class="iconfont icon-close"></i>
+                                            </li>
+                                        {{/if}}
+                                    </ul>
+                                    <div class="plug-file-upload-submit" data-view-tag="ul.plugins-user_poster_share_images-view">
+                                        <i class="iconfont icon-upload-add"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="am-cf">
+                        <div class="am-u-sm-6">
+                            <div class="am-form-group">
+                                <label>用户分享标题<span class="am-form-group-label-tips">空则读取站点页面名称</span></label>
+                                <input type="text" name="user_poster_share_title" placeholder="用户分享标题" maxlength="60" data-validation-message="用户分享标题格式最多 60 个字符" class="am-radius" value="{{if !empty($data['user_poster_share_title'])}}{{$data.user_poster_share_title}}{{/if}}" />
+                            </div>
+                        </div>
+                        <div class="am-u-sm-6">
+                            <div class="am-form-group am-form-file">
+                                <label class="am-block">用户分享描述<span class="am-form-group-label-tips">空则读取站点页面描述</span></label>
+                                <textarea rows="1" name="user_poster_share_desc" class="am-radius am-field-valid" placeholder="用户分享描述" data-validation-message="请填写用户分享描述">{{if !empty($data['user_poster_share_desc'])}}{{$data.user_poster_share_desc}}{{/if}}</textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="am-cf">
+                        <div class="am-u-sm-6">
+                            <div class="am-form-group">
+                                <label>H5自定义地址<span class="am-form-group-label-tips">分享使用、默认取当前站点地址、请以斜杠结尾[ / ]、uniapp端则写h5地址加/#/，如：https://shopxo.net/h5/#/</span></label>
+                                <input type="text" name="h5_url" placeholder="H5自定义地址" maxlength="200" data-validation-message="H5自定义地址格式最多 200 个字符" class="am-radius" value="{{if !empty($data['h5_url'])}}{{$data.h5_url}}{{/if}}" />
+                            </div>
+                        </div>
+                        <div class="am-u-sm-6">
+                            <div class="am-form-group">
+                                <label>手机端首页地址<span class="am-form-group-label-tips">分享使用、默认[ pages/index/index ]、仅uniapp主题有效</span></label>
+                                <input type="text" name="mobile_home_page" placeholder="手机端首页地址" maxlength="200" data-validation-message="手机端首页地址格式最多 200 个字符" class="am-radius" value="{{if !empty($data['mobile_home_page'])}}{{$data.mobile_home_page}}{{/if}}" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 会员首页 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">会员首页</h3>
+                </div>
+                <div class="am-panel-bd am-padding-vertical-xs">
+                    <div class="am-cf">
+                        <div class="am-u-sm-12 am-u-md-6">
+                            <div class="am-form-group">
+                                <label>首页banner大标题<span class="am-form-group-label-tips">空则不显示</span></label>
+                                <input type="text" name="banner_top_title" placeholder="首页banner大标题" maxlength="20" data-validation-message="首页banner大标题格式最多 20 个字符" class="am-radius" {{if !empty($data['banner_top_title'])}} value="{{$data.banner_top_title}}"{{/if}} />
+                            </div>
+                        </div>
+                        <div class="am-u-sm-12 am-u-md-6">
+                            <div class="am-cf">
+                                <div class="am-u-sm-6 am-padding-left-0">
+                                    <div class="am-form-group am-form-file">
+                                        <label class="am-block">首页banner按钮背景图<span class="am-form-group-label-tips">建议546*164px</span><a href="javascript:;" class="am-margin-left-lg common-annex-view-event" data-value="{{:StaticAttachmentUrl('btn.png')}}">查看默认</a></label>
+                                        <div class="am-form-file-upload-container">
+                                            <ul class="plug-file-upload-view vip-default-btn-bg-view" data-form-name="default_btn_bg" data-max-number="1" data-dialog-type="images">
+                                                {{if !empty($data['default_btn_bg'])}}
+                                                    <li>
+                                                        <input type="text" name="default_btn_bg" value="{{$data.default_btn_bg}}" data-validation-message="请上传首页banner按钮背景图" />
+                                                        <img src="{{$data.default_btn_bg}}" />
+                                                        <i class="iconfont icon-close"></i>
+                                                    </li>
+                                                {{/if}}
+                                            </ul>
+                                            <div class="plug-file-upload-submit" data-view-tag="ul.vip-default-btn-bg-view">
+                                                <i class="iconfont icon-upload-add"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="am-u-sm-6">
+                                    <div class="am-form-group">
+                                        <label>首页banner按钮文字<span class="am-form-group-label-tips">默认 开通会员</span></label>
+                                        <input type="text" name="banner_middle_name" placeholder="首页banner按钮文字" maxlength="6" data-validation-message="首页banner按钮文字格式最多 6 个字符" class="am-radius" {{if !empty($data['banner_middle_name'])}} value="{{$data.banner_middle_name}}"{{/if}} />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="am-cf">
+                        <div class="am-u-sm-6">
+                            <div class="am-form-group am-form-file">
+                                <label class="am-block">默认背景图片<span class="am-form-group-label-tips">建议3840*1682px</span><a href="javascript:;" class="am-margin-left-lg common-annex-view-event" data-value="{{:StaticAttachmentUrl('index-bg.png')}}">查看默认</a></label>
+                                <div class="am-form-file-upload-container">
+                                    <ul class="plug-file-upload-view vip-default-bg-images-view" data-form-name="default_bg_images" data-max-number="1" data-dialog-type="images">
+                                        {{if !empty($data['default_bg_images'])}}
+                                            <li>
+                                                <input type="text" name="default_bg_images" value="{{$data.default_bg_images}}" data-validation-message="请上传默认背景图片" />
+                                                <img src="{{$data.default_bg_images}}" />
+                                                <i class="iconfont icon-close"></i>
+                                            </li>
+                                        {{/if}}
+                                    </ul>
+                                    <div class="plug-file-upload-submit" data-view-tag="ul.vip-default-bg-images-view">
+                                        <i class="iconfont icon-upload-add"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="am-u-sm-6">
+                            <div class="am-form-group am-form-file">
+                                <label class="am-block">默认logo<span class="am-form-group-label-tips">建议800*220px</span><a href="javascript:;" class="am-margin-left-lg common-annex-view-event" data-value="{{:StaticAttachmentUrl('logo.png')}}">查看默认</a></label>
+                                <div class="am-form-file-upload-container">
+                                    <ul class="plug-file-upload-view vip-default-logo-view" data-form-name="default_logo" data-max-number="1" data-dialog-type="images">
+                                        {{if !empty($data['default_logo'])}}
+                                            <li>
+                                                <input type="text" name="default_logo" value="{{$data.default_logo}}" data-validation-message="请上传默认logo" />
+                                                <img src="{{$data.default_logo}}" />
+                                                <i class="iconfont icon-close"></i>
+                                            </li>
+                                        {{/if}}
+                                    </ul>
+                                    <div class="plug-file-upload-submit" data-view-tag="ul.vip-default-logo-view">
+                                        <i class="iconfont icon-upload-add"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="am-u-sm-12">
+                        <div class="am-form-group">
+                            <label>首页底部内容</label>
+                            <textarea class="am-radius am-validate" name="banner_bottom_content" rows="5" id="editor-tag" placeholder="首页底部内容格式最多 1005000 个字符" data-validation-message="首页底部内容格式最多 1005000 个字符">{{if !empty($data['banner_bottom_content'])}}{{$data.banner_bottom_content}}{{/if}}</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 会员中心 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">会员中心</h3>
+                </div>
+                <div class="am-panel-bd am-padding-vertical-xs">
+                    <div class="am-cf">
+                        <div class="am-u-sm-6">
+                            <div class="am-form-group">
+                                <label>未开通会员介绍<span class="am-form-group-label-tips">位于用户会员中心，仅开启会员购买有效</span></label>
+                                <textarea rows="3" name="not_opening_vip_desc" class="am-radius am-field-valid" placeholder="未开通会员介绍" data-validation-message="请填写未开通会员介绍">{{if !empty($data['not_opening_vip_desc'])}}{{:implode("\\n", $data['not_opening_vip_desc'])}}{{/if}}</textarea>
+                            </div>
+                        </div>
+                        <div class="am-u-sm-6">
+                            <div class="am-form-group">
+                                <label>会员中心公告<span class="am-form-group-label-tips">位于用户会员中心</span></label>
+                                <textarea rows="3" name="user_vip_center_notice" class="am-radius am-field-valid" placeholder="会员中心公告" data-validation-message="请填写用户中心公告">{{if !empty($data['user_vip_center_notice'])}}{{:implode("\\n", $data['user_vip_center_notice'])}}{{/if}}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEO -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">{{:MyLang('form_seo_data_title')}}</h3>
+                </div>
+                <div class="am-panel-bd am-padding-vertical-xs">
+                    {{:ModuleInclude('lib/seo')}}
+                </div>
+            </div>
+
+            <div class="am-form-popup-submit">
+                <a href="{{:PluginsAdminUrl('membershiplevelvip', 'admin', 'index', $params)}}" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg">
+                    <i class="am-icon-mail-reply"></i>
+                    <span>{{:MyLang('retreat_title')}}</span>
+                </a>
+                <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('save_title')}}'}">
+                    <i class="am-icon-save"></i>
+                    <span>{{:MyLang('save_title')}}</span>
+                </button>
+            </div>
+        </form>
+        <!-- form end -->
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- 商品添加弹窗 -->
+<div class="am-popup am-radius" id="membershiplevelvip-goods-popup">
+    <div class="am-popup-inner">
+        <div class="am-popup-hd">
+            <h4 class="am-popup-title">{{:MyLang('goods_add_name')}}</h4>
+            <span data-am-modal-close class="am-close">&times;</span>
+        </div>
+        <div class="am-popup-bd am-padding-0">
+            <form class="am-form am-padding-sm goods-add-container">
+                <!-- 搜索 -->
+                <div class="forth-selection-container" data-search-url="{{:PluginsAdminUrl('membershiplevelvip', 'admin', 'goodssearch')}}">
+                    <select class="am-radius chosen-select forth-selection-form-category" data-placeholder="{{:MyLang('form_goods_category_placeholder')}}" data-validation-message="{{:MyLang('form_goods_category_message')}}">
+                        <option value="">{{:MyLang('form_goods_category_placeholder')}}</option>
+                        {{if !empty($goods_category_list)}}
+                            {{foreach $goods_category_list as $v}}
+                                <option value="{{$v.id}}">{{$v.name}}</option>
+                                {{if !empty($v['items'])}}
+                                    {{foreach $v.items as $vs}}
+                                        <option style="padding-left: 15px;" value="{{$vs.id}}">{{if empty($vs['items'])}}├{{else /}}└{{/if}}² {{$vs.name}}</option>
+                                        {{if !empty($vs['items'])}}
+                                            {{foreach $vs.items as $kss=>$vss}}
+                                                <option style="padding-left: 30px;" value="{{$vss.id}}">{{if $kss eq count($vs['items'])-1}}└{{else /}}├{{/if}}³ {{$vss.name}}</option>
+                                            {{/foreach}}
+                                        {{/if}}
+                                    {{/foreach}}
+                                {{/if}}
+                            {{/foreach}}
+                        {{/if}}
+                    </select>
+                    <input type="text" placeholder="{{:MyLang('goods_name')}}" class="am-radius forth-selection-form-keywords" />
+                    <button type="button" class="am-btn am-btn-primary-light am-radius am-btn-xs btn-loading-example search-submit" data-am-loading="{spinner: 'circle-o-notch', loadingText: ' {{:MyLang('search_title')}}'}">
+                        <i class="iconfont icon-search"></i>
+                        <span>{{:MyLang('search_title')}}</span>
+                    </button>
+                </div>
+
+                <!-- 商品列表 -->
+                <div class="am-scrollable-vertical am-margin-top-sm am-padding-bottom-xs am-radius goods-list-container" data-loading-msg="{{:MyLang('searching_tips')}}">
+                    <ul class="am-gallery am-avg-sm-3 am-avg-md-4 am-avg-lg-5 am-gallery-bordered">
+                        <div class="table-no"><i class="am-icon-warning"></i> 请搜索商品</div>
+                    </ul>
+                </div>
+
+                <!-- 分页 -->
+                <div class="am-margin-top-sm am-text-center goods-page-container"></div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

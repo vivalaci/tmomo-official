@@ -1,0 +1,67 @@
+{{if !empty($module_data['ask_list']) and is_array($module_data['ask_list'])}}
+    <div class="module-ask-container module-ask-list module-ask-list-base">
+        {{if !empty($module_data['title'])}}
+            <div class="am-margin-top-main am-margin-bottom-sm">
+                <h2>
+                    {{if isset($module_data['icon'])}}
+                        <i class="iconfont {{$module_data['icon']}} am-vertical-align-middle"></i>
+                    {{/if}}
+                    <span class="am-vertical-align-middle">{{$module_data['title']}}</span>
+                </h2>
+            </div>
+        {{/if}}
+        <div class="content am-background-white am-radius am-padding-main">
+            <ul class="am-flex am-flex-col am-gap-2">
+                {{foreach $module_data.ask_list as $k => $v}}
+                    <li class="am-flex am-gap-1">
+                        <div class="list-left am-radius am-color-white am-text-center 
+                            {{if $v['is_reply'] eq 1}}am-background-green{{else/}}am-background-yellow{{/if}}
+                                {{if isset($module_data['mini_reply']) and $module_data['mini_reply'] eq 1}}
+                                {{if $k gt 2}}
+                                    mini-reply
+                                {{else/}}
+                                    mini-top-reply
+                                {{/if}}
+                            {{/if}}">
+                            {{if isset($module_data['mini_reply']) and $module_data['mini_reply'] eq 1}}
+                                {{if $k gt 2}}
+                                    <i class="am-icon-circle"></i>
+                                {{else/}}
+                                    {{$k+1}}
+                                {{/if}}
+                            {{else/}}
+                                {{if $v['is_reply'] eq 1}}
+                                    已回
+                                {{else/}}
+                                    未回
+                                {{/if}}
+                            {{/if}}
+                        </div>
+                        <div class="list-right am-flex am-flex-col am-flex-justify-between
+                            {{if isset($module_data['mini_reply']) and $module_data['mini_reply'] eq 1}} mini-reply{{/if}}">
+                            <a href="{{$v.url}}" target="_blank" class="am-text-default am-font-weight am-text-truncate">
+                                {{if empty($v['title'])}}
+                                    {{$v.content}}
+                                {{else /}}
+                                    {{$v.title}}
+                                {{/if}}
+                            </a>
+                            <span class="am-color-grey-dark am-text-truncate">
+                                {{$v.add_time_date}}
+                                {{if !empty($v.access_count)}}
+                                    <strong class="am-padding-right-xs">·</strong>
+                                    {{$v.access_count}}浏览
+                                {{/if}}
+                            </span>
+                        </div>
+                    </li>
+                {{/foreach}}
+            </ul>
+            {{if !isset($module_data['is_more']) or $module_data['is_more'] eq true}}
+                <div class="am-margin-top-main am-text-right">
+                    <a class="am-font-weight am-color-main" href="{{:PluginsHomeUrl('ask', 'index', 'search')}}">查看更多<i class="iconfont icon-angle-right am-text-default am-padding-left-xs"></i></a>
+                </div>
+            {{/if}}
+        </div>
+    </div>
+{{/if}}

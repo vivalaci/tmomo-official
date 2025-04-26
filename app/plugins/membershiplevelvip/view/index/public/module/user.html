@@ -1,0 +1,20 @@
+<!-- 用户信息 -->
+{{if !empty($module_data)}}
+    {{if empty($module_data['user'])}}
+        {{if !empty($module_data['user_name_view']) and !empty($module_data['avatar'])}}
+            <div class="am-nbfc">
+                <img src="{{$module_data.avatar}}" alt="{{$module_data.user_name_view}}" class="am-img-thumbnail am-radius am-align-left am-margin-right-xs am-margin-bottom-0" width="35" height="35" />
+                <ul class="user-base">
+                    <li>{{if !empty($module_data['user_name_view'])}}{{$module_data.user_name_view}}{{/if}}</li>
+                </ul>
+            </div>
+        {{/if}}
+    {{else /}}
+        <div class="am-nbfc">
+            <img src="{{$module_data.user.avatar}}" alt="{{$module_data.user.user_name_view}}" class="am-img-thumbnail am-radius am-align-left am-margin-right-xs am-margin-bottom-0" width="35" height="35" />
+            <ul class="user-base">
+                <li>{{if !empty($module_data['user']['user_name_view'])}}{{$module_data.user.user_name_view}}{{/if}}</li>
+            </ul>
+        </div>
+    {{/if}}
+{{/if}}

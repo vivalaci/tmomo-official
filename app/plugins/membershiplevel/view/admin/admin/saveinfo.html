@@ -1,0 +1,61 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'membershiplevel',
+            'title'     => MyLang('base_config_title'),
+            'back_url'  => PluginsAdminUrl('membershiplevel', 'admin', 'index'),
+        ])}}
+
+        <!-- form start -->
+        <form class="am-form form-validation am-form-full-screen am-form-popup-sticky" action="{{:PluginsAdminUrl('membershiplevel', 'admin', 'save')}}" method="POST" request-type="ajax-url" request-value="{{:PluginsAdminUrl('membershiplevel', 'admin', 'index')}}" enctype="multipart/form-data">            
+            <div class="am-form-group">
+                <label>等级规则模式<span class="am-form-group-label-tips">默认积分</span></label>
+                <div>
+                    {{foreach $members_level_rules_list as $v}}
+                        <label class="am-radio-inline">
+                            <input type="radio" name="level_rules" value="{{$v.value}}" {{if isset($data['level_rules']) and $data['level_rules'] eq $v['value']}}checked="checked"{{else /}}{{if !isset($data['level_rules']) and isset($v['checked']) and $v['checked'] eq true}}checked="checked"{{/if}}{{/if}} data-am-ucheck /> {{$v.name}}
+                        </label>
+                    {{/foreach}}
+                </div>
+            </div>
+
+            <div class="am-form-group am-form-file">
+                <label class="am-block">默认等级图标<span class="am-form-group-label-tips">建议50*50px</span></label>
+                <div class="am-form-file-upload-container">
+                    <ul class="plug-file-upload-view plugins-default_level_images-view" data-form-name="default_level_images" data-max-number="1" data-dialog-type="images">
+                        {{if !empty($data['default_level_images'])}}
+                            <li>
+                                <input type="text" name="default_level_images" value="{{$data.default_level_images_old}}" data-validation-message="请上传默认等级图标" />
+                                <img src="{{$data.default_level_images}}" />
+                                <i class="iconfont icon-close"></i>
+                            </li>
+                        {{/if}}
+                    </ul>
+                    <div class="plug-file-upload-submit" data-view-tag="ul.plugins-default_level_images-view">
+                        <i class="iconfont icon-upload-add"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="am-form-popup-submit">
+                <a href="{{:PluginsAdminUrl('membershiplevel', 'admin', 'index', $params)}}" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg">
+                    <i class="am-icon-mail-reply"></i>
+                    <span>{{:MyLang('retreat_title')}}</span>
+                </a>
+                <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('save_title')}}'}">
+                    <i class="am-icon-save"></i>
+                    <span>{{:MyLang('save_title')}}</span>
+                </button>
+            </div>
+        </form>
+        <!-- form end -->
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

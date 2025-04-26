@@ -1,0 +1,17 @@
+<!-- 操作栏 -->
+<a href="{{$module_data.url}}" target="_blank" class="am-btn am-btn-success am-btn-xs am-radius am-btn-block">
+    <i class="am-icon-home"></i>
+    <span>{{:MyLang('view_title')}}</span>
+</a>
+<button type="button" class="am-btn am-btn-default am-btn-xs am-radius am-btn-block submit-popup" data-url="{{:PluginsAdminUrl('label', 'label', 'detail', ['id'=>$module_data['id']])}}" data-title="{{:MyLang('detail_title')}}">
+    <i class="am-icon-eye"></i>
+    <span>{{:MyLang('detail_title')}}</span>
+</button>
+<button type="button" class="am-btn am-btn-secondary am-btn-xs am-radius am-btn-block submit-popup" data-url="{{:PluginsAdminUrl('label', 'label', 'saveinfo', array_merge($params, ['id'=>$module_data['id']]))}}" data-title="{{:MyLang('edit_title')}}">
+    <i class="am-icon-edit"></i>
+    <span>{{:MyLang('edit_title')}}</span>
+</button>
+<button type="button" class="am-btn am-btn-danger am-btn-xs am-radius am-btn-block submit-delete" data-url="{{:PluginsAdminUrl('label', 'label', 'delete')}}" data-id="{{$module_data.id}}" data-key="ids">
+    <i class="iconfont icon-delete"></i>
+    <span>{{:MyLang('delete_title')}}</span>
+</button>

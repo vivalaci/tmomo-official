@@ -1,0 +1,12 @@
+{{if !empty($module_data['membershiplevelvip_auto_level_data']) and is_array($module_data['membershiplevelvip_auto_level_data']) and !empty($module_data['membershiplevelvip_auto_level_data']['level_name'])}}
+    <span>{{$module_data.membershiplevelvip_auto_level_data.level_name}}</span>
+    {{if !empty($module_data['membershiplevelvip_auto_level_data']['user_vip_model']) and $module_data['membershiplevelvip_auto_level_data']['user_vip_model'] eq 'pay'}}
+        {{if isset($module_data['membershiplevelvip_auto_level_data']['is_permanent']) and $module_data['membershiplevelvip_auto_level_data']['is_permanent'] eq 1 and isset($module_data['membershiplevelvip_auto_level_data']['permanent_value'])}}
+            <span class="am-badge am-badge-primary am-radius">{{$module_data.membershiplevelvip_auto_level_data.permanent_value}}</span>
+        {{else /}}
+            {{if isset($module_data['membershiplevelvip_auto_level_data']['surplus_time_number']) and isset($module_data['membershiplevelvip_auto_level_data']['surplus_time_unit'])}}
+                <span class="am-badge am-badge-warning am-radius am-icon-history" title="{{$module_data['membershiplevelvip_auto_level_data']['expire_time']}}到期"> {{$module_data.membershiplevelvip_auto_level_data.surplus_time_number}}{{$module_data.membershiplevelvip_auto_level_data.surplus_time_unit}}</span>
+            {{/if}}
+        {{/if}}
+    {{/if}}
+{{/if}}

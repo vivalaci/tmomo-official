@@ -1,0 +1,22 @@
+{{if !empty($data)}}
+    {{foreach $data as $k=>$ask_comments}}
+        <div class="answer-item">
+            <div class="am-flex am-flex-col am-border-bottom-grey-light am-padding-vertical-main">
+                <div class="am-flex am-flex-row am-flex-justify-between am-flex-items-center">
+                    <div class="title am-font-weight">{{$ask_comments.content}}</div>
+                    <div class="am-color-grey">
+                        <text>{{$ask_comments.user.username}}</text>
+                        <text>{{$ask_comments.add_time}}</text>
+                    </div>
+                </div>
+                {{if isset($ask_comments.images)}}
+                    <ul data-am-widget="figure" class="am-cf comment-images am-figure am-inline-block" data-am-figure="{pureview: 'true'}">
+                        <li class="am-fl">
+                            <img src="{{$ask_comments.images}}" class="am-img-thumbnail am-radius" />
+                        </li>
+                    </ul>
+                {{/if}}
+            </div>
+        </div>
+    {{/foreach}}
+{{/if}}

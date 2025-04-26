@@ -1,0 +1,117 @@
+<!-- 继承公共的 form -->
+{{extend name="../../../module/view/form_table/form" /}}
+
+<!-- 表单顶部操作栏 -->
+{{block name="form_operate_top"}}
+    <!-- nav -->
+    {{:ModuleInclude('public/plugins_admin_nav', [
+        'plugins'   => 'quotation',
+        'title'     => '报价单',
+        'back_url'  => MyUrl('admin/pluginsadmin/index'),
+    ])}}
+
+    <!-- 已选商品数据 -->
+    <div class="am-dropdown choice-goods-container" data-ajax-url="{{:PluginsAdminUrl('quotation', 'goods', 'goodsdata')}}" data-am-dropdown="{trigger: 'hover'}">
+        <span class="am-badge am-badge-danger am-round goods-badge am-hide"></span>
+        <button class="am-btn am-btn-success am-dropdown-toggle am-text-xs am-radius am-margin-right-sm">已选商品 <span class="am-icon-caret-down"></span></button>
+        <div class="am-dropdown-content am-padding-0"></div>
+    </div>
+
+    <!-- 父级内容 -->
+    {__block__}
+{{/block}}
+
+<!-- 扩展 -->
+{{block name="form_extend"}}
+    <!-- 弹层 -->
+    <div class="am-popup am-radius" id="goods-popup-select">
+        <div class="am-popup-inner">
+            <div class="am-popup-hd">
+                <h4 class="am-popup-title">勾选需要导出的数据</h4>
+                <span data-am-modal-close class="am-close">&times;</span>
+            </div>
+            <div class="am-popup-bd">
+                <form class="am-form form-validation-popup" method="post" action="{{:PluginsAdminUrl('quotation', 'printing', 'index')}}" request-type="form">
+                    {{if !empty($goods_export_title)}}
+                        <!-- 字段列表 -->
+                        <div class="am-panel am-panel-default am-radius export-field-container">
+                            <div class="am-panel-hd">商品字段</div>
+                            <div class="am-panel-bd am-cf am-padding-0">
+                                <ul class="popup-content">
+                                    {{foreach $goods_export_title as $k=>$v}}
+                                        <li class="am-fl">
+                                            <label class="am-checkbox">
+                                                <input type="checkbox" name="export_field_{{$k}}" value="{{$v.field}}" data-am-ucheck />
+                                                <input type="text" name="export_title_{{$k}}" value="{{$v.title}}" class="am-radius input-title" />
+                                            </label>
+                                            {{if !in_array($k, ['spec', 'vip'])}}
+                                                <i class="drag-submit">排序</i>
+                                            {{/if}}
+                                        </li>
+                                    {{/foreach}}
+                                </ul>
+                            </div>
+                        </div>
+                    {{/if}}
+
+                    {{if !empty($vip_level_data)}}
+                        <!-- 会员等级 -->
+                        <div class="am-panel am-panel-default vip-level-container" style="display: none;">
+                            <div class="am-panel-hd">会员等级</div>
+                            <div class="am-panel-bd am-cf am-padding-0">
+                                <ul class="popup-content">
+                                    {{foreach $vip_level_data as $k=>$v}}
+                                        <li class="am-fl">
+                                            <label class="am-checkbox">
+                                                <input type="checkbox" name="vip_level_key_{{$k}}" value="{{$k}}" data-am-ucheck />
+                                                <input type="text" name="vip_level_name_{{$k}}" value="{{$v}}" class="am-radius input-title" />
+                                            </label>
+                                            <i class="drag-submit">排序</i>
+                                        </li>
+                                    {{/foreach}}
+                                </ul>
+                            </div>
+                        </div>
+                    {{/if}}
+
+                    {{if !empty($goods_export_spec_title)}}
+                        <!-- 规格字段 -->
+                        <div class="am-panel am-panel-default am-radius spec-field-container" style="display: none;">
+                            <div class="am-panel-hd">规格字段</div>
+                            <div class="am-panel-bd am-cf am-padding-0">
+                                <ul class="popup-content">
+                                    {{foreach $goods_export_spec_title as $k=>$v}}
+                                        <li class="am-fl">
+                                            <label class="am-checkbox">
+                                                <input type="checkbox" name="spec_field_{{$k}}" value="{{$v.field}}" data-am-ucheck />
+                                                <input type="text" name="spec_title_{{$k}}" value="{{$v.title}}" class="am-radius input-title" />
+                                            </label>
+                                            {{if $k neq 'original_price'}}
+                                                <i class="drag-submit">排序</i>
+                                            {{/if}}
+                                        </li>
+                                    {{/foreach}}
+                                </ul>
+                            </div>
+                        </div>
+                    {{/if}}
+
+                    <input type="hidden" name="goods_ids" value="" />
+                    <input type="hidden" name="type" value="0" />
+                    <div class="am-text-center am-margin-top-lg am-margin-bottom-lg">
+                        <button type="submit" class="am-btn am-btn-secondary am-radius am-btn-xs am-icon-print am-margin-right-lg" data-am-loading="{loadingText:' {{:MyLang('processing_tips')}}'}" data-type="0"> 打印预览</button>
+                        <button type="submit" class="am-btn am-btn-success am-btn-xs am-radius am-icon-file-excel-o am-margin-left-lg" data-am-loading="{loadingText:' {{:MyLang('processing_tips')}}'}" data-type="1"> 确认导出</button>
+                    </div>
+
+                    <div class="am-alert" data-am-alert>
+                        <p>1. 规格 和 规格+会员等级 默认在最后、不能拖拽排序</p>
+                        <p>2. 规格+会员等级 强制读取 规格数据</p>
+                        <p>3. 规格+会员等级 依赖 [<span class="am-text-warning">会员等级增强版插件</span>]</p>
+                        <p>4. 规格值固定在第一位、不可拖拽和配置</p>
+                        <p>5. 规格原价固定在售价前面、不能拖拽排序</p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{{/block}}

@@ -1,0 +1,135 @@
+<!-- 会员信息 -->
+<div class="base am-flex am-flex-justify-between">
+    <div class="base-user am-flex am-flex-items-center">
+        <div class="base-left">
+            <img src="{{$user.avatar}}" alt="用户头像" class="am-img-thumbnail am-circle user-avatar" width="80" />
+        </div>
+        <div class="base-right am-padding-left-main">
+            <p class="am-text-xl am-font-weight am-line-height-xl am-margin-bottom-module">{{$user.user_name_view}}</p>
+            <div class="am-flex am-flex-warp am-flex-items-center am-gap-12">
+                {{if !empty($user_vip) and !empty($user_vip['icon']) and !empty($user_vip['level_name'])}}
+                    <div class="certificate">
+                        <img src="{{$user_vip.icon}}" alt="会员等级" width="16" />
+                        <span class="name">{{$user_vip.level_name}}</span>
+                    </div>
+                {{/if}}
+                <div class="membercode am-cursor-pointer" data-number-code="{{$user.number_code}}">
+                    <i class="am-icon-qrcode"></i>
+                    <span class="name">会员码</span>
+                    <i class="iconfont icon-angle-right"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="base-content am-pr">
+        {{if !empty($user_vip)}}
+            {{if isset($user_vip['user_vip_model']) and $user_vip['user_vip_model'] eq 'pay'}}
+                {{if isset($user_vip['is_permanent']) and $user_vip['is_permanent'] eq 1}}
+                    <div class="membertips">
+                        <span>{{:MyLang('form_time_valid_title')}}</span>
+                        <span>{{$user_vip.permanent_value}}</span>
+                        <em>{{$user_vip.permanent_unit}}</em>
+                    </div>
+                {{else /}}
+                    {{if $user_vip['surplus_time_number'] eq 0}}
+                        <div class="membertips">
+                            <span class="panel-tips am-text-warning am-margin-right-sm">会员已过期或未开通</span>
+                        </div>
+                        {{if isset($plugins_config['is_user_buy']) and $plugins_config['is_user_buy'] eq 1}}
+                            <div class="openmeber">
+                                <a class="plugins-level-buy-open-event glideover-hover">
+                                    <i class="iconfont icon-qutixian_wdfx"></i>
+                                    开通会员
+                                    <i class="iconfont icon-angle-right"></i>
+                                </a>
+                            </div>
+                        {{/if}}
+                    {{else /}}
+                        <div class="membertips">
+                            <span>{{:MyLang('form_time_valid_title')}}</span>
+                            <span>{{$user_vip.surplus_time_number}}</span>
+                            <em>{{$user_vip.surplus_time_unit}}</em>
+                        </div>
+                        {{if !isset($user_vip['is_supported_renew']) or $user_vip['is_supported_renew'] neq 1}}
+                            {{if isset($plugins_config['is_supported_renew_old_order']) and $plugins_config['is_supported_renew_old_order'] eq 1}}
+                                <div class="openmeber">
+                                    <a class="submit-ajax" data-url="{{:PluginsHomeUrl('membershiplevelvip', 'buy', 'renew')}}" data-id="1" data-view="fun" data-value="PluginsLevelBuyBack" data-msg="按照原时长和费用续费，确定继续吗？">
+                                        <i class="iconfont icon-qutixian_wdfx"></i>
+                                        续费会员
+                                        <i class="iconfont icon-angle-right"></i>
+                                    </a>
+                                </div>
+                            {{else /}}
+                                {{if isset($plugins_config['is_user_buy']) and $plugins_config['is_user_buy'] eq 1}}
+                                    <div class="openmeber">
+                                        <a class="plugins-level-buy-open-event glideover-hover">
+                                            <i class="iconfont icon-qutixian_wdfx"></i>
+                                            连续开通
+                                            <i class="iconfont icon-angle-right"></i>
+                                        </a>
+                                    </div>
+                                {{/if}}
+                            {{/if}}
+                        {{/if}}
+                    {{/if}}
+                {{/if}}
+            {{else /}}
+                {{if isset($plugins_config['is_user_buy']) and $plugins_config['is_user_buy'] eq 1}}
+                    <div class="openmeber">
+                        <a class="plugins-level-buy-open-event glideover-hover">
+                            <i class="iconfont icon-qutixian_wdfx"></i>
+                            开通会员
+                            <i class="iconfont icon-angle-right"></i>
+                        </a>
+                    </div>
+                {{/if}}
+            {{/if}}
+        {{else /}}
+            {{if isset($plugins_config['is_user_buy']) and $plugins_config['is_user_buy'] eq 1}}
+                <div class="openmeber">
+                    <a class="plugins-level-buy-open-event glideover-hover">
+                        <i class="iconfont icon-qutixian_wdfx"></i>
+                        开通会员
+                        <i class="iconfont icon-angle-right"></i>
+                    </a>
+                </div>
+            {{/if}}
+        {{/if}}
+    </div>
+</div>
+
+<!-- 会员码 -->
+<div class="am-modal am-modal-no-btn" tabindex="-1" id="modal-member-code">
+    <div class="am-modal-dialog am-radius am-nbfc">
+        <div class="am-modal-hd">
+            <span>会员码</span>
+            <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
+        </div>
+        <div class="am-modal-bd am-margin-top-xs">
+            <svg id="member-barcode"></svg>
+            <div id="member-qrcode" class="am-text-center am-margin-top-sm"></div>
+        </div>
+    </div>
+</div>
+
+{{if empty($user_vip)}}
+    <!-- 已开通会员介绍 -->
+    {{if !empty($plugins_config['not_opening_vip_desc'])}}
+        <div class="am-padding-horizontal-lg am-margin-top-main">
+            <div class="am-alert am-margin-0" data-am-alert>
+                <button type="button" class="am-close">&times;</button>
+                <p>{{:implode('<br />', $plugins_config['not_opening_vip_desc'])}}</p>
+            </div>
+        </div>
+    {{/if}}
+{{else /}}
+    <!-- 未开通会员公告 -->
+    {{if !empty($plugins_config['user_vip_center_notice'])}}
+        <div class="am-padding-horizontal-lg am-margin-top-main">
+            <div class="am-alert am-alert-warning" data-am-alert>
+                <button type="button" class="am-close">&times;</button>
+                <p>{{:implode('<br />', $plugins_config['user_vip_center_notice'])}}</p>
+            </div>
+        </div>
+    {{/if}}
+{{/if}}

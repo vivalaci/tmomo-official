@@ -1,0 +1,103 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'intellectstools',
+            'nav_data'  => $plugins_nav_menu_list,
+        ])}}
+
+        <!-- form start -->
+        <form class="am-form form-validation am-form-full-screen am-form-popup-sticky" action="{{:PluginsAdminUrl('intellectstools', 'goods', 'beautifysave')}}" method="POST" request-type="ajax-reload">
+            <div class="am-alert" data-am-alert>
+                <button type="button" class="am-close">&times;</button>
+                <p class="am-text-danger am-text-sm">不建议过分夸张的修改访问量与销量数据、提倡数据真实性</p>
+                <p>1.【 指定商品id 、商品分类 、品牌 】条件为或关系</p>
+                <p>2. 选择商品分类、可多选，所选的商品分类自动包含下级分类、所有商品</p>
+                <p>3. 选择品牌、单选，所选品牌相关联的所有商品</p>
+            </div>
+
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">商品条件</h3>
+                </div>
+                <div class="am-panel-bd am-padding-vertical-xs">
+                    <p class="am-text-danger am-margin-vertical-sm">如不选择条件则默认更新全部商品</p>
+                    <div class="am-form-group">
+                        <label>指定商品id<span class="am-form-group-label-tips">多个id以英文逗号分割[ , ] 如：1,2,3</span></label>
+                        <input type="text" name="goods_ids" placeholder="指定商品id" data-validation-message="请填写指定商品id" class="am-radius" value="" />
+                    </div>
+                    <div class="am-form-group">
+                        <label>{{:MyLang('form_goods_category_title')}}<span class="am-form-group-label-tips">可多选（包含子级）、商品关联的分类</span></label>
+                        <select name="category_ids" class="am-radius chosen-select" multiple="multiple" data-placeholder="{{:MyLang('please_select_tips')}}" data-validation-message="{{:MyLang('form_goods_category_message')}}">
+                            {{if !empty($goods_category_list)}}
+                                {{foreach $goods_category_list as $v}}
+                                    <option value="{{$v.id}}">{{$v.name}}</option>
+                                    {{if !empty($v['items'])}}
+                                        {{foreach $v.items as $vs}}
+                                            <option style="padding-left: 15px;" value="{{$vs.id}}">{{if empty($vs['items'])}}├{{else /}}└{{/if}}² {{$vs.name}}</option>
+                                            {{if !empty($vs['items'])}}
+                                                {{foreach $vs.items as $kss=>$vss}}
+                                                    <option style="padding-left: 30px;" value="{{$vss.id}}">{{if $kss eq count($vs['items'])-1}}└{{else /}}├{{/if}}³ {{$vss.name}}</option>
+                                                {{/foreach}}
+                                            {{/if}}
+                                        {{/foreach}}
+                                    {{/if}}
+                                {{/foreach}}
+                            {{/if}}
+                        </select>
+                    </div>
+                    <div class="am-form-group">
+                        <label>品牌<span class="am-form-group-label-tips">可选、商品关联的品牌</span></label>
+                        <select name="brand_ids" class="am-radius chosen-select" multiple="multiple" data-placeholder="{{:MyLang('please_select_tips')}}" data-validation-message="请选择品牌">
+                            {{if !empty($brand_list)}}
+                                {{foreach $brand_list as $v}}
+                                    <option value="{{$v.id}}">{{$v.name}}</option>
+                                {{/foreach}}
+                            {{/if}}
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">操作项</h3>
+                </div>
+                <div class="am-panel-bd am-padding-vertical-xs">
+                    <p class="am-text-danger am-margin-vertical-sm">随机最大值为0或者空则不更新</p>
+                    <div class="am-form-group">
+                        <label>访问量<span class="am-form-group-label-tips">选填、默认0</span></label>
+                        <div class="form-multiple-where-input">
+                            <input type="number" name="access_min" placeholder="随机最小数" min="0" max="1000000000" data-validation-message="请填写访问量随机最小数" class="am-radius" value="" />
+                            <span>-</span>
+                            <input type="number" name="access_max" placeholder="随机最大数" min="0" max="1000000000" data-validation-message="请填写访问量随机最大数1000000000" class="am-radius" value="" />
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label>销量<span class="am-form-group-label-tips">选填、默认0</span></label>
+                        <div class="form-multiple-where-input">
+                            <input type="number" name="sales_min" placeholder="随机最小数" min="0" max="1000000000" data-validation-message="请填写销量随机最小数" class="am-radius" value="" />
+                            <span>-</span>
+                            <input type="number" name="sales_max" placeholder="随机最大数" min="0" max="1000000000" data-validation-message="请填写销量随机最大数1000000000" class="am-radius" value="" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="am-form-popup-submit">
+                <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('now_execute_title')}}'}">
+                    <i class="am-icon-send"></i>
+                    <span>{{:MyLang('now_execute_title')}}</span>
+                </button>
+            </div>
+        </form>
+        <!-- form end -->
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

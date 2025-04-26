@@ -1,0 +1,14 @@
+{{if !empty($module_data['seckill_price'])}}
+    <span class="am-text-danger">
+        <strong>{{$currency_symbol}}{{$module_data.seckill_price}}</strong>
+    </span>
+    <span class="am-text-grey am-fr">
+        {{if isset($module_data['dec_price']) and $module_data['dec_price'] gt 0}}
+            减{{$module_data.dec_price}}
+        {{else /}}
+            {{if isset($module_data['discount_rate']) and $module_data['discount_rate'] gt 0}}
+                {{$module_data.discount_rate*10}}折
+            {{/if}}
+        {{/if}}
+    </span>
+{{/if}}

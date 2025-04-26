@@ -1,0 +1,149 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'ordersubmitlimit',
+            'title'     => '订单提交限制',
+        ])}}
+
+        <div class="ordersubmitlimit-content">
+            <div class="ordersubmitlimit-content am-radius am-padding-bottom-xs">
+            <!-- 基础配置 -->
+            <div class="am-panel am-panel-default ordersubmitlimit-content-base">
+                <div class="am-panel-hd">
+                    <span class="am-panel-title">{{:MyLang('base_config_title')}}</span>
+                    <a class="am-margin-left-lg" href="{{:PluginsAdminUrl('ordersubmitlimit', 'admin', 'saveinfo')}}">
+                        <i class="am-icon-edit"></i>
+                        <span>{{:MyLang('edit_title')}}</span>
+                    </a>
+                </div>
+                <div class="am-panel-bd">
+                    <!-- 单次订单限制 -->
+                    <h2 class="am-padding-left-sm">单次订单限制</h2>
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>订单模式</label>
+                                <div>
+                                    {{if !empty($data['order_model_names'])}}
+                                        仅 [ {{$data.order_model_names}} ] 限制
+                                    {{else /}}
+                                        所有
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>订单金额小于限制</label>
+                                <div>
+                                    <p>
+                                        {{if isset($data['order_price_limit_type']) and isset($price_limit_type_list[$data['order_price_limit_type']])}}
+                                        {{$price_limit_type_list[$data['order_price_limit_type']]['name']}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 订单单价 ]
+                                    {{/if}}
+                                    </p>
+                                    <p>
+                                        {{if !empty($data['order_price_limit'])}}
+                                            {{$data.order_price_limit}}
+                                        {{else /}}
+                                            {{:MyLang('no_setup_tips')}}限制
+                                        {{/if}}
+                                    </p>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>订单购买数量小于限制</label>
+                                <div>
+                                    <p>
+                                        {{if isset($data['order_buy_number_limit_type']) and isset($number_limit_type_list[$data['order_buy_number_limit_type']])}}
+                                            {{$number_limit_type_list[$data['order_buy_number_limit_type']]['name']}}
+                                        {{else /}}
+                                            {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ SKU数量 ]
+                                        {{/if}}
+                                    </p>
+                                    <p>
+                                        {{if !empty($data['order_buy_number_limit'])}}
+                                            {{$data.order_buy_number_limit}}件
+                                        {{else /}}
+                                            未配置，默认 [ 不限制 ]
+                                        {{/if}}
+                                    </p>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>有效日期</label>
+                                <div>
+                                    {{if !empty($data['time_start']) and !empty($data['time_end'])}}
+                                        {{$data.time_start}} ~ {{$data.time_end}}
+                                    {{elseif !empty($data['time_start']) and empty($data['time_end'])}}
+                                        {{$data.time_start}} ~ 不限
+                                    {{elseif empty($data['time_start']) and !empty($data['time_end'])}}
+                                        立即生效 ~ {{$data.time_end}}
+                                    {{else /}}
+                                        <span class="am-text-grey">无限制</span>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>有效时段</label>
+                                <div>
+                                    {{if !empty($data['day_start']) and !empty($data['day_end'])}}
+                                        {{$data.day_start}} ~ {{$data.day_end}}
+                                    {{elseif !empty($data['day_start']) and empty($data['day_end'])}}
+                                        {{$data.day_start}} ~ 不限
+                                    {{elseif empty($data['day_start']) and !empty($data['day_end'])}}
+                                        立即生效 ~ {{$data.day_end}}
+                                    {{else /}}
+                                        <span class="am-text-grey">无限制</span>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <!-- 单品限制 -->
+                    <h2 class="am-padding-left-sm am-margin-top-lg">单品限制</h2>
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启单品总购限制</label>
+                                <div>
+                                    {{if isset($data['is_goods_all_order_limit']) and $data['is_goods_all_order_limit'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>超过限购提示信息（商品详情）</label>
+                                <div>
+                                    {{if !empty($data['goods_detail_exceed_limit_tips'])}}
+                                        已配置 [ {{$data.goods_detail_exceed_limit_tips}} ]
+                                    {{else /}}
+                                        未配置，默认 [ 超过限购 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

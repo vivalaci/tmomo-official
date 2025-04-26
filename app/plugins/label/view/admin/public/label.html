@@ -1,0 +1,5 @@
+{{if !empty($module_data['label_info']) and is_array($module_data['label_info'])}}
+    {{foreach $module_data.label_info as $v}}
+        <span class="am-badge am-round" style="{{if !empty($v['text_color'])}}color:{{$v.text_color}};{{/if}}{{if !empty($v['bg_color'])}}background:{{$v.bg_color}};{{/if}}">{{$v.name}}</span>
+    {{/foreach}}
+{{/if}}

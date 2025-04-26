@@ -1,0 +1,48 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'weixinwebauthorization',
+            'title'     => MyLang('base_config_title'),
+            'back_url'  => PluginsAdminUrl('orderremind', 'admin', 'index'),
+        ])}}
+
+        <!-- form start -->
+        <form class="am-form form-validation am-form-full-screen am-form-popup-sticky" action="{{:PluginsAdminUrl('orderremind', 'admin', 'save')}}" method="POST" request-type="ajax-url" request-value="{{:PluginsAdminUrl('orderremind', 'admin', 'index')}}" enctype="multipart/form-data">
+            <div class="am-form-group">
+                <label class="am-block">语言提醒<span class="am-form-group-label-tips">默认否</span></label>
+                <input name="is_voice_notice" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_voice_notice']) and $data['is_voice_notice'] eq 1}}checked="true"{{/if}} />
+            </div>
+
+            <div class="am-form-group">
+                <label>监听动作<span class="am-form-group-label-tips">默认 订单创建</span></label>
+                <select name="monitor_action" class="am-radius chosen-select" data-placeholder="{{:MyLang('optional_tips')}}" data-validation-message="请选择监听动作">
+                    {{if !empty($monitor_action_list)}}
+                        {{foreach $monitor_action_list as $v}}
+                            <option value="{{$v.value}}" {{if isset($data['monitor_action']) and $v['value'] eq $data['monitor_action']}}selected{{/if}}>{{$v.name}}</option>
+                        {{/foreach}}
+                    {{/if}}
+                </select>
+            </div>
+
+            <div class="am-form-popup-submit">
+                <a href="{{:PluginsAdminUrl('orderremind', 'admin', 'index', $params)}}" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg">
+                    <i class="am-icon-mail-reply"></i>
+                    <span>{{:MyLang('retreat_title')}}</span>
+                </a>
+                <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('save_title')}}'}">
+                    <i class="am-icon-save"></i>
+                    <span>{{:MyLang('save_title')}}</span>
+                </button>
+            </div>
+        </form>
+        <!-- form end -->
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

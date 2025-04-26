@@ -1,0 +1,3 @@
+{{if !empty($module_data['name'])}}
+    <span class="am-badge am-round" style="color:{{if empty($module_data['text_color'])}}#fff{{else /}}{{$module_data.text_color}} !important;{{/if}}background:{{if empty($module_data['bg_color'])}}#666{{else /}}{{$module_data.bg_color}} !important;{{/if}}">{{$module_data.name}}</span>
+{{/if}}

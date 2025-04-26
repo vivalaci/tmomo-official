@@ -1,0 +1,44 @@
+{{:ModuleInclude('public/header')}}
+
+{{if !empty($params['id'])}}
+    <!-- form start -->
+    <form class="am-form form-validation am-form-popup-fixed" action="{{:PluginsAdminUrl('invoice', 'invoice', 'audit')}}" method="POST" request-type="ajax-reload" request-value="parent">
+        <div class="am-padding">
+            <div class="am-form-group">
+                <label>操作类型</label>
+                <div class="am-radio-group audit-type-container">
+                    {{if !empty($audit_type_list)}}
+                        {{foreach $audit_type_list as $v}}
+                            <label class="am-radio-inline">
+                                <input type="radio" name="type" value="{{$v.id}}" data-validation-message="请选择操作类型" data-am-ucheck required > {{$v.name}}
+                            </label>
+                        {{/foreach}}
+                    {{/if}}
+                </div>
+            </div>
+
+            <div class="am-form-group am-form-file audit-refuse-reason-container" style="display: none;">
+                <label class="am-block">拒绝原因</label>
+                <textarea rows="4" name="refuse_reason" class="am-radius am-field-valid" maxlength="230" placeholder="拒绝原因" data-validation-message="请填写拒绝原因、最多230个字符"></textarea>
+            </div>
+
+            <div class="am-form-popup-submit">
+                <input type="hidden" name="id" value="{{$params.id}}" />
+                <button type="button" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg" data-am-modal-close>
+                    <i class="am-icon-paint-brush"></i>
+                    <span>{{:MyLang('cancel_title')}}</span>
+                </button>
+                <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('confirm_title')}}'}">
+                    <i class="am-icon-check"></i>
+                    <span>{{:MyLang('confirm_title')}}</span>
+                </button>
+            </div>
+        </div>
+    </form>
+    <!-- form end -->
+{{else /}}
+    {{:ModuleInclude('public/not_data', ['msg'=>MyLang('data_id_error_tips')])}}
+{{/if}}
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

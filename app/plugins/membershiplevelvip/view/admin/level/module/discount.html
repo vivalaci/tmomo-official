@@ -1,0 +1,20 @@
+满减：{{if $module_data['order_price'] gt 0 and $module_data['full_reduction_price'] gt 0}}
+    满{{$module_data.order_price}} 减{{$module_data.full_reduction_price}}
+{{else /}}
+    <span class="am-text-grey">无满减</span>
+{{/if}}
+<br />
+折扣：{{if $module_data['discount_rate']}}
+    {{$module_data.discount_rate}}折
+{{else /}}
+    <span class="am-text-grey">无折扣</span>
+{{/if}}
+{{if isset($module_data['free_shipping_price']) and $module_data['free_shipping_price'] gt 0}}
+    <p>
+        <span>运费：</span>
+        <span>满{{$module_data.free_shipping_price}}免运费</span>
+        {{if isset($module_data['is_span_free_shipping_price']) and $module_data['is_span_free_shipping_price'] eq 1}}
+            <span class="am-badge am-badge-secondary am-round">支持跨订单</span>
+        {{/if}}
+    </p>
+{{/if}}

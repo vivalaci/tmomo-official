@@ -1,0 +1,6 @@
+<!-- 图片信息 -->
+{{if !empty($module_data) and !empty($module_data['images_url'])}}
+    <figure data-am-widget="figure" class="am-figure am-inline-block" data-am-figure="{pureview: 'true'}">
+        <img src="{{$module_data['images_url']}}" class="am-radius am-block" width="225" height="50" />
+    </figure>
+{{/if}}

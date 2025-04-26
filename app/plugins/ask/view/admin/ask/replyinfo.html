@@ -1,0 +1,83 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- content start  -->
+<div class="am-padding-sm">
+    {{if empty($data)}}
+        {{:ModuleInclude('public/not_data')}}
+    {{else /}}
+        <div class="user-info am-padding-left-sm" data-default-avatar="{{:UserDefaultAvatar('sm')}}">
+            <img src="{{if empty($data['user'])}}{{:UserDefaultAvatar('sm')}}{{else /}}{{$data.user.avatar}}{{/if}}" class="am-img-thumbnail am-radius am-align-left am-margin-right-xs am-margin-bottom-0" width="35" height="35" />
+            <div class="user-base">
+                <p class="username">{{:MyLang('user_username_title')}}：<span>{{if empty($data['user'])}}...{{else /}}{{$data.user.username}}{{/if}}</span></p>
+                <p class="nickname">{{:MyLang('user_nickname_title')}}：<span>{{if empty($data['user'])}}...{{else /}}{{$data.user.nickname}}{{/if}}</span></p>
+                <p class="mobile">{{:MyLang('user_mobile_title')}}：<span>{{if empty($data['user'])}}...{{else /}}{{$data.user.mobile}}{{/if}}</span></p>
+                <p class="email">{{:MyLang('user_email_title')}}：<span>{{if empty($data['user'])}}...{{else /}}{{$data.user.email}}{{/if}}</span></p>
+            </div>
+        </div>
+        <hr data-am-widget="divider" class="am-divider am-divider-dashed" />
+        {{if !empty($data['title'])}}
+            <p><strong>{{$data.title}}</strong></p>
+        {{/if}}
+        <div class="am-padding-horizontal-sm">
+            {{if !empty($data['name']) or !empty($data['tel'])}}
+                <p class="am-text-grey">
+                    {{if !empty($data['name'])}}
+                        <span>{{$data.name}}</span>
+                    {{/if}}
+                    {{if !empty($data['tel'])}}
+                        <span class="am-margin-left-lg">{{$data.tel}}</span>
+                    {{/if}}
+                </p>
+            {{/if}}
+            <div class="am-scrollable-vertical am-margin-top-sm ask-content richtext">{{if !empty($data['content'])}}{{$data.content|raw}}{{/if}}</div>
+        </div>
+        <hr data-am-widget="divider" class="am-divider am-divider-dashed" />
+
+        <form class="am-form form-validation am-form-popup-fixed" action="{{:PluginsAdminUrl('ask', 'ask', 'reply')}}" method="POST" request-type="ajax-reload" request-value="parent">
+            <div class="am-padding-horizontal-sm">
+                <div class="am-form-group">
+                    <label class="am-block">{{:MyLang('ask.form_item_reply')}}</label>
+                    <textarea name="reply" id="editor-reply" rows="5" placeholder="{{:MyLang('ask.form_item_reply_message')}}" data-validation-message="{{:MyLang('ask.form_item_reply_message')}}">{{if !empty($data['reply'])}}{{$data.reply|raw}}{{/if}}</textarea>
+                </div>
+                {{if !empty($ask_category_list)}}
+                    <div class="am-form-group">
+                        <label class="am-block">{{:MyLang('ask.form_item_category_id')}}</label>
+                        <select name="category_id" class="am-radius chosen-select" data-placeholder="{{:MyLang('please_select_tips')}}" data-validation-message="{{:MyLang('ask.form_item_category_id_message')}}">
+                            <option value="0">{{:MyLang('please_select_tips')}}</option>
+                            {{foreach $ask_category_list as $v}}
+                                <option value="{{$v.id}}" {{if isset($data['category_id']) and $data['category_id'] eq $v['id']}}selected{{/if}}>{{$v.name}}</option>
+                            {{/foreach}}
+                        </select>
+                    </div>
+                {{/if}}
+                <div class="am-form-group">
+                    <label>{{:MyLang('ask.form_item_email_notice')}}</label>
+                    <input type="email" name="email_notice" placeholder="{{:MyLang('ask.form_item_email_notice')}}" maxlength="60" data-validation-message="{{:MyLang('ask.form_item_email_notice_message')}}" class="am-radius" value="{{if !empty($data['email_notice'])}}{{$data.email_notice}}{{/if}}" />
+                </div>
+                <div class="am-form-group">
+                    <label>{{:MyLang('ask.form_item_mobile_notice')}}</label>
+                    <input type="text" name="mobile_notice" pattern="{{:MyConst('common_regex_mobile')}}" placeholder="{{:MyLang('ask.form_item_mobile_notice')}}" maxlength="60" data-validation-message="{{:MyLang('ask.form_item_mobile_notice_message')}}" class="am-radius" value="{{if !empty($data['mobile_notice'])}}{{$data.mobile_notice}}{{/if}}" />
+                </div>
+                <div class="am-form-group">
+                    <label class="am-block">{{:MyLang('form_is_show_title')}}</label>
+                    <input name="is_show" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_show']) and $data['is_show'] eq 1}}checked{{/if}} />
+                </div>
+            </div>
+            <div class="am-form-popup-submit">
+                <input type="hidden" name="id" value="{{$data.id}}" />
+                <button type="button" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg" data-am-modal-close>
+                    <i class="am-icon-paint-brush"></i>
+                    <span>{{:MyLang('cancel_title')}}</span>
+                </button>
+                <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('confirm_title')}}'}">
+                    <i class="am-icon-check"></i>
+                    <span>{{:MyLang('confirm_title')}}</span>
+                </button>
+            </div>
+        </form>
+    {{/if}}
+</div>
+<!-- content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

@@ -1,0 +1,23 @@
+<!-- 操作栏 -->
+{{if !empty($module_data['share_data'])}}
+    <a href="{{$module_data.share_data.url}}" class="am-btn am-btn-success am-btn-xs am-radius am-btn-block" target="_blank">
+        <i class="am-icon-eye"></i>
+        <span>{{:MyLang('view_title')}}</span>
+    </a>
+{{/if}}
+<button type="button" class="am-btn am-btn-default am-btn-xs am-radius am-btn-block submit-popup" data-url="{{:PluginsAdminUrl('signin', 'qrcode', 'detail', ['id'=>$module_data['id']])}}" data-title="{{:MyLang('detail_title')}}">
+    <i class="am-icon-yelp"></i>
+    <span>{{:MyLang('detail_title')}}</span>
+</button>
+<button type="button" class="am-btn am-btn-warning am-btn-xs am-radius am-btn-block submit-popup" data-url="{{:PluginsAdminUrl('signin', 'usercoming', 'index', ['id'=>$module_data['id']])}}" data-title="{{:MyLang('signin_title')}}">
+    <i class="am-icon-users"></i>
+    <span>{{:MyLang('signin_title')}}</span>
+</button>
+<a href="{{:PluginsAdminUrl('signin', 'qrcode', 'saveinfo', array_merge($params, ['id'=>$module_data['id']]))}}" class="am-btn am-btn-secondary am-btn-xs am-radius am-btn-block">
+    <i class="am-icon-edit"></i>
+    <span>{{:MyLang('edit_title')}}</span>
+</a>
+<button type="button" class="am-btn am-btn-danger am-btn-xs am-radius am-btn-block submit-delete" data-url="{{:PluginsAdminUrl('signin', 'qrcode', 'delete')}}" data-id="{{$module_data.id}}" data-key="ids">
+    <i class="iconfont icon-delete"></i>
+    <span>{{:MyLang('delete_title')}}</span>
+</button>

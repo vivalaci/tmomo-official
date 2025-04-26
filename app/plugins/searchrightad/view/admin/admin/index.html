@@ -1,0 +1,107 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'searchrightad',
+            'title'     => '搜索右侧广告',
+        ])}}
+
+        <div class="searchrightad-content">
+            <!-- 操作提示 -->
+            <div class="am-operate-stretch-tips">
+                <div class="title">
+                    <i class="iconfont icon-tips"></i>
+                    <strong title="{{:MyLang('operate_list_tips_msg')}}">{{:MyLang('operate_list_tips_button_text')}}</strong>
+                    <i class="iconfont icon-contract contract" title="{{:MyLang('operate_list_tips_retract_text')}}"></i> 
+                </div>
+                <p>该插件仅PC端有效</p>
+            </div>
+
+            <!-- 基础配置 -->
+            <div class="am-panel am-panel-default am-radius searchrightad-content-base">
+                <div class="am-panel-hd">
+                    <span class="am-panel-title">{{:MyLang('base_config_title')}}</span>
+                    <a class="am-margin-left-lg" href="{{:PluginsAdminUrl('searchrightad', 'admin', 'saveinfo')}}">
+                        <i class="am-icon-edit"></i>
+                        <span>{{:MyLang('edit_title')}}</span>
+                    </a>
+                </div>
+                <div class="am-panel-bd">
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>图片</label>
+                                <div>
+                                    {{if empty($data['images'])}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{else /}}
+                                        <img src="{{$data.images}}" height="40" />
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>链接地址</label>
+                                <div>
+                                    {{if empty($data['url'])}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{else /}}
+                                        <a href="{{$data.url}}" target="_blank">{{$data.url}}</a>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>链接地址新窗口</label>
+                                <div>
+                                    {{if isset($data['is_url_new_window']) and $data['is_url_new_window'] eq 1}}
+                                        {{:MyLang('yes_title')}}
+                                    {{else /}}
+                                        {{:MyLang('no_title')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>仅首页</label>
+                                <div>
+                                    {{if isset($data['is_home']) and $data['is_home'] eq 1}}
+                                        仅首页有效
+                                    {{else /}}
+                                        整站有效
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('form_time_valid_title')}}</label>
+                                <div>
+                                    {{if !empty($data['time_start']) and !empty($data['time_end'])}}
+                                        {{$data.time_start}} ~ {{$data.time_end}}
+                                    {{elseif !empty($data['time_start']) and empty($data['time_end'])}}
+                                        {{$data.time_start}} ~ 无过期时间
+                                    {{elseif empty($data['time_start']) and !empty($data['time_end'])}}
+                                        立即生效 ~ {{$data.time_end}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 不限制 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

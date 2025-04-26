@@ -1,0 +1,33 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <div class="table-no">
+            <p>
+                <i class="am-icon-check-circle am-icon-md am-text-xl am-text-success"></i>
+            </p>
+            <p class="am-margin-top-xs am-text-sm">{{if isset($msg)}}{{$msg}}{{else /}}{{:MyLang('error')}}{{/if}}</p>
+            <p class="am-margin-top-lg">
+                <a href="{{$home_url}}" class="am-btn am-btn-primary am-radius">{{:MyLang('back_home_title')}}</a>
+            </p>
+        </div>
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}
+<script type="text/javascript">
+    var interval = setInterval(function()
+    {
+        var time = parseInt($('.content-right').attr('data-time') || 3)-1;
+        if(time <= 0)
+        {
+            clearInterval(interval);
+            window.location.href = '{{$home_url}}';
+        } else {
+            $('.content-right').attr('data-time', time);
+        }
+    }, 1000);
+</script>

@@ -1,0 +1,9 @@
+<!-- 操作栏 -->
+<a class="am-btn am-btn-default am-btn-xs am-radius am-btn-block" href="{{:MyUrl('admin/order/detail', ['id'=>$module_data['id']])}}" target="_blank">
+    <i class="am-icon-eye"></i>
+    <span>{{:MyLang('detail_title')}}</span>
+</a>
+<a class="am-btn am-btn-secondary am-btn-xs am-radius am-btn-block" href="{{:PluginsHomeUrl('invoice', 'user', 'saveinfo', ['ids'=>$module_data['id'], 'type'=>0])}}">
+    <i class="am-icon-edit"></i>
+    <span>{{:MyLang('invoice_title')}}</span>
+</a>

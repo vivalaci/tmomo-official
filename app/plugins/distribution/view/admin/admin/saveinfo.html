@@ -1,0 +1,1011 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'distribution',
+            'title'     => MyLang('base_config_title'),
+            'back_url'  => PluginsAdminUrl('distribution', 'admin', 'index'),
+        ])}}
+
+        <!-- form start -->
+        <form class="am-form form-validation am-form-full-screen am-form-popup-sticky" action="{{:PluginsAdminUrl('distribution', 'admin', 'save')}}" method="POST" request-type="ajax-url" request-value="{{:PluginsAdminUrl('distribution', 'admin', 'index')}}" enctype="multipart/form-data">            
+            <!-- 基础配置 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">{{:MyLang('base_config_title')}}</h3>
+                </div>
+                <div class="am-panel-bd">
+                    <ul class="am-avg-sm-1 am-avg-md-2">
+                        <li>
+                            <div class="am-form-group am-form-file">
+                                <label class="am-block">默认等级图标<span class="am-form-group-label-tips">建议50*50px</span></label>
+                                <div class="am-form-file-upload-container">
+                                    <ul class="plug-file-upload-view plugins-default_level_images-view" data-form-name="default_level_images" data-max-number="1" data-dialog-type="images">
+                                        {{if !empty($data['default_level_images'])}}
+                                            <li>
+                                                <input type="text" name="default_level_images" value="{{$data.default_level_images}}" data-validation-message="请上传默认等级图标" />
+                                                <img src="{{$data.default_level_images}}" />
+                                                <i class="iconfont icon-close"></i>
+                                            </li>
+                                        {{/if}}
+                                    </ul>
+                                    <div class="plug-file-upload-submit" data-view-tag="ul.plugins-default_level_images-view">
+                                        <i class="iconfont icon-upload-add"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="am-form-group am-form-file">
+                                <label class="am-block">默认二维码logo<span class="am-form-group-label-tips">建议50*50px</span></label>
+                                <div class="am-form-file-upload-container">
+                                    <ul class="plug-file-upload-view plugins-default_qrcode_logo-view" data-form-name="default_qrcode_logo" data-max-number="1" data-dialog-type="images">
+                                        {{if !empty($data['default_qrcode_logo'])}}
+                                            <li>
+                                                <input type="text" name="default_qrcode_logo" value="{{$data.default_qrcode_logo}}" data-validation-message="请上传默认二维码logo" />
+                                                <img src="{{$data.default_qrcode_logo}}" />
+                                                <i class="iconfont icon-close"></i>
+                                            </li>
+                                        {{/if}}
+                                    </ul>
+                                    <div class="plug-file-upload-submit" data-view-tag="ul.plugins-default_qrcode_logo-view">
+                                        <i class="iconfont icon-upload-add"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="am-form-group">
+                                <label class="am-block">用户列表展示等级</label>
+                                <input name="is_admin_user_level_show" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_admin_user_level_show']) and $data['is_admin_user_level_show'] eq 1}}checked="true"{{/if}} />
+                            </div>
+                        </li>
+                        <li>
+                            <div class="am-form-group">
+                                <label class="am-block">订单列表展示邀请用户</label>
+                                <input name="is_admin_order_user_referrer_show" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_admin_order_user_referrer_show']) and $data['is_admin_order_user_referrer_show'] eq 1}}checked="true"{{/if}} />
+                            </div>
+                        </li>
+                        <li>
+                            <div class="am-form-group">
+                                <label class="am-block">开启用户中心菜单入口</label>
+                                <div class="am-margin-top-sm">
+                                    <input name="is_user_menu" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_user_menu']) and $data['is_user_menu'] eq 1}}checked="true"{{/if}} />
+                                    <label class="am-checkbox-inline am-margin-left-lg">
+                                        <input type="checkbox" name="is_user_menu_must_power" value="1" data-am-ucheck {{if isset($data['is_user_menu_must_power']) and $data['is_user_menu_must_power'] eq 1}}checked{{/if}} /> 必须有分销权限
+                                    </label>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="am-form-group">
+                                <label class="am-block">强制受邀首单形成上下级关系</label>
+                                <input name="is_first_order_bind_invite_relation" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_first_order_bind_invite_relation']) and $data['is_first_order_bind_invite_relation'] eq 1}}checked="true"{{/if}} />
+                            </div>
+                        </li>
+                        <li>
+                            <div class="am-form-group">
+                                <label class="am-block">开启自提地址切换</label>
+                                <input name="is_user_extraction_switch" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_user_extraction_switch']) and $data['is_user_extraction_switch'] eq 1}}checked="true"{{/if}} />
+                            </div>
+                        </li>
+                        <li>
+                            <div class="am-form-group">
+                                <label class="am-block">商品自定义返佣金额倍数<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="根据订单商品购买数量x固定佣金"></a></label>
+                                <input name="is_fixed_price_multiple" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_fixed_price_multiple']) and $data['is_fixed_price_multiple'] eq 1}}checked="true"{{/if}} />
+                            </div>
+                        </li>
+                        <li>
+                            <div class="am-form-group">
+                                <label class="am-block">0元佣金不添加收益明细</label>
+                                <input name="is_no_price_profit_no_add_order" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_no_price_profit_no_add_order']) and $data['is_no_price_profit_no_add_order'] eq 1}}checked="true"{{/if}} />
+                            </div>
+                        </li>
+                        <li>
+                            <div class="am-form-group">
+                                <label class="am-block">后台分销用户管理一级仅展示手动数据</label>
+                                <input name="is_admin_team_appoint_model" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_admin_team_appoint_model']) and $data['is_admin_team_appoint_model'] eq 1}}checked="true"{{/if}} />
+                            </div>
+                        </li>
+                        <li>
+                            <div class="am-form-group">
+                                <label class="am-block">用户分销中心展示上级用户<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="1. 打开可修改上级用户后<br />2. 可修改上级用户的次数(空或者0则不限制)"></a></label>
+                                <div class="am-margin-top-sm">
+                                    <input name="is_show_superior" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_show_superior']) and $data['is_show_superior'] eq 1}}checked="true"{{/if}} />
+                                    <label class="am-checkbox-inline am-margin-left-lg">
+                                        <input type="checkbox" name="is_modify_superior" value="1" data-am-ucheck {{if isset($data['is_modify_superior']) and $data['is_modify_superior'] eq 1}}checked{{/if}} /> 可修改上级用户
+                                    </label>
+                                    <div class="am-inline-block">
+                                        <input type="number" name="superior_modify_number_limit" placeholder="可修改次数" min="0" class="am-radius" value="{{if !empty($data['superior_modify_number_limit'])}}{{$data.superior_modify_number_limit}}{{/if}}" data-is-clearout="0" />
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="am-form-group">
+                                <label class="am-block">开启商品详情页海报<span class="am-form-group-label-tips">默认否、仅手机端有效</span></label>
+                                <input name="is_goods_detail_poster" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_goods_detail_poster']) and $data['is_goods_detail_poster'] eq 1}}checked="true"{{/if}} />
+                            </div>
+                        </li>
+                        <li>
+                            <div class="am-form-group">
+                                <label class="am-block">从门店插件下单不返佣</label>
+                                <input name="is_realstore_order_not_profit" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_realstore_order_not_profit']) and $data['is_realstore_order_not_profit'] eq 1}}checked="true"{{/if}} />
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="am-form-group">
+                                <label class="am-block">支持多商户<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="1. 商家订单返佣配置将从商家配置中读取、未配置则不返佣<br />2. 商家订单的佣金、在给用户结算的时候将从商家钱包中扣除<br />3. 商家在扩展模块->分销中可以查看对应的佣金订单及返佣配置（商品规格中支持独立配置返佣）<br />4. 商家默认仅支持【向上1~3级】返佣模式，也可以开启向下及内购返佣（不开启则不生成返佣订单）"></a></label>
+                                <div class="am-margin-top-sm">
+                                    <input name="is_profit_shop" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_profit_shop']) and $data['is_profit_shop'] eq 1}}checked="true"{{/if}} />
+                                    <label class="am-checkbox-inline am-margin-left-lg">
+                                        <input type="checkbox" name="is_profit_down_return_shop" value="1" data-am-ucheck {{if isset($data['is_profit_down_return_shop']) and $data['is_profit_down_return_shop'] eq 1}}checked{{/if}} /> 支持向下返佣
+                                    </label>
+                                    <label class="am-checkbox-inline am-margin-left-lg">
+                                        <input type="checkbox" name="is_profit_self_buy_shop" value="1" data-am-ucheck {{if isset($data['is_profit_self_buy_shop']) and $data['is_profit_self_buy_shop'] eq 1}}checked{{/if}} /> 支持内购返佣
+                                    </label>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="am-form-group">
+                                <label class="am-block">开启客户拜访</label>
+                                <input name="is_enable_visit" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_enable_visit']) and $data['is_enable_visit'] eq 1}}checked="true"{{/if}} />
+                            </div>
+                        </li>
+                        <li>
+                            <div class="am-form-group">
+                                <label class="am-block">开启推荐宝</label>
+                                <input name="is_enable_recommend" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_enable_recommend']) and $data['is_enable_recommend'] eq 1}}checked="true"{{/if}} />
+                            </div>
+                        </li>
+                        <li>
+                            <div class="am-form-group">
+                                <label>返佣时间范围<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="留空则不限制、设置则这个时间范围内的订单才产生佣金"></a></label>
+                                <div class="form-multiple-where-input">
+                                    <input type="text" autocomplete="off" name="profit_time_start" class="Wdate am-radius" placeholder="{{:MyLang('form_time_start_title')}}" onclick="WdatePicker({firstDayOfWeek:1,dateFmt:'yyyy-MM-dd HH:mm:ss'})" {{if !empty($data['profit_time_start'])}}value="{{$data.profit_time_start}}"{{/if}}/>
+                                    <span class="am-text-grey">~</span>
+                                    <input type="text" autocomplete="off" class="Wdate am-radius" placeholder="{{:MyLang('form_time_end_title')}}" name="profit_time_end" onclick="WdatePicker({firstDayOfWeek:1,dateFmt:'yyyy-MM-dd HH:mm:ss'})" {{if !empty($data['profit_time_end'])}}value="{{$data.profit_time_end}}"{{/if}}/>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="am-form-group">
+                                <label>手机端首页地址<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="分享使用、默认[ pages/index/index ]、仅uniapp主题或小程序主题有效"></a></label>
+                                <input type="text" name="mobile_home_page" placeholder="手机端首页地址" maxlength="200" data-validation-message="手机端首页地址格式最多 200 个字符" class="am-radius" value="{{if !empty($data['mobile_home_page'])}}{{$data.mobile_home_page}}{{/if}}" />
+                            </div>
+                        </li>
+                        <li>
+                            <div class="am-form-group">
+                                <label class="am-block">用户海报页面顶部描述<span class="am-form-group-label-tips">空则不显示</span></label>
+                                <textarea rows="1" name="user_poster_top_desc" class="am-radius am-field-valid" placeholder="用户海报页面顶部描述" data-validation-message="请填写用户海报页面顶部描述">{{if !empty($data['user_poster_top_desc'])}}{{:implode("\\n", $data['user_poster_top_desc'])}}{{/if}}</textarea>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="am-form-group">
+                                <label>用户海报分享标题<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="空则读取站点页面名称"></a></label>
+                                <input type="text" name="user_poster_share_title" placeholder="用户海报分享标题" maxlength="60" data-validation-message="用户海报分享标题格式最多 60 个字符" class="am-radius" value="{{if !empty($data['user_poster_share_title'])}}{{$data.user_poster_share_title}}{{/if}}" />
+                            </div>
+                        </li>
+                        <li>
+                            <div class="am-form-group">
+                                <label class="am-block">用户海报分享描述<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="空则读取站点页面描述"></a></label>
+                                <textarea rows="1" name="user_poster_share_desc" class="am-radius am-field-valid" placeholder="用户海报分享描述" data-validation-message="请填写用户海报分享描述">{{if !empty($data['user_poster_share_desc'])}}{{$data.user_poster_share_desc}}{{/if}}</textarea>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="am-form-group">
+                                <label>H5自定义分享地址<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="分享使用、默认取当前站点地址、请以斜杠结尾[ / ]、uniapp端则写h5地址加/#/，如：https://shopxo.net/h5/#/，未设置则使用系统h5配置的地址"></a></label>
+                                <input type="text" name="h5_url" placeholder="H5自定义分享地址" maxlength="255" data-validation-message="H5自定义分享地址格式最多 255 个字符" class="am-radius" value="{{if !empty($data['h5_url'])}}{{$data.h5_url}}{{/if}}" />
+                            </div>
+                        </li>
+                        <li>
+                            <div class="am-form-group">
+                                <label>PC自定义分享地址<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="分享使用、未设置则使用pc默认首页地址"></a></label>
+                                <input type="text" name="pc_url" placeholder="PC自定义分享地址" maxlength="255" data-validation-message="PC自定义分享地址格式最多 255 个字符" class="am-radius" value="{{if !empty($data['pc_url'])}}{{$data.pc_url}}{{/if}}" />
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="am-form-group">
+                                <label>APP自定义分享地址<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="分享使用、未设置则使用pc默认首页地址"></a></label>
+                                <input type="text" name="app_url" placeholder="APP自定义分享地址" maxlength="255" data-validation-message="APP自定义分享地址格式最多 255 个字符" class="am-radius" value="{{if !empty($data['app_url'])}}{{$data.app_url}}{{/if}}" />
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 向上返佣 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">向上返佣</h3>
+                </div>
+                <div class="am-panel-bd">
+                    <ul class="am-avg-sm-1 am-avg-md-2">
+                        <li>
+                            <div class="am-form-group">
+                                <label>向上返佣<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="开启后，依次向上读取1~3级邀请人进行返佣"></a></label>
+                                <div class="am-radio-group">
+                                    {{foreach $distribution_is_enable_list as $v}}
+                                        <label class="am-radio-inline am-margin-right-sm">
+                                            <input type="radio" name="is_upper_return" value="{{$v.value}}" {{if isset($data['is_upper_return']) and $data['is_upper_return'] eq $v['value']}}checked="checked"{{else /}}{{if !isset($data['is_upper_return']) and isset($v['checked']) and $v['checked'] eq true}}checked="checked"{{/if}}{{/if}} data-am-ucheck /> {{$v.name}}
+                                        </label>
+                                    {{/foreach}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="am-form-group">
+                                <label>分销商内购<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="开启则分销商自己购买商品，获得佣金，需要在分销等级中配置好好自购返佣"></a></label>
+                                <div class="am-radio-group">
+                                    {{foreach $distribution_is_enable_list as $v}}
+                                        <label class="am-radio-inline am-margin-right-sm">
+                                            <input type="radio" name="self_buy" value="{{$v.value}}" {{if isset($data['self_buy']) and $data['self_buy'] eq $v['value']}}checked="checked"{{else /}}{{if !isset($data['self_buy']) and isset($v['checked']) and $v['checked'] eq true}}checked="checked"{{/if}}{{/if}} data-am-ucheck /> {{$v.name}}
+                                        </label>
+                                    {{/foreach}}
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="am-form-group">
+                                <label>分销层级<span class="am-form-group-label-tips">默认三级</span></label>
+                                <div class="am-radio-group">
+                                    {{foreach $distribution_level_list as $v}}
+                                        <label class="am-radio-inline am-margin-right-sm">
+                                            <input type="radio" name="level" value="{{$v.value}}" {{if isset($data['level']) and $data['level'] eq $v['value']}}checked="checked"{{else /}}{{if !isset($data['level']) and isset($v['checked']) and $v['checked'] eq true}}checked="checked"{{/if}}{{/if}} data-am-ucheck /> {{$v.name}}
+                                        </label>
+                                    {{/foreach}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 向下返佣 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">向下返佣</h3>
+                </div>
+                <div class="am-panel-bd">
+                    <ul class="am-avg-sm-1 am-avg-md-2">
+                        <li>
+                            <div class="am-form-group">
+                                <label>向下返佣<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="开启后自己消费后，仅自己邀请的下级将得到相应的佣金"></a></label>
+                                <div class="am-radio-group">
+                                    {{foreach $distribution_is_enable_list as $v}}
+                                        <label class="am-radio-inline am-margin-right-sm">
+                                            <input type="radio" name="is_down_return" value="{{$v.value}}" {{if isset($data['is_down_return']) and $data['is_down_return'] eq $v['value']}}checked="checked"{{else /}}{{if !isset($data['is_down_return']) and isset($v['checked']) and $v['checked'] eq true}}checked="checked"{{/if}}{{/if}} data-am-ucheck /> {{$v.name}}
+                                        </label>
+                                    {{/foreach}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="am-form-group">
+                                <label>最多分摊佣金人数<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="1. 以佣金的最小单位[ 分 ]自动计算最大人数<br />2. 如配置的数量大于或者未配置，则使用系统自动计算的人数，避免出现所有用户都无法正常返佣。<br />3. 实际返佣金额计算规则[ 佣金÷实际用户数量 ]<br />4. 读取用户规则，以最新注册的用户用户为准"></a></label>
+                                <div class="am-radio-group">
+                                    <input type="number" min="0" name="down_return_number" placeholder="最多分摊佣金人数" data-validation-message="请输入最多分摊佣金人数" class="am-radius" value="{{if !empty($data['down_return_number'])}}{{$data.down_return_number}}{{/if}}" />
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 向上返积分 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">向上返积分</h3>
+                </div>
+                <div class="am-panel-bd">
+                    <ul class="am-avg-sm-1 am-avg-md-2">
+                        <li>
+                            <div class="am-form-group">
+                                <label>向上返积分<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="开启后，仅向上级邀请人进行返积分"></a></label>
+                                <div class="am-radio-group">
+                                    {{foreach $distribution_is_enable_list as $v}}
+                                        <label class="am-radio-inline am-margin-right-sm">
+                                            <input type="radio" name="is_upper_return_integral" value="{{$v.value}}" {{if isset($data['is_upper_return_integral']) and $data['is_upper_return_integral'] eq $v['value']}}checked="checked"{{else /}}{{if !isset($data['is_upper_return_integral']) and isset($v['checked']) and $v['checked'] eq true}}checked="checked"{{/if}}{{/if}} data-am-ucheck /> {{$v.name}}
+                                        </label>
+                                    {{/foreach}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="am-form-group">
+                                <label>向上返积分数量</label>
+                                <div class="am-radio-group">
+                                    <input type="number" min="0" name="upper_return_integral" placeholder="向上返积分数量" data-validation-message="请输入向上返积分数量" class="am-radius" value="{{if !empty($data['upper_return_integral'])}}{{$data.upper_return_integral}}{{/if}}" />
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 向下返积分 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">向下返积分</h3>
+                </div>
+                <div class="am-panel-bd">
+                    <ul class="am-avg-sm-1 am-avg-md-2">
+                        <li>
+                            <div class="am-form-group">
+                                <label>向下返积分<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="开启后自己消费后，仅自己邀请的下级将得到相应的积分"></a></label>
+                                <div class="am-radio-group">
+                                    {{foreach $distribution_is_enable_list as $v}}
+                                        <label class="am-radio-inline am-margin-right-sm">
+                                            <input type="radio" name="is_down_return_integral" value="{{$v.value}}" {{if isset($data['is_down_return_integral']) and $data['is_down_return_integral'] eq $v['value']}}checked="checked"{{else /}}{{if !isset($data['is_down_return_integral']) and isset($v['checked']) and $v['checked'] eq true}}checked="checked"{{/if}}{{/if}} data-am-ucheck /> {{$v.name}}
+                                        </label>
+                                    {{/foreach}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="am-form-group">
+                                <label>向下返积分数量</label>
+                                <div class="am-radio-group">
+                                    <input type="number" min="0" name="down_return_integral" placeholder="向下返积分数量" data-validation-message="请输入向下返积分数量" class="am-radius" value="{{if !empty($data['down_return_integral'])}}{{$data.down_return_integral}}{{/if}}" />
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="am-form-group">
+                                <label>最多分摊积分人数<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="1. 以积分的最小值[ 1 ]自动计算最大人数<br />2. 如配置的数量大于或者未配置，则使用系统自动计算的人数，避免出现所有用户都无法正常返积分。<br />3. 读取用户规则，以最新注册的用户用户为准"></a></label>
+                                <div class="am-radio-group">
+                                    <input type="number" min="0" name="down_return_integral_people" placeholder="最多分摊积分人数" data-validation-message="请输入最多分摊积分人数" class="am-radius" value="{{if !empty($data['down_return_integral_people'])}}{{$data.down_return_integral_people}}{{/if}}" />
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 仅参加分佣商品 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">仅参加分佣商品</h3>
+                </div>
+                <div class="am-panel-bd">
+                    <div class="am-form-group">
+                        <label>开启仅参加分佣商品<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="开启后，配置的商品仅参与分佣，其他商品则不参与分佣"></a></label>
+                        <div class="am-radio-group">
+                            {{foreach $distribution_is_enable_list as $v}}
+                                <label class="am-radio-inline am-margin-right-sm">
+                                    <input type="radio" name="is_only_join_profit_goods" value="{{$v.value}}" {{if isset($data['is_only_join_profit_goods']) and $data['is_only_join_profit_goods'] eq $v['value']}}checked="checked"{{else /}}{{if !isset($data['is_only_join_profit_goods']) and isset($v['checked']) and $v['checked'] eq true}}checked="checked"{{/if}}{{/if}} data-am-ucheck /> {{$v.name}}
+                                </label>
+                            {{/foreach}}
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label>仅参加分佣的商品</label>
+                        <ul class="am-list am-list-border am-margin-top-sm appoint-goods-container appoint-only-join-profit-goods-container">
+                            {{if !empty($data['appoint_only_join_profit_goods_list']) and is_array($data['appoint_only_join_profit_goods_list'])}}
+                                {{foreach $data.appoint_only_join_profit_goods_list as $g}}
+                                    <li class="appoint-goods-{{$g.id}}">
+                                        <input type="hidden" name="appoint_only_join_profit_goods_ids[]" value="{{$g.id}}" />
+                                        <a href="{{$g.goods_url}}" target="_blank" class="am-text-truncate">
+                                            <img src="{{$g.images}}" alt="{{$g.title}}" class="am-fl am-radius am-margin-right-xs" width="20" height="20" />
+                                            <span>{{$g.title}}</span>
+                                        </a>
+                                        <button type="button" class="am-close am-fr">&times;</button>
+                                    </li>
+                                {{/foreach}}
+                            {{/if}}
+                        </ul>
+                        <span class="business-operations-submit goods-popup-add" data-tag=".appoint-only-join-profit-goods-container" data-form-name="appoint_only_join_profit_goods_ids[]">+添加商品</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 不参加分佣商品 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">不参加分佣商品</h3>
+                </div>
+                <div class="am-panel-bd">
+                    <div class="am-form-group">
+                        <label>开启不参加分佣商品<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="开启后，配置的商品不参与分佣"></a></label>
+                        <div class="am-radio-group">
+                            {{foreach $distribution_is_enable_list as $v}}
+                                <label class="am-radio-inline am-margin-right-sm">
+                                    <input type="radio" name="is_not_join_profit_goods" value="{{$v.value}}" {{if isset($data['is_not_join_profit_goods']) and $data['is_not_join_profit_goods'] eq $v['value']}}checked="checked"{{else /}}{{if !isset($data['is_not_join_profit_goods']) and isset($v['checked']) and $v['checked'] eq true}}checked="checked"{{/if}}{{/if}} data-am-ucheck /> {{$v.name}}
+                                </label>
+                            {{/foreach}}
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label>不参加分佣的商品</label>
+                        <ul class="am-list am-list-border am-margin-top-sm appoint-goods-container appoint-not-join-profit-goods-container">
+                            {{if !empty($data['appoint_not_join_profit_goods_list']) and is_array($data['appoint_not_join_profit_goods_list'])}}
+                                {{foreach $data.appoint_not_join_profit_goods_list as $g}}
+                                    <li class="appoint-goods-{{$g.id}}">
+                                        <input type="hidden" name="appoint_not_join_profit_goods_ids[]" value="{{$g.id}}" />
+                                        <a href="{{$g.goods_url}}" target="_blank" class="am-text-truncate">
+                                            <img src="{{$g.images}}" alt="{{$g.title}}" class="am-fl am-radius am-margin-right-xs" width="20" height="20" />
+                                            <span>{{$g.title}}</span>
+                                        </a>
+                                        <button type="button" class="am-close am-fr">&times;</button>
+                                    </li>
+                                {{/foreach}}
+                            {{/if}}
+                        </ul>
+                        <span class="business-operations-submit goods-popup-add" data-tag=".appoint-not-join-profit-goods-container" data-form-name="appoint_not_join_profit_goods_ids[]">+添加商品</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 购买指定商品获得分销等级 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">购买指定商品获得分销等级</h3>
+                </div>
+                <div class="am-panel-bd">
+                    <div class="am-form-group">
+                        <label>开启购买指定商品获得分销等级<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="开启后，购买对应商品后获得分销等级"></a></label>
+                        <div class="am-radio-group">
+                            {{foreach $distribution_is_enable_list as $v}}
+                                <label class="am-radio-inline am-margin-right-sm">
+                                    <input type="radio" name="is_appoint_appoint_level" value="{{$v.value}}" {{if isset($data['is_appoint_appoint_level']) and $data['is_appoint_appoint_level'] eq $v['value']}}checked="checked"{{else /}}{{if !isset($data['is_appoint_appoint_level']) and isset($v['checked']) and $v['checked'] eq true}}checked="checked"{{/if}}{{/if}} data-am-ucheck /> {{$v.name}}
+                                </label>
+                            {{/foreach}}
+                        </div>
+                    </div>
+                    <div class="am-cf">
+                        <div class="am-u-sm-12 am-u-md-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label>购买指定商品成为指定分销等级<span class="am-form-group-label-tips">（等级名称、满足订单数量、满足商品购买数量）</span></label>
+                                {{foreach $level_data_list as $v}}
+                                    <div class="appoint-level-list am-margin-top-xs">
+                                        <p class="level-name am-text-truncate am-vertical-align-middle am-margin-right-xs">
+                                            <label>{{$v.name}}</label>
+                                            <input type="hidden" name="appoint_level_buy_data[{{$v.id}}][id]" value="{{$v.id}}" />
+                                        </p>
+                                        <input type="text" name="appoint_level_buy_data[{{$v.id}}][order_min_number]" placeholder="需要满足订单数量" data-validation-message="请填写需要满足订单数量" class="am-radius" value="{{if empty($data['appoint_level_buy_data']) or empty($data['appoint_level_buy_data'][$v['id']]) or empty($data['appoint_level_buy_data'][$v['id']]['order_min_number'])}}1{{else /}}{{$data['appoint_level_buy_data'][$v['id']]['order_min_number']}}{{/if}}" />
+                                        <input type="text" name="appoint_level_buy_data[{{$v.id}}][goods_min_number]" placeholder="需要满足商品购买数量" data-validation-message="请填写需要满足商品购买数量" class="am-radius" value="{{if empty($data['appoint_level_buy_data']) or empty($data['appoint_level_buy_data'][$v['id']]) or empty($data['appoint_level_buy_data'][$v['id']]['goods_min_number'])}}1{{else /}}{{$data['appoint_level_buy_data'][$v['id']]['goods_min_number']}}{{/if}}" />
+                                    </div>
+                                    <ul class="am-list am-list-border am-margin-bottom-0 appoint-goods-container appoint-level-{{$v.id}}-goods-container">
+                                        {{if !empty($data['appoint_level_buy_data']) and !empty($data['appoint_level_buy_data'][$v['id']]) and !empty($data['appoint_level_buy_data'][$v['id']]['goods_list']) and is_array($data['appoint_level_buy_data'][$v['id']]['goods_list'])}}
+                                            {{foreach $data['appoint_level_buy_data'][$v['id']]['goods_list'] as $g}}
+                                                <li class="appoint-goods-{{$g.id}}">
+                                                    <input type="hidden" name="appoint_level_buy_data[{{$v.id}}][goods_ids][]" value="{{$g.id}}" />
+                                                    <a href="{{$g.goods_url}}" target="_blank" class="am-text-truncate">
+                                                        <img src="{{$g.images}}" alt="{{$g.title}}" class="am-fl am-radius am-margin-right-xs" width="20" height="20" />
+                                                        <span>{{$g.title}}</span>
+                                                    </a>
+                                                    <button type="button" class="am-close am-fr">&times;</button>
+                                                </li>
+                                            {{/foreach}}
+                                        {{/if}}
+                                    </ul>
+                                    <span class="business-operations-submit goods-popup-add" data-tag=".appoint-level-{{$v.id}}-goods-container" data-form-name="appoint_level_buy_data[{{$v.id}}][goods_ids][]">+添加商品</span>
+                                {{/foreach}}
+                            </div>
+                        </div>
+                        <div class="am-u-sm-12 am-u-md-6 am-padding-horizontal-0">
+                            <div class="am-margin-top-lg am-padding-top-xs">
+                                <div class="am-form-group">
+                                    <div class="am-alert am-alert-warning am-margin-0">
+                                        <p>1. 必须配置等级、商品</p>
+                                        <p>1. 订单必须是完成状态</p>
+                                        <p>2. 该配置为动态实时计算、根据用户已完成订单商品是否在当前配置的商品中包含</p>
+                                        <p>3. 需要满足包含指定商品的订单购买最小数量、默认1个订单</p>
+                                        <p>4. 需要满足指定商品的购买最小数量、默认1个订单</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 指定商品及返佣折扣 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">指定商品及返佣折扣</h3>
+                </div>
+                <div class="am-panel-bd">
+                    <div class="am-form-group">
+                        <label>指定商品及返佣折扣<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="开启后，支持以下配置的商品按照规则进行返佣和折扣"></a></label>
+                        <div class="am-radio-group">
+                            {{foreach $distribution_is_enable_list as $v}}
+                                <label class="am-radio-inline am-margin-right-sm">
+                                    <input type="radio" name="is_appoint_goods" value="{{$v.value}}" {{if isset($data['is_appoint_goods']) and $data['is_appoint_goods'] eq $v['value']}}checked="checked"{{else /}}{{if !isset($data['is_appoint_goods']) and isset($v['checked']) and $v['checked'] eq true}}checked="checked"{{/if}}{{/if}} data-am-ucheck /> {{$v.name}}
+                                </label>
+                            {{/foreach}}
+                        </div>
+                    </div>
+                    <div class="am-cf">
+                        <div class="am-u-sm-12 am-u-md-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label>推荐多少个用户购买指定商品后返现商品的金额</label>
+                                <input type="number" name="appoint_goods_profit_number" min="0" placeholder="指定用户数量" data-validation-message="请填写指定用户数量" class="am-radius am-margin-top-xs" value="{{if !empty($data['appoint_goods_profit_number'])}}{{$data.appoint_goods_profit_number}}{{/if}}" />
+                                <ul class="am-list am-list-border am-margin-top-sm appoint-goods-container appoint-profit-goods-container">
+                                    {{if !empty($data['appoint_profit_goods_list']) and is_array($data['appoint_profit_goods_list'])}}
+                                        {{foreach $data.appoint_profit_goods_list as $g}}
+                                            <li class="appoint-goods-{{$g.id}}">
+                                                <input type="hidden" name="appoint_profit_goods_ids[]" value="{{$g.id}}" />
+                                                <a href="{{$g.goods_url}}" target="_blank" class="am-text-truncate">
+                                                    <img src="{{$g.images}}" alt="{{$g.title}}" class="am-fl am-radius am-margin-right-xs" width="20" height="20" />
+                                                    <span>{{$g.title}}</span>
+                                                </a>
+                                                <button type="button" class="am-close am-fr">&times;</button>
+                                            </li>
+                                        {{/foreach}}
+                                    {{/if}}
+                                </ul>
+                                <span class="business-operations-submit goods-popup-add" data-tag=".appoint-profit-goods-container" data-form-name="appoint_profit_goods_ids[]">+添加商品</span>
+                            </div>
+                        </div>
+                        <div class="am-u-sm-12 am-u-md-6 am-padding-horizontal-0">
+                            <div class="am-margin-top-lg am-padding-top-xs">
+                                <div class="am-form-group">
+                                    <div class="am-alert am-alert-warning am-margin-0">
+                                        <p>1. 必须配置用户数量、商品</p>
+                                        <p>2. 推荐多少个用户购买指定商品后返现指定商品的金额、一人购买多件仅按照一件计算（配置数量必须大于0）</p>
+                                        <p>3. 比如设置2、当推荐两个用户购买指定同一个商品等于2件的时候进行返现</p>
+                                        <p>4. 由于商品存在多个规格、可能价格也会不一样、返现金额最终以推荐有效用户购买金额平均（实际运营中建议这种参与活动的商品多个规格价格保持一致）</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="am-cf">
+                        <div class="am-u-sm-12 am-u-md-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label>指定商品满足销售数量后返佣</label>
+                                <div class="am-radio-group">
+                                    <input name="appoint_goods_sale_is_user" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['appoint_goods_sale_is_user']) and $data['appoint_goods_sale_is_user'] eq 1}}checked="true"{{/if}} />
+                                    <span class="am-form-group-label-tips">按照用户纬度计算</span>
+                                </div>
+                                <div class="am-margin-top-xs">
+                                    <input type="number" name="appoint_goods_sale_number" min="0" placeholder="商品购买最低数量" data-validation-message="请填写商品购买最低数量" class="am-radius" value="{{if !empty($data['appoint_goods_sale_number'])}}{{$data.appoint_goods_sale_number}}{{/if}}" />
+                                </div>
+                                <div class="am-margin-top-xs">
+                                    <input type="number" name="appoint_goods_sale_price" step="0.01" min="0" placeholder="返佣固定金额" data-validation-message="请填写指定商品满足销售数量后返固定金额" class="am-radius" value="{{if !empty($data['appoint_goods_sale_price'])}}{{$data.appoint_goods_sale_price}}{{/if}}" />
+                                </div>
+                                <div class="am-input-group am-input-group-sm am-margin-top-xs">
+                                    <input type="number" name="appoint_goods_sale_rate" placeholder="返佣比例 0~100 的数字" min="0" max="100" step="0.01" data-validation-message="请填写指定商品满足销售数量后返比例 0~100 的数字" class="am-form-field am-radius" {{if !empty($data['appoint_goods_sale_rate']) and $data['appoint_goods_sale_rate'] gt 0}} value="{{$data.appoint_goods_sale_rate}}"{{/if}} />
+                                    <span class="am-input-group-btn">
+                                        <button type="button" class="am-btn am-btn-default am-radius">%</button>
+                                    </span>
+                                </div>
+                                <ul class="am-list am-list-border am-margin-top-sm appoint-goods-container appoint-profit-user-goods-container">
+                                    {{if !empty($data['appoint_sale_goods_list']) and is_array($data['appoint_sale_goods_list'])}}
+                                        {{foreach $data.appoint_sale_goods_list as $g}}
+                                            <li class="appoint-goods-{{$g.id}}">
+                                                <input type="hidden" name="appoint_sale_goods_ids[]" value="{{$g.id}}" />
+                                                <a href="{{$g.goods_url}}" target="_blank" class="am-text-truncate">
+                                                    <img src="{{$g.images}}" alt="{{$g.title}}" class="am-fl am-radius am-margin-right-xs" width="20" height="20" />
+                                                    <span>{{$g.title}}</span>
+                                                </a>
+                                                <button type="button" class="am-close am-fr">&times;</button>
+                                            </li>
+                                        {{/foreach}}
+                                    {{/if}}
+                                </ul>
+                                <span class="business-operations-submit goods-popup-add" data-tag=".appoint-profit-user-goods-container" data-form-name="appoint_sale_goods_ids[]">+添加商品</span>
+                            </div>
+                        </div>
+                        <div class="am-u-sm-12 am-u-md-6 am-padding-horizontal-0">
+                            <div class="am-margin-top-lg am-padding-top-xs">
+                                <div class="am-form-group">
+                                    <div class="am-alert am-alert-warning am-margin-0">
+                                        <p>1. 必须配置最低数量、固定金额和比例选一、商品</p>
+                                        <p>2. 推荐用户购买指定商品满足销售数量后，给推广人员返佣（大于该配置的数量）</p>
+                                        <p>3. 返佣计算规则[ 固定金额 -> 返佣比例 ]</p>
+                                        <p>4. 返佣固定金额、建议仔细确认金额、金额没有上限限制、可以低于或超出商品金额</p>
+                                        <p>5. 返佣比例、由于商品存在多个规格、可能价格也会不一样、返现金额最终以推荐有效用户购买金额平均（实际运营中建议这种参与活动的商品多个规格价格保持一致）</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="am-cf">
+                        <div class="am-u-sm-12 am-u-md-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label>指定商品复购折扣优惠</label>
+                                <div class="am-input-group am-input-group-sm am-margin-top-xs">
+                                    <input type="number" name="appoint_goods_repurchase_discount" placeholder="指定商品复购折扣优惠 0~1 的数字" min="0" max="1" step="0.01" data-validation-message="指定商品复购折扣优惠 0~1 的数字" class="am-form-field am-radius" {{if !empty($data['appoint_goods_repurchase_discount']) and $data['appoint_goods_repurchase_discount'] gt 0}} value="{{$data.appoint_goods_repurchase_discount}}"{{/if}} />
+                                    <span class="am-input-group-btn">
+                                        <button type="button" class="am-btn am-btn-default am-radius">折</button>
+                                    </span>
+                                </div>
+                                <div class="am-margin-top-xs">
+                                    <input type="text" name="goods_detail_icon" placeholder="商品详情折扣图标名称" maxlength="8" data-validation-message="商品详情折扣图标名称格式最多 8 个字符" class="am-radius" {{if !empty($data['goods_detail_icon'])}} value="{{$data.goods_detail_icon}}"{{/if}} />
+                                </div>
+                                <ul class="am-list am-list-border am-margin-top-sm appoint-goods-container appoint-repurchase-goods-container">
+                                    {{if !empty($data['appoint_repurchase_goods_list']) and is_array($data['appoint_repurchase_goods_list'])}}
+                                        {{foreach $data.appoint_repurchase_goods_list as $g}}
+                                            <li class="appoint-goods-{{$g.id}}">
+                                                <input type="hidden" name="appoint_repurchase_goods_ids[]" value="{{$g.id}}" />
+                                                <a href="{{$g.goods_url}}" target="_blank" class="am-text-truncate">
+                                                    <img src="{{$g.images}}" alt="{{$g.title}}" class="am-fl am-radius am-margin-right-xs" width="20" height="20" />
+                                                    <span>{{$g.title}}</span>
+                                                </a>
+                                                <button type="button" class="am-close am-fr">&times;</button>
+                                            </li>
+                                        {{/foreach}}
+                                    {{/if}}
+                                </ul>
+                                <span class="business-operations-submit goods-popup-add" data-tag=".appoint-repurchase-goods-container" data-form-name="appoint_repurchase_goods_ids[]">+添加商品</span>
+                            </div>
+                        </div>
+                        <div class="am-u-sm-12 am-u-md-6 am-padding-horizontal-0">
+                            <div class="am-margin-top-lg am-padding-top-xs">
+                                <div class="am-form-group">
+                                    <div class="am-alert am-alert-warning am-margin-0">
+                                        <p>1. 必须配置折扣率、商品</p>
+                                        <p>2. 仅对购买人非首次购买享受折扣优惠购买指定的商品（必须存在一个已完成的订单包含商品）</p>
+                                        <p>3. 折扣优惠计算规则[ 当前配置返佣折扣 ]</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="am-cf">
+                        <div class="am-u-sm-12 am-u-md-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label>指定商品阶梯返佣</label>
+                                <div class="am-radio-group">
+                                    <input name="is_show_profit_ladder_tips" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_show_profit_ladder_tips']) and $data['is_show_profit_ladder_tips'] eq 1}}checked="true"{{/if}} />
+                                    <span class="am-form-group-label-tips">是否在用户分销中心展示推广提示信息</span>
+                                </div>
+                                <div class="am-input-group am-input-group-sm am-margin-top-xs">
+                                    <input type="number" name="appoint_goods_ladder_interval_time" placeholder="阶梯间隔时间" min="0" data-validation-message="阶梯间隔时间" class="am-form-field am-radius" {{if !empty($data['appoint_goods_ladder_interval_time']) and $data['appoint_goods_ladder_interval_time'] gt 0}} value="{{$data.appoint_goods_ladder_interval_time}}"{{/if}} />
+                                    <span class="am-input-group-btn">
+                                        <button type="button" class="am-btn am-btn-default am-radius">{{:MyLang('minute_title')}}</button>
+                                    </span>
+                                </div>
+                                <div class="am-margin-top-xs">
+                                    <ul class="am-list am-list-static am-list-border appoint-ladder-goods-config-container">
+                                        {{if !empty($data['appoint_goods_ladder_config']) and !empty($data['appoint_goods_ladder_config']['rate']) and !empty($data['appoint_goods_ladder_config']['price'])}}
+                                            {{foreach $data.appoint_goods_ladder_config.rate as $k=>$v}}
+                                                <li>
+                                                    <input type="number" name="appoint_goods_ladder_config[rate][]" min="0" max="100" class="am-form-field am-radius" placeholder="比例" value="{{if $v gt 0}}{{$v}}{{/if}}" />
+                                                    <input type="number" name="appoint_goods_ladder_config[price][]" step="0.01" min="0" class="am-form-field am-radius" placeholder="固定金额" value="{{if isset($data['appoint_goods_ladder_config']['price'][$k]) and $data['appoint_goods_ladder_config']['price'][$k] gt 0}}{{$data.appoint_goods_ladder_config.price[$k]}}{{/if}}" />
+                                                    <i class="iconfont icon-delete am-fr"></i>
+                                                </li>
+                                            {{/foreach}}
+                                        {{/if}}
+                                    </ul>
+                                    <span class="business-operations-submit ladder-config-add" data-tag=".appoint-ladder-goods-config-container">+添加阶梯规则</span>
+                                </div>
+                                <ul class="am-list am-list-border am-margin-top-sm appoint-goods-container appoint-ladder-user-goods-container">
+                                    {{if !empty($data['appoint_ladder_goods_list']) and is_array($data['appoint_ladder_goods_list'])}}
+                                        {{foreach $data.appoint_ladder_goods_list as $g}}
+                                            <li class="appoint-goods-{{$g.id}}">
+                                                <input type="hidden" name="appoint_ladder_goods_ids[]" value="{{$g.id}}" />
+                                                <a href="{{$g.goods_url}}" target="_blank" class="am-text-truncate">
+                                                    <img src="{{$g.images}}" alt="{{$g.title}}" class="am-fl am-radius am-margin-right-xs" width="20" height="20" />
+                                                    <span>{{$g.title}}</span>
+                                                </a>
+                                                <button type="button" class="am-close am-fr">&times;</button>
+                                            </li>
+                                        {{/foreach}}
+                                    {{/if}}
+                                </ul>
+                                <span class="business-operations-submit goods-popup-add" data-tag=".appoint-ladder-user-goods-container" data-form-name="appoint_ladder_goods_ids[]">+添加商品</span>
+                            </div>
+                        </div>
+                        <div class="am-u-sm-12 am-u-md-6 am-padding-horizontal-0">
+                            <div class="am-margin-top-lg am-padding-top-xs">
+                                <div class="am-form-group">
+                                    <div class="am-alert am-alert-warning am-margin-0">
+                                        <p>1. 必须配置规则、商品</p>
+                                        <p>2. 推荐用户购买指定商品按照阶梯返佣、以订单为维度计算</p>
+                                        <p>3. 用户购买返佣计算规则级别[ 固定金额 -> 返佣比例 ]</p>
+                                        <p>4. 返佣固定金额、建议仔细确认金额、金额没有上限限制、可以低于或超出订单金额（金额乘以购买数量）</p>
+                                        <p>5. 返佣比例、根据用户购买的订单存在配置中的商品取平均值进行计算</p>
+                                        <p>6. 阶梯间隔时间为空时则没限制、不为空是订单超过时间则重新从第一个规则开始、当达到最高阶梯的时候自动从第一个规则重新开始</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 取货点 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">取货点</h3>
+                </div>
+                <div class="am-panel-bd">
+                    <div class="am-cf">
+                        <div class="am-u-sm-4 am-u-md-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label>自提取货点申请<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="开启则用户可申请成为站点自提模式下取货点"></a></label>
+                                <div class="am-radio-group">
+                                    {{foreach $distribution_is_enable_list as $v}}
+                                        <label class="am-radio-inline am-margin-right-sm">
+                                            <input type="radio" name="is_enable_self_extraction" value="{{$v.value}}" {{if isset($data['is_enable_self_extraction']) and $data['is_enable_self_extraction'] eq $v['value']}}checked="checked"{{else /}}{{if !isset($data['is_enable_self_extraction']) and isset($v['checked']) and $v['checked'] eq true}}checked="checked"{{/if}}{{/if}} data-am-ucheck /> {{$v.name}}
+                                        </label>
+                                    {{/foreach}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="am-u-sm-4 am-u-md-3 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label>下单默认取货地址<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="用户下单默认取货地址为上级用户的取货点地址、并且是有效的取货点，则默认为上级用户的取货点地址"></a></label>
+                                <div class="am-radio-group">
+                                    {{foreach $distribution_is_enable_list as $v}}
+                                        <label class="am-radio-inline am-margin-right-sm">
+                                            <input type="radio" name="is_buy_default_extraction_address" value="{{$v.value}}" {{if isset($data['is_buy_default_extraction_address']) and $data['is_buy_default_extraction_address'] eq $v['value']}}checked="checked"{{else /}}{{if !isset($data['is_buy_default_extraction_address']) and isset($v['checked']) and $v['checked'] eq true}}checked="checked"{{/if}}{{/if}} data-am-ucheck /> {{$v.name}}
+                                        </label>
+                                    {{/foreach}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="am-u-sm-4 am-u-md-3 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label>取货点返佣<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="当用户选择取货点取货、给取货点返佣（仅对当前订单有效、该规则仅适应自提模式订单、采用返佣至取货点的配置规则、取货点为一级、取货点的上一级为二级、再上一级为三级）<br /><br />PS：仅对下单选择的自提点为用户申请的地址有效，如是系统自带的自提点地址则继续使用正常返佣模式进行。"></a></label>
+                                <div class="am-radio-group">
+                                    {{foreach $distribution_is_enable_list as $v}}
+                                        <label class="am-radio-inline am-margin-right-sm">
+                                            <input type="radio" name="is_self_extraction" value="{{$v.value}}" {{if isset($data['is_self_extraction']) and $data['is_self_extraction'] eq $v['value']}}checked="checked"{{else /}}{{if !isset($data['is_self_extraction']) and isset($v['checked']) and $v['checked'] eq true}}checked="checked"{{/if}}{{/if}} data-am-ucheck /> {{$v.name}}
+                                        </label>
+                                    {{/foreach}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="am-cf">
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label>取货点返佣后不再向上返佣逻辑<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="PS：当订单选择了取货点、并且对取货点进行了返佣、则不再进行向上返佣的逻辑（如果不开启则会正常再走向上返佣1～3级），前提条件是必须开启了自提点返佣+满足取货点返佣的条件。"></a></label>
+                                <div class="am-radio-group">
+                                    {{foreach $distribution_is_enable_list as $v}}
+                                        <label class="am-radio-inline am-margin-right-sm">
+                                            <input type="radio" name="is_self_extraction_close_upper" value="{{$v.value}}" {{if isset($data['is_self_extraction_close_upper']) and $data['is_self_extraction_close_upper'] eq $v['value']}}checked="checked"{{else /}}{{if !isset($data['is_self_extraction_close_upper']) and isset($v['checked']) and $v['checked'] eq true}}checked="checked"{{/if}}{{/if}} data-am-ucheck /> {{$v.name}}
+                                        </label>
+                                    {{/foreach}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label>取货点返佣层级<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="当开启取货点返佣后，再向取货点的上级（采用自提二级返佣配置）、二级（采用自提三级返佣配置）"></a></label>
+                                <div class="am-radio-group">
+                                    {{foreach $distribution_extraction_profit_level_list as $v}}
+                                        <label class="am-radio-inline am-margin-right-sm">
+                                            <input type="radio" name="extraction_profit_level" value="{{$v.value}}" {{if isset($data['extraction_profit_level']) and $data['extraction_profit_level'] eq $v['value']}}checked="checked"{{else /}}{{if !isset($data['extraction_profit_level']) and isset($v['checked']) and $v['checked'] eq true}}checked="checked"{{/if}}{{/if}} data-am-ucheck /> {{$v.name}}
+                                        </label>
+                                    {{/foreach}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="am-cf">
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label class="am-block">自提取货点申请介绍<span class="am-form-group-label-tips">空则不显示</span></label>
+                                <textarea rows="3" name="self_extraction_apply_desc" class="am-radius am-field-valid" placeholder="自提取货点申请介绍" data-validation-message="请填写自提取货点申请介绍">{{if !empty($data['self_extraction_apply_desc'])}}{{:implode("\\n", $data['self_extraction_apply_desc'])}}{{/if}}</textarea>
+                            </div>
+                        </div>
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label class="am-block">自提取货点顶部公告<span class="am-form-group-label-tips">空则不显示</span></label>
+                                <textarea rows="3" name="self_extraction_common_notice" class="am-radius am-field-valid" placeholder="自提取货点顶部公告" data-validation-message="请填写自提取货点顶部公告">{{if !empty($data['self_extraction_common_notice'])}}{{:implode("\\n", $data['self_extraction_common_notice'])}}{{/if}}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 结算 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">结算</h3>
+                </div>
+                <div class="am-panel-bd">
+                    <div class="am-cf">
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label class="am-block">返佣类型<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="1. 所有订单、就是用户下的每一单都会进行返佣<br />2. 首单、就是用户的第一笔订单会进行返佣<br />3. 默认 所有订单"></a></label>
+                                <div class="am-radio-group">
+                                    {{foreach $distribution_profit_type_list as $v}}
+                                        <label class="am-radio-inline am-margin-right-sm">
+                                            <input type="radio" name="profit_type" value="{{$v.value}}" {{if isset($data['profit_type']) and $data['profit_type'] eq $v['value']}}checked="checked"{{else /}}{{if !isset($data['profit_type']) and isset($v['checked']) and $v['checked'] eq true}}checked="checked"{{/if}}{{/if}} data-am-ucheck /> {{$v.name}}
+                                        </label>
+                                    {{/foreach}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label>佣金结算周期<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="单位 分钟，默认43200分钟/30天"></a></label>
+                                <input type="number" min="0" name="profit_settlement_limit_time" placeholder="佣金结算周期" data-validation-message="请填写佣金结算周期" class="am-radius" value="{{if !empty($data['profit_settlement_limit_time'])}}{{$data.profit_settlement_limit_time}}{{else /}}43200{{/if}}" required />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="am-cf">
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label class="am-block">结算转换订单货币汇率<span class="am-form-group-label-tips">结算金额除以订单汇率值</span></label>
+                                <input name="is_profit_transform_currency_rate" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_profit_transform_currency_rate']) and $data['is_profit_transform_currency_rate'] eq 1}}checked="true"{{/if}} />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="am-alert am-alert-warning am-margin-top-0">
+                        <p class="am-text-warning">建议将该地址添加到linux定时任务定时请求即可（结果 sucs:0, fail:0 冒号后面则是处理的数据条数，sucs成功，fali失败）</p>
+                        <p class="am-text-secondary">插件已经做了兼容处理，访问分销管理后台也会自动运行一次，脚本每次处理50条数据</p>
+                        <a href="{{:PluginsHomeUrl('distribution', 'crontab', 'profit')}}" target="_blank">{{:PluginsHomeUrl('distribution', 'crontab', 'profit')}}</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 客户地图分布 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">客户地图分布</h3>
+                </div>
+                <div class="am-panel-bd">
+                    <div class="am-cf">
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label class="am-block">订单地址坐标逆解析脚本</label>
+                                <input name="is_order_address_location_geocoder" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_order_address_location_geocoder']) and $data['is_order_address_location_geocoder'] eq 1}}checked="true"{{/if}} />
+                            </div>
+                        </div>
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label class="am-block">推广员端可以查看全部用户分布</label>
+                                <input name="is_promotion_view_all_user_distribution" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_promotion_view_all_user_distribution']) and $data['is_promotion_view_all_user_distribution'] eq 1}}checked="true"{{/if}} />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="am-cf">
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label>分布客户订单范围<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="1. 以用户坐标位置方圆范围内查询订单用户<br />2. 空或0则默认10公里"></a></label>
+                                <div class="am-input-group am-input-group-sm am-margin-top-xs">
+                                    <input type="number" name="user_order_map_distance" placeholder="分布客户订单范围" min="0" data-validation-message="请填写分布客户订单范围" class="am-form-field am-radius" {{if !empty($data['user_order_map_distance'])}} value="{{$data.user_order_map_distance}}"{{/if}} />
+                                    <span class="am-input-group-btn">
+                                        <button type="button" class="am-btn am-btn-default am-radius">公里</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="am-alert am-alert-warning am-margin-top-0">
+                        <p class="am-text-warning">建议将该地址添加到linux定时任务定时请求即可（结果 sucs:0, fail:0 冒号后面则是处理的数据条数，sucs成功，fali失败），脚本每次处理10条数据</p>
+                        <a href="{{:PluginsHomeUrl('distribution', 'crontab', 'ordergeocoder')}}" target="_blank">{{:PluginsHomeUrl('distribution', 'crontab', 'ordergeocoder')}}</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 等级介绍 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">等级介绍</h3>
+                </div>
+                <div class="am-panel-bd">
+                    <div class="am-cf">
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label class="am-block">分销中心开启等级介绍<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="开启后用户将可以看见分销等级数据"></a></label>
+                                <div class="am-radio-group">
+                                    {{foreach $distribution_is_enable_list as $v}}
+                                        <label class="am-radio-inline am-margin-right-sm">
+                                            <input type="radio" name="is_show_introduce" value="{{$v.value}}" {{if isset($data['is_show_introduce']) and $data['is_show_introduce'] eq $v['value']}}checked="checked"{{else /}}{{if !isset($data['is_show_introduce']) and !isset($v['checked'])}}checked="checked"{{/if}}{{/if}} data-am-ucheck /> {{$v.name}}
+                                        </label>
+                                    {{/foreach}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label class="am-block">等级介绍顶部描述<span class="am-form-group-label-tips">空则不显示</span></label>
+                                <textarea rows="1" name="user_center_level_desc" class="am-radius am-field-valid" placeholder="等级介绍顶部描述" data-validation-message="请填写等级介绍顶部描述">{{if !empty($data['user_center_level_desc'])}}{{:implode("\\n", $data['user_center_level_desc'])}}{{/if}}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 分销中心 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">分销中心</h3>
+                </div>
+                <div class="am-panel-bd">
+                    <div class="am-cf">
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label class="am-block">不符合分销条件描述<span class="am-form-group-label-tips">空则不显示</span></label>
+                                <textarea rows="3" name="non_conformity_desc" class="am-radius am-field-valid" placeholder="不符合分销条件描述" data-validation-message="请填写不符合分销条件描述">{{if !empty($data['non_conformity_desc'])}}{{:implode("\\n", $data['non_conformity_desc'])}}{{/if}}</textarea>
+                            </div>
+                        </div>
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label>分销中心公告<span class="am-form-group-label-tips">空则不显示</span></label>
+                                <textarea rows="3" name="user_center_notice" class="am-radius am-field-valid" placeholder="分销中心公告" data-validation-message="请填写分销中心公告">{{if !empty($data['user_center_notice'])}}{{:implode("\\n", $data['user_center_notice'])}}{{/if}}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="am-form-popup-submit">
+                <a href="{{:PluginsAdminUrl('distribution', 'admin', 'index', $params)}}" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg">
+                    <i class="am-icon-mail-reply"></i>
+                    <span>{{:MyLang('retreat_title')}}</span>
+                </a>
+                <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('save_title')}}'}">
+                    <i class="am-icon-save"></i>
+                    <span>{{:MyLang('save_title')}}</span>
+                </button>
+            </div>
+        </form>
+        <!-- form end -->
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- 商品添加弹窗 -->
+<div class="am-popup am-radius" id="distribution-goods-popup">
+    <div class="am-popup-inner">
+        <div class="am-popup-hd">
+            <h4 class="am-popup-title">{{:MyLang('goods_add_name')}}</h4>
+            <span data-am-modal-close class="am-close">&times;</span>
+        </div>
+        <div class="am-popup-bd am-padding-0">
+            <form class="am-form am-padding-sm goods-add-container">
+                <!-- 搜索 -->
+                <div class="forth-selection-container" data-search-url="{{:PluginsAdminUrl('distribution', 'admin', 'goodssearch')}}">
+                    <select class="am-radius chosen-select forth-selection-form-category" data-placeholder="{{:MyLang('form_goods_category_placeholder')}}" data-validation-message="{{:MyLang('form_goods_category_message')}}">
+                        <option value="">{{:MyLang('form_goods_category_placeholder')}}</option>
+                        {{if !empty($goods_category_list)}}
+                            {{foreach $goods_category_list as $v}}
+                                <option value="{{$v.id}}">{{$v.name}}</option>
+                                {{if !empty($v['items'])}}
+                                    {{foreach $v.items as $vs}}
+                                        <option style="padding-left: 15px;" value="{{$vs.id}}">{{if empty($vs['items'])}}├{{else /}}└{{/if}}² {{$vs.name}}</option>
+                                        {{if !empty($vs['items'])}}
+                                            {{foreach $vs.items as $kss=>$vss}}
+                                                <option style="padding-left: 30px;" value="{{$vss.id}}">{{if $kss eq count($vs['items'])-1}}└{{else /}}├{{/if}}³ {{$vss.name}}</option>
+                                            {{/foreach}}
+                                        {{/if}}
+                                    {{/foreach}}
+                                {{/if}}
+                            {{/foreach}}
+                        {{/if}}
+                    </select>
+                    <input type="text" placeholder="{{:MyLang('goods_name')}}" class="am-radius forth-selection-form-keywords" />
+                    <button type="button" class="am-btn am-btn-primary-light am-radius am-btn-xs btn-loading-example search-submit" data-am-loading="{spinner: 'circle-o-notch', loadingText: ' {{:MyLang('search_title')}}'}">
+                        <i class="iconfont icon-search"></i>
+                        <span>{{:MyLang('search_title')}}</span>
+                    </button>
+                </div>
+
+                <!-- 商品列表 -->
+                <div class="am-scrollable-vertical am-margin-top-sm am-padding-bottom-xs am-radius goods-list-container" data-loading-msg="{{:MyLang('searching_tips')}}">
+                    <ul class="am-gallery am-avg-sm-3 am-avg-md-4 am-avg-lg-5 am-gallery-bordered">
+                        <div class="table-no"><i class="am-icon-warning"></i> 请搜索商品</div>
+                    </ul>
+                </div>
+
+                <!-- 分页 -->
+                <div class="am-margin-top-sm am-text-center goods-page-container"></div>
+            </form>
+        </div>
+    </div>
+</div>
+        
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

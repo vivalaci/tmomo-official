@@ -1,0 +1,15 @@
+{{if !empty($data) and is_array($data)}}
+    <div class="am-cf plugins-label plugins-label-{{$user_goods_show_style}} plugins-label-{{if $is_label_icon eq 1}}img{{else /}}text{{/if}}">
+        {{foreach $data as $v}}
+            {{if $is_label_icon eq 1}}
+                {{if !empty($v['icon'])}}
+                    <a {{if $is_label_url eq 1}}href="{{$v.url}}" target="_blank"{{else /}}href="javascript:;"{{/if}}>
+                        <img src="{{$v.icon}}" alt="{{$v.name}}" />
+                    </a>
+                {{/if}}
+            {{else /}}
+                <a {{if $is_label_url eq 1}}href="{{$v.url}}" target="_blank"{{else /}}href="javascript:;"{{/if}} class="am-badge am-round" style="background:{{if empty($v['bg_color'])}}#666{{else /}}{{$v.bg_color}}{{/if}};color:{{if empty($v['text_color'])}}#fff{{else /}}{{$v.text_color}}{{/if}}">{{$v.name}}</a>
+            {{/if}}            
+        {{/foreach}}
+    </div>
+{{/if}}

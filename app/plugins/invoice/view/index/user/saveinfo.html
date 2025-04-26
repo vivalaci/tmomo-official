@@ -1,0 +1,160 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- header top nav -->
+{{:ModuleInclude('public/header_top_nav')}}
+
+<!-- header simple nav -->
+{{:ModuleInclude('public/header_nav_simple', [
+    'search' => 1,
+])}}
+
+<!-- content -->
+<div class="am-container user-main">
+    <!-- user menu start -->
+    {{:ModuleInclude('public/user_menu')}}
+    <!-- user menu end -->
+
+    <!-- content start -->
+    <div class="user-content">
+        <div class="user-content-body">
+            <!-- user center title -->
+            {{:ModuleInclude('public/user_center_main_title', [
+                'operate_url'   => PluginsHomeUrl('invoice', 'user', 'index'),
+                'operate_name'  => MyLang('retreat_title'),
+                'operate_icon'  => 'icon-back'
+            ])}}
+            <!-- form start -->
+            <form class="am-form form-validation am-form-full-screen am-form-popup-sticky" action="{{:PluginsHomeUrl('invoice', 'user', 'save')}}" method="POST" request-type="ajax-url" request-value="{{:PluginsHomeUrl('invoice', 'user', 'index', $form_back_params)}}" enctype="multipart/form-data">
+                <!-- 描述信息 -->
+                {{if !empty($plugins_config['invoice_desc']) and is_array($plugins_config['invoice_desc'])}}
+                    <div class="am-alert" data-am-alert>
+                        <button type="button" class="am-close">&times;</button>
+                        {{foreach $plugins_config.invoice_desc as $k=>$v}}
+                            <p>{{$k+1}}. {{$v}}</p>
+                        {{/foreach}}
+                    </div>
+                {{/if}}
+
+                <div class="am-alert am-alert-secondary" data-am-alert>
+                    <p>
+                        <span>发票金额</span>
+                        <strong class="am-text-danger am-text-lg">{{$currency_symbol}}{{$save_base_data.total_price}}</strong>
+                    </p>
+                    <p class="am-margin-top-xs am-color-grey">{{$save_base_data.business_desc}}</p>
+                </div>
+
+                <div class="am-form-group">
+                    <label>发票类型<span class="am-form-group-label-tips-must">*</span></label>
+                    <select name="invoice_type" class="am-radius chosen-select" data-placeholder="{{:MyLang('please_select_tips')}}" data-validation-message="请选择发票类型" required>
+                        {{if !empty($can_invoice_type_list)}}
+                            {{foreach $can_invoice_type_list as $v}}
+                                <option value="{{$v.id}}" {{if (!empty($data['invoice_type']) and $v['id'] eq $data['invoice_type']) or (empty($data) and $v['id'] eq 0)}}selected{{/if}}>{{$v.name}}</option>
+                            {{/foreach}}
+                        {{/if}}
+                    </select>
+                </div>
+
+                <div class="am-form-group">
+                    <label>申请类型<span class="am-form-group-label-tips-must">*</span></label>
+                    <select name="apply_type" class="am-radius chosen-select" data-placeholder="{{:MyLang('please_select_tips')}}" data-validation-message="请选择申请类型" required>
+                        {{if !empty($apply_type_list)}}
+                            {{foreach $apply_type_list as $v}}
+                                <option value="{{$v.id}}" {{if (!empty($data['apply_type']) and $v['id'] eq $data['apply_type']) or (empty($data) and $v['id'] eq 0)}}selected{{/if}}>{{$v.name}}</option>
+                            {{/foreach}}
+                        {{/if}}
+                    </select>
+                </div>
+
+                {{if !empty($invoice_content_list)}}
+                    <div class="am-form-group">
+                        <label>发票内容<span class="am-form-group-label-tips-must">*</span></label>
+                        <select name="invoice_content" class="am-radius chosen-select" data-placeholder="{{:MyLang('please_select_tips')}}" data-validation-message="请选择发票内容" required>
+                            {{foreach $invoice_content_list as $v}}
+                                <option value="{{$v}}" {{if !empty($data['invoice_content']) and $v eq $data['invoice_content']}}selected{{/if}}>{{$v}}</option>
+                            {{/foreach}}
+                        </select>
+                    </div>
+                {{/if}}
+
+                <div class="am-form-group">
+                    <label>发票抬头<span class="am-form-group-label-tips-must">*</span></label>
+                    <input type="text" name="invoice_title" placeholder="发票抬头" maxlength="200" data-validation-message="请填写发票抬头、最多200个字符" class="am-radius" value="{{if !empty($data['invoice_title'])}}{{$data.invoice_title}}{{/if}}" required />
+                </div>
+                <!-- 企业信息 -->
+                <div class="company-container" {{if empty($data) or !isset($data['apply_type']) or $data['apply_type'] eq 0}}style="display: none;"{{/if}}>
+                    <div class="am-form-group">
+                        <label>企业统一社会信用代码或纳税识别号<span class="am-form-group-label-tips-must">*</span></label>
+                        <input type="text" name="invoice_code" placeholder="企业统一社会信用代码或纳税识别号" maxlength="160" data-validation-message="请填写企业统一社会信用代码或纳税识别号、最多160个字符" class="am-radius" value="{{if !empty($data['invoice_code'])}}{{$data.invoice_code}}{{/if}}" required />
+                    </div>
+                </div>
+                <!-- 企业专票信息 -->
+                <div class="company-special-container" {{if empty($data) or !isset($data['invoice_type']) or $data['invoice_type'] neq 2}}style="display: none;"{{/if}}>
+                    <div class="am-form-group">
+                        <label>企业开户行名称<span class="am-form-group-label-tips-must">*</span></label>
+                        <input type="text" name="invoice_bank" placeholder="企业开户行名称" maxlength="200" data-validation-message="请填写企业开户行名称、最多200个字符" class="am-radius" value="{{if !empty($data['invoice_bank'])}}{{$data.invoice_bank}}{{/if}}" required />
+                    </div>
+                    <div class="am-form-group">
+                        <label>企业开户帐号<span class="am-form-group-label-tips-must">*</span></label>
+                        <input type="text" name="invoice_account" placeholder="企业开户帐号" maxlength="160" data-validation-message="请填写企业开户帐号、最多160个字符" class="am-radius" value="{{if !empty($data['invoice_account'])}}{{$data.invoice_account}}{{/if}}" required />
+                    </div>
+                    <div class="am-form-group">
+                        <label>企业联系电话<span class="am-form-group-label-tips-must">*</span></label>
+                        <input type="text" name="invoice_tel" placeholder="企业联系电话" minlength="6" maxlength="15" data-validation-message="请填写企业联系电话 6~15 个字符" class="am-radius" value="{{if !empty($data['invoice_tel'])}}{{$data.invoice_tel}}{{/if}}" required />
+                    </div>
+                    <div class="am-form-group">
+                        <label>企业注册地址<span class="am-form-group-label-tips-must">*</span></label>
+                        <input type="text" name="invoice_address" placeholder="企业注册地址" maxlength="230" data-validation-message="请填写企业注册地址、最多230个字符" class="am-radius" value="{{if !empty($data['invoice_address'])}}{{$data.invoice_address}}{{/if}}" required />
+                    </div>
+                </div>
+
+                <!-- 收件人信息 -->
+                <div class="addressee-container" {{if empty($data) or !isset($data['invoice_type']) or $data['invoice_type'] eq 0}}style="display: none;"{{/if}}>
+                    <div class="am-form-group">
+                        <label>收件人姓名<span class="am-form-group-label-tips-must">*</span></label>
+                        <input type="text" name="name" placeholder="收件人姓名" minlength="2" maxlength="30" data-validation-message="收件人姓名格式 2~30 个字符之间" class="am-radius" {{if !empty($data['name'])}} value="{{$data.name}}"{{/if}} required />
+                    </div>
+                    <div class="am-form-group">
+                        <label>收件人电话<span class="am-form-group-label-tips-must">*</span></label>
+                        <input type="text" name="tel" placeholder="收件人电话" minlength="6" maxlength="15" data-validation-message="请填写收件人电话 6~15 个字符" class="am-radius" {{if !empty($data['tel'])}} value="{{$data.tel}}"{{/if}} required />
+                    </div>
+                    <div class="am-form-group">
+                        <label>收件人地址<span class="am-form-group-label-tips-must">*</span></label>
+                        <input type="text" name="address" placeholder="收件人地址" maxlength="230" data-validation-message="请填写收件人地址、最多230个字符" class="am-radius" value="{{if !empty($data['address'])}}{{$data.address}}{{/if}}" required />
+                    </div>
+                </div>
+
+                <!-- 电子邮箱信息 -->
+                <div class="email-container" {{if !empty($data) and isset($data['invoice_type']) and $data['invoice_type'] neq 0}}style="display: none;"{{/if}}>
+                    <div class="am-form-group">
+                        <label>电子邮箱</label>
+                        <input type="email" name="email" placeholder="电子邮箱" maxlength="60" data-validation-message="请填写正确的电子邮箱、最多60个字符" class="am-radius" value="{{if !empty($data['email'])}}{{$data.email}}{{/if}}" />
+                    </div>
+                </div>
+
+                <div class="am-form-group">
+                    <label>备注</label>
+                    <input type="text" name="user_note" placeholder="备注" maxlength="230" data-validation-message="备注最多230个字符" class="am-radius" value="{{if !empty($data['user_note'])}}{{$data.user_note}}{{/if}}" />
+                </div>
+
+                <div class="am-form-popup-submit">
+                    <input type="hidden" name="type" value="{{$save_base_data.business_type}}" />
+                    <input type="hidden" name="ids" value="{{$save_base_data.business_ids}}" />
+                    <input type="hidden" name="id" {{if !empty($data['id'])}} value="{{$data.id}}"{{/if}} />
+                    <a href="{{:PluginsHomeUrl('invoice', 'user', 'index', $form_back_params)}}" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg">
+                        <i class="am-icon-mail-reply"></i>
+                        <span>{{:MyLang('retreat_title')}}</span>
+                    </a>
+                    <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('submit_title')}}'}">
+                        <i class="am-icon-save"></i>
+                        <span>{{:MyLang('submit_title')}}</span>
+                    </button>
+                </div>
+            </form>
+            <!-- form end -->
+        </div>
+    </div>
+    <!-- content end -->
+</div>
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

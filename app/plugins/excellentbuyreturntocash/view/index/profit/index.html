@@ -1,0 +1,15 @@
+<!-- 继承公共的 form -->
+{{extend name="../../../module/view/form_table/user_form" /}}
+
+{{block name="form_extend"}}
+    <!-- 未完成自动结算提示分享弹窗 -->
+    <div class="am-modal am-modal-no-btn" tabindex="-1" id="modal-plugins-excellentbuyreturntocash-share">
+        <div class="am-modal-dialog am-padding-sm">
+            <div class="am-modal-hd">
+                <p class="am-text-left am-text-truncate msg-text">{{$user_share_msg}}</p>
+                <a href="javascript: void(0)" class="am-close" data-am-modal-close>&times;</a>
+            </div>
+            <div class="am-modal-bd plugins-share-view am-margin-top-xs"></div>
+        </div>
+    </div>
+{{/block}}

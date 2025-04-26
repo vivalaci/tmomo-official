@@ -1,0 +1,82 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- header top nav -->
+{{:ModuleInclude('public/header_top_nav')}}
+
+<!-- search -->
+{{:ModuleInclude('public/nav_search')}}
+
+<!-- header nav -->
+{{:ModuleInclude('public/header_nav')}}
+
+<!-- goods category -->
+{{:ModuleInclude('public/goods_category')}}
+
+<!-- content start -->
+{{if !empty($slider_list)}}
+    <!-- slider start -->
+    <div class="banner">
+        <div data-am-widget="slider" class="am-slider am-slider-a1" data-am-slider='{&quot;directionNav&quot;:false}'>
+            <ul class="am-slides">
+                {{foreach $slider_list as $sk=>$sv}}
+                    <li {{if !empty($sv['bg_color'])}}style="background: {{$sv.bg_color}};"{{/if}}>
+                        {{switch sv.event_type}}
+                            {{case 3}}
+                                <!-- 地图 -->
+                                <a href="javascript:;" {{if !empty($sv['event_value_data']) and !empty($sv['event_value_data'][2]) and !empty($sv['event_value_data'][3])}}class="submit-map-popup" data-lng="{{$sv['event_value_data'][2]}}" data-lat="{{$sv['event_value_data'][3]}}"{{/if}}><img src="{{$sv.images_url}}" alt="{{$sv.name}}" /></a>
+                            {{/case}}
+                            {{case 4}}
+                                <!-- 电话 -->
+                                <a {{if !empty($sv['event_value'])}}href="tel:{{$sv.event_value}}"{{else /}}href="javascript:;"{{/if}}><img src="{{$sv.images_url}}" alt="{{$sv.name}}" /></a>
+                            {{/case}}
+                            {{default /}}
+                                <!-- 默认url地址 -->
+                                <a {{if !empty($sv['event_value'])}}href="{{$sv.event_value}}" target="_blank"{{else /}}href="javascript:;"{{/if}}><img src="{{$sv.images_url}}" alt="{{$sv.name}}" /></a>
+                        {{/switch}}
+                    </li>
+                {{/foreach}}
+            </ul>
+        </div>
+    </div>
+    <!-- slider end -->
+{{/if}}
+
+<div class="am-container activity-base">
+    <!-- nav -->
+    {{if !empty($activity_category_list)}}
+        <ul class="activity-nav am-flex am-flex-row am-flex-warp am-gap-12 am-margin-top-main">
+            <li {{if !isset($params['id'])}}class="am-active"{{/if}}><a href="{{:PluginsHomeUrl('activity', 'index', 'index')}}">{{:MyLang('all_title')}}</a></li>
+            {{foreach $activity_category_list as $cv}}
+                <li {{if isset($params['id']) and $params['id'] eq $cv['id']}}class="am-active"{{/if}}><a href="{{:PluginsHomeUrl('activity', 'index', 'index', ['id'=>$cv['id']])}}">{{$cv.name}}</a></li>
+            {{/foreach}}
+        </ul>
+    {{/if}}
+
+    <!-- data list -->
+    {{if !empty($data_list)}}
+        <ul class="am-avg-sm-2 am-avg-md-3 am-avg-lg-4 am-margin-top-xs data-list am-flex am-flex-row am-flex-warp am-margin-lr-clear">
+            {{foreach $data_list as $v}}
+                <li class="am-padding-module-half">
+                    <div class="am-radius-lg am-nbfc am-flex am-flex-col am-flex-justify-between am-pr">
+                        <a href="{{$v.url}}" target="_blank" class="am-pr am-block">
+                            <img src="{{$v.cover}}" alt="{{$v.title}}" class="am-width scale-sm am-radius-lg" />
+                        </a>
+                        <h2 class="am-text-center am-padding-sm am-text-truncate">{{$v.title}}</h2>
+                    </div>
+                </li>
+            {{/foreach}}
+        </ul>
+
+        <!-- page start -->
+        {{if !empty($data_list)}}
+            {{$page_html|raw}}
+        {{/if}}
+        <!-- page end -->
+    {{else /}}
+        {{:ModuleInclude('public/not_data')}}
+    {{/if}}
+</div>
+<!-- content end -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

@@ -1,0 +1,171 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'signin',
+            'title'     => MyLang('base_config_title'),
+            'back_url'  => PluginsAdminUrl('signin', 'admin', 'index'),
+        ])}}
+
+        <!-- form start -->
+        <form class="am-form form-validation am-form-full-screen am-form-popup-sticky" action="{{:PluginsAdminUrl('signin', 'admin', 'save')}}" method="POST" request-type="ajax-url" request-value="{{:PluginsAdminUrl('signin', 'admin', 'index')}}" enctype="multipart/form-data">
+            <div class="am-cf">
+                <div class="am-u-sm-6 am-padding-horizontal-0">
+                    <div class="am-form-group">
+                        <label class="am-block">开启快捷导航入口</label>
+                        <input name="is_user_quick" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_user_quick']) and $data['is_user_quick'] eq 1}}checked="true"{{/if}} />
+                    </div>
+                </div>
+                <div class="am-u-sm-6 am-padding-horizontal-0">
+                    <div class="am-form-group">
+                        <label class="am-block">开启用户中心菜单入口</label>
+                        <input name="is_user_menu" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_user_menu']) and $data['is_user_menu'] eq 1}}checked="true"{{/if}} />
+                    </div>
+                </div>
+            </div>
+
+            <div class="am-cf">
+                <div class="am-u-sm-6 am-padding-horizontal-0">
+                    <div class="am-form-group">
+                        <label class="am-block">按照签到码限制</label>
+                        <input name="is_qrcode_limit" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_qrcode_limit']) and $data['is_qrcode_limit'] eq 1}}checked="true"{{/if}} />
+                    </div>
+                </div>
+                <div class="am-u-sm-6 am-padding-horizontal-0">
+                    <div class="am-form-group">
+                        <label class="am-block">开启组队</label>
+                        <input name="is_team" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_team']) and $data['is_team'] eq 1}}checked="true"{{/if}} />
+                    </div>
+                </div>
+            </div>
+
+            <div class="am-cf">
+                <div class="am-u-sm-6 am-padding-horizontal-0">
+                    <div class="am-form-group">
+                        <label class="am-block">开启分享</label>
+                        <input name="is_share" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_share']) and $data['is_share'] eq 1}}checked="true"{{/if}} />
+                    </div>
+                </div>
+                <div class="am-u-sm-6 am-padding-horizontal-0">
+                    <div class="am-form-group">
+                        <label class="am-block">签到码必填用户联系信息</label>
+                        <input name="is_qrcode_must_userinfo" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_qrcode_must_userinfo']) and $data['is_qrcode_must_userinfo'] eq 1}}checked="true"{{/if}} />
+                    </div>
+                </div>
+            </div>
+
+            <div class="am-cf">
+                <div class="am-u-sm-6 am-padding-horizontal-0">
+                    <div class="am-form-group">
+                        <label class="am-block">队长查看签到人员</label>
+                        <input name="is_team_show_coming_user" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_team_show_coming_user']) and $data['is_team_show_coming_user'] eq 1}}checked="true"{{/if}} />
+                    </div>
+                </div>
+                <div class="am-u-sm-6 am-padding-horizontal-0">
+                    <div class="am-cf">
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label>邀请人奖励积分<span class="am-form-group-label-tips">默认1</span></label>
+                                <input type="number" name="reward_master" placeholder="邀请人奖励积分" min="0" maxlength="8" data-validation-message="请填写邀请人奖励积分、长度不超过8位" class="am-radius" value="{{if !empty($data['reward_master'])}}{{$data.reward_master}}{{/if}}" />
+                            </div>
+                        </div>
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label>受邀人奖励积分<span class="am-form-group-label-tips">默认1</span></label>
+                                <input type="number" name="reward_invitee" placeholder="受邀人奖励积分" min="0" maxlength="8" data-validation-message="请填写受邀人奖励积分、长度不超过8位" class="am-radius" value="{{if !empty($data['reward_invitee'])}}{{$data.reward_invitee}}{{/if}}" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="am-cf">
+                <div class="am-u-sm-6 am-padding-horizontal-0">
+                    <div class="am-form-group am-form-file">
+                        <label class="am-block">提示信息<span class="am-form-group-label-tips">可换行、一行一个</span></label>
+                        <textarea rows="2" name="signin_desc" class="am-radius am-field-valid" placeholder="提示信息" data-validation-message="请填写提示信息">{{if !empty($data['signin_desc'])}}{{:implode("\\n", $data['signin_desc'])}}{{/if}}</textarea>
+                    </div>
+                </div>
+                <div class="am-u-sm-6 am-padding-horizontal-0">
+                    <div class="am-form-group am-form-file">
+                        <label class="am-block">默认签到成功图标<span class="am-form-group-label-tips">建议600*625px</span><a href="{{:StaticAttachmentUrl('coming-success-icon.png')}}" class="am-margin-left-sm" target="_blank">查看默认</a></label>
+                        <div class="am-form-file-upload-container">
+                            <ul class="plug-file-upload-view signin-default-success-icon-view" data-form-name="default_success_icon" data-max-number="1" data-dialog-type="images">
+                                {{if !empty($data['default_success_icon'])}}
+                                    <li>
+                                        <input type="text" name="default_success_icon" value="{{$data.default_success_icon}}" data-validation-message="请上传默认签到成功图标" />
+                                        <img src="{{$data.default_success_icon}}" />
+                                        <i class="iconfont icon-close"></i>
+                                    </li>
+                                {{/if}}
+                            </ul>
+                            <div class="plug-file-upload-submit" data-view-tag="ul.signin-default-success-icon-view">
+                                <i class="iconfont icon-upload-add"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="am-cf">
+                <div class="am-u-sm-6 am-padding-horizontal-0">
+                    <div class="am-form-group am-form-file">
+                        <label class="am-block">默认背景图片<span class="am-form-group-label-tips">建议3840*1312px</span><a href="{{:StaticAttachmentUrl('signin-bg.png')}}" class="am-margin-left-sm" target="_blank">查看默认</a></label>
+                        <div class="am-form-file-upload-container">
+                            <ul class="plug-file-upload-view signin-default-bg-images-view" data-form-name="default_bg_images" data-max-number="1" data-dialog-type="images">
+                                {{if !empty($data['default_bg_images'])}}
+                                    <li>
+                                        <input type="text" name="default_bg_images" value="{{$data.default_bg_images}}" data-validation-message="请上传默认背景图片" />
+                                        <img src="{{$data.default_bg_images}}" />
+                                        <i class="iconfont icon-close"></i>
+                                    </li>
+                                {{/if}}
+                            </ul>
+                            <div class="plug-file-upload-submit" data-view-tag="ul.signin-default-bg-images-view">
+                                <i class="iconfont icon-upload-add"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="am-u-sm-6 am-padding-horizontal-0">
+                    <div class="am-form-group am-form-file">
+                        <label class="am-block">默认logo<span class="am-form-group-label-tips">建议800*342px</span><a href="{{:StaticAttachmentUrl('logo.png')}}" class="am-margin-left-sm" target="_blank">查看默认</a></label>
+                        <div class="am-form-file-upload-container">
+                            <ul class="plug-file-upload-view signin-default-logo-view" data-form-name="default_logo" data-max-number="1" data-dialog-type="images">
+                                {{if !empty($data['default_logo'])}}
+                                    <li>
+                                        <input type="text" name="default_logo" value="{{$data.default_logo}}" data-validation-message="请上传默认logo" />
+                                        <img src="{{$data.default_logo}}" />
+                                        <i class="iconfont icon-close"></i>
+                                    </li>
+                                {{/if}}
+                            </ul>
+                            <div class="plug-file-upload-submit" data-view-tag="ul.signin-default-logo-view">
+                                <i class="iconfont icon-upload-add"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="am-form-popup-submit">
+                <a href="{{:PluginsAdminUrl('signin', 'admin', 'index', $params)}}" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg">
+                    <i class="am-icon-mail-reply"></i>
+                    <span>{{:MyLang('retreat_title')}}</span>
+                </a>
+                <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('save_title')}}'}">
+                    <i class="am-icon-save"></i>
+                    <span>{{:MyLang('save_title')}}</span>
+                </button>
+            </div>
+        </form>
+        <!-- form end -->
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

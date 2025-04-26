@@ -1,0 +1,19 @@
+{{block name="form_header"}}
+    {{:ModuleInclude('public/header')}}
+{{/block}}
+
+<!-- 继承公共的 form -->
+{{extend name="../../../module/view/form_table/base_form" /}}
+
+<!-- 表单顶部操作栏 -->
+{{block name="form_operate_top"}}
+    <!-- 占位外边距 -->
+    <div class="am-margin-top-xs"></div>
+
+    <!-- 父级内容 -->
+    {__block__}
+{{/block}}
+
+{{block name="form_footer"}}
+    {{:ModuleInclude('public/footer')}}
+{{/block}}

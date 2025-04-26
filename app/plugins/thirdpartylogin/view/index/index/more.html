@@ -1,0 +1,27 @@
+{{:ModuleInclude('public/header')}}
+
+{{if !empty($params['platform']) and !empty($platform_type_list) and !empty($platform_type_list[$params['platform']]) and !empty($platform_type_list[$params['platform']]['config'])}}
+    <ul class="am-list am-list-border">
+        <li>
+            <a href="{{:PluginsHomeUrl('thirdpartylogin', 'index', 'login', ['platform'=>$params['platform']])}}" target="_blank">
+                {{if empty($platform_type_list[$params['platform']]['config']['app_name'])}}
+                    默认应用
+                {{else /}}
+                    {{$platform_type_list[$params['platform']]['config']['app_name']}}
+                {{/if}}
+            </a>
+        </li>
+        {{if !empty($platform_type_list[$params['platform']]['config']['more_app'])}}
+            {{foreach $platform_type_list[$params['platform']]['config']['more_app'] as $k=>$v}}
+                <li>
+                    <a href="{{:PluginsHomeUrl('thirdpartylogin', 'index', 'login', ['platform'=>$params['platform'], 'appoint'=>$k])}}" target="_blank">{{$v.app_name}}</a>
+                </li>
+            {{/foreach}}
+        {{/if}}
+    </ul>
+{{else /}}
+    {{:ModuleInclude('public/not_data')}}
+{{/if}}
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

@@ -1,0 +1,12 @@
+<!-- 基础信息 -->
+{{if !empty($module_data)}}
+    <div class="am-nbfc">
+        <a href="{{$module_data.url}}" target="_blank">
+            <img src="{{$module_data.cover}}" class="am-img-thumbnail am-radius am-margin-right-sm am-fl" width="50" height="50" />
+            <span>{{$module_data.title}}</span>
+        </a>
+        {{if !empty($module_data['vice_title'])}}
+            <p class="am-nowrap-initial" {{if !empty($module_data['color'])}} style="color:{{$module_data.color}};" {{/if}}>{{$module_data.vice_title}}</p>
+        {{/if}}
+    </div>
+{{/if}}

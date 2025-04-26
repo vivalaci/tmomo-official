@@ -1,0 +1,52 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- header top nav -->
+{{:ModuleInclude('public/header_top_nav')}}
+
+<!-- content start -->
+<div class="am-g plugins-membershiplevelvip am-background-white am-nbfc">
+    <!-- banner -->
+    <img class="bg-img" src="{{if !empty($default_images_data['default_bg_images'])}}{{$default_images_data.default_bg_images}}{{/if}}">
+    <div class="plugins-membershiplevelvip-banner">
+        <div class="am-container am-text-center">
+            <img class="title" src="{{if !empty($default_images_data['default_logo'])}}{{$default_images_data.default_logo}}{{/if}}">
+            {{if !empty($plugins_config['banner_top_title'])}}
+                <h3>
+                    {{$plugins_config.banner_top_title}}
+                </h3>
+            {{/if}}
+            <div class="submit">
+                <button type="button" class="am-btn am-radius am-btn-sm {{if empty($user)}}login-event{{else /}}plugins-level-buy-open-event{{/if}}" style="background-image:url({{$default_images_data.default_btn_bg}});">{{$default_images_data.banner_middle_name}}</button>
+            </div>
+        </div>
+    </div>
+    <div class="am-container">
+        {{if !empty($introduce_list)}}
+            <ul class="items am-flex am-flex-justify-around am-flex-items-center am-text-center">
+                {{foreach $introduce_list as $introduce}}
+                    <li class="am-flex-1">
+                        <div class="content am-padding-horizontal-main">
+                            <p class="title am-text-truncate">{{$introduce.name}}</p>
+                            <p class="desc am-text-truncate-2">{{$introduce.desc}}</p>
+                            <img src="{{$introduce.images_url}}" class="am-margin-top-main" />
+                        </div>
+                    </li>
+                {{/foreach}}
+            </ul>
+        {{/if}}
+    </div>
+
+    <!-- content -->
+    {{if !empty($plugins_config['banner_bottom_content'])}}
+        <div class="am-container rich-text-content">
+            <div class="am-padding-xs">{{$plugins_config.banner_bottom_content|raw}}</div>
+        </div>
+    {{/if}}
+</div>
+<!-- content end -->
+
+<!-- common -->
+{{:ModuleInclude('../../../plugins/membershiplevelvip/view/index/public/common')}}
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

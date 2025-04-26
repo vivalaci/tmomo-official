@@ -1,0 +1,65 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'homemiddleadv',
+            'nav_data'  => $plugins_nav_menu_list,
+        ])}}
+
+        <div class="homemiddleadv-content">
+            <!-- 基础数据 -->
+            <div class="am-panel am-panel-default am-radius homemiddleadv-content-base">
+                <div class="am-panel-hd">
+                    <span class="am-panel-title">{{:MyLang('form_base_data_title')}}</span>
+                    <a class="am-margin-left-lg" href="{{:PluginsAdminUrl('homemiddleadv', 'admin', 'saveinfo')}}">
+                        <i class="am-icon-edit"></i>
+                        <span>{{:MyLang('edit_title')}}</span>
+                    </a>
+                </div>
+                <div class="am-panel-bd">
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('form_time_valid_title')}}</label>
+                                <div>
+                                    {{if !empty($data['time_start']) and !empty($data['time_end'])}}
+                                        {{$data.time_start}} ~ {{$data.time_end}}
+                                    {{elseif !empty($data['time_start']) and empty($data['time_end'])}}
+                                        {{$data.time_start}} ~ 长期有效
+                                    {{elseif empty($data['time_start']) and !empty($data['time_end'])}}
+                                        立即生效 ~ {{$data.time_end}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}限制
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启展示 - web端</label>
+                                <div>
+                                    {{if isset($data['is_web_show']) and $data['is_web_show'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启展示 - 手机端</label>
+                                <div>
+                                    {{if isset($data['is_app_show']) and $data['is_app_show'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

@@ -1,0 +1,52 @@
+{{if isset($plugins_config['is_ask_comments_add']) and $plugins_config['is_ask_comments_add'] eq 1}}
+    <form class="am-form am-padding-bottom-xs reply-container">
+        <div class="am-pr">
+            <h2 class="am-margin-bottom-main comments-title">评论 <font>{{$data.comments_count}}</font></h2>
+            <div class="am-flex am-flex-justify-between">
+                <img src="{{if empty($user)}}{{:UserDefaultAvatar()}}{{else /}}{{$user.avatar}}{{/if}}" class="am-img-thumbnail am-circle am-fl" />
+                <div class="am-radius comment-content">
+                    {{if empty($user)}}
+                        <div class="am-text-center am-radius login-event not-login-textarea-comments am-text-text-lg">
+                            <span>请先</span>
+                            <span class="am-color-main">{{:MyLang('login_title')}}</span>
+                            <span>后发表评论~</span>
+                        </div>
+                    {{else /}}
+                        <textarea rows="4" placeholder="期待您的发言..." maxlength="500" class="am-radius add-event-listener-textarea" data-is-clearout="0"></textarea>
+                    {{/if}}
+                    {{if !empty($user)}}
+                        <div class="reply-bottom-content am-pa am-bottom-0 am-left-0 am-right-0 am-padding-bottom-module am-padding-right-module am-padding-left-module">
+                            <a href="javascript:;" class="am-icon-smile-o am-icon-sm am-color-grey emoji-submit am-text-sm"></a>
+                            <div class="am-fr">
+                                <span class="am-text-grey am-margin-right-main am-text-sm">
+                                    <span>剩余</span><strong class="comments-length-value">500</strong><span>字</span>
+                                </span>
+                                <button type="submit" class="am-btn am-btn-default am-btn-info am-radius am-btn-xs textarea-btn {{if empty($user)}}login-event{{/if}}">评论</button>
+                            </div>
+                        </div>
+
+                        <!-- 表情容器 -->
+                        <div class="emoji-container">
+                            <button type="button" class="am-close">&times;</button>
+                            <div class="module-content am-scrollable-vertical {{if empty($emoji_list)}}container-not-data{{/if}}">
+                                {{if empty($emoji_list)}}
+                                    <div class="not-data-msg">
+                                        <i class="am-icon-exclamation-circle"></i> 无表情数据
+                                    </div>
+                                {{else /}}
+                                    <ul class="am-gallery am-avg-sm-4 am-avg-md-5">
+                                        {{foreach $emoji_list as $v}}
+                                            <li>
+                                                <a href="javascript:;" title="{{$v.tips}}" class="emoji-icon">{{$v.emoji}}</a>
+                                            </li>
+                                        {{/foreach}}
+                                    </ul>
+                                {{/if}}
+                            </div>
+                        </div>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+    </form>
+{{/if}}

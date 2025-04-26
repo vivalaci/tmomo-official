@@ -1,0 +1,18 @@
+<!-- 操作栏 -->
+<button type="button" class="am-btn am-btn-default am-btn-xs am-radius am-btn-block submit-popup" data-url="{{:PluginsAdminUrl('ask', 'askcomments', 'detail', ['id'=>$module_data['id']])}}" data-title="{{:MyLang('detail_title')}}">
+    <i class="am-icon-eye"></i>
+    <span>{{:MyLang('detail_title')}}</span>
+</button>
+<button type="button" class="am-btn am-btn-primary am-btn-xs am-radius am-btn-block submit-modal" data-url="{{:PluginsAdminUrl('ask', 'askcomments', 'saveinfo', array_merge($params, ['id'=>$module_data['id']]))}}" data-width="600" data-height="440" data-close-via-dimmer="0" data-title="评论内容">
+    {{if $module_data['status'] eq 0}}
+        <i class="am-icon-gavel"></i>
+        <span>{{:MyLang('audit_title')}}</span>
+    {{else /}}
+        <i class="am-icon-edit"></i>
+        <span>{{:MyLang('edit_title')}}</span>
+    {{/if}}
+</button>
+<button type="button" class="am-btn am-btn-danger am-btn-xs am-radius am-btn-block submit-delete" data-url="{{:PluginsAdminUrl('ask', 'askcomments', 'delete')}}" data-id="{{$module_data.id}}" data-key="ids">
+    <i class="iconfont icon-delete"></i>
+    <span>{{:MyLang('delete_title')}}</span>
+</button>

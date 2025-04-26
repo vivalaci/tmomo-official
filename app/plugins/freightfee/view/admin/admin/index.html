@@ -1,0 +1,12 @@
+<!-- 继承导航 form -->
+{{block name="form_navigation"}}
+    <!-- nav -->
+    {{:ModuleInclude('public/plugins_admin_nav', [
+        'plugins'   => 'freightfee',
+        'title'     => '运费设置',
+        'back_url'  => MyUrl('admin/pluginsadmin/index'),
+    ])}}
+{{/block}}
+
+<!-- 继承公共的 form -->
+{{extend name="../../../module/view/form_table/form" /}}

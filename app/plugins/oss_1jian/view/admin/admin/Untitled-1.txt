@@ -1,0 +1,19 @@
+
+阿里云oss使用
+1)登录阿里云
+2)创建oss对象存储空间
+3)获取AccessKey
+
+
+腾讯云使用
+1）先登录腾讯云
+2）创建存储空间
+3)获取SecretId和SecretKey
+打开API密钥管理 https://console.cloud.tencent.com/cam/capi
+
+
+七牛使用
+1）登录七牛
+2）创建存储空间
+3)获取密钥
+https://portal.qiniu.com/user/key

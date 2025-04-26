@@ -1,0 +1,80 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'themestyle',
+            'title'     => MyLang('base_config_title'),
+            'back_url'  => PluginsAdminUrl('themestyle', 'admin', 'index'),
+        ])}}
+
+        <!-- form start -->
+        <form class="am-form form-validation am-form-full-screen am-form-popup-sticky" action="{{:PluginsAdminUrl('themestyle', 'admin', 'save')}}" method="POST" request-type="ajax-url" request-value="{{:PluginsAdminUrl('themestyle', 'admin', 'index')}}" enctype="multipart/form-data">
+            <!-- web端 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">{{:MyLang('backstage_admin.item_web_title')}}</h3>
+                </div>
+                <div class="am-panel-bd am-padding-vertical-xs">
+                    <div class="am-form-group">
+                        <label class="am-block">{{:MyLang('backstage_admin.is_web_open')}}</label>
+                        <input name="is_web_open" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_web_open']) and $data['is_web_open'] eq 1}}checked="true"{{/if}} />
+                    </div>
+
+                    <div class="am-alert am-alert-warning am-margin-top-0" data-am-alert>
+                        <button type="button" class="am-close">&times;</button>
+                        <p>
+                            <span>web端配色在《web配置》中新增配置，</span>
+                            <a href="{{:PluginsAdminUrl('themestyle', 'config', 'index')}}">去管理 >></a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 手机端 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">{{:MyLang('backstage_admin.item_app_title')}}</h3>
+                </div>
+                <div class="am-panel-bd am-padding-vertical-xs">
+                    <div class="am-form-group">
+                        <label class="am-block">{{:MyLang('backstage_admin.is_app_open')}}</label>
+                        <input name="is_app_open" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_app_open']) and $data['is_app_open'] eq 1}}checked="true"{{/if}} />
+                    </div>
+                    <div class="am-form-group">
+                        <label class="am-block">{{:MyLang('backstage_admin.app_theme')}}</label>
+                        <div class="theme-color-list">
+                            {{foreach $app_theme_style_list as $v}}
+                                <label class="am-radio-inline am-text-center am-circle" style="background: {{$v.color}};">
+                                    <i class="am-icon-check am-icon-md checked-icon {{if (empty($data['app_theme']) and isset($v['checked']) and $v['checked'] neq true) or (!empty($data['app_theme']) and $data['app_theme'] neq $v['value'])}}am-hide{{/if}}"></i>
+                                    <div class="drift">
+                                        <input type="radio" name="app_theme" value="{{$v.value}}" data-am-ucheck {{if (empty($data['app_theme']) and isset($v['checked']) and $v['checked'] eq true) or (!empty($data['app_theme']) and $data['app_theme'] eq $v['value'])}}checked{{/if}} />
+                                    </div>
+                                    <p class="name">{{$v.name}}</p>
+                                </label>
+                            {{/foreach}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="am-form-popup-submit">
+                <a href="{{:PluginsAdminUrl('themestyle', 'admin', 'index', $params)}}" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg">
+                    <i class="am-icon-mail-reply"></i>
+                    <span>{{:MyLang('retreat_title')}}</span>
+                </a>
+                <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('save_title')}}'}">
+                    <i class="am-icon-save"></i>
+                    <span>{{:MyLang('save_title')}}</span>
+                </button>
+            </div>
+        </form>
+        <!-- form end -->
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer -->
+{{:ModuleInclude('public/footer')}}

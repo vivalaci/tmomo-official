@@ -1,0 +1,70 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'searchrightad',
+            'title'     => MyLang('base_config_title'),
+            'back_url'  => PluginsAdminUrl('searchrightad', 'admin', 'index'),
+        ])}}
+
+        <!-- form start -->
+        <form class="am-form form-validation am-form-full-screen am-form-popup-sticky" action="{{:PluginsAdminUrl('searchrightad', 'admin', 'save')}}" method="POST" request-type="ajax-url" request-value="{{:PluginsAdminUrl('searchrightad', 'admin', 'index')}}">
+            <div class="am-form-group am-form-file">
+                <label class="am-block">图片<span class="am-form-group-label-tips">建议285*180px</span></label>
+                <div class="am-form-file-upload-container">
+                    <ul class="plug-file-upload-view plugins-images-view" data-form-name="images" data-max-number="1" data-dialog-type="images">
+                        {{if !empty($data['images'])}}
+                            <li>
+                                <input type="text" name="images" value="{{$data.images}}" data-validation-message="{{:MyLang('form_upload_images_message')}}" required />
+                                <img src="{{$data.images}}" />
+                            </li>
+                        {{/if}}
+                    </ul>
+                    <div class="plug-file-upload-submit" data-view-tag="ul.plugins-images-view">
+                        <i class="iconfont icon-upload-add"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="am-form-group">
+                <label>链接地址<span class="am-form-group-label-tips">带http://或https://</span></label>
+                <input type="url" placeholder="链接地址" name="url"  data-validation-message="链接地址格式有误" class="am-radius" {{if !empty($data['url'])}} value="{{$data.url}}"{{/if}} />
+            </div>
+            <div class="am-form-group">
+                <label class="am-block">链接地址新窗口<span class="am-form-group-label-tips">默认否</span></label>
+                <input name="is_url_new_window" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_url_new_window']) and $data['is_url_new_window'] eq 1}}checked="true"{{/if}} />
+            </div>
+
+            <div class="am-form-group">
+                <label class="am-block">仅首页<span class="am-form-group-label-tips">默认否、整站有效</span></label>
+                <input name="is_home" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_home']) and $data['is_home'] eq 1}}checked="true"{{/if}} />
+            </div>
+            <div class="am-form-group">
+                <label>{{:MyLang('form_time_valid_title')}}<span class="am-form-group-label-tips">空则不限制</span></label>
+                <div class="searchrightad-form-time">
+                    <input type="text" autocomplete="off" name="time_start" class="Wdate am-radius" placeholder="{{:MyLang('form_time_start_title')}}" onclick="WdatePicker({firstDayOfWeek:1,dateFmt:'yyyy-MM-dd HH:mm:ss'})" {{if !empty($data['time_start'])}}value="{{$data.time_start}}"{{/if}}/>
+                    <span class="am-text-grey">~</span>
+                    <input type="text" autocomplete="off" class="Wdate am-radius" placeholder="{{:MyLang('form_time_end_title')}}" name="time_end" onclick="WdatePicker({firstDayOfWeek:1,dateFmt:'yyyy-MM-dd HH:mm:ss'})" {{if !empty($data['time_end'])}}value="{{$data.time_end}}"{{/if}}/>
+                </div>
+            </div>
+
+            <div class="am-form-popup-submit">
+                <a href="{{:PluginsAdminUrl('searchrightad', 'admin', 'index', $params)}}" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg">
+                    <i class="am-icon-mail-reply"></i>
+                    <span>{{:MyLang('retreat_title')}}</span>
+                </a>
+                <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('save_title')}}'}">
+                    <i class="am-icon-save"></i>
+                    <span>{{:MyLang('save_title')}}</span>
+                </button>
+            </div>
+        </form>
+        <!-- form end -->
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

@@ -1,0 +1,27 @@
+<!-- 继承公共的 form -->
+{{extend name="../../../module/view/form_table/detail" /}}
+
+<!-- 重写数据模块 -->
+{{block name="detail_data"}}
+    <!-- 父级内容 -->
+    {__block__}
+
+    <!-- 变更日志 -->
+    <div class="am-panel am-panel-default am-radius">
+        <div class="am-panel-hd">变更日志</div>
+        <div class="am-panel-bd">
+            {{if !empty($data['log'])}}
+                <ul class="am-list am-list-static am-list-border am-nowrap-initial">
+                    {{foreach $data.log as $log}}
+                        <li>
+                            <span>{{$log.msg}}</span>
+                            <span class="am-margin-left-lg am-text-primary">{{$log.time}}</span>
+                        </li>
+                    {{/foreach}}
+                </ul>
+            {{else /}}
+                {{:ModuleInclude('public/not_data')}}
+            {{/if}}
+        </div>
+    </div>
+{{/block}}

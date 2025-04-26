@@ -1,0 +1,63 @@
+{{if !empty($warehouse_data)}}
+    <div class="block-container inventory">
+        <div class="am-flex am-flex-row am-flex-justify-between am-flex-warp am-padding-bottom-sm">
+            <div class="am-pr block-title">
+                <span class="title icon">库存预警</span>
+            </div>
+            <div id="inventory-more">
+                <div class="am-dropdown" data-am-dropdown="{justify: '#inventory-more'}">
+                <a href="javascript:;" class="am-dropdown-toggle">更多 <i class="iconfont icon-angle-down"></i></a>
+                <ul class="am-dropdown-content am-radius">
+                    {{foreach $warehouse_data as $k=>$v}}
+                        <li>
+                            <div class="li-content">
+                                <div class="am-flex am-flex-row am-flex-justify-between">
+                                    <div>
+                                        <p class="name submit-popup" data-url="{{$v.warehouse_url}}" data-title="{{$v.warehouse_name}}">{{$v.warehouse_name}}</p>
+                                        <p class="total animation-count-to base-user-count submit-popup" data-url="{{$v.warehouse_goods_url}}" data-full="1" data-max-full="1" data-to="{{$v.goods_count}}" data-speed="1500" data-title="库存预警">0</p>
+                                    </div>
+                                    <div class="item am-color-999 am-text-truncate">更新时间：{{$v.time}}</div>
+                                </div>
+                                <div class="am-color-ccc am-margin-bottom-xs am-text-truncate">{{$v.goods_count}}个商品规格库存低于预警值</div>
+                                <div class="li-content-foot am-flex am-flex-row am-flex-justify-between">
+                                    <span>总库存</span>
+                                    <span>{{$v.inventory_total}}</span>
+                                </div>
+                            </div>
+                        </li>
+                    {{/foreach}}
+                </ul>
+                </div>
+            </div>
+        </div>
+        <div class="am-padding-xs">
+            <div class="am-slider am-slider-default" data-am-flexslider="{playAfterPaused: 8000,direction: 'vertical',animationLoop: true,directionNav: false,controlNav: false}">
+                <ul class="am-slides">
+                    {{foreach $warehouse_data as $k=>$v}}
+                        <li>
+                            <div class="li-content">
+                                <div class="am-flex am-flex-row am-flex-justify-between">
+                                    <div>
+                                        <p class="name submit-popup" data-url="{{$v.warehouse_url}}" data-title="{{$v.warehouse_name}}">{{$v.warehouse_name}}</p>
+                                        <p class="total animation-count-to base-user-count submit-popup" data-url="{{$v.warehouse_goods_url}}" data-full="1" data-max-full="1" data-to="{{$v.goods_count}}" data-speed="1500" data-title="库存预警">0</p>
+                                    </div>
+                                    <div class="item am-color-999 am-text-truncate">更新时间：{{$v.time}}</div>
+                                </div>
+                                <div class="am-color-ccc am-margin-bottom-xs am-text-truncate">{{$v.goods_count}}个商品规格库存低于预警值</div>
+                                <div class="li-content-foot am-flex am-flex-row am-flex-justify-between">
+                                    <div class="am-flex am-gap-1">
+                                        <span>总库存</span>
+                                        <span>{{$v.inventory_total}}</span>
+                                    </div>
+                                    <span class="am-color-ccc">
+                                        {{$k + 1}}/{{:count($warehouse_data)}}
+                                    </span>
+                                </div>
+                            </div>
+                        </li>
+                    {{/foreach}}
+                </ul>
+              </div>
+        </div>
+    </div>
+{{/if}}

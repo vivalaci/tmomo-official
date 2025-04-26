@@ -1,0 +1,14 @@
+<!-- 操作按钮 -->
+<div class="ask-right-list">
+    {{if isset($plugins_config['is_user_add_ask']) and $plugins_config['is_user_add_ask'] eq 1}}
+        <a href="javascript:;" class="am-radius am-color-main am-background-white am-flex am-flex-col am-flex-justify-center am-flex-items-center box-shadow-hover {{if empty($user)}}login-event{{else /}}submit-modal{{/if}}" {{if !empty($user)}}data-url="{{:PluginsHomeUrl('ask', 'ask', 'saveinfo')}}"{{/if}} data-width="1200" data-height="800" data-close-via-dimmer="0" data-title="{{:MyLang('add_title')}}">
+            <i class="iconfont icon-question_tw"></i>
+            <span class="am-hide-sm-only">我要提问</span>
+        </a>
+    {{/if}}
+    <a href="{{if empty($user)}}javascript:;{{else /}}{{:PluginsHomeUrl('ask', 'ask', 'index')}}{{/if}}"
+        class="am-radius am-color-main am-background-white am-margin-top-module am-flex am-flex-col am-flex-justify-center am-flex-items-center box-shadow-hover {{if empty($user)}}login-event{{/if}}">
+        <i class="iconfont icon-my-list"></i>
+        <span class="am-hide-sm-only">我的提问</span>
+    </a>
+</div>

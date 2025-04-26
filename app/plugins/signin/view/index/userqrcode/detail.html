@@ -1,0 +1,54 @@
+<!-- 继承公共的 form -->
+{{extend name="../../../module/view/form_table/detail" /}}
+
+<!-- 重写数据模块 -->
+{{block name="detail_data"}}
+    <div class="am-padding">
+        <!-- 父级内容 -->
+        {__block__}
+
+        <!-- 连续签到翻倍奖励配置 -->
+        {{if !empty($data['continuous_rules'])}}
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">连续签到翻倍奖励配置</div>
+                <div class="am-panel-bd am-padding-vertical-xs">
+                    <dl class="dl-content dl-content-dd-only">
+                        {{foreach $data.continuous_rules as $v}}
+                            <dd>连续{{$v.number}}天、翻{{$v.value}}倍</dd>
+                        {{/foreach}}
+                    </dl>
+                </div>
+            </div>
+        {{/if}}
+
+        <!-- 指定时段额外奖励 -->
+        {{if !empty($data['specified_time_reward']) and !empty($data['specified_time_reward']['time_start']) and !empty($data['specified_time_reward']['time_end']) and !empty($data['specified_time_reward']['value'])}}
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">指定时段额外奖励</div>
+                <div class="am-panel-bd">
+                    时段 {{$data.specified_time_reward.time_start}} ~ {{$data.specified_time_reward.time_end}}、额外奖励 {{$data.specified_time_reward.value}}
+                </div>
+            </div>
+        {{/if}}
+
+        <!-- 推广 -->
+        {{if isset($plugins_config['is_share']) and $plugins_config['is_share'] eq 1}}
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">推广</div>
+                <div class="am-panel-bd">
+                    {{if !empty($data['share_data'])}}
+                        <label class="am-block">url地址</label>
+                        <pre class="am-padding-sm text-copy-submit" data-value="{{$data.share_data.url}}"><span>{{$data.share_data.url}}</span><a href="javascript:;" class="am-badge am-badge-secondary am-radius am-margin-left-sm am-icon-copy"> 复制</a></pre>
+
+                        {{if !empty($data['share_data']['qrcode'])}}
+                            <label class="am-block am-margin-top-lg">二维码<a href="{{:MyUrl('index/qrcode/download', ['url'=>urlencode(base64_encode($data['share_data']['qrcode']))])}}" target="_blank" class="am-badge am-badge-secondary am-radius am-margin-left-sm am-icon-download"> 下载</a></label>
+                            <img class="am-img-thumbnail am-radius" alt="140*140" src="{{$data.share_data.qrcode}}" width="140" height="140" />
+                        {{/if}}
+                    {{else /}}
+                        {{:ModuleInclude('public/not_data')}}
+                    {{/if}}
+                </div>
+            </div>
+        {{/if}}
+    </div>
+{{/block}}

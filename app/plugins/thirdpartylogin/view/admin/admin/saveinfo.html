@@ -1,0 +1,366 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'thirdpartylogin',
+            'title'     => MyLang('base_config_title'),
+            'back_url'  => PluginsAdminUrl('thirdpartylogin', 'admin', 'index', $params),
+        ])}}
+
+        <!-- form start -->
+        <form class="am-form form-validation am-form-full-screen am-form-popup-sticky" action="{{:PluginsAdminUrl('thirdpartylogin', 'admin', 'save')}}" method="POST" request-type="ajax-url" request-value="{{:PluginsAdminUrl('thirdpartylogin', 'admin', 'index', $params)}}" enctype="multipart/form-data">
+            <!-- 基础配置 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">{{:MyLang('base_config_title')}}</h3>
+                </div>
+                <div class="am-panel-bd am-padding-vertical-xs">
+                    <div class="am-form-group">
+                        <label class="am-block">强制绑定帐号<span class="am-form-group-label-tips">默认否</span></label>
+                        <input name="is_force_bind_user" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_force_bind_user']) and $data['is_force_bind_user'] eq 1}}checked="true"{{/if}} />
+                        <div class="am-alert am-alert-warning">
+                            <p>开启后用户使用第三方授权成功后、在用户没有绑定过商城帐号的情况下需要登录或注册商城帐号。</p>
+                        </div>  
+                    </div>
+                    <div class="am-form-group">
+                        <label class="am-block">登录页面展示登录入口<span class="am-form-group-label-tips">默认否</span></label>
+                        <input name="is_logininfo_show_ent" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_logininfo_show_ent']) and $data['is_logininfo_show_ent'] eq 1}}checked="true"{{/if}} />
+                        <div class="am-alert am-alert-warning">
+                            <p>开启后在用户登录页面展示第三方登录入口。</p>
+                        </div>  
+                    </div>
+                    <div class="am-form-group">
+                        <label class="am-block">注册页面展示登录入口<span class="am-form-group-label-tips">默认否</span></label>
+                        <input name="is_reginfo_show_ent" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_reginfo_show_ent']) and $data['is_reginfo_show_ent'] eq 1}}checked="true"{{/if}} />
+                        <div class="am-alert am-alert-warning">
+                            <p>开启后在用户注册页面展示第三方登录入口。</p>
+                        </div>  
+                    </div>
+                    <div class="am-form-group">
+                        <label class="am-block">开启web端扫码登录<span class="am-form-group-label-tips">默认否</span></label>
+                        <input name="is_web_login_scan" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_web_login_scan']) and $data['is_web_login_scan'] eq 1}}checked="true"{{/if}} />
+                    </div>
+                    <div class="am-form-group">
+                        <label>顶部导航左侧登录入口名称<span class="am-form-group-label-tips">空则不展示、比如：第三方登录</span></label>
+                        <input type="text" name="nav_top_left_ent_name" placeholder="顶部导航左侧登录入口名称" data-validation-message="请填写顶部导航左侧登录入口名称" class="am-radius" {{if !empty($data['nav_top_left_ent_name'])}} value="{{$data.nav_top_left_ent_name}}"{{/if}} />
+                    </div>
+                    <div class="am-form-group">
+                        <label>H5自定义地址<span class="am-form-group-label-tips">登录使用、默认取当前站点地址、请以斜杠结尾[ / ]、uniapp端则写h5地址加/#/，如：https://shopxo.net/h5/#/</span></label>
+                        <input type="text" name="h5_url" placeholder="H5自定义地址" maxlength="200" data-validation-message="H5自定义地址格式最多 200 个字符" class="am-radius" value="{{if !empty($data['h5_url'])}}{{$data.h5_url}}{{/if}}" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- 平台配置 -->
+            <div data-am-widget="tabs" class="am-tabs am-tabs-default am-radius am-margin-0" data-am-tabs="{noSwipe: 1}">
+                <ul class="am-tabs-nav am-cf">
+                    <li class="am-active"><a href="[data-tab-panel-0]">钉钉</a></li>
+                    <li><a href="[data-tab-panel-1]">支付宝</a></li>
+                    <li><a href="[data-tab-panel-2]">微信</a></li>
+                    <li><a href="[data-tab-panel-3]">QQ</a></li>
+                    <li><a href="[data-tab-panel-4]">微博</a></li>
+                    <li><a href="[data-tab-panel-5]">闽诊通</a></li>
+                    <li><a href="[data-tab-panel-6]">苹果</a></li>
+                    <li><a href="[data-tab-panel-7]">谷歌</a></li>
+                    <li><a href="[data-tab-panel-8]">APP本机号码登录</a></li>
+                </ul>
+                <div class="am-tabs-bd">
+                    <!-- 钉钉 -->
+                    <div data-tab-panel-0 class="am-tab-panel am-active">
+                        <div class="am-alert">
+                            <p>回调地址</p>
+                            <p><a href="{{:PluginsHomeUrl('thirdpartylogin', 'index', 'back', ['platform'=>'dingding'])}}" target="_blank">{{:PluginsHomeUrl('thirdpartylogin', 'index', 'back', ['platform'=>'dingding'])}}</a></p>
+                            <div class="am-margin-top-sm">
+                                <a href="https://open-dev.dingtalk.com/" target="_blank">去钉钉开放平台申请权限 >></a>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="am-form-group">
+                                <label>应用名称</label>
+                                <input type="text" name="dingding_app_name" placeholder="应用名称" data-validation-message="请填写钉钉应用名称" class="am-radius" {{if !empty($data['dingding_app_name'])}} value="{{$data.dingding_app_name}}"{{/if}} />
+                            </div>
+                            <div class="am-form-group">
+                                <label>AppKey</label>
+                                <input type="text" name="dingding_app_id" placeholder="AppKey" data-validation-message="请填写钉钉AppKey" class="am-radius" {{if !empty($data['dingding_app_id'])}} value="{{$data.dingding_app_id}}"{{/if}} />
+                            </div>
+                            <div class="am-form-group">
+                                <label>AppSecret</label>
+                                <input type="text" name="dingding_app_secret" placeholder="AppSecret" data-validation-message="请填写钉钉AppSecret" class="am-radius" {{if !empty($data['dingding_app_secret'])}} value="{{$data.dingding_app_secret}}"{{/if}} />
+                            </div>
+                            <div class="am-form-group">
+                                <label class="am-block">钉钉环境自动登录<span class="am-form-group-label-tips">默认否、开启后在钉钉app中打开商城自动登录</span></label>
+                                <input name="dingding_is_env_auto_login" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['dingding_is_env_auto_login']) and $data['dingding_is_env_auto_login'] eq 1}}checked="true"{{/if}} />
+                            </div>
+                            <div class="am-form-group">
+                                <label class="am-block">开启登录<span class="am-form-group-label-tips">默认否、开启后用户可使用钉钉登录商城</span></label>
+                                <input name="dingding_is_enable" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['dingding_is_enable']) and $data['dingding_is_enable'] eq 1}}checked="true"{{/if}} />
+                            </div>
+                        </div>
+                        <div class="am-panel am-panel-default am-radius am-margin-top-xs am-margin-bottom-0">
+                            <div class="am-panel-hd">
+                                <h3 class="am-panel-title">更多应用<span class="am-form-group-label-tips-must">（登录地址、回调地址）保存后到首页查看</span></h3>
+                            </div>
+                            <div class="am-panel-bd">
+                                <ul class="dingding-more-app-container">
+                                    {{if !empty($data['dingding_more_app']) and is_array($data['dingding_more_app'])}}
+                                        {{foreach $data.dingding_more_app as $k=>$v}}
+                                            <li class="am-form-group">
+                                                <input type="text" name="dingding_more_app[{{$k}}][app_name]"  placeholder="应用名称" data-validation-message="请填写钉钉应用名称" class="am-radius" value="{{$v.app_name}}" />
+                                                <input type="text" name="dingding_more_app[{{$k}}][app_id]"  placeholder="AppKey" data-validation-message="请填写钉钉AppKey" class="am-radius" value="{{$v.app_id}}" />
+                                                <input type="text" name="dingding_more_app[{{$k}}][app_secret]"  placeholder="AppSecret" data-validation-message="请填写钉钉AppSecret" class="am-radius" value="{{$v.app_secret}}" />
+                                                <button type="button" class="am-close">&times;</button>
+                                            </li>
+                                        {{/foreach}}
+                                    {{/if}}
+                                </ul>
+                                <div class="am-margin-top-xs">
+                                    <span class="business-operations-submit dingding-more-app-add">+添加更多应用</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 支付宝 -->
+                    <div data-tab-panel-1 class="am-tab-panel">
+                        <div class="am-alert">
+                            <p>回调地址</p>
+                            <p><a href="{{:PluginsHomeUrl('thirdpartylogin', 'index', 'back', ['platform'=>'alipay'])}}" target="_blank">{{:PluginsHomeUrl('thirdpartylogin', 'index', 'back', ['platform'=>'alipay'])}}</a></p>
+                            <div class="am-margin-top-sm">
+                                <a href="https://open.alipay.com/" target="_blank">去支付宝开放平台申请权限 >></a>
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label>AppKey</label>
+                            <input type="text" name="alipay_app_id" placeholder="AppKey" data-validation-message="请填写支付宝AppKey" class="am-radius" {{if !empty($data['alipay_app_id'])}} value="{{$data.alipay_app_id}}"{{/if}} />
+                        </div>
+                        <div class="am-form-group">
+                            <label class="am-block">应用公钥</label>
+                            <textarea rows="6" name="alipay_rsa_public" class="am-radius" placeholder="应用公钥" data-validation-message="请填写支付宝应用公钥">{{if !empty($data['alipay_rsa_public'])}}{{$data.alipay_rsa_public}}{{/if}}</textarea>
+                        </div>
+                        <div class="am-form-group">
+                            <label class="am-block">应用私钥</label>
+                            <textarea rows="6" name="alipay_rsa_private" class="am-radius" placeholder="应用私钥" data-validation-message="请填写支付宝应用私钥">{{if !empty($data['alipay_rsa_private'])}}{{$data.alipay_rsa_private}}{{/if}}</textarea>
+                        </div>
+                        <div class="am-form-group">
+                            <label class="am-block">支付宝公钥</label>
+                            <textarea rows="6" name="alipay_out_rsa_public" class="am-radius" placeholder="支付宝公钥" data-validation-message="请填写支付宝公钥">{{if !empty($data['alipay_out_rsa_public'])}}{{$data.alipay_out_rsa_public}}{{/if}}</textarea>
+                        </div>
+                        <div class="am-form-group">
+                            <label class="am-block">支付宝环境自动登录<span class="am-form-group-label-tips">默认否、开启后在支付宝app中打开商城自动登录</span></label>
+                            <input name="alipay_is_env_auto_login" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['alipay_is_env_auto_login']) and $data['alipay_is_env_auto_login'] eq 1}}checked="true"{{/if}} />
+                        </div>
+                        <div class="am-form-group">
+                            <label class="am-block">开启登录<span class="am-form-group-label-tips">默认否、开启后用户可使用支付宝登录商城</span></label>
+                            <input name="alipay_is_enable" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['alipay_is_enable']) and $data['alipay_is_enable'] eq 1}}checked="true"{{/if}} />
+                        </div>
+                    </div>
+
+                    <!-- 微信 -->
+                    <div data-tab-panel-2 class="am-tab-panel">
+                        <div class="am-alert">
+                            <p>网站回调地址</p>
+                            <p><a href="{{:__MY_HOST__}}" target="_blank">{{:__MY_HOST__}}</a></p>
+
+                            <p class="am-margin-top-sm">APP接口地址</p>
+                            <p><a href="{{:__MY_URL__}}api.php?s=plugins/index&pluginsname=thirdpartylogin&pluginscontrol=index&pluginsaction=bind&platform=weixin" target="_blank">{{:__MY_URL__}}api.php?s=plugins/index&pluginsname=thirdpartylogin&pluginscontrol=index&pluginsaction=bind&platform=weixin</a></p>
+
+                            <div class="am-margin-top-sm">
+                                <a href="https://open.weixin.qq.com/" target="_blank">去微信开放平台申请权限 >></a>
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label>AppID - APP应用</label>
+                            <input type="text" name="weixin_app_id" placeholder="AppID" data-validation-message="请填写微信APP应用AppID" class="am-radius" {{if !empty($data['weixin_app_id'])}} value="{{$data.weixin_app_id}}"{{/if}} />
+                        </div>
+                        <div class="am-form-group">
+                            <label>AppSecret - APP应用</label>
+                            <input type="text" name="weixin_app_secret" placeholder="AppSecret" data-validation-message="请填写微信APP应用AppSecret" class="am-radius" {{if !empty($data['weixin_app_secret'])}} value="{{$data.weixin_app_secret}}"{{/if}} />
+                        </div>
+                        <div class="am-form-group">
+                            <label>AppID - 网站应用</label>
+                            <input type="text" name="weixin_web_id" placeholder="AppID" data-validation-message="请填写微信网站应用AppID" class="am-radius" {{if !empty($data['weixin_web_id'])}} value="{{$data.weixin_web_id}}"{{/if}} />
+                        </div>
+                        <div class="am-form-group">
+                            <label>AppSecret - 网站应用</label>
+                            <input type="text" name="weixin_web_secret" placeholder="AppSecret" data-validation-message="请填写微信网站应用AppSecret" class="am-radius" {{if !empty($data['weixin_web_secret'])}} value="{{$data.weixin_web_secret}}"{{/if}} />
+                        </div>
+                        <div class="am-form-group">
+                            <label>AppID - 公众号</label>
+                            <input type="text" name="weixin_public_id" placeholder="AppID" data-validation-message="请填写微信公众号AppID" class="am-radius" {{if !empty($data['weixin_public_id'])}} value="{{$data.weixin_public_id}}"{{/if}} />
+                        </div>
+                        <div class="am-form-group">
+                            <label>AppSecret - 公众号</label>
+                            <input type="text" name="weixin_public_secret" placeholder="AppSecret" data-validation-message="请填写微信公众号AppSecret" class="am-radius" {{if !empty($data['weixin_public_secret'])}} value="{{$data.weixin_public_secret}}"{{/if}} />
+                        </div>
+                        <div class="am-form-group">
+                            <label class="am-block">微信环境静默授权 - 公众号<span class="am-form-group-label-tips">默认否、开启后在微信app中打开商城不需要用户确认同意授权</span></label>
+                            <input name="weixin_public_is_auth_base" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['weixin_public_is_auth_base']) and $data['weixin_public_is_auth_base'] eq 1}}checked="true"{{/if}} />
+                        </div>
+                        <div class="am-form-group">
+                            <label class="am-block">微信环境自动登录 - 公众号<span class="am-form-group-label-tips">默认否、开启后在微信app中打开商城自动登录</span></label>
+                            <input name="weixin_is_env_auto_login" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['weixin_is_env_auto_login']) and $data['weixin_is_env_auto_login'] eq 1}}checked="true"{{/if}} />
+                        </div>
+                        <div class="am-form-group">
+                            <label class="am-block">开启登录<span class="am-form-group-label-tips">默认否、开启后用户可使用微信登录商城</span></label>
+                            <input name="weixin_is_enable" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['weixin_is_enable']) and $data['weixin_is_enable'] eq 1}}checked="true"{{/if}} />
+                        </div>
+                    </div>
+
+                    <!-- QQ -->
+                    <div data-tab-panel-3 class="am-tab-panel">
+                        <div class="am-alert">
+                            <p>网站回调地址</p>
+                            <p><a href="{{:PluginsHomeUrl('thirdpartylogin', 'index', 'back', ['platform'=>'qq'])}}" target="_blank">{{:PluginsHomeUrl('thirdpartylogin', 'index', 'back', ['platform'=>'qq'])}}</a></p>
+
+                            <p class="am-margin-top-sm">APP接口地址</p>
+                            <p><a href="{{:__MY_URL__}}api.php?s=plugins/index&pluginsname=thirdpartylogin&pluginscontrol=index&pluginsaction=bind&platform=qq" target="_blank">{{:__MY_URL__}}api.php?s=plugins/index&pluginsname=thirdpartylogin&pluginscontrol=index&pluginsaction=bind&platform=qq</a></p>
+
+                            <div class="am-margin-top-sm">
+                                <a href="https://connect.qq.com/" target="_blank">去QQ开放平台申请权限 >></a>
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label>AppID - APP应用</label>
+                            <input type="text" name="qq_app_id" placeholder="AppID" data-validation-message="请填写QQAppKey" class="am-radius" {{if !empty($data['qq_app_id'])}} value="{{$data.qq_app_id}}"{{/if}} />
+                        </div>
+                        <div class="am-form-group">
+                            <label>AppKey - APP应用</label>
+                            <input type="text" name="qq_app_secret" placeholder="AppKey" data-validation-message="请填写QQAppSecret" class="am-radius" {{if !empty($data['qq_app_secret'])}} value="{{$data.qq_app_secret}}"{{/if}} />
+                        </div>
+                        <div class="am-form-group">
+                            <label>AppID - 网站应用</label>
+                            <input type="text" name="qq_web_id" placeholder="AppID" data-validation-message="请填写QQAppKey" class="am-radius" {{if !empty($data['qq_web_id'])}} value="{{$data.qq_web_id}}"{{/if}} />
+                        </div>
+                        <div class="am-form-group">
+                            <label>AppKey - 网站应用</label>
+                            <input type="text" name="qq_web_secret" placeholder="AppKey" data-validation-message="请填写QQAppSecret" class="am-radius" {{if !empty($data['qq_web_secret'])}} value="{{$data.qq_web_secret}}"{{/if}} />
+                        </div>
+                        <div class="am-form-group">
+                            <label class="am-block">QQ环境自动登录<span class="am-form-group-label-tips">默认否、开启后在QQapp中打开商城自动登录（仅web端有效）</span></label>
+                            <input name="qq_is_env_auto_login" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['qq_is_env_auto_login']) and $data['qq_is_env_auto_login'] eq 1}}checked="true"{{/if}} />
+                        </div>
+                        <div class="am-form-group">
+                            <label class="am-block">开启登录<span class="am-form-group-label-tips">默认否、开启后用户可使用QQ登录商城</span></label>
+                            <input name="qq_is_enable" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['qq_is_enable']) and $data['qq_is_enable'] eq 1}}checked="true"{{/if}} />
+                        </div>
+                    </div>
+
+                    <!-- 新浪微博 -->
+                    <div data-tab-panel-4 class="am-tab-panel">
+                        <div class="am-alert">
+                            <p>回调地址</p>
+                            <p><a href="{{:PluginsHomeUrl('thirdpartylogin', 'index', 'back', ['platform'=>'weibo'])}}" target="_blank">{{:PluginsHomeUrl('thirdpartylogin', 'index', 'back', ['platform'=>'weibo'])}}</a></p>
+                            <div class="am-margin-top-sm">
+                                <a href="https://open.weibo.com/" target="_blank">去新浪微博开放平台申请权限 >></a>
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label>AppID</label>
+                            <input type="text" name="weibo_app_id" placeholder="AppID" data-validation-message="请填写微博AppKey" class="am-radius" {{if !empty($data['weibo_app_id'])}} value="{{$data.weibo_app_id}}"{{/if}} />
+                        </div>
+                        <div class="am-form-group">
+                            <label>AppKey</label>
+                            <input type="text" name="weibo_app_secret" placeholder="AppKey" data-validation-message="请填写微博AppSecret" class="am-radius" {{if !empty($data['weibo_app_secret'])}} value="{{$data.weibo_app_secret}}"{{/if}} />
+                        </div>
+                        <div class="am-form-group">
+                            <label class="am-block">微博环境自动登录<span class="am-form-group-label-tips">默认否、开启后在微博app中打开商城自动登录</span></label>
+                            <input name="weibo_is_env_auto_login" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['weibo_is_env_auto_login']) and $data['weibo_is_env_auto_login'] eq 1}}checked="true"{{/if}} />
+                        </div>
+                        <div class="am-form-group">
+                            <label class="am-block">开启登录<span class="am-form-group-label-tips">默认否、开启后用户可使用微博登录商城</span></label>
+                            <input name="weibo_is_enable" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['weibo_is_enable']) and $data['weibo_is_enable'] eq 1}}checked="true"{{/if}} />
+                        </div>
+                    </div>
+
+                    <!-- 闽诊通 -->
+                    <div data-tab-panel-5 class="am-tab-panel">
+                        <div class="am-alert">
+                            <div>
+                                <a href="http://3dsky.com.cn/" target="_blank">去闽诊通平台申请权限 >></a>
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label>AppID</label>
+                            <input type="text" name="3dsky_app_id" placeholder="AppID" data-validation-message="请填写闽诊通AppID" class="am-radius" {{if !empty($data['3dsky_app_id'])}} value="{{$data.3dsky_app_id}}"{{/if}} />
+                        </div>
+                        <div class="am-form-group">
+                            <label>AppSecret</label>
+                            <input type="text" name="3dsky_app_secret" placeholder="AppSecret" data-validation-message="请填写闽诊通AppSecret" class="am-radius" {{if !empty($data['3dsky_app_secret'])}} value="{{$data.3dsky_app_secret}}"{{/if}} />
+                        </div>
+                        <div class="am-form-group">
+                            <label class="am-block">开启登录<span class="am-form-group-label-tips">默认否、开启后用户可使用闽诊通登录商城、仅微信小程序端支持</span></label>
+                            <input name="3dsky_is_enable" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['3dsky_is_enable']) and $data['3dsky_is_enable'] eq 1}}checked="true"{{/if}} />
+                        </div>
+                    </div>
+
+                    <!-- 苹果 -->
+                    <div data-tab-panel-6 class="am-tab-panel">
+                        <div class="am-alert">
+                            <p class="am-margin-top-sm">APP接口地址（仅支持IOS端）</p>
+                            <p><a href="{{:__MY_URL__}}api.php?s=plugins/index&pluginsname=thirdpartylogin&pluginscontrol=index&pluginsaction=bind&platform=apple" target="_blank">{{:__MY_URL__}}api.php?s=plugins/index&pluginsname=thirdpartylogin&pluginscontrol=index&pluginsaction=bind&platform=apple</a></p>
+
+                            <div class="am-margin-top-sm">
+                                <a href="https://developer.apple.com/" target="_blank">去苹果开放平台申请权限 >></a>
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label class="am-block">开启登录<span class="am-form-group-label-tips">默认否、开启后用户可使用苹果登录商城</span></label>
+                            <input name="apple_is_enable" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['apple_is_enable']) and $data['apple_is_enable'] eq 1}}checked="true"{{/if}} />
+                        </div>
+                    </div>
+
+                    <!-- 谷歌 -->
+                    <div data-tab-panel-7 class="am-tab-panel">
+                        <div class="am-alert">
+                            <p class="am-margin-top-sm">APP接口地址（仅支持APP端）</p>
+                            <p><a href="{{:__MY_URL__}}api.php?s=plugins/index&pluginsname=thirdpartylogin&pluginscontrol=index&pluginsaction=bind&platform=google" target="_blank">{{:__MY_URL__}}api.php?s=plugins/index&pluginsname=thirdpartylogin&pluginscontrol=index&pluginsaction=bind&platform=google</a></p>
+
+                            <div class="am-margin-top-sm">
+                                <a href="https://console.cloud.google.com/" target="_blank">去谷歌开放平台申请权限 >></a>
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label class="am-block">开启登录<span class="am-form-group-label-tips">默认否、开启后用户可使用谷歌登录商城</span></label>
+                            <input name="google_is_enable" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['google_is_enable']) and $data['google_is_enable'] eq 1}}checked="true"{{/if}} />
+                        </div>
+                    </div>
+
+                    <!-- APP本机号码登录 -->
+                    <div data-tab-panel-8 class="am-tab-panel">
+                        <div class="am-alert">
+                            <p class="am-margin-top-sm">APP接口地址（仅支持APP端），该登录不受【强制绑定帐号】配置所影响，手机号码存在就登录、则自动注册并登录</p>
+                            <p><a href="{{:__MY_URL__}}api.php?s=plugins/index&pluginsname=thirdpartylogin&pluginscontrol=index&pluginsaction=apponekeyusermobile" target="_blank">{{:__MY_URL__}}api.php?s=plugins/index&pluginsname=thirdpartylogin&pluginscontrol=index&pluginsaction=apponekeyusermobile</a></p>
+
+                            <div class="am-margin-top-sm">
+                                <a href="https://doc.dcloud.net.cn/uniCloud/univerify.html" target="_blank">去Dcloud云平台申请权限 >></a>
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label class="am-block">开启登录<span class="am-form-group-label-tips">默认否、开启后用户可使用谷歌登录商城</span></label>
+                            <input name="apponekeyusermobile_is_enable" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['apponekeyusermobile_is_enable']) and $data['apponekeyusermobile_is_enable'] eq 1}}checked="true"{{/if}} />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="am-form-popup-submit">
+                <a href="{{:PluginsAdminUrl('thirdpartylogin', 'admin', 'index', $params)}}" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg">
+                    <i class="am-icon-mail-reply"></i>
+                    <span>{{:MyLang('retreat_title')}}</span>
+                </a>
+                <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('save_title')}}'}">
+                    <i class="am-icon-save"></i>
+                    <span>{{:MyLang('save_title')}}</span>
+                </button>
+            </div>
+        </form>
+        <!-- form end -->
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

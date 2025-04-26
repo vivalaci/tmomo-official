@@ -1,0 +1,30 @@
+{{if !empty($data)}}
+    {{if isset($data['is_goods_photo_bottom']) and $data['is_goods_photo_bottom'] eq 1}}
+        <!-- pc端 -->
+        <div class="plugins-goods-share-view am-margin-top-xs am-padding-horizontal-xs am-padding-vertical-sm am-hide-sm-only">
+            <div class="am-dropdown" data-am-dropdown="{trigger: 'hover'}">
+                <a class="am-dropdown-toggle am-color-grey-dark share-btn" href="javascript:;">
+                    <i class="iconfont icon-share"></i> 
+                    <span>{{:MyLang('share_title')}}</span>
+                </a>
+                <div class="am-dropdown-content share-list am-radius">
+                    <div class="am-fl plugins-share-view" {{if !empty($share_pic)}}data-pic="{{$share_pic}}"{{/if}}></div>
+                </div>
+            </div>
+        </div>
+    {{/if}}
+    {{if isset($data['is_goods_photo_top_right']) and $data['is_goods_photo_top_right'] eq 1}}
+        <!-- 手机端 -->
+        <div class="am-modal am-modal-no-btn" tabindex="-1" id="modal-plugins-share-goods">
+            <div class="am-modal-dialog">
+                <div class="am-modal-hd">
+                    <a href="javascript: void(0)" class="am-close" data-am-modal-close>&times;</a>
+                </div>
+                <div class="am-modal-bd plugins-share-view" {{if !empty($share_pic)}}data-pic="{{$share_pic}}"{{/if}}></div>
+            </div>
+        </div>
+        <span class="am-text-center plugins-share-goods-submit-photo" data-am-modal="{target: '#modal-plugins-share-goods', closeViaDimmer: 0, width: 280, height: 60}">
+            <i class="am-icon-share-alt"></i>
+        </span>
+    {{/if}}
+{{/if}}

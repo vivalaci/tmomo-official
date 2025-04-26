@@ -1,0 +1,145 @@
+<!-- 继承公共的 form -->
+{{extend name="../../../module/view/form_table/user_form" /}}
+
+<!-- 导航 -->
+{{block name="form_content_top"}}
+    {{:ModuleInclude('../../../plugins/distribution/view/index/public/nav')}}
+
+    {{if !empty($data)}}
+        {{switch $data.status}}
+            {{case 0}}
+                <div class="am-alert am-alert-warning" data-am-alert>
+                    <p class="am-text-default">申请信息正在审核中...</p>
+                    <p class="am-text-primary am-margin-top-sm">你可以 <a href="{{:PluginsHomeUrl('distribution', 'extraction', 'applyinfo')}}" class="am-margin-left-xs">信息编辑 >></a></p>
+                </div>
+            {{/case}}
+            {{case 1|3}}
+                <!-- 基础信息 -->
+                {{if $data['status'] eq 1 and !empty($plugins_config['self_extraction_common_notice'])}}
+                    <div class="am-alert am-alert-warning" data-am-alert>
+                        <button type="button" class="am-close">&times;</button>
+                        <p>{{:implode('<br />', $plugins_config['self_extraction_common_notice'])}}</p>
+                    </div>
+                {{/if}}
+
+                <!-- 已解约 -->
+                {{if $data.status eq 3}}
+                    <div class="am-alert am-alert-danger">
+                        <p>当前状态也解约，可重新编辑数据提交审核。</p>
+                    </div>
+                {{/if}}
+
+                <!-- 取货点信息 -->
+                <div class="extraction-info">
+                    <div class="am-panel am-panel-default am-radius">
+                        <div class="am-panel-hd">
+                            <span>取货点信息</span>
+                            <a href="{{:PluginsHomeUrl('distribution', 'extraction', 'applyinfo')}}" class="am-margin-left-sm am-text-primary am-fr">
+                                <i class="iconfont icon-edit"></i>
+                                <span>编辑信息</span>
+                            </a>
+                        </div>
+                        <div class="am-panel-bd">
+                            {{if !empty($data['logo'])}}
+                                <img src="{{$data.logo}}" alt="{{$data.name}}" class="am-img-thumbnail am-radius" width="35" height="35" />
+                            {{/if}}
+                            {{if !empty($data['alias'])}}
+                                <span class="am-badge am-radius am-badge-success">{{$data.alias}}</span>
+                            {{/if}}
+                            <span>{{$data.province_name}}</span>
+                            <span>{{$data.city_name}}</span>
+                            <span>{{$data.county_name}}</span>
+                            <span>{{$data.address}}</span>
+                            <span>，</span>
+                            <span>{{$data.name}}</span>
+                            <span>{{$data.tel}}</span>
+                            {{if isset($data['lng']) and isset($data['lat']) and $data['lng'] neq 0 and $data['lat'] neq 0}}
+                                <button type="button" class="am-btn am-btn-success am-radius am-icon-map-marker am-margin-left-sm submit-map-popup" data-lng="{{$data.lng}}" data-lat="{{$data.lat}}"> 查看位置</button>
+                            {{/if}}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 订单导航 -->
+                <div class="am-margin-bottom-sm">
+                    <div data-am-widget="tabs" class="am-tabs-d2 am-margin-0">
+                        <ul class="am-tabs-nav am-cf">
+                            <li {{if !isset($params['status']) or $params['status'] eq -1}}class="am-active"{{/if}}>
+                                <a href="{{:PluginsHomeUrl('distribution', 'extraction', 'index')}}">{{:MyLang('all_title')}}</a>
+                            </li>
+                            <li {{if isset($params['status']) and $params['status'] eq 0}}class="am-active"{{/if}}>
+                                <a href="{{:PluginsHomeUrl('distribution', 'extraction', 'index', ['status'=>0])}}">待处理</a>
+                            </li>
+                            <li {{if isset($params['status']) and $params['status'] eq 1}}class="am-active"{{/if}}>
+                                <a href="{{:PluginsHomeUrl('distribution', 'extraction', 'index', ['status'=>1])}}">已处理</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            {{/case}}
+            {{case 2}}
+                <div class="am-alert am-alert-danger" data-am-alert>
+                    <p class="am-text-default">申请信息审核失败{{if !empty($data['fail_reason'])}}，原因：{{$data.fail_reason}}{{/if}}</p>
+                    <p class="am-text-warning am-margin-top-sm">你可以重新编辑信息提交<a href="{{:PluginsHomeUrl('distribution', 'extraction', 'applyinfo')}}" class="am-margin-left-xs">立即信息编辑 >></a></p>
+                </div>
+            {{/case}}
+            {{default /}}
+                <div class="am-alert am-alert-danger" data-am-alert>
+                    数据状态错误，请联系管理员！
+                </div>
+        {{/switch}}
+    {{else /}}
+        <div class="am-alert" data-am-alert>
+            {{if !empty($plugins_config['self_extraction_apply_desc'])}}
+                {{:implode('<br />', $plugins_config['self_extraction_apply_desc'])}}
+            {{/if}}
+            <a href="{{:PluginsHomeUrl('distribution', 'extraction', 'applyinfo')}}" class="am-margin-left-xs">立即申请 >></a>
+        </div>
+    {{/if}}
+{{/block}}
+
+<!-- 扩展 -->
+{{block name="form_extend"}}
+    <!-- 取货弹窗 -->
+    <div class="am-modal am-modal-no-btn" tabindex="-1" id="order-take-modal">
+        <div class="am-modal-dialog am-radius am-nbfc">
+            <div class="am-modal-hd">
+                <span>取货码</span>
+                <a href="javascript: void(0)" class="am-close" data-am-modal-close>&times;</a>
+            </div>
+            <div class="am-modal-bd">
+                <div class="am-padding-sm">
+                    <form class="am-form form-validation-take am-form-popup-fixed" method="post" action="{{:PluginsHomeUrl('distribution', 'extraction', 'take')}}" request-type="ajax-reload">
+                        <div class="am-form-group am-form-group-refreshing am-margin-bottom-0">
+                            <div class="am-form-icon am-nbfc">
+                                <i class="am-icon-camera common-scan-submit" data-back-fun="OrderTakeScanBackHandle"></i>
+                                <input type="text" autocomplete="off" name="extraction_code" placeholder="取货码" minlength="4" maxlength="4" data-validation-message="请填写4位数取货码" class="am-radius am-form-field" required />
+                            </div>
+                        </div>
+                        <div class="am-form-popup-submit">
+                            <input type="hidden" name="id" value="0" />
+                            <input type="hidden" name="user_id" value="0" />
+                            <button type="button" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg" data-am-modal-close>
+                                <i class="am-icon-paint-brush"></i>
+                                <span>{{:MyLang('cancel_title')}}</span>
+                            </button>
+                            <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('confirm_title')}}'}">
+                                <i class="am-icon-check"></i>
+                                <span>{{:MyLang('confirm_title')}}</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <script type="text/javascript">
+                    // 扫码回调
+                    function OrderTakeScanBackHandle(value)
+                    {
+                        $('form.form-validation-take input[name="extraction_code"]').val(value);
+                        $('form.form-validation-take').find('button[type="submit"]').trigger('click');
+                    }
+                </script>
+            </div>
+        </div>
+    </div>
+{{/block}}

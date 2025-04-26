@@ -1,0 +1,46 @@
+{
+    "base":{
+        "plugins":"customdevelop",
+        "name":"自定义开发",
+        "logo":"\/static\/upload\/images\/plugins_customdevelop\/2023\/05\/28\/1685242569684408.jpg",
+        "author":"Devil",
+        "author_url":"https:\/\/shopxo.net\/",
+        "version":"3.2.2",
+        "desc":"WEB端自定义HTML、CSS、Javascript，可根据自身需求编写css覆盖原有样式",
+        "apply_terminal":[
+            "pc"
+        ],
+        "apply_version":[
+            "6.4.0"
+        ],
+        "is_home":false
+    },
+    "hook":{
+        "plugins_common_header":[
+            "app\\plugins\\customdevelop\\Hook"
+        ],
+        "plugins_common_page_bottom":[
+            "app\\plugins\\customdevelop\\Hook"
+        ],
+        "plugins_view_common_bottom":[
+            "app\\plugins\\customdevelop\\Hook"
+        ],
+        "plugins_admin_common_header":[
+            "app\\plugins\\customdevelop\\Hook"
+        ],
+        "plugins_admin_common_page_bottom":[
+            "app\\plugins\\customdevelop\\Hook"
+        ],
+        "plugins_admin_view_common_bottom":[
+            "app\\plugins\\customdevelop\\Hook"
+        ]
+    },
+    "history":[
+        {
+            "host":"shopxo.com",
+            "url":"http:\/\/shopxo.com\/",
+            "ip":"127.0.0.1",
+            "time":"2024-12-22 12:16:53"
+        }
+    ]
+}

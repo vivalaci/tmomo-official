@@ -1,0 +1,233 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- header top nav -->
+{{:ModuleInclude('public/header_top_nav')}}
+
+<!-- header simple nav -->
+{{:ModuleInclude('public/header_nav_simple', [
+    'search' => 1,
+])}}
+
+<!-- content -->
+<div class="am-container user-main">
+
+    <!-- user menu start -->
+    {{:ModuleInclude('public/user_menu')}}
+    <!-- user menu end -->
+
+    <!-- content start -->
+    <div class="user-content">
+        <div class="user-content-body">
+            <!-- vip -->
+            {{:ModuleInclude('../../../plugins/membershiplevelvip/view/index/vip/vip')}}
+
+            <!-- 导航和统计 -->
+            {{if (!empty($center_nav) and is_array($center_nav)) or (isset($plugins_config['is_user_buy']) and $plugins_config['is_user_buy'] eq 1 && isset($plugins_config['is_commission']) and $plugins_config['is_commission'] eq 1)}}
+                <div class="content">
+                    <!-- 导航 -->
+                    {{if !empty($center_nav) and is_array($center_nav)}}
+                        <ul class="am-avg-sm-2 am-avg-md-3 am-avg-lg-4 nav-items">
+                            {{foreach $center_nav as $k=>$v}}
+                                {{if $k gt 0}}
+                                    <li class="am-padding-module-half">
+                                        <div class="items glideover-hover">
+                                            <a href="{{:PluginsHomeUrl($v['plugins'], $v['control'], $v['action'])}}" class="am-block">
+                                                <p class="am-flex am-flex-justify-between am-flex-items-center">
+                                                    {{$v.title}}
+                                                    <span class="am-inline-block">
+                                                        <i class="iconfont icon-angle-right"></i>
+                                                    </span>
+                                                </p>
+                                                <div class="am-text-right">
+                                                    <img src="{{$v.icon}}" alt="{{$v.title}}" />
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </li>
+                                {{/if}}
+                            {{/foreach}}
+                        </ul>
+                    {{/if}}
+
+                    {{if isset($plugins_config['is_user_buy']) and $plugins_config['is_user_buy'] eq 1 && isset($plugins_config['is_commission']) and $plugins_config['is_commission'] eq 1}}
+                        <!-- 推广客户 -->
+                        <div class="echarts-container am-margin-top-main">
+                            <div class="echarts-title am-margin-bottom">
+                                <span class="title am-text-lg am-title-left-border">推广客户</span>
+                            </div>
+                            <ul class="am-avg-sm-2 promotion-user-content">
+                                <li class="am-text-center">
+                                    <p class="am-color-grey-dark">已推广用户总数</p>
+                                    <p class="am-text-truncate">
+                                        <strong class="am-text-xl">{{$user_total.user_count}}</strong>
+                                        <span class="am-text-grey">人</span>
+                                    </p>
+                                </li>
+                                <li class="am-text-center">
+                                    <p class="am-color-grey-dark">已消费用户总数</p>
+                                    <p class="am-text-truncate">
+                                        <strong class="am-text-xl">{{$user_total.valid_user_count}}</strong>
+                                        <span class="am-text-grey">人</span>
+                                    </p>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- 返利概况 -->
+                        <div class="echarts-container am-margin-top-main">
+                            <div class="echarts-title am-margin-bottom">
+                                <span class="title am-text-lg am-title-left-border">返利概况</span>
+                            </div>
+                            <ul class="am-avg-sm-3 base-user-content">
+                                <li class="am-text-center">
+                                    <p class="am-color-grey-dark">返佣总金额</p>
+                                    <p class="am-text-truncate">
+                                        <strong class="am-text-xl">{{$currency_symbol}}{{$user_profit_total_price}}</strong>
+                                    </p>
+                                </li>
+                                <li class="am-text-center">
+                                    <p class="am-color-grey-dark">待结算金额</p>
+                                    <p class="am-text-truncate">
+                                        <strong class="am-text-xl">{{$currency_symbol}}{{$user_profit_stay_price}}</strong>
+                                    </p>
+                                </li>
+                                <li class="am-text-center">
+                                    <p class="am-color-grey-dark">已结算金额</p>
+                                    <p class="am-text-truncate">
+                                        <strong class="am-text-xl">{{$currency_symbol}}{{$user_profit_already_price}}</strong>
+                                    </p>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- 近15日收益走势 -->
+                        <div class="echarts-container am-margin-top-main">
+                            <div class="echarts-title am-margin-bottom">
+                                <span class="title am-text-lg am-title-left-border">近15日收益走势</span>
+                            </div>
+                            <div id="echarts-profit"></div>
+                        </div>
+
+                        <!-- 近15日推广用户数 -->
+                        <div class="echarts-container am-margin-top-main">
+                            <div class="echarts-title am-margin-bottom">
+                                <span class="title am-text-lg am-title-left-border">近15日推广用户数</span>
+                            </div>
+                            <div id="echarts-user"></div>
+                        </div>
+                    {{/if}}
+                </div>
+            {{/if}}
+        </div>
+    </div>
+    <!-- content end -->
+</div>
+
+<!-- common -->
+{{:ModuleInclude('../../../plugins/membershiplevelvip/view/index/public/common')}}
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}
+
+{{if isset($plugins_config['is_user_buy']) and $plugins_config['is_user_buy'] eq 1 && isset($plugins_config['is_commission']) and $plugins_config['is_commission'] eq 1}}
+<script type="text/javascript">
+$(function()
+{
+    // 近15日收益走势
+    var profit_chart = echarts.init(document.getElementById('echarts-profit'), 'macarons');
+    var option = {
+        tooltip : {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross',
+                    label: {
+                        backgroundColor: '#6a7985'
+                    }
+                }
+            },
+        grid: {
+            top: '13%',
+            left: '3%',
+            right: '5%',
+            bottom: '3%',
+            containLabel: true
+        },
+        toolbox: {
+            show : true,
+            feature : {
+                mark : {show: true},
+                dataView : {show: true, readOnly: false},
+                magicType : {show: true, type: ['line', 'bar']},
+                restore : {show: false},
+                saveAsImage : {name:'近15日收益走势', show: true}
+            }
+        },
+        xAxis: {
+            type: 'category',
+            boundaryGap : false,
+            data: {{:json_encode($profit_chart.name_arr)}}
+        },
+        yAxis: {
+            type: 'value'
+        },
+        series: [{
+            data: {{:json_encode($profit_chart.data)}},
+            type: 'line'
+        }]
+    };
+    profit_chart.setOption(option);
+
+    // 近15日推广用户数
+    var user_chart = echarts.init(document.getElementById('echarts-user'), 'macarons');
+    var option = {
+        tooltip : {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross',
+                    label: {
+                        backgroundColor: '#6a7985'
+                    }
+                }
+            },
+        grid: {
+            top: '13%',
+            left: '3%',
+            right: '5%',
+            bottom: '3%',
+            containLabel: true
+        },
+        toolbox: {
+            show : true,
+            feature : {
+                mark : {show: true},
+                dataView : {show: true, readOnly: false},
+                magicType : {show: true, type: ['line', 'bar']},
+                restore : {show: false},
+                saveAsImage : {name:'近15日推广用户数', show: true}
+            }
+        },
+        xAxis: {
+            type: 'category',
+            boundaryGap : false,
+            data: {{:json_encode($user_chart.name_arr)}}
+        },
+        yAxis: {
+            type: 'value'
+        },
+        series: [{
+            data: {{:json_encode($user_chart.data)}},
+            type: 'bar',
+            areaStyle: {}
+        }]
+    };
+    user_chart.setOption(option);
+
+    // 浏览器大小改变则实时更新图表大小
+    window.onresize = function ()
+    {
+        profit_chart.resize();
+        user_chart.resize();
+    };
+});
+</script>
+{{/if}}

@@ -1,0 +1,85 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'databoard',
+            'title'     => '数据看板',
+        ])}}
+
+        <div class="databoard-content">
+            <!-- 大屏幕数据看板 -->
+            <div class="am-panel am-panel-default am-radius card-nav-content">
+                <div class="am-panel-hd">
+                    <span class="am-panel-title">大屏幕数据看板</span>
+                </div>
+                <div class="am-panel-bd">
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-8 am-gallery-default">
+                        <li>
+                            <div class="nav-item">
+                                <a href="{{:PluginsAdminUrl('databoard', 'template1', 'index')}}" target="_blank" class="am-block am-text-sm am-padding-horizontal-sm am-padding-vertical">模板一 <i class="iconfont icon-angle-right"></i></a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 基础配置 -->
+            <div class="am-panel am-panel-default databoard-content-base">
+                <div class="am-panel-hd">
+                    <span class="am-panel-title">{{:MyLang('base_config_title')}}</span>
+                    <a class="am-margin-left-lg" href="{{:PluginsAdminUrl('databoard', 'admin', 'saveinfo')}}">
+                        <i class="am-icon-edit"></i>
+                        <span>{{:MyLang('edit_title')}}</span>
+                    </a>
+                </div>
+                <div class="am-panel-bd">
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>LOGO名称</label>
+                                <div>
+                                    {{if empty($data['logo_name'])}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 商城智能看板 ]
+                                    {{else /}}
+                                        {{:MyLang('already_setup_tips')}}[ {{$data.logo_name}} ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>刷新数据间隔时间</label>
+                                <div>
+                                    {{if empty($data['interval_time'])}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 30秒 ]
+                                    {{else /}}
+                                        {{:MyLang('already_setup_tips')}}[ {{$data.interval_time}}秒 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>全屏展示</label>
+                                <div>
+                                    {{if isset($data['is_full_screen']) and $data['is_full_screen'] eq 1}}
+                                        {{:MyLang('already_setup_tips')}}[ 是 ]
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 否 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

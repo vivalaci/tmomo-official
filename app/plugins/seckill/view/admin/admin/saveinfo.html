@@ -1,0 +1,192 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'seckill',
+            'title'     => MyLang('base_config_title'),
+            'back_url'  => PluginsAdminUrl('seckill', 'admin', 'index'),
+        ])}}
+
+        <!-- form start -->
+        <form class="am-form form-validation am-form-full-screen am-form-popup-sticky" action="{{:PluginsAdminUrl('seckill', 'admin', 'save')}}" method="POST" request-type="ajax-url" request-value="{{:PluginsAdminUrl('seckill', 'admin', 'index')}}" enctype="multipart/form-data">
+            <!-- 基础配置 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">{{:MyLang('base_config_title')}}</h3>
+                </div>
+                <div class="am-panel-bd am-padding-vertical-xs">
+                    <div class="am-cf">
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label>{{:MyLang('admin.form_item_application_name')}}<span class="am-form-group-label-tips">{{:MyLang('admin.form_item_application_name_tips')}}</span></label>
+                                <input type="text" name="application_name" placeholder="{{:MyLang('admin.form_item_application_name')}}" maxlength="60" data-validation-message="{{:MyLang('admin.form_item_application_name_message')}}" class="am-radius" {{if !empty($data['application_name'])}} value="{{$data.application_name}}"{{/if}} />
+                            </div>
+                        </div>
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label>{{:MyLang('admin.form_item_goods_detail_icon')}}<span class="am-form-group-label-tips">{{:MyLang('admin.form_item_goods_detail_icon_tips')}}</span></label>
+                                <input type="text" name="goods_detail_icon" placeholder="{{:MyLang('admin.form_item_goods_detail_icon')}}" maxlength="8" data-validation-message="{{:MyLang('admin.form_item_goods_detail_icon_message')}}" class="am-radius" {{if !empty($data['goods_detail_icon'])}} value="{{$data.goods_detail_icon}}"{{/if}} />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="am-cf">
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label>{{:MyLang('admin.form_item_goods_detail_title')}}<span class="am-form-group-label-tips">{{:MyLang('admin.form_item_goods_detail_title_tips')}}</span></label>
+                                <input type="text" name="goods_detail_title" placeholder="{{:MyLang('admin.form_item_goods_detail_title')}}" maxlength="30" data-validation-message="{{:MyLang('admin.form_item_goods_detail_title_message')}}" class="am-radius" {{if !empty($data['goods_detail_title'])}} value="{{$data.goods_detail_title}}"{{/if}} />
+                            </div>
+                        </div>
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label class="am-block">{{:MyLang('admin.form_item_is_actas_price_original')}}<span class="am-form-group-label-tips">{{:MyLang('admin.form_item_is_actas_price_original_tips')}}</span></label>
+                                <input name="is_actas_price_original" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_actas_price_original']) and $data['is_actas_price_original'] eq 1}}checked="true"{{/if}} />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="am-cf">
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label class="am-block">{{:MyLang('admin.form_item_is_home_show')}}<span class="am-form-group-label-tips">{{:MyLang('admin.form_item_is_home_show_tips')}}</span></label>
+                                <input name="is_home_show" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_home_show']) and $data['is_home_show'] eq 1}}checked="true"{{/if}} />
+                            </div>
+                        </div>
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label class="am-block">{{:MyLang('admin.form_item_is_home_auto_play')}}<span class="am-form-group-label-tips">{{:MyLang('admin.form_item_is_home_auto_play_tips')}}</span></label>
+                                <input name="is_home_auto_play" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_home_auto_play']) and $data['is_home_auto_play'] eq 1}}checked="true"{{/if}} />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="am-cf">
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label class="am-block">{{:MyLang('admin.form_item_is_shop_seckill')}}</label>
+                                <input name="is_shop_seckill" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_shop_seckill']) and $data['is_shop_seckill'] eq 1}}checked="true"{{/if}} />
+                            </div>
+                        </div>
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group am-form-file">
+                                <label class="am-block">{{:MyLang('admin.form_item_content_notice')}}<span class="am-form-group-label-tips">{{:MyLang('admin.form_item_content_notice_tips')}}</span></label>
+                                <textarea rows="2" name="content_notice" class="am-radius am-field-valid" placeholder="{{:MyLang('admin.form_item_content_notice')}}" data-validation-message="{{:MyLang('admin.form_item_content_notice_message')}}">{{if !empty($data['content_notice'])}}{{:implode("\\n", $data['content_notice'])}}{{/if}}</textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="am-cf">
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group am-form-file">
+                                <label class="am-block">{{:MyLang('admin.form_item_header_logo')}}<span class="am-form-group-label-tips">{{:MyLang('admin.form_item_header_logo_tips')}}</span></label>
+                                <div class="am-form-file-upload-container">
+                                    <ul class="plug-file-upload-view admin-header-logo-images-view" data-form-name="header_logo" data-max-number="1" data-dialog-type="images">
+                                        {{if !empty($data['header_logo'])}}
+                                            <li>
+                                                <input type="text" name="header_logo" value="{{$data.header_logo}}" data-validation-message="{{:MyLang('admin.form_item_header_logo_message')}}" required />
+                                                <img src="{{$data.header_logo}}" />
+                                                <i class="iconfont icon-close"></i>
+                                            </li>
+                                        {{/if}}
+                                    </ul>
+                                    <div class="plug-file-upload-submit" data-view-tag="ul.admin-header-logo-images-view">
+                                        <i class="iconfont icon-upload-add"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group am-form-file">
+                                <label class="am-block">{{:MyLang('admin.form_item_header_bg')}}<span class="am-form-group-label-tips">{{:MyLang('admin.form_item_header_bg_tips')}}</span></label>
+                                <div class="am-form-file-upload-container">
+                                    <ul class="plug-file-upload-view admin-header-bg-images-view" data-form-name="header_bg" data-max-number="1" data-dialog-type="images">
+                                        {{if !empty($data['header_bg'])}}
+                                            <li>
+                                                <input type="text" name="header_bg" value="{{$data.header_bg}}" data-validation-message="{{:MyLang('admin.form_item_header_bg_message')}}" required />
+                                                <img src="{{$data.header_bg}}" />
+                                                <i class="iconfont icon-close"></i>
+                                            </li>
+                                        {{/if}}
+                                    </ul>
+                                    <div class="plug-file-upload-submit" data-view-tag="ul.admin-header-bg-images-view">
+                                        <i class="iconfont icon-upload-add"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="am-cf">
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group am-form-file">
+                                <label class="am-block">{{:MyLang('admin.form_item_home_title_icon')}}<span class="am-form-group-label-tips">{{:MyLang('admin.form_item_home_title_icon_tips')}}</span></label>
+                                <div class="am-form-file-upload-container">
+                                    <ul class="plug-file-upload-view admin-home-title-icon-images-view" data-form-name="home_title_icon" data-max-number="1" data-dialog-type="images">
+                                        {{if !empty($data['home_title_icon'])}}
+                                            <li>
+                                                <input type="text" name="home_title_icon" value="{{$data.home_title_icon}}" data-validation-message="{{:MyLang('admin.form_item_home_title_icon_message')}}" required />
+                                                <img src="{{$data.home_title_icon}}" />
+                                                <i class="iconfont icon-close"></i>
+                                            </li>
+                                        {{/if}}
+                                    </ul>
+                                    <div class="plug-file-upload-submit" data-view-tag="ul.admin-home-title-icon-images-view">
+                                        <i class="iconfont icon-upload-add"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group am-form-file">
+                                <label class="am-block">{{:MyLang('admin.form_item_home_bg')}}<span class="am-form-group-label-tips">{{:MyLang('admin.form_item_home_bg_tips')}}</span></label>
+                                <div class="am-form-file-upload-container">
+                                    <ul class="plug-file-upload-view admin-home-bg-images-view" data-form-name="home_bg" data-max-number="1" data-dialog-type="images">
+                                        {{if !empty($data['home_bg'])}}
+                                            <li>
+                                                <input type="text" name="home_bg" value="{{$data.home_bg}}" data-validation-message="{{:MyLang('admin.form_item_home_bg_message')}}" required />
+                                                <img src="{{$data.home_bg}}" />
+                                                <i class="iconfont icon-close"></i>
+                                            </li>
+                                        {{/if}}
+                                    </ul>
+                                    <div class="plug-file-upload-submit" data-view-tag="ul.admin-home-bg-images-view">
+                                        <i class="iconfont icon-upload-add"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEO -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">{{:MyLang('form_seo_data_title')}}</h3>
+                </div>
+                <div class="am-panel-bd am-padding-vertical-xs">
+                    {{:ModuleInclude('lib/seo')}}
+                </div>
+            </div>
+
+            <div class="am-form-popup-submit">
+                <a href="{{:PluginsAdminUrl('seckill', 'admin', 'index', $params)}}" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg">
+                    <i class="am-icon-mail-reply"></i>
+                    <span>{{:MyLang('retreat_title')}}</span>
+                </a>
+                <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('save_title')}}'}">
+                    <i class="am-icon-save"></i>
+                    <span>{{:MyLang('save_title')}}</span>
+                </button>
+            </div>
+        </form>
+        <!-- form end -->
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

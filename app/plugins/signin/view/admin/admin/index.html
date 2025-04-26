@@ -1,0 +1,161 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'signin',
+            'nav_data'  => $plugins_nav_menu_list,
+        ])}}
+
+        <div class="signin-content">
+            <!-- 基础配置 -->
+            <div class="am-panel am-panel-default am-radius signin-content-base">
+                <div class="am-panel-hd">
+                    <span class="am-panel-title">{{:MyLang('base_config_title')}}</span>
+                    <a class="am-margin-left-lg" href="{{:PluginsAdminUrl('signin', 'admin', 'saveinfo')}}">
+                        <i class="am-icon-edit"></i>
+                        <span>{{:MyLang('edit_title')}}</span>
+                    </a>
+                </div>
+                <div class="am-panel-bd">
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启快捷导航入口</label>
+                                <div>
+                                    {{if isset($data['is_user_quick']) and $data['is_user_quick'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启用户中心菜单入口</label>
+                                <div>
+                                    {{if isset($data['is_user_menu']) and $data['is_user_menu'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>按照签到码限制</label>
+                                <div>
+                                    {{if isset($data['is_qrcode_limit']) and $data['is_qrcode_limit'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启组队</label>
+                                <div>
+                                    {{if isset($data['is_team']) and $data['is_team'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启分享</label>
+                                <div>
+                                    {{if isset($data['is_share']) and $data['is_share'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>签到码必填用户联系信息</label>
+                                <div>
+                                    {{if isset($data['is_qrcode_must_userinfo']) and $data['is_qrcode_must_userinfo'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>队长查看签到人员</label>
+                                <div>
+                                    {{if isset($data['is_team_show_coming_user']) and $data['is_team_show_coming_user'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>邀请人默认奖励积分</label>
+                                <div>
+                                    {{if !empty($data['reward_master'])}}
+                                        {{:MyLang('already_setup_tips')}}[ {{$data.reward_master}} ]
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 1 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>受邀人默认奖励积分</label>
+                                <div>
+                                    {{if !empty($data['reward_invitee'])}}
+                                        {{:MyLang('already_setup_tips')}}[ {{$data.reward_invitee}} ]
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 1 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>提示信息</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if !empty($data['signin_desc'])}}
+                                        {{:implode('<br />', $data['signin_desc'])}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 不展示 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>默认签到成功图标</label>
+                                {{if !empty($data['default_success_icon'])}}
+                                    <div class="immages-tag">
+                                        <img src="{{$data.default_success_icon}}" />
+                                    </div>
+                                {{else /}}
+                                    <div>{{:MyLang('no_setup_tips')}}</div>
+                                {{/if}}
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>默认背景图片</label>
+                                {{if !empty($data['default_bg_images'])}}
+                                    <div class="immages-tag">
+                                        <img src="{{$data.default_bg_images}}" />
+                                    </div>
+                                {{else /}}
+                                    <div>{{:MyLang('no_setup_tips')}}</div>
+                                {{/if}}
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>默认logo</label>
+                                {{if !empty($data['default_logo'])}}
+                                    <div class="immages-tag">
+                                        <img src="{{$data.default_logo}}" />
+                                    </div>
+                                {{else /}}
+                                    <div>{{:MyLang('no_setup_tips')}}</div>
+                                {{/if}}
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

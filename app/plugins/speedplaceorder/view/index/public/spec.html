@@ -1,0 +1,48 @@
+{{if !empty($goods)}}
+    {{if !empty($goods['original_price']) and $goods['original_price'] gt 0}}
+        <div class="am-margin-bottom-sm goods-original-price" data-old-price="{{$goods.original_price}}">
+            <span class="price-title">原价</span>
+            <strong>{{$currency_symbol}}{{$goods.original_price}}</strong>
+        </div>
+    {{/if}}
+    <div class="am-margin-bottom-sm goods-price" data-old-price="{{$goods.price}}">
+        <span class="price-title">销售价</span>
+        <strong class="am-text-danger">{{$currency_symbol}}{{$goods.price}}</strong>
+    </div>
+    <div class="goods-spec" data-id="{{$goods.id}}">
+        {{if !empty($goods['specifications']['choose'])}}
+            {{foreach $goods.specifications.choose as $key=>$spec}}
+                {{if !empty($spec['value'])}}
+                    <div class="spec-options sku-items">
+                        <div class="spec-title">{{$spec.name}}</div>
+                        <ul>
+                            {{foreach $spec.value as $keys=>$specs}}
+                                <li class="sku-line {{if !empty($specs['images'])}} sku-line-images{{/if}} {{if $key gt 0}} sku-dont-choose{{/if}} {{if isset($specs['is_only_level_one']) and isset($specs['inventory']) and $specs['inventory'] elt 0}} sku-items-disabled{{/if}}" data-type-value="{{$spec.name}}" data-value="{{$specs.name}}" {{if !empty($specs['images'])}} data-type-images="{{$specs.images}}"{{/if}}>
+                                    {{if !empty($specs['images'])}}
+                                        <img src="{{$specs.images}}" class="am-radius" />
+                                    {{/if}}
+                                    {{$specs.name}}<i></i>
+                                </li>
+                            {{/foreach}}
+                        </ul>
+                    </div>
+                {{/if}}
+            {{/foreach}}
+        {{/if}}
+        <div class="spec-options">
+            <div class="spec-title number">数量</div>
+            <div class="inventory-number am-margin-top-sm">
+                <div class="am-inline-block am-radius">
+                    <div class="am-input-group am-input-group-sm number-tag am-radius am-nbfc">
+                        <button class="am-input-group-label" id="min" type="button">-</button>
+                        <input type="number" class="am-form-field" value="{{$goods.buy_min_number}}" id="text_box" min="{{$goods.buy_min_number}}" max="{{if empty($goods['buy_max_number'])}}{{$goods.inventory}}{{else /}}{{$goods.buy_max_number}}{{/if}}" data-original-max="{{$goods.inventory}}" data-is-clearout="0" />
+                        <button class="am-input-group-label" id="add" type="button">+</button>
+                    </div>
+                </div>
+                <span class="stock-tips am-margin-left-sm">库存<span class="stock" data-original-stock="{{$goods.inventory}}" data-min-limit="{{$goods.buy_min_number}}" data-max-limit="{{$goods.buy_max_number}}" data-unit="{{$goods.inventory_unit}}">{{$goods.inventory}}</span>{{$goods.inventory_unit}}</span>
+            </div>
+        </div>
+    </div>
+{{else /}}
+    <div class="table-no"><i class="am-icon-warning"></i> {{:MyLang('no_goods')}}</div>
+{{/if}}

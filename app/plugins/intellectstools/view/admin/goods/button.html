@@ -1,0 +1,20 @@
+{{if !empty($plugins_data) and !empty($plugins_data['id']) and !empty($plugins_config)}}
+    {{if isset($plugins_config['is_admin_goods_operate_inventory']) and $plugins_config['is_admin_goods_operate_inventory'] eq 1}}
+        <button type="button" class="am-btn am-btn-primary am-btn-xs am-radius am-btn-block submit-popup" data-url="{{:PluginsAdminUrl('intellectstools', 'goods', 'inventoryinfo', ['id'=>$plugins_data['id']])}}" data-title="{{:MyLang('inventory_title')}}">
+            <i class="am-icon-square-o"></i>
+            <span>{{:MyLang('inventory_title')}}</span>
+        </button>
+    {{/if}}
+    {{if isset($plugins_config['is_admin_goods_operate_price']) and $plugins_config['is_admin_goods_operate_price'] eq 1}}
+        <button type="button" class="am-btn am-btn-warning am-btn-xs am-radius am-btn-block submit-popup" data-url="{{:PluginsAdminUrl('intellectstools', 'goods', 'priceinfo', ['id'=>$plugins_data['id']])}}" data-title="{{:MyLang('price_title')}}" data-offcanvas="right">
+            <i class="am-icon-rmb"></i>
+            <span>{{:MyLang('price_title')}}</span>
+        </button>
+    {{/if}}
+    {{if isset($plugins_config['is_goods_note']) and $plugins_config['is_goods_note'] eq 1}}
+        <button type="button" class="am-btn am-btn-default am-btn-xs am-radius am-btn-block submit-popup" data-url="{{:PluginsAdminUrl('intellectstools', 'goods', 'noteinfo', ['id'=>$plugins_data['id']])}}" data-title="{{:MyLang('note_title')}}">
+            <i class="am-icon-sticky-note-o"></i>
+            <span>{{:MyLang('note_title')}}</span>
+        </button>
+    {{/if}}
+{{/if}}

@@ -1,0 +1,45 @@
+{{include file="public/header" /}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- form start -->
+        <form class="am-form form-validation view-save" action="{{:PluginsAdminUrl('goodssales', 'admin', 'save')}}" method="POST" request-type="ajax-url" request-value="{{:PluginsAdminUrl('goodssales', 'admin', 'index')}}" enctype="multipart/form-data">
+            <legend>
+                <span class="fs-16">商品销量初始化</span>
+                <a href="{{:PluginsAdminUrl('goodssales', 'admin', 'index')}}" class="fr fs-14 m-t-5 am-icon-mail-reply"> 返回</a>
+            </legend>
+
+            <div class="am-form-group">
+                <label>初始化方式<span class="am-form-group-label-tips">若选择随机，请设置随机最大值</span></label>
+                <div>
+                    {{foreach $begin_style as $v}}
+                        <label class="am-radio-inline m-r-10">
+                            <input type="radio" name="begin_style" value="{{$v.id}}" {{if isset($data['begin_style']) and $data['begin_style'] eq $v['id']}}checked="checked"{{else /}}{{if !isset($data['begin_style']) and isset($v['checked']) and $v['checked'] eq true}}checked="checked"{{/if}}{{/if}} data-am-ucheck onclick="isshowendnum()" /> {{$v.name}}
+                        </label>
+                    {{/foreach}}
+                </div>
+            </div>
+
+            <div class="am-form-group">
+                <label>初始值<span class="am-form-group-label-tips">若选择随机，则这里便是随机的最小值，固定时这里便是固定的值</span></label>
+                <input type="number" name="begin_num" placeholder="初始值" min="0" max="100000000" data-validation-message="商品销量 0~100000000" class="am-radius" value="{{if !empty($data['begin_num'])}}{{$data.begin_num}}{{else /}}0{{/if}}" />
+            </div>
+
+            <div class="am-form-group">
+                <label>最大值<span class="am-form-group-label-tips">若选择随机，请设置随机最大值，固定时此值无效</span></label>
+                <input type="number" name="end_num" placeholder="最大值" min="0" max="100000000" data-validation-message="商品销量 0~100000000" class="am-radius" value="{{if !empty($data['end_num'])}}{{$data.end_num}}{{else /}}0{{/if}}" />
+            </div>
+
+            <div class="am-form-group am-form-group-refreshing">
+                <button type="submit" class="am-btn am-btn-primary am-radius btn-loading-example am-btn-sm am-btn-block" data-am-loading="{loadingText:'处理中...'}">保存</button>
+            </div>
+        </form>
+        <!-- form end -->
+    </div>
+</div>
+<!-- right content end  -->
+        
+<!-- footer start -->
+{{include file="public/footer" /}}
+<!-- footer end -->

@@ -1,0 +1,101 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- form start -->
+        <form class="am-form form-validation am-form-full-screen am-form-popup-sticky" action="{{:PluginsAdminUrl('ask', 'ask', 'save')}}" method="POST" request-type="ajax-url" request-value="{{:PluginsAdminUrl('ask', 'ask', 'index', $params)}}" enctype="multipart/form-data">
+            <!-- nav -->
+            {{:ModuleInclude('public/plugins_admin_nav', [
+                'plugins'   => 'ask',
+                'title'     => MyLang('ask.base_nav_title').(empty($data['id']) ? MyLang('created_title') : MyLang('edit_title')),
+                'back_url'  => PluginsAdminUrl('ask', 'ask', 'index', $params),
+            ])}}
+
+            <div class="am-alert am-alert-secondary user-info" data-am-alert>
+                <p class="am-text-lg">{{:MyLang('ask.user_info_title')}}</p>
+                {{if !empty($data['user'])}}
+                    <img src="{{$data.user.avatar}}" alt="{{$data.user.user_name_view}}" class="am-img-thumbnail am-radius am-align-left am-margin-right-xs am-margin-bottom-0" width="35" height="35" />
+                    <ul class="user-base">
+                        <li>{{:MyLang('user_username_title')}}：{{if empty($data['user']['username'])}}<span class="am-text-grey">{{:MyLang('no_filled_tips')}}</span>{{else /}}{{$data.user.username}}{{/if}}</li>
+                        <li>{{:MyLang('user_nickname_title')}}：{{if empty($data['user']['nickname'])}}<span class="am-text-grey">{{:MyLang('no_filled_tips')}}</span>{{else /}}{{$data.user.nickname}}{{/if}}</li>
+                        <li>{{:MyLang('user_mobile_title')}}：{{if empty($data['user']['mobile'])}}<span class="am-text-grey">{{:MyLang('no_filled_tips')}}</span>{{else /}}{{$data.user.mobile}}{{/if}}</li>
+                        <li>{{:MyLang('user_email_title')}}：{{if empty($data['user']['email'])}}<span class="am-text-grey">{{:MyLang('no_filled_tips')}}</span>{{else /}}{{$data.user.email}}{{/if}}</li>
+                    </ul>
+                {{else /}}
+                    {{:MyLang('user_info_abnormal_tips')}}
+                {{/if}}
+            </div>
+            <div class="am-form-group">
+                <label>{{:MyLang('ask.form_item_title')}}<span class="am-form-group-label-tips-must">*</span></label>
+                <input type="text" name="title" placeholder="{{:MyLang('ask.form_item_title_message')}}" minlength="2" maxlength="120" data-validation-message="{{:MyLang('ask.form_item_title_message')}}" class="am-radius" value="{{if !empty($data['title'])}}{{$data.title}}{{/if}}" />
+            </div>
+            <div class="am-form-group">
+                <label class="am-block">{{:MyLang('ask.form_item_content')}}<span class="am-form-group-label-tips-must">*</span></label>
+                <textarea name="content" id="editor-content" rows="5" minlength="5" placeholder="{{:MyLang('ask.form_item_content_message')}}" data-validation-message="{{:MyLang('ask.form_item_content_message')}}">{{if !empty($data['content'])}}{{$data.content|raw}}{{/if}}</textarea>
+            </div>
+            <div class="am-form-group">
+                <label class="am-block">{{:MyLang('ask.form_item_reply')}}</label>
+                <textarea name="reply" id="editor-reply" rows="5" placeholder="{{:MyLang('ask.form_item_reply_message')}}" data-validation-message="{{:MyLang('ask.form_item_reply_message')}}">{{if !empty($data['reply'])}}{{$data.reply|raw}}{{/if}}</textarea>
+            </div>
+            {{if !empty($ask_category_list)}}
+                <div class="am-form-group">
+                    <label class="am-block">{{:MyLang('ask.form_item_category_id')}}</label>
+                    <select name="category_id" class="am-radius chosen-select" data-placeholder="{{:MyLang('please_select_tips')}}" data-validation-message="{{:MyLang('ask.form_item_category_id_message')}}">
+                        <option value="0">{{:MyLang('please_select_tips')}}</option>
+                        {{foreach $ask_category_list as $v}}
+                            <option value="{{$v.id}}" {{if isset($data['category_id']) and $data['category_id'] eq $v['id']}}selected{{/if}}>{{$v.name}}</option>
+                        {{/foreach}}
+                    </select>
+                </div>
+            {{/if}}
+            <div class="am-form-group">
+                <label>{{:MyLang('ask.form_item_name')}}</label>
+                <input type="text" name="name" placeholder="{{:MyLang('ask.form_item_name_message')}}" maxlength="30" data-validation-message="{{:MyLang('ask.form_item_name_message')}}" class="am-radius" value="{{if !empty($data['name'])}}{{$data.name}}{{/if}}" />
+            </div>
+            <div class="am-form-group">
+                <label>{{:MyLang('ask.form_item_tel')}}</label>
+                <input type="text" name="tel" placeholder="{{:MyLang('ask.form_item_tel_message')}}" data-validation-message="{{:MyLang('ask.form_item_tel_message')}}" class="am-radius" value="{{if !empty($data['tel'])}}{{$data.tel}}{{/if}}" />
+            </div>
+            <div class="am-form-group">
+                <label>{{:MyLang('ask.form_item_access_count')}}</label>
+                <input type="number" name="access_count" min="0" placeholder="{{:MyLang('ask.form_item_access_count_message')}}" data-validation-message="{{:MyLang('ask.form_item_access_count_message')}}" class="am-radius" value="{{if !empty($data['access_count'])}}{{$data.access_count}}{{else /}}0{{/if}}" />
+            </div>
+            <div class="am-form-group">
+                <label>{{:MyLang('ask.form_item_email_notice')}}</label>
+                <input type="email" name="email_notice" placeholder="{{:MyLang('ask.form_item_email_notice')}}" maxlength="60" data-validation-message="{{:MyLang('ask.form_item_email_notice_message')}}" class="am-radius" value="{{if !empty($data['email_notice'])}}{{$data.email_notice}}{{/if}}" />
+            </div>
+            <div class="am-form-group">
+                <label>{{:MyLang('ask.form_item_mobile_notice')}}</label>
+                <input type="text" name="mobile_notice" pattern="{{:MyConst('common_regex_mobile')}}" placeholder="{{:MyLang('ask.form_item_mobile_notice')}}" maxlength="60" data-validation-message="{{:MyLang('ask.form_item_mobile_notice_message')}}" class="am-radius" value="{{if !empty($data['mobile_notice'])}}{{$data.mobile_notice}}{{/if}}" />
+            </div>
+            <div class="am-form-group">
+                <label class="am-block">{{:MyLang('ask.form_is_reply')}}</label>
+                <input name="is_reply" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_reply']) and $data['is_reply'] eq 1}}checked="true"{{/if}} />
+            </div>
+            <div class="am-form-group">
+                <label class="am-block">{{:MyLang('form_is_show_title')}}</label>
+                <input name="is_show" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if empty($data) or (isset($data['is_show']) and $data['is_show'] eq 1)}}checked="true"{{/if}} />
+            </div>
+
+            <div class="am-form-popup-submit">
+                <input type="hidden" name="id" {{if !empty($data['id'])}} value="{{$data.id}}"{{/if}} />
+                <input type="hidden" name="user_id" {{if !empty($data['user_id'])}} value="{{$data.user_id}}"{{/if}} />
+                <input type="hidden" name="goods_id" value="{{if !empty($data['goods_id'])}}{{$data.goods_id}}{{else /}}{{if !empty($params['goods_id'])}}{{$params.goods_id}}{{/if}}{{/if}}" />
+                <a href="{{:PluginsAdminUrl('ask', 'ask', 'index', $params)}}" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg">
+                    <i class="am-icon-mail-reply"></i>
+                    <span>{{:MyLang('retreat_title')}}</span>
+                </a>
+                <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('save_title')}}'}">
+                    <i class="am-icon-save"></i>
+                    <span>{{:MyLang('save_title')}}</span>
+                </button>
+            </div>
+        </form>
+        <!-- form end -->
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

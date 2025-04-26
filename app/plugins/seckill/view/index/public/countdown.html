@@ -1,0 +1,22 @@
+<div class="plugins-seckill-goods-base-top">
+    <div class="countdown am-cf">      
+        <span class="am-text-lg">
+            <i class="iconfont icon-flash-killing"></i>
+            <span>{{$plugins_seckill_data.goods_detail_title}}</span>
+        </span>
+        {{if isset($plugins_seckill_data['time']['status']) and $plugins_seckill_data['time']['status'] eq 1}}
+            <div class="am-fr time-right am-text-sm">
+                <span class="timer-title">距离结束还有</span>
+                <span class="timer-hours hours">{{if isset($plugins_seckill_data['time']['hours'])}}{{$plugins_seckill_data.time.hours}}{{else /}}00{{/if}}</span>
+                <em>{{:MyLang('hour_title')}}</em>
+                <span class="timer-hours minutes">{{if isset($plugins_seckill_data['time']['minutes'])}}{{$plugins_seckill_data.time.minutes}}{{else /}}00{{/if}}</span>
+                <em>{{:MyLang('minute_title')}}</em>
+                <span class="timer-hours seconds">{{if isset($plugins_seckill_data['time']['seconds'])}}{{$plugins_seckill_data.time.seconds}}{{else /}}00{{/if}}</span>
+                <em>{{:MyLang('second_title')}}</em>
+                <span class="timer-hours millisecond am-fr am-text-center">0</span>
+            </div>
+        {{else /}}
+            <span class="timer-title am-fr">{{$plugins_seckill_data.time.msg}}</span>
+        {{/if}}
+    </div>
+</div>

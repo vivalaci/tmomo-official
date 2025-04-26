@@ -1,0 +1,185 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right" data-url="{{:PluginsAdminUrl('distribution', 'stats', 'data')}}" data-uid="{{$uid}}">
+    <div class="content">
+        <!-- 基础统计 -->
+        <div class="am-panel am-panel-default am-radius">
+            <div class="am-panel-hd">
+                <span class="am-panel-title">基础统计</span>
+            </div>
+            <div class="am-panel-bd am-padding-sm">
+                <div class="echarts-container am-padding-sm">
+                    <div class="am-text-right right-operate" data-type="base" data-empty-time="1">
+                        {{if !empty($time_data)}}
+                            <span class="quick-time">
+                                {{foreach $time_data as $k=>$v}}
+                                    <a href="javascript:;" data-start="{{$v.start}}" data-end="{{$v.end}}">{{$v.name}}</a>
+                                {{/foreach}}
+                                <a href="javascript:;" data-start="" data-end="">{{:MyLang('all_title')}}</a>
+                            </span>
+                        {{/if}}
+                        {{:ModuleInclude('../../../plugins/distribution/view/admin/stats/public/stats_where')}}
+                    </div>
+                    <!-- 推广客户 -->
+                    <ul class="am-avg-sm-3 promotion-user-content">
+                        <li class="am-text-center">
+                            <p class="am-color-grey-dark">已推广客户</p>
+                            <p class="am-text-truncate">
+                                <a href="javascript:;" class="total am-text-xl user-count submit-popup-custom" data-url="{{:PluginsAdminUrl('distribution', 'promotionuser', 'index', ['uid'=>$uid, 'type'=>0])}}">{{$user_promotion_data.user_count}}</a>
+                                <span class="am-text-grey">人</span>
+                            </p>
+                        </li>
+                        <li class="am-text-center">
+                            <p class="am-color-grey-dark">已消费客户</p>
+                            <p class="am-text-truncate">
+                                <a href="javascript:;" class="total am-text-xl valid-user-count submit-popup-custom" data-url="{{:PluginsAdminUrl('distribution', 'promotionuser', 'index', ['uid'=>$uid, 'type'=>1])}}">{{$user_promotion_data.valid_user_count}}</a>
+                                <span class="am-text-grey">人</span>
+                            </p>
+                        </li>
+                        <li class="am-text-center">
+                            <p class="am-color-grey-dark">未消费客户</p>
+                            <p class="am-text-truncate">
+                                <a href="javascript:;" class="total am-text-xl not-consumed-user-count submit-popup-custom" data-url="{{:PluginsAdminUrl('distribution', 'promotionuser', 'index', ['uid'=>$uid, 'type'=>2])}}">{{$user_promotion_data.not_consumed_user_count}}</a>
+                                <span class="am-text-grey">人</span>
+                            </p>
+                        </li>
+                    </ul>
+                    <ul class="am-margin-top-sm am-cf am-avg-sm-2 am-avg-md-4 base-user-content">
+                        <li class="am-text-center">
+                            <p class="am-color-grey-dark">新增客户</p>
+                            <p class="am-text-truncate">
+                                <a href="javascript:;" class="total am-text-xl order-new-user-count submit-popup-custom" data-url="{{:PluginsAdminUrl('distribution', 'promotionuser', 'index', ['uid'=>$uid, 'type'=>3])}}">{{$base_data.order_new_user_count}}</a>
+                                <span class="am-text-grey am-text-xs">人</span>
+                            </p>
+                            <p class="buttom-stats am-nbfc">
+                                <a href="javascript:;" class="am-text-grey am-text-xs submit-popup-custom" data-url="{{:PluginsAdminUrl('distribution', 'promotionuser', 'index', ['uid'=>$uid, 'type'=>4])}}">
+                                    <span>有效</span>
+                                    <span>(</span>
+                                    <span class="order-new-user-valid-count">{{$base_data.order_new_user_valid_count}}</span>
+                                    <span>)</span>
+                                </a>
+                                <a href="javascript:;" class="am-text-grey am-text-xs am-margin-left submit-popup-custom" data-url="{{:PluginsAdminUrl('distribution', 'promotionuser', 'index', ['uid'=>$uid, 'type'=>5])}}">
+                                    <span>需复购</span>
+                                    <span>(</span>
+                                    <span class="order-new-user-need-repurchase-count">{{$base_data.order_new_user_need_repurchase_count}}</span>
+                                    <span>)</span>
+                                </a>
+                            </p>
+                        </li>
+                        <li class="am-text-center">
+                            <p class="am-color-grey-dark">新增客户总GMV</p>
+                            <p class="am-text-truncate">
+                                <span class="am-text-grey">{{$currency_symbol}}</span>
+                                <a href="javascript:;" class="total am-text-xl order-new-user-total-price submit-popup-custom" data-url="{{:PluginsAdminUrl('distribution', 'promotionorder', 'index', ['uid'=>$uid, 'type'=>0])}}">{{$base_data.order_new_user_total_price}}</a>
+                            </p>
+                        </li>
+                        <li class="am-text-center">
+                            <p class="am-color-grey-dark">订单总数</p>
+                            <p class="am-text-truncate">
+                                <a href="javascript:;" class="total am-text-xl order-user-count submit-popup-custom" data-url="{{:PluginsAdminUrl('distribution', 'promotionorder', 'index', ['uid'=>$uid, 'type'=>1])}}">{{$base_data.order_user_count}}</a>
+                                <span class="am-text-grey">条</span>
+                            </p>
+                        </li>
+                        <li class="am-text-center">
+                            <p class="am-color-grey-dark">订单总GMV</p>
+                            <p class="am-text-truncate">
+                                <span class="am-text-grey">{{$currency_symbol}}</span>
+                                <a href="javascript:;" class="total am-text-xl order-user-total-price submit-popup-custom" data-url="{{:PluginsAdminUrl('distribution', 'promotionorder', 'index', ['uid'=>$uid, 'type'=>2])}}">{{$base_data.order_user_total_price}}</a>
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- 返佣统计 -->
+        <div class="am-panel am-panel-default am-radius">
+            <div class="am-panel-hd">
+                <span class="am-panel-title">返佣统计</span>
+            </div>
+            <div class="am-panel-bd am-padding-sm">
+                <div class="echarts-container am-padding-sm">
+                    <ul class="am-margin-top-xs am-cf am-avg-sm-2 am-avg-md-4 profit-content">
+                        <li class="am-text-center am-padding-vertical-sm">
+                            <p>返佣总额</p>
+                            <p class="am-text-truncate am-text-primary">
+                                <span>{{$currency_symbol}}</span>
+                                <strong class="am-text-lg total-price">{{$profit_data.total_price}}</strong>
+                            </p>
+                        </li>
+                        <li class="am-text-center am-padding-vertical-sm">
+                            <p>待生效</p>
+                            <p class="am-text-truncate am-text-warning">
+                                <span>{{$currency_symbol}}</span>
+                                <strong class="am-text-lg stay-price">{{$profit_data.stay_price}}</strong>
+                            </p>
+                        </li>
+                        <li class="am-text-center am-padding-vertical-sm">
+                            <p>待结算</p>
+                            <p class="am-text-truncate am-text-secondary">
+                                <span>{{$currency_symbol}}</span>
+                                <strong class="am-text-lg vaild-price">{{$profit_data.vaild_price}}</strong>
+                            </p>
+                        </li>
+                        <li class="am-text-center am-padding-vertical-sm">
+                            <p>已结算</p>
+                            <p class="am-text-truncate am-text-success">
+                                <span>{{$currency_symbol}}</span>
+                                <strong class="am-text-lg already-price">{{$profit_data.already_price}}</strong>
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- 收益走势 -->
+        <div class="am-panel am-panel-default am-radius">
+            <div class="am-panel-hd">
+                <span class="am-panel-title">收益走势</span>
+            </div>
+            <div class="am-panel-bd am-padding-sm">
+                <div class="echarts-container am-padding-sm">
+                    <div class="am-text-right right-operate" data-init="1" data-type="profit" data-empty-time="1">
+                        {{if !empty($time_data)}}
+                            <span class="quick-time">
+                                {{foreach $time_data as $k=>$v}}
+                                    <a href="javascript:;" data-start="{{$v.start}}" data-end="{{$v.end}}">{{$v.name}}</a>
+                                {{/foreach}}
+                            </span>
+                        {{/if}}
+                        {{:ModuleInclude('../../../plugins/distribution/view/admin/stats/public/stats_where')}}
+                    </div>
+                </div>
+            </div>
+            <div id="echarts-profit" class="am-margin-top"></div>
+        </div>
+
+        <!-- 推广用户数 -->
+        <div class="am-panel am-panel-default am-radius">
+            <div class="am-panel-hd">
+                <span class="am-panel-title">推广用户数</span>
+            </div>
+            <div class="am-panel-bd am-padding-sm">
+                <div class="echarts-container am-padding-sm">
+                    <div class="am-text-right right-operate" data-init="1" data-type="user" data-empty-time="1">
+                        {{if !empty($time_data)}}
+                            <span class="quick-time">
+                                {{foreach $time_data as $k=>$v}}
+                                    <a href="javascript:;" data-start="{{$v.start}}" data-end="{{$v.end}}">{{$v.name}}</a>
+                                {{/foreach}}
+                            </span>
+                        {{/if}}
+                        {{:ModuleInclude('../../../plugins/distribution/view/admin/stats/public/stats_where')}}
+                    </div>
+                    <div id="echarts-user" class="am-margin-top"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

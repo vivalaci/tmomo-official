@@ -1,0 +1,76 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- header top nav -->
+{{:ModuleInclude('public/header_top_nav')}}
+
+<!-- search -->
+{{:ModuleInclude('public/nav_search')}}
+
+<!-- header nav -->
+{{:ModuleInclude('public/header_nav')}}
+
+<!-- goods category -->
+{{:ModuleInclude('public/goods_category')}}
+
+<!-- content -->
+<div class="am-container plugins-label-data-list">
+    <div class="am-u-sm-12 am-u-md-12 am-padding-left-0 am-padding-right-0">
+        {{if empty($label_info)}}
+            {{:ModuleInclude('public/not_data')}}
+        {{else /}}
+            <!-- 基础信息 -->
+            <div class="map-base-tips am-nbfc am-padding-horizontal-xs am-padding-vertical-sm am-radius">
+                <p class="am-fl">
+                    <span class="am-badge am-round am-margin-right-xs" style="color:{{if empty($label_info['text_color'])}}#fff{{else /}}{{$label_info.text_color}}{{/if}};{{if !empty($label_info['bg_color'])}}background:{{$label_info.bg_color}};{{/if}}">{{$label_info.name}}</span>
+                    <span>共有</span>
+                    <strong class="map-result-count am-text-danger">{{$data_total}}</strong>
+                    <span>条相关商品</span>
+                </p>
+                {{if !empty($params) and !empty($params['ov']) and $params['ov'] neq 'default'}}
+                    <a href="{{:PluginsHomeUrl('label', 'index', 'detail', ['id'=>$label_id])}}" class="am-icon-filter map-remove-submit"> 清除</a>
+                {{/if}}
+            </div>
+
+            <!-- 排序方式 -->
+            {{if !empty($map_order_by_list)}}
+                <div class="search-nav am-margin-top-sm">
+                    <ul class="sort-nav" data-am-sticky="{animation: 'slide-top'}">
+                        {{foreach $map_order_by_list as $k=>$v}}
+                            <li class="{{if $v['active'] eq 1}}active{{/if}}">
+                                <a href="{{$v.url}}">
+                                    <span>{{$v.name}}</span>
+                                    {{if $v['type'] neq 'default'}}
+                                        <i class="am-icon-long-arrow-{{if $v['value'] eq 'asc' or $v['active'] eq 0}}down{{else /}}up{{/if}}"></i>
+                                    {{/if}}
+                                </a>
+                            </li>
+                        {{/foreach}}
+                    </ul>
+                </div>
+            {{/if}}
+
+            <!-- 数据列表 -->
+            {{if !empty($data_list)}}
+                <div class="data-list">
+                    {{:ModuleInclude('module/goods/grid/base', [
+                        'goods_list'         => $data_list,
+                        'type'               => 'detail',
+                        'price_key'          => 'price',
+                        'original_price_key' => 'original_price',
+                        
+                    ])}}
+                </div>
+            {{else /}}
+                {{:ModuleInclude('public/not_data')}}
+            {{/if}}
+
+            <!-- 分页 -->
+            <div class="am-nbfc am-margin-top-sm">
+                {{$page_html|raw}}
+            </div>
+        {{/if}}
+    </div>
+</div>
+
+<!-- footer -->
+{{:ModuleInclude('public/footer')}}

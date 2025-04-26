@@ -1,0 +1,12 @@
+{{if !empty($plugins_data) and !empty($plugins_data['goods']) and !empty($plugins_data['module']) and in_array($plugins_data['module'], ['grid-base', 'slider-base', 'slider-piece'])}}
+    <div class="plugins-intellectstools-goods-above-suspension-operate">
+        <div class="collect common-goods-favor-submit-event am-radius am-cursor-pointer" data-gid="{{$plugins_data.goods.id}}">
+            <i class="iconfont icon-heart-o"></i>
+        </div> 
+        {{if $plugins_data.goods.is_error eq 0}}
+            <div class="shop am-radius am-cursor-pointer">
+                <i class="iconfont icon-shopping-cart common-goods-cart-submit-event" data-gid="{{$plugins_data.goods.id}}" data-is-many-spec="{{$plugins_data.goods.is_exist_many_spec}}"></i>
+            </div>
+        {{/if}}
+    </div>
+{{/if}}

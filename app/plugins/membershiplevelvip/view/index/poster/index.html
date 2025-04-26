@@ -1,0 +1,82 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- header top nav -->
+{{:ModuleInclude('public/header_top_nav')}}
+
+<!-- header simple nav -->
+{{:ModuleInclude('public/header_nav_simple', [
+    'search' => 1,
+])}}
+
+<!-- content -->
+<div class="am-container user-main">
+
+    <!-- user menu start -->
+    {{:ModuleInclude('public/user_menu')}}
+    <!-- user menu end -->
+
+    <!-- content start -->
+    <div class="user-content">
+        <div class="user-content-body">
+            <!-- user center title -->
+            {{:ModuleInclude('public/user_center_main_title')}}
+            <!-- nav -->
+            {{:ModuleInclude('../../../plugins/membershiplevelvip/view/index/public/nav')}}
+            
+            <!-- 推广 -->
+            <div class="am-margin-top-sm">
+                <!-- 一键推荐 -->
+                <div class="am-panel am-panel-default am-radius">
+                    <div class="am-panel-hd">
+                        <h3 class="am-panel-title">一键推荐</h3>
+                    </div>
+                    <div class="am-panel-bd">
+                        <p class="am-color-grey am-margin-bottom-sm">点击下方图标，直接分享给好友或社交平台，轻轻松松赚返利！</p>
+                        <div class="plugins-share-view" data-url="{{$user_share_url}}" data-title="{{if isset($plugins_config['user_poster_share_title'])}}{{$plugins_config.user_poster_share_title}}{{/if}}" data-desc="{{if isset($plugins_config['user_poster_share_desc'])}}{{$plugins_config.user_poster_share_desc}}{{/if}}" data-pic="{{if !empty($plugins_config['user_poster_share_images'])}}{{$plugins_config.user_poster_share_images}}{{/if}}" data-share="qq,qzone,sina,weixin,facebook,twitter"></div>
+                    </div>
+                </div>
+
+                <!-- 链接分享 -->
+                <div class="am-panel am-panel-default am-radius share-link">
+                    <div class="am-panel-hd">
+                        <h3 class="am-panel-title">链接分享</h3>
+                    </div>
+                    <div class="am-panel-bd">
+                        <p class="am-color-grey am-margin-bottom-sm">复制以下内容，发送给微信好友/群、QQ好友/群，分享到分朋友圈，微博等进行推广，轻轻松松赚返利！</p>
+                        <div class="am-input-group am-input-group-sm">
+                            <input type="text" class="am-form-field" value="{{$user_share_url}}" />
+                            <span class="am-input-group-btn">
+                                <button class="am-btn am-btn-default am-icon-copy" type="button"> 复制</button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 二维码分享 -->
+                <div class="am-panel am-panel-default am-radius">
+                    <div class="am-panel-hd">
+                        <h3 class="am-panel-title">二维码分享</h3>
+                    </div>
+                    <div class="am-panel-bd">
+                        <p class="am-color-grey am-margin-bottom-sm">复制或保存二维码后，发送给微信好友/群、QQ好友/群，分享到分朋友圈，微博等进行推广，轻轻松松赚返利！</p>
+                        {{if !empty($user_share_qrode)}}
+                            <img src="{{$user_share_qrode}}" class="am-img-thumbnail am-block common-annex-view-event" data-value="{{$user_share_qrode}}" data-is-download="1" data-download-name="推广二维码" />
+                            <a href="{{:MyUrl('index/qrcode/download', ['url'=>urlencode(base64_encode($user_share_qrode)), 'filename'=>'推广二维码'])}}" class="am-btn am-btn-success am-btn-sm am-radius am-margin-top-sm am-icon-cloud-download"> 下载二维码</a>
+                        {{else /}}
+                            <span class="am-text-center am-text-danger">
+                                二维码生成失败
+                            </span>
+                        {{/if}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- content end -->
+</div>
+
+<!-- common -->
+{{:ModuleInclude('../../../plugins/membershiplevelvip/view/index/public/common')}}
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

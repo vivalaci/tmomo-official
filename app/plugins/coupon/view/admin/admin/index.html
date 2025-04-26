@@ -1,0 +1,258 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'coupon',
+            'nav_data'  => $plugins_nav_menu_list,
+        ])}}
+
+        <div class="coupon-content">
+            <!-- 基础配置 -->
+            <div class="am-panel am-panel-default am-radius coupon-content-base">
+                <div class="am-panel-hd">
+                    <span class="am-panel-title">{{:MyLang('base_config_title')}}</span>
+                    <a class="am-margin-left-lg" href="{{:PluginsAdminUrl('coupon', 'admin', 'saveinfo')}}">
+                        <i class="am-icon-edit"></i>
+                        <span>{{:MyLang('edit_title')}}</span>
+                    </a>
+                </div>
+                <div class="am-panel-bd">
+                    <!-- 基础配置 -->
+                    <h2 class="am-margin-0">{{:MyLang('base_config_title')}}</h2>
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('application_nav_name_text')}}</label>
+                                <div>
+                                    {{if empty($data['application_name'])}}
+                                        {{:MyLang('no_setup_tips')}}{{:MyLang('application_nav_name_text')}}
+                                    {{else /}}
+                                        {{$data.application_name}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('top_app_img_text')}}</label>
+                                <div class="immages-tag">
+                                    {{if empty($data['app_banner_images'])}}
+                                        <span class="am-text-grey">{{:MyLang('no_setup_tips')}}</span>
+                                    {{else /}}
+                                        <img src="{{$data.app_banner_images}}" class="am-img-thumbnail am-radius common-annex-view-event" data-value="{{$data.app_banner_images}}" />
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('top_img_text')}}</label>
+                                <div class="immages-tag">
+                                    {{if empty($data['banner_images'])}}
+                                        <span class="am-text-grey">{{:MyLang('no_setup_tips')}}</span>
+                                    {{else /}}
+                                        <img src="{{$data.banner_images}}" class="am-img-thumbnail am-radius common-annex-view-event" data-value="{{$data.banner_images}}" />
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('coupon_index_top_img_backgound_text')}}</label>
+                                <div>
+                                    {{if empty($data['banner_bg_color'])}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{else /}}
+                                        <div class="am-margin-top-sm">
+                                            <span class="am-padding-sm am-padding-horizontal-lg" style="background:{{$data.banner_bg_color}}"></span>
+                                        </div>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('coupon_index_top_img_address_text')}}</label>
+                                <div>
+                                    {{if !empty($data['url_rules'])}}
+                                        {{:MyLang('already_setup_tips')}}[ <a href="javascript:;" data-am-modal="{target: '#popup-shop-level-data'}">{{:MyLang('view_title')}}</a> ]
+                                        <div class="am-popup am-radius" id="popup-shop-level-data">
+                                            <div class="am-popup-inner">
+                                                <div class="am-popup-hd">
+                                                    <h4 class="am-popup-title">{{:MyLang('href_address_title')}}</h4>
+                                                    <span data-am-modal-close class="am-close">&times;</span>
+                                                </div>
+                                                <div class="am-popup-bd">
+                                                    <table class="am-table am-table-bordered am-table-radius am-table-striped am-margin-bottom-0">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>{{:MyLang('platform_title')}}</th>
+                                                                <th>{{:MyLang('href_address_title')}}</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {{if !empty($common_platform_type)}}
+                                                                {{foreach $common_platform_type as $v}}
+                                                                    <tr>
+                                                                        <td>{{$v.name}}</td>
+                                                                        <td>{{if !empty($data['url_rules']) and is_array($data['url_rules']) and array_key_exists($v['value'], $data['url_rules'])}}{{$data['url_rules'][$v['value']]}}{{/if}}</td>
+                                                                    </tr>
+                                                                {{/foreach}}
+                                                            {{/if}}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                        </div>
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('coupon_station_email_notification_text')}}</label>
+                                <div>
+                                    {{if isset($data['is_user_coupon_send_site_notice']) and $data['is_user_coupon_send_site_notice'] eq 1}}
+                                        {{:MyLang('yes_title')}}
+                                    {{else /}}
+                                        {{:MyLang('no_title')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('limit_time_shop_order_not_available_text')}}</label>
+                                <div>
+                                    {{if isset($data['is_exclude_seckill_goods_order']) and $data['is_exclude_seckill_goods_order'] eq 1}}
+                                        {{:MyLang('yes_title')}}
+                                    {{else /}}
+                                        {{:MyLang('no_title')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('is_default_use_coupon')}}</label>
+                                <div>
+                                    {{if isset($data['is_default_use_coupon']) and $data['is_default_use_coupon'] eq 1}}
+                                        {{:MyLang('yes_title')}}
+                                    {{else /}}
+                                        {{:MyLang('no_title')}}
+                                    {{/if}}
+                                    {{if !isset($data['is_default_use_coupon_type']) or (isset($data['is_default_use_coupon_type']) and $data['is_default_use_coupon_type'] eq 0)}}
+                                        <span class="am-badge am-badge-success am-radius am-margin-left-xs">{{:MyLang('is_default_use_coupon_type_0')}}</span>
+                                    {{/if}}
+                                    {{if isset($data['is_default_use_coupon_type']) and $data['is_default_use_coupon_type'] eq 1}}
+                                        <span class="am-badge am-badge-success am-radius am-margin-left-xs">{{:MyLang('is_default_use_coupon_type_1')}}</span>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('coupon_expired_script_text')}}</label>
+                                <div class="am-scrollable-vertical">
+                                    <a href="{{:PluginsHomeUrl('coupon', 'index', 'expire')}}" target="_blank">{{:PluginsHomeUrl('coupon', 'index', 'expire')}}</a>
+                                    <p class="am-text-warning am-margin-top-xs">{{:MyLang('suggest_address_add_linux_tips')}}</p>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <!-- 短信配置 -->
+                    <h2 class="am-margin-0">{{:MyLang('sms_config_text')}}</h2>
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('coupon_sms_notification_text')}}</label>
+                                <div>
+                                    {{if isset($data['is_user_coupon_send_sms_notice']) and $data['is_user_coupon_send_sms_notice'] eq 1}}
+                                        {{:MyLang('yes_title')}}
+                                    {{else /}}
+                                        {{:MyLang('no_title')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('sms_signature_text')}}</label>
+                                <div>
+                                    {{if !empty($data['sms_sign'])}}
+                                        {{:MyLang('already_setup_tips')}}[ {{$data.sms_sign}} ]
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('use_sys_default_signature_text')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('coupon_signature_temp_text')}}</label>
+                                <div>
+                                    {{if !empty($data['user_coupon_send_notice_sms_template'])}}
+                                        {{:MyLang('already_setup_tips')}}[ {{$data.user_coupon_send_notice_sms_template}} ]
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <!-- 支持多商户 -->
+                    <h2 class="am-margin-0">{{:MyLang('support_multiple_merchants_text')}}</h2>
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('open_support_multiple_merchants_text')}}</label>
+                                <div>
+                                    {{if isset($data['is_shop_coupon']) and $data['is_shop_coupon'] eq 1}}
+                                        {{:MyLang('yes_title')}}
+                                    {{else /}}
+                                        {{:MyLang('no_title')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('open_multiple_merchants_coupon_nav_text')}}</label>
+                                <div>
+                                    {{if isset($data['is_shop_nav_coupon']) and $data['is_shop_nav_coupon'] eq 1}}
+                                        {{:MyLang('yes_title')}}
+                                    {{else /}}
+                                        {{:MyLang('no_title')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('shop_nav_name_text')}}</label>
+                                <div>
+                                    {{if empty($data['shop_application_name'])}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ {{:MyLang('coupon_name')}} ]
+                                    {{else /}}
+                                        {{$data.shop_application_name}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

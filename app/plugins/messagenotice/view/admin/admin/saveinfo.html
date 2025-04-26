@@ -1,0 +1,643 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'messagenotice',
+            'title'     => MyLang('base_config_title'),
+            'back_url'  => PluginsAdminUrl('messagenotice', 'admin', 'index'),
+        ])}}
+
+        <!-- form start -->
+        <form class="am-form form-validation am-form-full-screen am-form-popup-sticky" action="{{:PluginsAdminUrl('messagenotice', 'admin', 'save')}}" method="POST" request-type="ajax-url" request-value="{{:PluginsAdminUrl('messagenotice', 'admin', 'index')}}" enctype="multipart/form-data">
+            <!-- 基础配置 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">{{:MyLang('base_config_title')}}</h3>
+                </div>
+                <div class="am-panel-bd">
+                    <div data-am-widget="tabs" class="am-tabs am-tabs-d2 am-radius am-margin-0" data-am-tabs="{noSwipe: 1}">
+                        <ul class="am-tabs-nav am-cf">
+                            <li class="am-active">
+                                <a href="[data-tab-panel-0]">短信配置</a></li>
+                            <li>
+                                <a href="[data-tab-panel-1]">语音配置</a>
+                            </li>
+                        </ul>
+                        <div class="am-tabs-bd">
+                            <div data-tab-panel-0 class="am-tab-panel am-active">
+                                <div class="am-form-group">
+                                    <label>短信签名<span class="am-form-group-label-tips">空则使用系统默认签名</span></label>
+                                    <input type="text" name="sms_sign" placeholder="短信签名" maxlength="30" data-validation-message="短信签名格式最多 30 个字符" class="am-radius" {{if !empty($data['sms_sign'])}} value="{{$data.sms_sign}}"{{/if}} />
+                                </div>
+                            </div>
+                            <div data-tab-panel-1 class="am-tab-panel">
+                                <div class="am-form-group">
+                                    <label>应用ID</label>
+                                    <input type="text" name="partner_id" placeholder="应用ID" maxlength="60" data-validation-message="应用ID格式最多 60 个字符" class="am-radius" {{if !empty($data['partner_id'])}} value="{{$data.partner_id}}"{{/if}} />
+                                </div>
+                                <div class="am-form-group">
+                                    <label>应用Secret</label>
+                                    <input type="text" name="partner_secret" placeholder="应用Secret" maxlength="120" data-validation-message="应用Secret格式最多 120 个字符" class="am-radius" {{if !empty($data['partner_secret'])}} value="{{$data.partner_secret}}"{{/if}} />
+                                </div>
+                                <div class="am-form-group">
+                                    <label>设备ID</label>
+                                    <input type="text" name="device_id" placeholder="设备ID" maxlength="200" data-validation-message="设备ID格式最多 200 个字符" class="am-radius" {{if !empty($data['device_id'])}} value="{{$data.device_id}}"{{/if}} />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 用户公共站内消息通知 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">用户公共站内消息通知</h3>
+                </div>
+                <div class="am-panel-bd">
+                    <div class="am-form-group">
+                        <label class="am-block">开启站内消息邮件通知</label>
+                        <input name="is_message_email_notice" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_message_email_notice']) and $data['is_message_email_notice'] eq 1}}checked="true"{{/if}} />
+                    </div>
+                    <div class="am-form-group">
+                        <label>站内消息邮件通知<span class="am-form-group-label-tips">空则不发送、变量标识符 [ 标题 message_title , 类型 message_type , 内容 message_content ]</span></label>
+                        <textarea id="message_email_template" name="message_email_template">{{if !empty($data['message_email_template'])}}{{$data.message_email_template}}{{/if}}</textarea>
+                        <div class="am-alert">
+                            <p><strong class="am-text-warning">参考模板内容：</strong></p>
+                            <div>
+                                <p>${message_title}消息通知：</p>
+                                <div class="am-padding-left-lg">
+                                    <p>${message_content}</p>
+                                </div>
+                                <p>如有问题请及时联系客服！</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 用户订单通知相关配置 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">用户订单通知相关配置</h3>
+                </div>
+                <div class="am-panel-bd">
+                    <div data-am-widget="tabs" class="am-tabs am-tabs-d2 am-radius am-margin-0" data-am-tabs="{noSwipe: 1}">
+                        <ul class="am-tabs-nav am-cf">
+                            <li class="am-active">
+                                <a href="[data-tab-panel-0]">短信模板</a>
+                            </li>
+                            <li>
+                                <a href="[data-tab-panel-1]">邮件模板</a>
+                            </li>
+                        </ul>
+                        <!-- 短信模板 -->
+                        <div class="am-tabs-bd">
+                            <div data-tab-panel-0 class="am-tab-panel am-active">
+                                <div class="am-form-group">
+                                    <label class="am-block">开启订单短信通知</label>
+                                    <input name="is_order_sms_notice" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_order_sms_notice']) and $data['is_order_sms_notice'] eq 1}}checked="true"{{/if}} />
+                                </div>
+                                <div class="am-form-group">
+                                    <label>订单待支付<span class="am-form-group-label-tips">空则不发送、变量标识符 [ 订单号 order_no , 订单金额 total_price ]</span></label>
+                                    <input type="text" name="order_await_pay_sms_template" placeholder="订单待支付短信模板ID" maxlength="30" data-validation-message="订单待支付短信模板ID格式最多 30 个字符" class="am-radius" {{if !empty($data['order_await_pay_sms_template'])}} value="{{$data.order_await_pay_sms_template}}"{{/if}} />
+                                    <div class="am-alert">
+                                        <p><strong class="am-text-warning">参考模板内容：</strong></p>
+                                        <p>您的订单已提交、订单号：${order_no}、金额：${total_price}、请在30分钟内完成支付、则系统将订单自动关闭。</p>
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+                                    <label>订单支付成功（快递订单）<span class="am-form-group-label-tips">空则不发送、变量标识符 [ 订单号 order_no , 订单金额 total_price ]</span></label>
+                                    <input type="text" name="order_pay_success_sms_template" placeholder="订单支付成功快递订单短信模板ID" maxlength="30" data-validation-message="订单支付成功快递订单短信模板ID格式最多 30 个字符" class="am-radius" {{if !empty($data['order_pay_success_sms_template'])}} value="{{$data.order_pay_success_sms_template}}"{{/if}} />
+                                    <div class="am-alert">
+                                        <p><strong class="am-text-warning">参考模板内容：</strong></p>
+                                        <p>您的订单已支付成功、订单号：${order_no}、金额：${total_price}、已为您安排仓储发货中、感谢您的支持！</p>
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+                                    <label>订单支付成功（自提订单）<span class="am-form-group-label-tips">空则不发送、变量标识符 [ 订单号 order_no , 订单金额 total_price , 取货码 order_code , 联系人 address_name , 联系电话 address_tel , 取货地址 address_content ]</span></label>
+                                    <input type="text" name="order_pay_success_extraction_sms_template" placeholder="订单支付成功自提订单短信模板ID" maxlength="30" data-validation-message="订单支付成功自提订单短信模板ID格式最多 30 个字符" class="am-radius" {{if !empty($data['order_pay_success_extraction_sms_template'])}} value="{{$data.order_pay_success_extraction_sms_template}}"{{/if}} />
+                                    <div class="am-alert">
+                                        <p><strong class="am-text-warning">参考模板内容：</strong></p>
+                                        <p>您的订单已支付成功、订单号：${order_no}、金额：${total_price}、取货码：${order_code}、联系人：${address_name}、联系电话：${address_tel}、取货地址：${address_content}、请尽快到指定地址取货、如有问题请联系客服、感谢您的支持！</p>
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+                                    <label>订单支付成功（虚拟订单）<span class="am-form-group-label-tips">空则不发送、变量标识符 [ 订单号 order_no , 订单金额 total_price ]</span></label>
+                                    <input type="text" name="order_pay_success_fictitious_sms_template" placeholder="订单支付成功虚拟订单短信模板ID" maxlength="30" data-validation-message="订单支付成功虚拟订单短信模板ID格式最多 30 个字符" class="am-radius" {{if !empty($data['order_pay_success_fictitious_sms_template'])}} value="{{$data.order_pay_success_fictitious_sms_template}}"{{/if}} />
+                                    <div class="am-alert">
+                                        <p><strong class="am-text-warning">参考模板内容：</strong></p>
+                                        <p>您的订单已支付成功、订单号：${order_no}、金额：${total_price}、秘钥信息请在订单详情中查看、如有问题请联系客服、感谢您的支持！</p>
+                                    </div>
+                                </div>
+
+                                <div class="am-form-group">
+                                    <label>订单发货（快递订单）<span class="am-form-group-label-tips">空则不发送、变量标识符 [ 订单号 order_no , 快递公司 express_name , 快递单号 express_number ]</span></label>
+                                    <input type="text" name="order_delivery_sms_template" placeholder="订单发货快递订单短信模板ID" maxlength="30" data-validation-message="订单发货快递订单短信模板ID格式最多 30 个字符" class="am-radius" {{if !empty($data['order_delivery_sms_template'])}} value="{{$data.order_delivery_sms_template}}"{{/if}} />
+                                    <div class="am-alert">
+                                        <p><strong class="am-text-warning">参考模板内容：</strong></p>
+                                        <p>您的订单已发货、订单号：${order_no}、快递：${express_name}、运单号：${express_number}、请留意快递配送。</p>
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+                                    <label>订单发货（自提订单）<span class="am-form-group-label-tips">空则不发送、变量标识符 [ 订单号 order_no ]</span></label>
+                                    <input type="text" name="order_delivery_extraction_sms_template" placeholder="订单发货自提订单短信模板ID" maxlength="30" data-validation-message="订单发货自提订单短信模板ID格式最多 30 个字符" class="am-radius" {{if !empty($data['order_delivery_extraction_sms_template'])}} value="{{$data.order_delivery_extraction_sms_template}}"{{/if}} />
+                                    <div class="am-alert">
+                                        <p><strong class="am-text-warning">参考模板内容：</strong></p>
+                                        <p>您的订单已完成取货、订单号：${order_no}、如有问题请联系客服、感谢您的支持！</p>
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+                                    <label>订单收货完成<span class="am-form-group-label-tips">空则不发送、变量标识符 [ 订单号 order_no ]</span></label>
+                                    <input type="text" name="order_collect_sms_template" placeholder="订单收货短信模板ID" maxlength="30" data-validation-message="订单收货短信模板ID格式最多 30 个字符" class="am-radius" {{if !empty($data['order_collect_sms_template'])}} value="{{$data.order_collect_sms_template}}"{{/if}} />
+                                    <div class="am-alert">
+                                        <p><strong class="am-text-warning">参考模板内容：</strong></p>
+                                        <p>您的订单已完成收货、订单号：${order_no}、如有问题请联系客服、感谢您的支持！</p>
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+                                    <label>订单取消/关闭<span class="am-form-group-label-tips">空则不发送、变量标识符 [ 关闭或取消 type_msg , 订单号 order_no ]</span></label>
+                                    <input type="text" name="order_close_sms_template" placeholder="订单取消/关闭短信模板ID" maxlength="30" data-validation-message="订单取消/关闭短信模板ID格式最多 30 个字符" class="am-radius" {{if !empty($data['order_close_sms_template'])}} value="{{$data.order_close_sms_template}}"{{/if}} />
+                                    <div class="am-alert">
+                                        <p><strong class="am-text-warning">参考模板内容：</strong></p>
+                                        <p>您的订单已${type_msg}、订单号：${order_no}、如有问题请联系客服、感谢您的支持！</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 邮件模板 -->
+                            <div data-tab-panel-1 class="am-tab-panel">
+                                <div class="am-form-group">
+                                    <label class="am-block">开启订单邮件通知</label>
+                                    <input name="is_order_email_notice" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_order_email_notice']) and $data['is_order_email_notice'] eq 1}}checked="true"{{/if}} />
+                                </div>
+                                <div class="am-form-group">
+                                    <label>订单待支付<span class="am-form-group-label-tips">空则不发送</span></label>
+                                    <textarea id="order_await_pay_email_template" name="order_await_pay_email_template">{{if !empty($data['order_await_pay_email_template'])}}{{$data.order_await_pay_email_template}}{{/if}}</textarea>
+                                </div>
+                                <div class="am-form-group">
+                                    <label>订单支付成功（快递订单）<span class="am-form-group-label-tips">空则不发送</span></label>
+                                    <textarea id="order_pay_success_email_template" name="order_pay_success_email_template">{{if !empty($data['order_pay_success_email_template'])}}{{$data.order_pay_success_email_template}}{{/if}}</textarea>
+                                </div>
+                                <div class="am-form-group">
+                                    <label>订单支付成功（自提订单）<span class="am-form-group-label-tips">空则不发送</span></label>
+                                    <textarea id="order_pay_success_extraction_email_template" name="order_pay_success_extraction_email_template">{{if !empty($data['order_pay_success_extraction_email_template'])}}{{$data.order_pay_success_extraction_email_template}}{{/if}}</textarea>
+                                </div>
+                                <div class="am-form-group">
+                                    <label>订单支付成功（虚拟订单）<span class="am-form-group-label-tips">空则不发送</span></label>
+                                    <textarea id="order_pay_success_fictitious_email_template" name="order_pay_success_fictitious_email_template">{{if !empty($data['order_pay_success_fictitious_email_template'])}}{{$data.order_pay_success_fictitious_email_template}}{{/if}}</textarea>
+                                </div>
+                                <div class="am-form-group">
+                                    <label>订单发货（快递订单）<span class="am-form-group-label-tips">空则不发送</span></label>
+                                    <textarea id="order_delivery_email_template" name="order_delivery_email_template">{{if !empty($data['order_delivery_email_template'])}}{{$data.order_delivery_email_template}}{{/if}}</textarea>
+                                </div>
+                                <div class="am-form-group">
+                                    <label>订单发货（自提订单）<span class="am-form-group-label-tips">空则不发送</span></label>
+                                    <textarea id="order_delivery_extraction_email_template" name="order_delivery_extraction_email_template">{{if !empty($data['order_delivery_extraction_email_template'])}}{{$data.order_delivery_extraction_email_template}}{{/if}}</textarea>
+                                </div>
+                                <div class="am-form-group">
+                                    <label>订单收货完成<span class="am-form-group-label-tips">空则不发送</span></label>
+                                    <textarea id="order_collect_email_template" name="order_collect_email_template">{{if !empty($data['order_collect_email_template'])}}{{$data.order_collect_email_template}}{{/if}}</textarea>
+                                </div>
+                                <div class="am-form-group">
+                                    <label>订单取消/关闭<span class="am-form-group-label-tips">空则不发送</span></label>
+                                    <textarea id="order_close_email_template" name="order_close_email_template">{{if !empty($data['order_close_email_template'])}}{{$data.order_close_email_template}}{{/if}}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 管理员新订单通知相关配置 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">管理员新订单通知相关配置</h3>
+                </div>
+                <div class="am-panel-bd">
+                    <div data-am-widget="tabs" class="am-tabs am-tabs-d2 am-radius am-margin-0" data-am-tabs="{noSwipe: 1}">
+                        <ul class="am-tabs-nav am-cf">
+                            <li class="am-active">
+                                <a href="[data-tab-panel-0]">短信模板</a>
+                            </li>
+                            <li>
+                                <a href="[data-tab-panel-1]">邮件模板</a>
+                            </li>
+                            <li>
+                                <a href="[data-tab-panel-2]">语音模板</a>
+                            </li>
+                        </ul>
+                        <!-- 短信模板 -->
+                        <div class="am-tabs-bd">
+                            <div class="am-alert am-alert-warning am-margin-top-sm" data-am-alert>
+                                <button type="button" class="am-close">&times;</button>
+                                <p>订单预约模式</p>
+                                <div class="am-padding-left-sm">
+                                    <p>订单状态为（待确认）</p>
+                                </div>
+                                <p>订单状态为（待确认）</p>
+                                <div class="am-padding-left-sm">
+                                    <p>非线下支付 <strong class="am-text-danger">并且</strong> 对的状态为（支付、发货、收货）</p>
+                                    <p>线下支付  <strong class="am-text-danger">并且</strong> 订单为（待支付） <strong>并且</strong> 线下支付正常进行（否）</p>
+                                    <p>线下支付 <strong class="am-text-danger">并且</strong> 订单状态为（支付、发货、收货） <strong class="am-text-danger">并且</strong> 线下支付正常进行（是）</p>
+                                </div>
+                            </div>
+
+                            <!-- 短信模板 -->
+                            <div data-tab-panel-0 class="am-tab-panel am-active">
+                                <div class="am-form-group">
+                                    <label class="am-block">开启新订单短信通知</label>
+                                    <input name="is_admin_new_order_sms_notice" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_admin_new_order_sms_notice']) and $data['is_admin_new_order_sms_notice'] eq 1}}checked="true"{{/if}} />
+                                </div>
+                                <div class="am-form-group">
+                                    <label>新订单短信模板ID<span class="am-form-group-label-tips">空则不发送、变量标识符 [ 订单号 order_no , 订单金额 total_price ]</span></label>
+                                    <input type="text" name="admin_new_order_sms_template" placeholder="新订单短信模板ID" maxlength="30" data-validation-message="新订单短信模板ID格式最多 30 个字符" class="am-radius" {{if !empty($data['admin_new_order_sms_template'])}} value="{{$data.admin_new_order_sms_template}}"{{/if}} />
+                                    <div class="am-alert">
+                                        <p><strong class="am-text-warning">参考模板内容：</strong></p>
+                                        <p>恭喜您有新订单了、订单号：${order_no}、金额：${total_price}、请及时登录后台处理！</p>
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+                                    <label>接收消息手机号码<span class="am-form-group-label-tips">空则不发送、多个以英文逗号分隔[ , ]、最多增加10个号码</span></label>
+                                    <input type="text" name="admin_new_order_sms_mobile" placeholder="接收消息手机号码" maxlength="110" data-validation-message="接收消息手机号码、最多10个号码" class="am-radius" {{if !empty($data['admin_new_order_sms_mobile'])}} value="{{$data.admin_new_order_sms_mobile}}"{{/if}} />
+                                </div>
+                            </div>
+                            <!-- 邮件模板 -->
+                            <div data-tab-panel-1 class="am-tab-panel">
+                                <div class="am-form-group">
+                                    <label class="am-block">开启新订单邮件通知</label>
+                                    <input name="is_admin_new_order_email_notice" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_admin_new_order_email_notice']) and $data['is_admin_new_order_email_notice'] eq 1}}checked="true"{{/if}} />
+                                </div>
+                                <div class="am-form-group">
+                                    <label>新订单邮件模板<span class="am-form-group-label-tips">空则不发送</span></label>
+                                    <textarea id="admin_new_order_email_template" name="admin_new_order_email_template">{{if !empty($data['admin_new_order_email_template'])}}{{$data.admin_new_order_email_template}}{{/if}}</textarea>
+                                </div>
+                                <div class="am-form-group">
+                                    <label>接收消息邮箱<span class="am-form-group-label-tips">空则不发送、多个以英文逗号分隔[ , ]</span></label>
+                                    <input type="text" name="admin_new_order_email_accounts" placeholder="接收消息邮箱" maxlength="200" data-validation-message="接收消息邮箱格式最多200个字符" class="am-radius" {{if !empty($data['admin_new_order_email_accounts'])}} value="{{$data.admin_new_order_email_accounts}}"{{/if}} />
+                                </div>
+                                <!-- 订单通知邮件变量标识符 -->
+                                <p><strong class="am-text-warning">订单通知邮件变量标识符：</strong></p>
+                                <ul data-am-widget="gallery" class="am-gallery am-avg-sm-2 am-avg-md-3 am-avg-lg-4 am-gallery-bordered am-padding-0">
+                                    {{foreach $order_email_var_fields as $v}}
+                                        <li>
+                                            <div class="am-gallery-item am-radius">
+                                                <span>{{$v.name}}</span>
+                                                <strong>${{{$v.field}}}</strong>
+                                                <a href="javascript:;" data-value="${{{$v.field}}}" class="am-icon-copy text-copy-submit am-fr am-margin-right-xs"></a>
+                                            </div>
+                                        </li>
+                                    {{/foreach}}
+                                </ul>
+                            </div>
+                            <!-- 语音模板 -->
+                            <div data-tab-panel-1 class="am-tab-panel">
+                                <div class="am-form-group">
+                                    <label class="am-block">开启新订单语音通知</label>
+                                    <input name="is_admin_new_order_voice_notice" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_admin_new_order_voice_notice']) and $data['is_admin_new_order_voice_notice'] eq 1}}checked="true"{{/if}} />
+                                </div>
+                                <div class="am-form-group">
+                                    <label>新订单语音模板<span class="am-form-group-label-tips">空则不通知、变量标识符 [ 订单号 order_no , 订单单价 price , 订单总额 total_price , 订单支付金额 pay_price ]</span></label>
+                                    <input type="text" name="admin_new_order_voice_template" placeholder="新订单语音模板" maxlength="60" data-validation-message="新订单语音模板格式最多 60 个字符" class="am-radius" {{if !empty($data['admin_new_order_voice_template'])}} value="{{$data.admin_new_order_voice_template}}"{{/if}} />
+                                    <div class="am-alert">
+                                        <p><strong class="am-text-warning">参考模板内容：</strong></p>
+                                        <p>
+                                            <span>模板1：</span>
+                                            <span class="text-copy-submit">您有新订单了，请注意查收</span>
+                                        </p>
+                                        <p>
+                                            <span>模板2：</span>
+                                            <span class="text-copy-submit">您有新订单了，${total_price}</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 管理员新用户待审通知相关配置 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">管理员新用户待审通知相关配置</h3>
+                </div>
+                <div class="am-panel-bd">
+                    <div data-am-widget="tabs" class="am-tabs am-tabs-d2 am-radius am-margin-0" data-am-tabs="{noSwipe: 1}">
+                        <ul class="am-tabs-nav am-cf">
+                            <li class="am-active">
+                                <a href="[data-tab-panel-0]">短信模板</a>
+                            </li>
+                            <li>
+                                <a href="[data-tab-panel-1]">邮件模板</a>
+                            </li>
+                            <li>
+                                <a href="[data-tab-panel-2]">语音模板</a>
+                            </li>
+                        </ul>
+                        <!-- 短信模板 -->
+                        <div class="am-tabs-bd">
+                            <!-- 短信模板 -->
+                            <div data-tab-panel-0 class="am-tab-panel am-active">
+                                <div class="am-form-group">
+                                    <label class="am-block">开启新用户待审短信通知</label>
+                                    <input name="is_admin_new_user_audit_sms_notice" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_admin_new_user_audit_sms_notice']) and $data['is_admin_new_user_audit_sms_notice'] eq 1}}checked="true"{{/if}} />
+                                </div>
+                                <div class="am-form-group">
+                                    <label>新用户待审短信模板ID<span class="am-form-group-label-tips">空则不发送、变量标识符 [ 用户展示名称 user_name_view ]</span></label>
+                                    <input type="text" name="admin_new_user_audit_sms_template" placeholder="新用户待审短信模板ID" maxlength="30" data-validation-message="新用户待审短信模板ID格式最多 30 个字符" class="am-radius" {{if !empty($data['admin_new_user_audit_sms_template'])}} value="{{$data.admin_new_user_audit_sms_template}}"{{/if}} />
+                                    <div class="am-alert">
+                                        <p><strong class="am-text-warning">参考模板内容：</strong></p>
+                                        <p>您有新用户[${user_name_view}]注册待审核、请及时登录后台处理！</p>
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+                                    <label>接收消息手机号码<span class="am-form-group-label-tips">空则不发送、多个以英文逗号分隔[ , ]、最多增加10个号码</span></label>
+                                    <input type="text" name="admin_new_user_audit_sms_mobile" placeholder="接收消息手机号码" maxlength="110" data-validation-message="接收消息手机号码、最多10个号码" class="am-radius" {{if !empty($data['admin_new_user_audit_sms_mobile'])}} value="{{$data.admin_new_user_audit_sms_mobile}}"{{/if}} />
+                                </div>
+                            </div>
+                            <!-- 邮件模板 -->
+                            <div data-tab-panel-1 class="am-tab-panel">
+                                <div class="am-form-group">
+                                    <label class="am-block">开启新用户待审邮件通知</label>
+                                    <input name="is_admin_new_user_audit_email_notice" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_admin_new_user_audit_email_notice']) and $data['is_admin_new_user_audit_email_notice'] eq 1}}checked="true"{{/if}} />
+                                </div>
+                                <div class="am-form-group">
+                                    <label>新用户待审邮件模板<span class="am-form-group-label-tips">空则不发送</span></label>
+                                    <textarea id="admin_new_user_audit_email_template" name="admin_new_user_audit_email_template">{{if !empty($data['admin_new_user_audit_email_template'])}}{{$data.admin_new_user_audit_email_template}}{{/if}}</textarea>
+                                </div>
+                                <div class="am-form-group">
+                                    <label>接收消息邮箱<span class="am-form-group-label-tips">空则不发送、多个以英文逗号分隔[ , ]</span></label>
+                                    <input type="text" name="admin_new_user_audit_email_accounts" placeholder="接收消息邮箱" maxlength="200" data-validation-message="接收消息邮箱格式最多200个字符" class="am-radius" {{if !empty($data['admin_new_user_audit_email_accounts'])}} value="{{$data.admin_new_user_audit_email_accounts}}"{{/if}} />
+                                </div>
+
+                                <!-- 新用户待审邮件变量标识符 -->
+                                <p><strong class="am-text-warning">新用户待审邮件变量标识符：</strong></p>
+                                <ul data-am-widget="gallery" class="am-gallery am-avg-sm-2 am-avg-md-3 am-avg-lg-4 am-gallery-bordered am-padding-0">
+                                    {{foreach $user_audit_email_var_fields as $v}}
+                                        <li>
+                                            <div class="am-gallery-item am-radius">
+                                                <span>{{$v.name}}</span>
+                                                <strong>${{{$v.field}}}</strong>
+                                                <a href="javascript:;" data-value="${{{$v.field}}}" class="am-icon-copy text-copy-submit am-fr am-margin-right-xs"></a>
+                                            </div>
+                                        </li>
+                                    {{/foreach}}
+                                </ul>
+                            </div>
+                            <!-- 语音模板 -->
+                            <div data-tab-panel-1 class="am-tab-panel">
+                                <div class="am-form-group">
+                                    <label class="am-block">开启新用户待审语音通知</label>
+                                    <input name="is_admin_new_user_audit_voice_notice" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_admin_new_user_audit_voice_notice']) and $data['is_admin_new_user_audit_voice_notice'] eq 1}}checked="true"{{/if}} />
+                                </div>
+                                <div class="am-form-group">
+                                    <label>新用户待审语音模板<span class="am-form-group-label-tips">空则不发送</span></label>
+                                    <input type="text" name="admin_new_user_audit_voice_template" placeholder="新用户待审语音模板" maxlength="60" data-validation-message="新用户待审语音模板格式最多 60 个字符" class="am-radius" {{if !empty($data['admin_new_user_audit_voice_template'])}} value="{{$data.admin_new_user_audit_voice_template}}"{{/if}} />
+                                    <div class="am-alert">
+                                        <p><strong class="am-text-warning">参考模板内容：</strong></p>
+                                        <p>
+                                            <span class="text-copy-submit">您有新用户了，请及时审核</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 管理员新问答通知相关配置 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">管理员新问答通知相关配置</h3>
+                </div>
+                <div class="am-panel-bd">
+                    <div data-am-widget="tabs" class="am-tabs am-tabs-d2 am-radius am-margin-0" data-am-tabs="{noSwipe: 1}">
+                        <ul class="am-tabs-nav am-cf">
+                            <li class="am-active">
+                                <a href="[data-tab-panel-0]">短信模板</a>
+                            </li>
+                            <li>
+                                <a href="[data-tab-panel-1]">邮件模板</a>
+                            </li>
+                            <li>
+                                <a href="[data-tab-panel-2]">语音模板</a>
+                            </li>
+                        </ul>
+                        <!-- 短信模板 -->
+                        <div class="am-tabs-bd">
+                            <!-- 短信模板 -->
+                            <div data-tab-panel-0 class="am-tab-panel am-active">
+                                <div class="am-form-group">
+                                    <label class="am-block">开启新问答短信通知</label>
+                                    <input name="is_admin_new_ask_sms_notice" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_admin_new_ask_sms_notice']) and $data['is_admin_new_ask_sms_notice'] eq 1}}checked="true"{{/if}} />
+                                </div>
+                                <div class="am-form-group">
+                                    <label>新问答短信模板ID<span class="am-form-group-label-tips">空则不发送、变量标识符 [ 用户展示名称 user_name_view ]</span></label>
+                                    <input type="text" name="admin_new_ask_sms_template" placeholder="新问答短信模板ID" maxlength="30" data-validation-message="新问答短信模板ID格式最多 30 个字符" class="am-radius" {{if !empty($data['admin_new_ask_sms_template'])}} value="{{$data.admin_new_ask_sms_template}}"{{/if}} />
+                                    <div class="am-alert">
+                                        <p><strong class="am-text-warning">参考模板内容：</strong></p>
+                                        <p>用户[${user_name_view}]提交了问答、请尽快回复！</p>
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+                                    <label>接收消息手机号码<span class="am-form-group-label-tips">空则不发送、多个以英文逗号分隔[ , ]、最多增加10个号码</span></label>
+                                    <input type="text" name="admin_new_ask_sms_mobile" placeholder="接收消息手机号码" maxlength="110" data-validation-message="接收消息手机号码、最多10个号码" class="am-radius" {{if !empty($data['admin_new_ask_sms_mobile'])}} value="{{$data.admin_new_ask_sms_mobile}}"{{/if}} />
+                                </div>
+                            </div>
+                            <!-- 邮件模板 -->
+                            <div data-tab-panel-1 class="am-tab-panel">
+                                <div class="am-form-group">
+                                    <label class="am-block">开启新问答邮件通知</label>
+                                    <input name="is_admin_new_ask_email_notice" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_admin_new_ask_email_notice']) and $data['is_admin_new_ask_email_notice'] eq 1}}checked="true"{{/if}} />
+                                </div>
+                                <div class="am-form-group">
+                                    <label>新问答邮件模板<span class="am-form-group-label-tips">空则不发送、多个以英文逗号分隔[ , ]</span></label>
+                                    <textarea id="admin_new_ask_email_template" name="admin_new_ask_email_template">{{if !empty($data['admin_new_ask_email_template'])}}{{$data.admin_new_ask_email_template}}{{/if}}</textarea>
+                                </div>
+                                <div class="am-form-group">
+                                    <label>接收消息邮箱<span class="am-form-group-label-tips">空则不发送、多个以英文逗号分隔[ , ]</span></label>
+                                    <input type="text" name="admin_new_ask_email_accounts" placeholder="接收消息邮箱" maxlength="200" data-validation-message="接收消息邮箱格式最多200个字符" class="am-radius" {{if !empty($data['admin_new_ask_email_accounts'])}} value="{{$data.admin_new_ask_email_accounts}}"{{/if}} />
+                                </div>
+
+                                <!-- 新问答邮件变量标识符 -->
+                                <p><strong class="am-text-warning">新问答邮件变量标识符：</strong></p>
+                                <ul data-am-widget="gallery" class="am-gallery am-avg-sm-2 am-avg-md-3 am-avg-lg-4 am-gallery-bordered am-padding-0">
+                                    {{foreach $ask_email_var_fields as $v}}
+                                        <li>
+                                            <div class="am-gallery-item am-radius">
+                                                <span>{{$v.name}}</span>
+                                                <strong>${{{$v.field}}}</strong>
+                                                <a href="javascript:;" data-value="${{{$v.field}}}" class="am-icon-copy text-copy-submit am-fr am-margin-right-xs"></a>
+                                            </div>
+                                        </li>
+                                    {{/foreach}}
+                                </ul>
+                            </div>
+                            <!-- 语音模板 -->
+                            <div data-tab-panel-1 class="am-tab-panel">
+                                <div class="am-form-group">
+                                    <label class="am-block">开启新问答语音通知</label>
+                                    <input name="is_admin_new_ask_voice_notice" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_admin_new_ask_voice_notice']) and $data['is_admin_new_ask_voice_notice'] eq 1}}checked="true"{{/if}} />
+                                </div>
+                                <div class="am-form-group">
+                                    <label>新问答语音模板<span class="am-form-group-label-tips">空则不发送</span></label>
+                                    <input type="text" name="admin_new_ask_voice_template" placeholder="新问答语音模板" maxlength="60" data-validation-message="新问答语音模板格式最多 60 个字符" class="am-radius" {{if !empty($data['admin_new_ask_voice_template'])}} value="{{$data.admin_new_ask_voice_template}}"{{/if}} />
+                                    <div class="am-alert">
+                                        <p><strong class="am-text-warning">参考模板内容：</strong></p>
+                                        <p>
+                                            <span class="text-copy-submit">您有新问答了，请尽快回复</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--用户问答回复通知相关配置 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">用户问答回复通知相关配置</h3>
+                </div>
+                <div class="am-panel-bd">
+                    <div data-am-widget="tabs" class="am-tabs am-tabs-d2 am-radius am-margin-0" data-am-tabs="{noSwipe: 1}">
+                        <ul class="am-tabs-nav am-cf">
+                            <li class="am-active">
+                                <a href="[data-tab-panel-0]">短信模板</a>
+                            </li>
+                            <li>
+                                <a href="[data-tab-panel-1]">邮件模板</a>
+                            </li>
+                        </ul>
+                        <!-- 短信模板 -->
+                        <div class="am-tabs-bd">
+                            <!-- 短信模板 -->
+                            <div data-tab-panel-0 class="am-tab-panel am-active">
+                                <div class="am-form-group">
+                                    <label class="am-block">开启问答回复短信通知</label>
+                                    <input name="is_user_ask_reply_sms_notice" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_user_ask_reply_sms_notice']) and $data['is_user_ask_reply_sms_notice'] eq 1}}checked="true"{{/if}} />
+                                </div>
+                                <div class="am-form-group">
+                                    <label>问答回复短信模板ID<span class="am-form-group-label-tips">空则不发送、变量标识符 [ 站点名称 site_name ]</span></label>
+                                    <input type="text" name="user_ask_reply_sms_template" placeholder="问答回复短信模板ID" maxlength="30" data-validation-message="问答回复短信模板ID格式最多 30 个字符" class="am-radius" {{if !empty($data['user_ask_reply_sms_template'])}} value="{{$data.user_ask_reply_sms_template}}"{{/if}} />
+                                    <div class="am-alert">
+                                        <p><strong class="am-text-warning">参考模板内容：</strong></p>
+                                        <p>您在${site_name}平台的问答已回复，请登录问答中心查看！</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 邮件模板 -->
+                            <div data-tab-panel-1 class="am-tab-panel">
+                                <div class="am-form-group">
+                                    <label class="am-block">开启问答回复邮件通知</label>
+                                    <input name="is_user_ask_reply_email_notice" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_user_ask_reply_email_notice']) and $data['is_user_ask_reply_email_notice'] eq 1}}checked="true"{{/if}} />
+                                </div>
+                                <div class="am-form-group">
+                                    <label>问答回复邮件模板<span class="am-form-group-label-tips">空则不发送</span></label>
+                                    <textarea id="user_ask_reply_email_template" name="user_ask_reply_email_template">{{if !empty($data['user_ask_reply_email_template'])}}{{$data.user_ask_reply_email_template}}{{/if}}</textarea>
+                                </div>
+
+                                <!-- 问答回复变量标识符 -->
+                                <p><strong class="am-text-warning">问答回复邮件变量标识符：</strong></p>
+                                <ul data-am-widget="gallery" class="am-gallery am-avg-sm-2 am-avg-md-3 am-avg-lg-4 am-gallery-bordered am-padding-0">
+                                    {{foreach $ask_email_var_fields as $v}}
+                                        <li>
+                                            <div class="am-gallery-item am-radius">
+                                                <span>{{$v.name}}</span>
+                                                <strong>${{{$v.field}}}</strong>
+                                                <a href="javascript:;" data-value="${{{$v.field}}}" class="am-icon-copy text-copy-submit am-fr am-margin-right-xs"></a>
+                                            </div>
+                                        </li>
+                                    {{/foreach}}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--用户问答评论通知相关配置 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">用户问答评论通知相关配置</h3>
+                </div>
+                <div class="am-panel-bd">
+                    <div data-am-widget="tabs" class="am-tabs am-tabs-d2 am-radius am-margin-0" data-am-tabs="{noSwipe: 1}">
+                        <ul class="am-tabs-nav am-cf">
+                            <li class="am-active">
+                                <a href="[data-tab-panel-0]">短信模板</a>
+                            </li>
+                            <li>
+                                <a href="[data-tab-panel-1]">邮件模板</a>
+                            </li>
+                        </ul>
+                        <!-- 短信模板 -->
+                        <div class="am-tabs-bd">
+                            <!-- 短信模板 -->
+                            <div data-tab-panel-0 class="am-tab-panel am-active">
+                                <div class="am-form-group">
+                                    <label class="am-block">开启问答评论短信通知</label>
+                                    <input name="is_user_ask_comments_sms_notice" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_user_ask_comments_sms_notice']) and $data['is_user_ask_comments_sms_notice'] eq 1}}checked="true"{{/if}} />
+                                </div>
+                                <div class="am-form-group">
+                                    <label>问答评论短信模板ID<span class="am-form-group-label-tips">空则不发送、变量标识符 [ 站点名称 site_name ]</span></label>
+                                    <input type="text" name="user_ask_comments_sms_template" placeholder="问答评论短信模板ID" maxlength="30" data-validation-message="问答评论短信模板ID格式最多 30 个字符" class="am-radius" {{if !empty($data['user_ask_comments_sms_template'])}} value="{{$data.user_ask_comments_sms_template}}"{{/if}} />
+                                    <div class="am-alert">
+                                        <p><strong class="am-text-warning">参考模板内容：</strong></p>
+                                        <p>您在${site_name}平台的评论有人回复，请登录问答中心查看！</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 邮件模板 -->
+                            <div data-tab-panel-1 class="am-tab-panel">
+                                <div class="am-form-group">
+                                    <label class="am-block">开启问答评论邮件通知</label>
+                                    <input name="is_user_ask_comments_email_notice" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_user_ask_comments_email_notice']) and $data['is_user_ask_comments_email_notice'] eq 1}}checked="true"{{/if}} />
+                                </div>
+                                <div class="am-form-group">
+                                    <label>问答评论邮件模板<span class="am-form-group-label-tips">空则不发送</span></label>
+                                    <textarea id="user_ask_comments_email_template" name="user_ask_comments_email_template">{{if !empty($data['user_ask_comments_email_template'])}}{{$data.user_ask_comments_email_template}}{{/if}}</textarea>
+                                </div>
+
+                                <!-- 问答评论变量标识符 -->
+                                <p><strong class="am-text-warning">问答评论邮件变量标识符：</strong></p>
+                                <ul data-am-widget="gallery" class="am-gallery am-avg-sm-2 am-avg-md-3 am-avg-lg-4 am-gallery-bordered am-padding-0">
+                                    {{foreach $ask_comments_email_var_fields as $v}}
+                                        <li>
+                                            <div class="am-gallery-item am-radius">
+                                                <span>{{$v.name}}</span>
+                                                <strong>${{{$v.field}}}</strong>
+                                                <a href="javascript:;" data-value="${{{$v.field}}}" class="am-icon-copy text-copy-submit am-fr am-margin-right-xs"></a>
+                                            </div>
+                                        </li>
+                                    {{/foreach}}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="am-form-popup-submit">
+                <a href="{{:PluginsAdminUrl('messagenotice', 'admin', 'index', $params)}}" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg">
+                    <i class="am-icon-mail-reply"></i>
+                    <span>{{:MyLang('retreat_title')}}</span>
+                </a>
+                <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('save_title')}}'}">
+                    <i class="am-icon-save"></i>
+                    <span>{{:MyLang('save_title')}}</span>
+                </button>
+            </div>
+        </form>
+        <!-- form end -->
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

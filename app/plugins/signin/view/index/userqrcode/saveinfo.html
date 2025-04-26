@@ -1,0 +1,81 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- header top nav -->
+{{:ModuleInclude('public/header_top_nav')}}
+
+<!-- search -->
+{{:ModuleInclude('public/nav_search')}}
+
+<!-- header nav -->
+{{:ModuleInclude('public/header_nav')}}
+
+<!-- goods category -->
+{{:ModuleInclude('public/goods_category')}}
+
+<!-- content -->
+<div class="am-container user-main">
+
+    <!-- user menu start -->
+    {{:ModuleInclude('public/user_menu')}}
+    <!-- user menu end -->
+
+    <!-- content start -->
+    <div class="user-content">
+        <div class="user-content-body">
+            <!-- form start -->
+            <form class="am-form form-validation am-form-full-screen am-form-popup-sticky" action="{{:PluginsHomeUrl('signin', 'userqrcode', 'save')}}" method="POST" request-type="ajax-url" request-value="{{:PluginsHomeUrl('signin', 'userqrcode', 'index', $form_back_params)}}" enctype="multipart/form-data">
+                {{:ModuleInclude('public/admin_nav', [
+                    'title'     => '签到码'.(empty($data['id']) ? MyLang('created_title') : MyLang('edit_title')),
+                    'back_url'  => $form_back_url
+                ])}}
+
+                <!-- 积分奖励 -->
+                <div class="am-form-group">
+                    <label>邀请人奖励积分</label>
+                    <input type="number" name="reward_master" placeholder="邀请人奖励积分" class="am-radius" value="{{if !empty($data['reward_master'])}}{{$data.reward_master}}{{else /}}{{if !empty($plugins_config['reward_master'])}}{{$plugins_config.reward_master}}{{else /}}1{{/if}}{{/if}}" disabled />
+                </div>
+                <div class="am-form-group">
+                    <label>受邀人奖励积分</label>
+                    <input type="number" name="reward_invitee" placeholder="受邀人奖励积分" class="am-radius" value="{{if !empty($data['reward_invitee'])}}{{$data.reward_invitee}}{{else /}}{{if !empty($plugins_config['reward_invitee'])}}{{$plugins_config.reward_invitee}}{{else /}}1{{/if}}{{/if}}" disabled />
+                </div>
+
+                <!-- 联系人信息 -->
+                {{if isset($plugins_config['is_qrcode_must_userinfo']) and $plugins_config['is_qrcode_must_userinfo'] eq 1}}
+                    <div class="am-form-group">
+                        <label>联系人<span class="am-form-group-label-tips-must">*</span></label>
+                        <input type="text" name="name" placeholder="联系人" maxlength="30" data-validation-message="请填写联系人、最多30个字符" class="am-radius" value="{{if !empty($data['name'])}}{{$data.name}}{{/if}}" required />
+                    </div>
+                    <div class="am-form-group">
+                        <label>联系电话<span class="am-form-group-label-tips-must">*</span></label>
+                        <input type="text" name="tel" placeholder="联系电话" maxlength="15" data-validation-message="请填写联电话、最多15个字符" class="am-radius" value="{{if !empty($data['tel'])}}{{$data.tel}}{{/if}}" required />
+                    </div>
+                    <div class="am-form-group">
+                        <label>联系地址<span class="am-form-group-label-tips-must">*</span></label>
+                        <input type="text" name="address" placeholder="联系地址" maxlength="230" data-validation-message="请填写联系地址、最多230个字符" class="am-radius" value="{{if !empty($data['address'])}}{{$data.address}}{{/if}}" required />
+                    </div>
+                {{/if}}
+                <div class="am-form-group">
+                    <label>备注</label>
+                    <input type="text" name="note" placeholder="备注" maxlength="30" data-validation-message="请填写备注、最多30个字符" class="am-radius" value="{{if !empty($data['note'])}}{{$data.note}}{{/if}}" />
+                </div>
+
+                <div class="am-form-popup-submit">
+                    <input type="hidden" name="id" {{if !empty($data['id'])}} value="{{$data.id}}"{{/if}} />
+                    <a href="{{:PluginsHomeUrl('signin', 'userqrcode', 'index', $form_back_params)}}" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg">
+                        <i class="am-icon-mail-reply"></i>
+                        <span>{{:MyLang('retreat_title')}}</span>
+                    </a>
+                    <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('save_title')}}'}">
+                        <i class="am-icon-save"></i>
+                        <span>{{:MyLang('save_title')}}</span>
+                    </button>
+                </div>
+            </form>
+            <!-- form end -->
+        </div>
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

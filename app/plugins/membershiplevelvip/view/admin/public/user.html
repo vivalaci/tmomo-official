@@ -1,0 +1,11 @@
+{{if !empty($level_list)}}
+    <div class="am-form-group">
+        <label>会员等级增强版</label>
+        <select name="plugins_user_level" class="am-radius chosen-select" data-placeholder="{{:MyLang('please_select_tips')}}" data-validation-message="请选择会员等级增强版">
+            <option value="">{{:MyLang('please_select_tips')}}</option>
+            {{foreach $level_list as $v}}
+                <option value="{{$v.id}}" {{if isset($user_data['plugins_user_level']) and $user_data['plugins_user_level'] eq $v['id']}}selected{{/if}}>{{$v.name}}</option>
+            {{/foreach}}
+        </select>
+    </div>
+{{/if}}

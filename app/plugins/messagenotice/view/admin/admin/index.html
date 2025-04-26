@@ -1,0 +1,891 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'messagenotice',
+            'nav_data'  => $plugins_nav_menu_list,
+        ])}}
+
+        <div class="messagenotice-content am-padding-bottom-xs">
+            <!-- 操作提示 -->
+            <div class="am-operate-stretch-tips">
+                <div class="title">
+                    <i class="iconfont icon-tips"></i>
+                    <strong title="{{:MyLang('operate_list_tips_msg')}}">{{:MyLang('operate_list_tips_button_text')}}</strong>
+                    <i class="iconfont icon-contract contract" title="{{:MyLang('operate_list_tips_retract_text')}}"></i> 
+                </div>
+                <p>1. 请到后台站点设置中【短信设置、邮箱设置】配置好基础信息后再开启使用</p>
+                <p>2. 用户短信通知（手机号码提取规则：订单地址手机(订单业务) -> 用户绑定的手机）</p>
+                <p>3. 用户邮件通知（使用用户绑定的邮箱地址）</p>
+                <p>4. 语音通知设备可以在商店购买（<a href="https://store.shopxo.net/goods-279.html" target="_blank">去购买 >></a>）</p>
+            </div>
+
+            <!-- 基础配置 -->
+            <div class="am-panel am-radius am-panel-default messagenotice-content-base">
+                <div class="am-panel-hd">
+                    <span class="am-panel-title">{{:MyLang('base_config_title')}}</span>
+                    <a class="am-margin-left-lg" href="{{:PluginsAdminUrl('messagenotice', 'admin', 'saveinfo')}}">
+                        <i class="am-icon-edit"></i>
+                        <span>{{:MyLang('edit_title')}}</span>
+                    </a>
+                </div>
+                <div class="am-panel-bd">
+                    <!-- 基础配置-短信 -->
+                    <h2 class="am-margin-bottom-xs">{{:MyLang('base_config_title')}} - 短信</h2>
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>短信签名</label>
+                                <div>
+                                    {{if !empty($data['sms_sign'])}}
+                                        {{:MyLang('already_setup_tips')}}[ {{$data.sms_sign}} ]
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、使用系统默认签名
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <!-- 基础配置-语音 -->
+                    <h2 class="am-margin-bottom-xs">{{:MyLang('base_config_title')}} - 语音</h2>
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>应用ID</label>
+                                <div>
+                                    {{if !empty($data['partner_id'])}}
+                                        {{:MyLang('already_setup_tips')}}[ {{$data.partner_id}} ]
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>应用Secret</label>
+                                <div>
+                                    {{if !empty($data['partner_secret'])}}
+                                        {{:MyLang('already_setup_tips')}}[ {{$data.partner_secret}} ]
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>设备ID</label>
+                                <div>
+                                    {{if !empty($data['device_id'])}}
+                                        {{:MyLang('already_setup_tips')}}[ {{$data.device_id}} ]
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <!-- 用户站内消息邮件通知 -->
+                    <h2 class="am-margin-bottom-xs am-margin-top-xl">用户站内消息邮件通知</h2>
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启站内消息邮件通知</label>
+                                <div>
+                                    {{if isset($data['is_message_email_notice']) and $data['is_message_email_notice'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>站内消息邮件通知</label>
+                                <div>
+                                    {{if !empty($data['message_email_template'])}}
+                                        {{:MyLang('already_setup_tips')}}[ <a href="javascript:;" data-am-modal="{target: '#popup-message-email'}">{{:MyLang('view_title')}}</a> ]
+                                        <div class="am-popup am-radius" id="popup-message-email">
+                                            <div class="am-popup-inner">
+                                            <div class="am-popup-hd">
+                                                    <h4 class="am-popup-title">邮件模板</h4>
+                                                    <span data-am-modal-close class="am-close">&times;</span>
+                                                </div>
+                                            <div class="am-popup-bd">
+                                                {{$data.message_email_template|raw}}
+                                            </div>
+                                        </div>
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <!-- 用户订单通知相关配置 - 短信模板 -->
+                    <h2 class="am-margin-bottom-xs am-margin-top-xl">用户订单通知相关配置 - 短信模板</h2>
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启订单短信通知</label>
+                                <div>
+                                    {{if isset($data['is_order_sms_notice']) and $data['is_order_sms_notice'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>订单待支付</label>
+                                <div>
+                                    {{if !empty($data['order_await_pay_sms_template'])}}
+                                        {{:MyLang('already_setup_tips')}}[ {{$data.order_await_pay_sms_template}} ]
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>订单支付成功（快递订单）</label>
+                                <div>
+                                    {{if !empty($data['order_pay_success_sms_template'])}}
+                                        {{:MyLang('already_setup_tips')}}[ {{$data.order_pay_success_sms_template}} ]
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>订单支付成功（自提订单）</label>
+                                <div>
+                                    {{if !empty($data['order_pay_success_extraction_sms_template'])}}
+                                        {{:MyLang('already_setup_tips')}}[ {{$data.order_pay_success_extraction_sms_template}} ]
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>订单支付成功（虚拟订单）</label>
+                                <div>
+                                    {{if !empty($data['order_pay_success_fictitious_sms_template'])}}
+                                        {{:MyLang('already_setup_tips')}}[ {{$data.order_pay_success_fictitious_sms_template}} ]
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>订单发货（快递订单）</label>
+                                <div>
+                                    {{if !empty($data['order_delivery_sms_template'])}}
+                                        {{:MyLang('already_setup_tips')}}[ {{$data.order_delivery_sms_template}} ]
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>订单发货（自提订单）</label>
+                                <div>
+                                    {{if !empty($data['order_delivery_extraction_sms_template'])}}
+                                        {{:MyLang('already_setup_tips')}}[ {{$data.order_delivery_extraction_sms_template}} ]
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>订单收货完成</label>
+                                <div>
+                                    {{if !empty($data['order_collect_sms_template'])}}
+                                        {{:MyLang('already_setup_tips')}}[ {{$data.order_collect_sms_template}} ]
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>订单取消/关闭</label>
+                                <div>
+                                    {{if !empty($data['order_close_sms_template'])}}
+                                        {{:MyLang('already_setup_tips')}}[ {{$data.order_close_sms_template}} ]
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <!-- 用户订单通知相关配置 - 邮件模板 -->
+                    <h2 class="am-margin-bottom-xs am-margin-top-lg">用户订单通知相关配置 - 邮件模板</h2>
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启订单邮件通知</label>
+                                <div>
+                                    {{if isset($data['is_order_email_notice']) and $data['is_order_email_notice'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>订单待支付</label>
+                                <div>
+                                    {{if !empty($data['order_await_pay_email_template'])}}
+                                        {{:MyLang('already_setup_tips')}}[ <a href="javascript:;" data-am-modal="{target: '#popup-order-await-pay-email'}">{{:MyLang('view_title')}}</a> ]
+                                        <div class="am-popup am-radius" id="popup-order-await-pay-email">
+                                            <div class="am-popup-inner">
+                                                <div class="am-popup-hd">
+                                                    <h4 class="am-popup-title">邮件模板</h4>
+                                                    <span data-am-modal-close class="am-close">&times;</span>
+                                                </div>
+                                                <div class="am-popup-bd">
+                                                    {{$data.order_await_pay_email_template|raw}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>订单支付成功（快递订单）</label>
+                                <div>
+                                    {{if !empty($data['order_pay_success_email_template'])}}
+                                        {{:MyLang('already_setup_tips')}}[ <a href="javascript:;" data-am-modal="{target: '#popup-order-pay-success-email'}">{{:MyLang('view_title')}}</a> ]
+                                        <div class="am-popup am-radius" id="popup-order-pay-success-email">
+                                            <div class="am-popup-inner">
+                                                <div class="am-popup-hd">
+                                                    <h4 class="am-popup-title">邮件模板</h4>
+                                                    <span data-am-modal-close class="am-close">&times;</span>
+                                                </div>
+                                                <div class="am-popup-bd">
+                                                    {{$data.order_pay_success_email_template|raw}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>订单支付成功（自提订单）</label>
+                                <div>
+                                    {{if !empty($data['order_pay_success_extraction_email_template'])}}
+                                        {{:MyLang('already_setup_tips')}}[ <a href="javascript:;" data-am-modal="{target: '#popup-order-pay-success-extraction-email'}">{{:MyLang('view_title')}}</a> ]
+                                        <div class="am-popup am-radius" id="popup-order-pay-success-extraction-email">
+                                            <div class="am-popup-inner">
+                                                <div class="am-popup-hd">
+                                                    <h4 class="am-popup-title">邮件模板</h4>
+                                                    <span data-am-modal-close class="am-close">&times;</span>
+                                                </div>
+                                                <div class="am-popup-bd">
+                                                    {{$data.order_pay_success_extraction_email_template|raw}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>订单支付成功（虚拟订单）</label>
+                                <div>
+                                    {{if !empty($data['order_pay_success_fictitious_email_template'])}}
+                                        {{:MyLang('already_setup_tips')}}[ <a href="javascript:;" data-am-modal="{target: '#popup-order-pay-success-fictitious-email'}">{{:MyLang('view_title')}}</a> ]
+                                        <div class="am-popup am-radius" id="popup-order-pay-success-fictitious-email">
+                                            <div class="am-popup-inner">
+                                                <div class="am-popup-hd">
+                                                    <h4 class="am-popup-title">邮件模板</h4>
+                                                    <span data-am-modal-close class="am-close">&times;</span>
+                                                </div>
+                                                <div class="am-popup-bd">
+                                                    {{$data.order_pay_success_fictitious_email_template|raw}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>订单发货（快递订单）</label>
+                                <div>
+                                    {{if !empty($data['order_delivery_email_template'])}}
+                                        {{:MyLang('already_setup_tips')}}[ <a href="javascript:;" data-am-modal="{target: '#popup-order-delivery-email'}">{{:MyLang('view_title')}}</a> ]
+                                        <div class="am-popup am-radius" id="popup-order-delivery-email">
+                                            <div class="am-popup-inner">
+                                                <div class="am-popup-hd">
+                                                    <h4 class="am-popup-title">邮件模板</h4>
+                                                    <span data-am-modal-close class="am-close">&times;</span>
+                                                </div>
+                                                <div class="am-popup-bd">
+                                                    {{$data.order_delivery_email_template|raw}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>订单发货（自提订单）</label>
+                                <div>
+                                    {{if !empty($data['order_delivery_extraction_email_template'])}}
+                                        {{:MyLang('already_setup_tips')}}[ <a href="javascript:;" data-am-modal="{target: '#popup-order-delivery-extraction-email'}">{{:MyLang('view_title')}}</a> ]
+                                        <div class="am-popup am-radius" id="popup-order-delivery-extraction-email">
+                                            <div class="am-popup-inner">
+                                                <div class="am-popup-hd">
+                                                    <h4 class="am-popup-title">邮件模板</h4>
+                                                    <span data-am-modal-close class="am-close">&times;</span>
+                                                </div>
+                                                <div class="am-popup-bd">
+                                                    {{$data.order_delivery_extraction_email_template|raw}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>订单收货完成</label>
+                                <div>
+                                    {{if !empty($data['order_collect_email_template'])}}
+                                        {{:MyLang('already_setup_tips')}}[ <a href="javascript:;" data-am-modal="{target: '#popup-order-collect-email'}">{{:MyLang('view_title')}}</a> ]
+                                        <div class="am-popup am-radius" id="popup-order-collect-email">
+                                            <div class="am-popup-inner">
+                                                <div class="am-popup-hd">
+                                                    <h4 class="am-popup-title">邮件模板</h4>
+                                                    <span data-am-modal-close class="am-close">&times;</span>
+                                                </div>
+                                                <div class="am-popup-bd">
+                                                    {{$data.order_collect_email_template|raw}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>订单取消/关闭</label>
+                                <div>
+                                    {{if !empty($data['order_close_email_template'])}}
+                                        {{:MyLang('already_setup_tips')}}[ <a href="javascript:;" data-am-modal="{target: '#popup-order-close-email'}">{{:MyLang('view_title')}}</a> ]
+                                        <div class="am-popup am-radius" id="popup-order-close-email">
+                                            <div class="am-popup-inner">
+                                                <div class="am-popup-hd">
+                                                    <h4 class="am-popup-title">邮件模板</h4>
+                                                    <span data-am-modal-close class="am-close">&times;</span>
+                                                </div>
+                                                <div class="am-popup-bd">
+                                                    {{$data.order_close_email_template|raw}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <!-- 管理员新订单通知相关配置 - 短信模板 -->
+                    <h2 class="am-margin-bottom-xs am-margin-top-xl">管理员新订单通知相关配置 - 短信模板</h2>
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启新订单短信通知</label>
+                                <div>
+                                    {{if isset($data['is_admin_new_order_sms_notice']) and $data['is_admin_new_order_sms_notice'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>新订单短信模板ID</label>
+                                <div>
+                                    {{if !empty($data['admin_new_order_sms_template'])}}
+                                        {{:MyLang('already_setup_tips')}}[ {{$data.admin_new_order_sms_template}} ]
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>接收消息手机号码</label>
+                                <div>
+                                    {{if !empty($data['admin_new_order_sms_mobile'])}}
+                                        {{:MyLang('already_setup_tips')}}[ {{$data.admin_new_order_sms_mobile}} ]
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <!-- 管理员新订单通知相关配置 - 邮件模板 -->
+                    <h2 class="am-margin-bottom-xs am-margin-top-lg">管理员新订单通知相关配置 - 邮件模板</h2>
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启新订单邮件通知</label>
+                                <div>
+                                    {{if isset($data['is_admin_new_order_email_notice']) and $data['is_admin_new_order_email_notice'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>新订单邮件模板</label>
+                                <div>
+                                    {{if !empty($data['admin_new_order_email_template'])}}
+                                        {{:MyLang('already_setup_tips')}}[ <a href="javascript:;" data-am-modal="{target: '#popup-admin-new-order-email'}">{{:MyLang('view_title')}}</a> ]
+                                        <div class="am-popup am-radius" id="popup-admin-new-order-email">
+                                            <div class="am-popup-inner">
+                                                <div class="am-popup-hd">
+                                                    <h4 class="am-popup-title">邮件模板</h4>
+                                                    <span data-am-modal-close class="am-close">&times;</span>
+                                                </div>
+                                                <div class="am-popup-bd">
+                                                    {{$data.admin_new_order_email_template|raw}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>接收消息邮箱</label>
+                                <div>
+                                    {{if !empty($data['admin_new_order_email_accounts'])}}
+                                        {{:MyLang('already_setup_tips')}}[ {{$data.admin_new_order_email_accounts}} ]
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <!-- 管理员新订单通知相关配置 - 语音模板 -->
+                    <h2 class="am-margin-bottom-xs am-margin-top-lg">管理员新订单通知相关配置 - 语音模板</h2>
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启新订单语音通知</label>
+                                <div>
+                                    {{if isset($data['is_admin_new_order_voice_notice']) and $data['is_admin_new_order_voice_notice'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>新订单语音模板</label>
+                                <div>
+                                    {{if !empty($data['admin_new_order_voice_template'])}}
+                                        {{:MyLang('already_setup_tips')}}[ {{$data.admin_new_order_voice_template}} ]
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <!-- 管理员新用户待审通知相关配置 - 短信模板 -->
+                    <h2 class="am-margin-bottom-xs am-margin-top-xl">管理员新用户待审通知相关配置 - 短信模板</h2>
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启新用户待审短信通知</label>
+                                <div>
+                                    {{if isset($data['is_admin_new_user_audit_sms_notice']) and $data['is_admin_new_user_audit_sms_notice'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>新用户待审短信模板ID</label>
+                                <div>
+                                    {{if !empty($data['admin_new_user_audit_sms_template'])}}
+                                        {{:MyLang('already_setup_tips')}}[ {{$data.admin_new_user_audit_sms_template}} ]
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>接收消息手机号码</label>
+                                <div>
+                                    {{if !empty($data['admin_new_user_audit_sms_mobile'])}}
+                                        {{:MyLang('already_setup_tips')}}[ {{$data.admin_new_user_audit_sms_mobile}} ]
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <!-- 管理员新用户待审通知相关配置 - 邮件模板 -->
+                    <h2 class="am-margin-bottom-xs am-margin-top-lg">管理员新用户待审通知相关配置 - 邮件模板</h2>
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启新用户待审邮件通知</label>
+                                <div>
+                                    {{if isset($data['is_admin_new_user_audit_email_notice']) and $data['is_admin_new_user_audit_email_notice'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>新用户待审邮件模板</label>
+                                <div>
+                                    {{if !empty($data['admin_new_user_audit_email_template'])}}
+                                        {{:MyLang('already_setup_tips')}}[ <a href="javascript:;" data-am-modal="{target: '#popup-admin-new-user-audit-email'}">{{:MyLang('view_title')}}</a> ]
+                                        <div class="am-popup am-radius" id="popup-admin-new-user-audit-email">
+                                            <div class="am-popup-inner">
+                                                <div class="am-popup-hd">
+                                                    <h4 class="am-popup-title">邮件模板</h4>
+                                                    <span data-am-modal-close class="am-close">&times;</span>
+                                                </div>
+                                                <div class="am-popup-bd">
+                                                    {{$data.admin_new_user_audit_email_template|raw}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>接收消息邮箱</label>
+                                <div>
+                                    {{if !empty($data['admin_new_user_audit_email_accounts'])}}
+                                        {{:MyLang('already_setup_tips')}}[ {{$data.admin_new_user_audit_email_accounts}} ]
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <!-- 管理员新用户待审通知相关配置 - 语音模板 -->
+                    <h2 class="am-margin-bottom-xs am-margin-top-lg">管理员新用户待审通知相关配置 - 语音模板</h2>
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启新用户待审短信通知</label>
+                                <div>
+                                    {{if isset($data['is_admin_new_user_audit_voice_notice']) and $data['is_admin_new_user_audit_voice_notice'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>新用户待审语音模板</label>
+                                <div>
+                                    {{if !empty($data['admin_new_user_audit_voice_template'])}}
+                                        {{:MyLang('already_setup_tips')}}[ {{$data.admin_new_user_audit_voice_template}} ]
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <!-- 管理员新问答通知相关配置 - 短信模板 -->
+                    <h2 class="am-margin-bottom-xs am-margin-top-xl">管理员新问答通知相关配置 - 短信模板</h2>
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启新问答短信通知</label>
+                                <div>
+                                    {{if isset($data['is_admin_new_ask_sms_notice']) and $data['is_admin_new_ask_sms_notice'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>新问答短信模板ID</label>
+                                <div>
+                                    {{if !empty($data['admin_new_ask_sms_template'])}}
+                                        {{:MyLang('already_setup_tips')}}[ {{$data.admin_new_ask_sms_template}} ]
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>接收消息手机号码</label>
+                                <div>
+                                    {{if !empty($data['admin_new_ask_sms_mobile'])}}
+                                        {{:MyLang('already_setup_tips')}}[ {{$data.admin_new_ask_sms_mobile}} ]
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <!-- 管理员新问答通知相关配置 - 邮件模板 -->
+                    <h2 class="am-margin-bottom-xs am-margin-top-lg">管理员新问答通知相关配置 - 邮件模板</h2>
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启新问答邮件通知</label>
+                                <div>
+                                    {{if isset($data['is_admin_new_ask_email_notice']) and $data['is_admin_new_ask_email_notice'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>新问答邮件模板</label>
+                                <div>
+                                    {{if !empty($data['admin_new_ask_email_template'])}}
+                                        {{:MyLang('already_setup_tips')}}[ <a href="javascript:;" data-am-modal="{target: '#popup-admin-new-ask-email'}">{{:MyLang('view_title')}}</a> ]
+                                        <div class="am-popup am-radius" id="popup-admin-new-ask-email">
+                                            <div class="am-popup-inner">
+                                                <div class="am-popup-hd">
+                                                    <h4 class="am-popup-title">邮件模板</h4>
+                                                    <span data-am-modal-close class="am-close">&times;</span>
+                                                </div>
+                                                <div class="am-popup-bd">
+                                                    {{$data.admin_new_ask_email_template|raw}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>接收消息邮箱</label>
+                                <div>
+                                    {{if !empty($data['admin_new_ask_email_accounts'])}}
+                                        {{:MyLang('already_setup_tips')}}[ {{$data.admin_new_ask_email_accounts}} ]
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <!-- 管理员新问答通知相关配置 - 语音模板 -->
+                    <h2 class="am-margin-bottom-xs am-margin-top-lg">管理员新问答通知相关配置 - 语音模板</h2>
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启新问答短信通知</label>
+                                <div>
+                                    {{if isset($data['is_admin_new_ask_voice_notice']) and $data['is_admin_new_ask_voice_notice'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>新问答语音模板</label>
+                                <div>
+                                    {{if !empty($data['admin_new_ask_voice_template'])}}
+                                        {{:MyLang('already_setup_tips')}}[ {{$data.admin_new_ask_voice_template}} ]
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <!-- 用户问答回复通知相关配置 - 短信模板 -->
+                    <h2 class="am-margin-bottom-xs am-margin-top-xl">用户问答回复通知相关配置 - 短信模板</h2>
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启问答回复短信通知</label>
+                                <div>
+                                    {{if isset($data['is_user_ask_reply_sms_notice']) and $data['is_user_ask_reply_sms_notice'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>问答回复短信模板ID</label>
+                                <div>
+                                    {{if !empty($data['user_ask_reply_sms_template'])}}
+                                        {{:MyLang('already_setup_tips')}}[ {{$data.user_ask_reply_sms_template}} ]
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <!-- 用户问答回复通知相关配置 - 邮件模板 -->
+                    <h2 class="am-margin-bottom-xs am-margin-top-lg">用户问答回复通知相关配置 - 邮件模板</h2>
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启问答回复邮件通知</label>
+                                <div>
+                                    {{if isset($data['is_user_ask_reply_email_notice']) and $data['is_user_ask_reply_email_notice'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>问答回复邮件模板</label>
+                                <div>
+                                    {{if !empty($data['user_ask_reply_email_template'])}}
+                                        {{:MyLang('already_setup_tips')}}[ <a href="javascript:;" data-am-modal="{target: '#popup-user-ask-reply-email'}">{{:MyLang('view_title')}}</a> ]
+                                        <div class="am-popup am-radius" id="popup-user-ask-reply-email">
+                                            <div class="am-popup-inner">
+                                                <div class="am-popup-hd">
+                                                    <h4 class="am-popup-title">邮件模板</h4>
+                                                    <span data-am-modal-close class="am-close">&times;</span>
+                                                </div>
+                                                <div class="am-popup-bd">
+                                                    {{$data.user_ask_reply_email_template|raw}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+
+
+
+
+
+
+
+                    <!-- 用户问答评论通知相关配置 - 短信模板 -->
+                    <h2 class="am-margin-bottom-xs am-margin-top-xl">用户问答评论通知相关配置 - 短信模板</h2>
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启问答评论短信通知</label>
+                                <div>
+                                    {{if isset($data['is_user_ask_comments_sms_notice']) and $data['is_user_ask_comments_sms_notice'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>问答评论短信模板ID</label>
+                                <div>
+                                    {{if !empty($data['user_ask_comments_sms_template'])}}
+                                        {{:MyLang('already_setup_tips')}}[ {{$data.user_ask_comments_sms_template}} ]
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <!-- 用户问答评论通知相关配置 - 邮件模板 -->
+                    <h2 class="am-margin-bottom-xs am-margin-top-lg">用户问答评论通知相关配置 - 邮件模板</h2>
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启问答评论邮件通知</label>
+                                <div>
+                                    {{if isset($data['is_user_ask_comments_email_notice']) and $data['is_user_ask_comments_email_notice'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>问答评论邮件模板</label>
+                                <div>
+                                    {{if !empty($data['user_ask_comments_email_template'])}}
+                                        {{:MyLang('already_setup_tips')}}[ <a href="javascript:;" data-am-modal="{target: '#popup-user-ask-comments-email'}">{{:MyLang('view_title')}}</a> ]
+                                        <div class="am-popup am-radius" id="popup-user-ask-comments-email">
+                                            <div class="am-popup-inner">
+                                                <div class="am-popup-hd">
+                                                    <h4 class="am-popup-title">邮件模板</h4>
+                                                    <span data-am-modal-close class="am-close">&times;</span>
+                                                </div>
+                                                <div class="am-popup-bd">
+                                                    {{$data.user_ask_comments_email_template|raw}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

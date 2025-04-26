@@ -1,0 +1,166 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- header top nav -->
+{{:ModuleInclude('public/header_top_nav')}}
+
+<!-- header simple nav -->
+{{:ModuleInclude('public/header_nav_simple', [
+    'search' => 1,
+])}}
+
+<!-- content -->
+<div class="am-container user-main">
+    <!-- user menu start -->
+    {{:ModuleInclude('public/user_menu')}}
+    <!-- user menu end -->
+
+    <!-- content start -->
+    <div class="user-content">
+        <div class="user-content-body plugins-coupon">
+            <!-- user center title -->
+            {{:ModuleInclude('public/user_center_main_title')}}
+            
+            <div class="am-tabs am-margin-0 am-border-0" data-am-tabs="{noSwipe: 1}">
+                <ul class="am-tabs-nav am-cf am-nav am-nav-tabs am-margin-0">
+                    <li class="am-active"><a href="javascript: void(0);">{{:MyLang('unused_name')}}</a></li>
+                    <li><a href="javascript: void(0);">{{:MyLang('used_name')}}</a></li>
+                    <li><a href="javascript: void(0);">{{:MyLang('expired_name')}}</a></li>
+                </ul>
+                <div class="am-tabs-bd">
+                    <div class="am-tab-panel am-active not-use-items am-padding-main">
+                        <!-- 未使用 -->
+                        {{if !empty($coupon_list['not_use'])}}
+                            <ul class="am-avg-sm-1 am-avg-md-2 plugins-coupon-items">
+                                {{foreach $coupon_list.not_use as $v}}
+                                    <li data-coupon-user-id="{{$v.id}}" data-coupon-id="{{$v.coupon_id}}">
+                                        <div class="item am-cf" {{if !empty($v['coupon']['bg_color_value'])}}style="border:1px solid {{$v.coupon.bg_color_value}}"{{/if}}>
+                                            <div class="v-left-border" {{if !empty($v.coupon['bg_color_value'])}}style="background: linear-gradient(135deg, transparent, transparent 40%, {{$v.coupon.bg_color_value}}, transparent 60%, transparent 100%), linear-gradient(45deg, transparent, transparent 40%, {{$v.coupon.bg_color_value}}, transparent 60%, transparent 100%);background-size: 1rem 1.5rem;
+                                            "{{/if}}></div>
+                                            <div class="v-left-point v-point-background-white"></div>
+                                            <div class="v-left am-fl am-padding-left-sm am-padding-top-sm am-padding-bottom-sm">
+                                                <div class="v-left-center-border" {{if !empty($v.coupon['bg_color_value'])}}style="background-image: radial-gradient(circle at right top, {{$v.coupon.bg_color_value}}, {{$v.coupon.bg_color_value}} 1.15rem, transparent 1.18rem), radial-gradient(circle at right bottom, {{$v.coupon.bg_color_value}}, {{$v.coupon.bg_color_value}} 1.15rem, transparent 1.18rem)"{{/if}}></div>
+                                                <div class="v-left-center-point v-left-center-point-background-white"></div>
+                                                <div class="base am-text-truncate">
+                                                    <span class="symbol">{{$currency_symbol}}</span>
+                                                    <span class="price">{{$v.coupon.discount_value}}</span>
+                                                    <span class="unit">{{$v.coupon.type_unit}}</span>
+                                                    <p>
+                                                        {{if !empty($v['coupon']['desc'])}}
+                                                        <span class="desc am-text-truncate">{{$v.coupon.desc}}</span>
+                                                        {{/if}}
+                                                        {{if !empty($v['coupon']['use_limit_type_name'])}}
+                                                        <span class="tips am-text-truncate">{{$v.coupon.use_limit_type_name}}</span>
+                                                        {{/if}}
+                                                    </p>
+                                                </div>
+                                                <p class="time am-text-truncate am-margin-top-sm">{{$v.time_end}} {{:MyLang('expire_name')}}</p>
+                                            </div>
+                                            <a href="{{$Think.__MY_URL__}}" class="am-block">
+                                                <div class="v-right am-fr am-text-center" {{if !empty($v['coupon']['bg_color_value'])}}style="background:{{$v.coupon.bg_color_value}}"{{/if}}>
+                                                    <div class="am-vertical-align-middle v-right-center-point v-right-center-point-background-white"> {{:MyLang('to_use_name')}}</div>
+                                                </div>
+                                                <div class="v-right-point v-point-background-white"></div>
+                                            </a>
+                                        </div>
+                                    </li>
+                                {{/foreach}}
+                            </ul>
+                        {{else /}}
+                            {{:ModuleInclude('public/not_data', [
+                                'msg' => MyLang('can_use_coupon_empty_tips'),
+                            ])}}
+                        {{/if}}
+                    </div>
+                    <div class="am-tab-panel am-padding-main">
+                        <!-- 已使用 -->
+                        {{if !empty($coupon_list['already_use'])}}
+                            <ul class="am-avg-sm-1 am-avg-md-2 plugins-coupon-items">
+                                {{foreach $coupon_list.already_use as $v}}
+                                    <li data-coupon-user-id="{{$v.id}}" data-coupon-id="{{$v.coupon_id}}">
+                                        <div class="item am-cf coupon-disabled" {{if !empty($v['coupon']['bg_color_value'])}}style="border:1px solid {{$v.coupon.bg_color_value}}"{{/if}}>
+                                            <div class="v-left-border" {{if !empty($v.coupon['bg_color_value'])}}style="background: linear-gradient(135deg, transparent, transparent 40%, {{$v.coupon.bg_color_value}}, transparent 60%, transparent 100%), linear-gradient(45deg, transparent, transparent 40%, {{$v.coupon.bg_color_value}}, transparent 60%, transparent 100%);background-size: 1rem 1.5rem;
+                                            "{{/if}}></div>
+                                            <div class="v-left-point v-point-background-white"></div>
+                                            <div class="v-left am-fl am-padding-left-sm am-padding-top-sm am-padding-bottom-sm">
+                                                <div class="v-left-center-border" {{if !empty($v.coupon['bg_color_value'])}}style="background-image: radial-gradient(circle at right top, {{$v.coupon.bg_color_value}}, {{$v.coupon.bg_color_value}} 1.15rem, transparent 1.18rem), radial-gradient(circle at right bottom, {{$v.coupon.bg_color_value}}, {{$v.coupon.bg_color_value}} 1.15rem, transparent 1.18rem)"{{/if}}></div>
+                                                <div class="v-left-center-point v-left-center-point-background-white"></div>
+                                                <div class="base am-text-truncate">
+                                                    <span class="symbol">{{$currency_symbol}}</span>
+                                                    <span class="price">{{$v.coupon.discount_value}}</span>
+                                                    <span class="unit">{{$v.coupon.type_unit}}</span>
+                                                    <p>
+                                                        {{if !empty($v['coupon']['desc'])}}
+                                                        <span class="desc am-text-truncate">{{$v.coupon.desc}}</span>
+                                                        {{/if}}
+                                                        {{if !empty($v['coupon']['use_limit_type_name'])}}
+                                                        <span class="tips am-text-truncate">{{$v.coupon.use_limit_type_name}}</span>
+                                                        {{/if}}
+                                                    </p>
+                                                </div>
+                                                <p class="time am-text-truncate am-margin-top-xs">{{$v.use_time}} {{:MyLang('use_name')}}</p>
+                                            </div>
+                                            <div class="v-right am-fr am-text-center" {{if !empty($v['coupon']['bg_color_value'])}}style="background:{{$v.coupon.bg_color_value}}"{{/if}}>
+                                                <div class="am-vertical-align-middle v-right-center-point v-right-center-point-background-white">{{:MyLang('used_name')}}</div>
+                                            </div>
+                                            <div class="v-right-point v-point-background-white"></div>
+                                        </div>
+                                    </li>
+                                {{/foreach}}
+                            </ul>
+                        {{else /}}
+                            {{:ModuleInclude('public/not_data', [
+                                'msg' => MyLang('not_used_coupon_tips'),
+                            ])}}
+                        {{/if}}
+                    </div>
+                    <div class="am-tab-panel am-padding-main">
+                        <!-- 已过期 -->
+                        {{if !empty($coupon_list['already_expire'])}}
+                            <ul class="am-avg-sm-1 am-avg-md-2 plugins-coupon-items">
+                                {{foreach $coupon_list.already_expire as $v}}
+                                    <li data-coupon-user-id="{{$v.id}}" data-coupon-id="{{$v.coupon_id}}">
+                                        <div class="item am-cf coupon-disabled" {{if !empty($v['coupon']['bg_color_value'])}}style="border:1px solid {{$v.coupon.bg_color_value}}"{{/if}}>
+                                            <div class="v-left-border" {{if !empty($v.coupon['bg_color_value'])}}style="background: linear-gradient(135deg, transparent, transparent 40%, {{$v.coupon.bg_color_value}}, transparent 60%, transparent 100%), linear-gradient(45deg, transparent, transparent 40%, {{$v.coupon.bg_color_value}}, transparent 60%, transparent 100%);background-size: 1rem 1.5rem;
+                                            "{{/if}}></div>
+                                            <div class="v-left-point v-point-background-white"></div>
+                                            <div class="v-left am-fl am-padding-left-sm am-padding-top-sm am-padding-bottom-sm">
+                                                <div class="v-left-center-border" {{if !empty($v.coupon['bg_color_value'])}}style="background-image: radial-gradient(circle at right top, {{$v.coupon.bg_color_value}}, {{$v.coupon.bg_color_value}} 1.15rem, transparent 1.18rem), radial-gradient(circle at right bottom, {{$v.coupon.bg_color_value}}, {{$v.coupon.bg_color_value}} 1.15rem, transparent 1.18rem)"{{/if}}></div>
+                                                <div class="v-left-center-point v-left-center-point-background-white"></div>
+                                                <div class="base am-text-truncate">
+                                                    <span class="symbol">{{$currency_symbol}}</span>
+                                                    <span class="price">{{$v.coupon.discount_value}}</span>
+                                                    <span class="unit">{{$v.coupon.type_unit}}</span>
+                                                    <p>
+                                                        {{if !empty($v['coupon']['desc'])}}
+                                                        <span class="desc am-text-truncate">{{$v.coupon.desc}}</span>
+                                                        {{/if}}
+                                                        {{if !empty($v['coupon']['use_limit_type_name'])}}
+                                                        <span class="tips am-text-truncate">{{$v.coupon.use_limit_type_name}}</span>
+                                                        {{/if}}
+                                                    </p>
+                                                </div>
+                                                <p class="time am-text-truncate am-margin-top-sm">{{$v.time_end}} {{:MyLang('expire_name')}}</p>
+                                            </div>
+                                            <div class="v-right am-fr am-text-center" {{if !empty($v['coupon']['bg_color_value'])}}style="background:{{$v.coupon.bg_color_value}}"{{/if}}>
+                                                <div class="am-vertical-align-middle v-right-center-point v-right-center-point-background-white">{{:MyLang('expired_name')}}</div>
+                                            </div>
+                                            <div class="v-right-point v-point-background-white"></div>
+                                        </div>
+                                    </li>
+                                {{/foreach}}
+                            </ul>
+                        {{else /}}
+                            {{:ModuleInclude('public/not_data', [
+                                'msg' => MyLang('not_expire_coupon_tips'),
+                            ])}}
+                        {{/if}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- content end -->
+</div>
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

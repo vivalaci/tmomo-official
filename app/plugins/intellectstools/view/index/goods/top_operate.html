@@ -1,0 +1,16 @@
+{{if isset($plugins_config['is_goods_top_is_shelves_shop']) and $plugins_config['is_goods_top_is_shelves_shop'] eq 1}}
+    <div class="am-dropdown am-margin-right-sm" data-am-dropdown>
+        <button type="button" class="am-btn am-btn-default-plain am-radius am-btn-xs am-dropdown-toggle" data-am-dropdown-toggle>
+            <span>上下架</span>
+            <i class="iconfont icon-retract am-show-sm-only"></i>
+        </button>
+        <ul class="am-dropdown-content am-radius submit-goods-shelves" data-url="{{:PluginsHomeUrl('intellectstools', 'goods', 'shelves')}}">
+            <li>
+                <a href="javascript:;" class="am-text-blue" data-value="0">下架</a>
+            </li>
+            <li>
+                <a href="javascript:;" class="am-text-blue" data-value="1">上架</a>
+            </li>
+        </ul>
+    </div>
+{{/if}}

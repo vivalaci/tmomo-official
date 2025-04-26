@@ -1,0 +1,130 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'activity',
+            'nav_data'  => $plugins_nav_menu_list,
+        ])}}
+
+        <div class="activity-content">
+            <!-- 基础配置 -->
+            <div class="am-panel am-panel-default am-radius activity-content-base">
+                <div class="am-panel-hd">
+                    <span class="am-panel-title">{{:MyLang('base_config_title')}}</span>
+                    <a class="am-margin-left-lg" href="{{:PluginsAdminUrl('activity', 'admin', 'saveinfo')}}">
+                        <i class="am-icon-edit"></i>
+                        <span>{{:MyLang('edit_title')}}</span>
+                    </a>
+                </div>
+                <div class="am-panel-bd">
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>应用导航名称</label>
+                                <div>
+                                    {{if empty($data['application_name'])}}
+                                        {{:MyLang('no_setup_tips')}}应用导航名称
+                                    {{else /}}
+                                        {{$data.application_name}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>首页数据列表显示数量</label>
+                                <div>
+                                    {{if empty($data['home_data_list_number'])}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 20 ]
+                                    {{else /}}
+                                        {{$data.home_data_list_number}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>商品详情名称图标</label>
+                                <div>
+                                    {{if empty($data['goods_detail_icon'])}}
+                                        {{:MyLang('no_setup_tips')}} 
+                                    {{else /}}
+                                        {{$data.goods_detail_icon}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>使用销售价作为原价</label>
+                                <div>
+                                    {{if isset($data['is_actas_price_original']) and $data['is_actas_price_original'] eq 1}}
+                                        {{:MyLang('yes_title')}}
+                                    {{else /}}
+                                        {{:MyLang('no_title')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>首页推荐滚动自动播放</label>
+                                <div>
+                                    {{if isset($data['is_home_auto_play']) and $data['is_home_auto_play'] eq 1}}
+                                        {{:MyLang('yes_title')}}
+                                    {{else /}}
+                                        {{:MyLang('no_title')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('form_seo_title_title')}}</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if empty($data['seo_title'])}}
+                                        {{:MyLang('no_setup_tips')}}SEO标题
+                                    {{else /}}
+                                        {{$data.seo_title}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('form_seo_keywords_title')}}</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if empty($data['seo_keywords'])}}
+                                        {{:MyLang('no_setup_tips')}}SEO关键字
+                                    {{else /}}
+                                        {{$data.seo_keywords}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('form_seo_desc_title')}}</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if empty($data['seo_desc'])}}
+                                        {{:MyLang('no_setup_tips')}}SEO描述
+                                    {{else /}}
+                                        {{$data.seo_desc}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

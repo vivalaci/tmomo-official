@@ -1,0 +1,14 @@
+{{if isset($plugins_config['is_user_address_discern']) and $plugins_config['is_user_address_discern'] eq 1}}
+    <!-- 地址识别接口地址 -->
+    <div class="am-hide plugins-intellectstools-useraddress-url" data-url="{{:PluginsHomeUrl('intellectstools', 'index', 'address')}}"></div>
+{{/if}}
+
+{{if isset($plugins_config['is_order_pay_only_can_buy_payment']) and $plugins_config['is_order_pay_only_can_buy_payment'] eq 1}}
+    <!-- 订单列表和详情支付仅可以选择下单时候选择的支付方式 -->
+    <div class="am-hide plugins-intellectstools-order-pay-only-can-buy-payment"></div>
+{{/if}}
+
+{{if isset($plugins_config['is_goods_detail_comments_add']) and $plugins_config['is_goods_detail_comments_add'] eq 1}}
+    <!-- 商品页面展示评论入口 -->
+    评论弹窗html
+{{/if}}

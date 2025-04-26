@@ -1,0 +1,14 @@
+{{if !empty($plugins_data) and !empty($plugins_data['id']) and !empty($plugins_config)}}
+    {{if isset($plugins_config['is_admin_user_login']) and $plugins_config['is_admin_user_login'] eq 1}}
+        <a href="{{:PluginsAdminUrl('intellectstools', 'user', 'login', ['uid'=>$plugins_data['id']])}}" target="_blank" class="am-btn am-btn-success am-btn-xs am-radius am-btn-block">
+            <i class="am-icon-shield"></i>
+            <span>{{:MyLang('login_title')}}</span>
+        </a>
+    {{/if}}
+    {{if isset($plugins_config['is_user_note']) and $plugins_config['is_user_note'] eq 1}}
+        <button type="button" class="am-btn am-btn-default am-btn-xs am-radius am-btn-block submit-popup" data-url="{{:PluginsAdminUrl('intellectstools', 'user', 'noteinfo', ['id'=>$plugins_data['id']])}}" data-title="{{:MyLang('note_title')}}">
+            <i class="am-icon-sticky-note-o"></i>
+            <span>{{:MyLang('note_title')}}</span>
+        </button>
+    {{/if}}
+{{/if}}

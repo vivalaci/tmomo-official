@@ -1,0 +1,64 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'backgroundad',
+            'title'     => MyLang('base_config_title'),
+            'back_url'  => PluginsAdminUrl('backgroundad', 'admin', 'index'),
+        ])}}
+
+        <!-- form start -->
+        <form class="am-form form-validation am-form-full-screen am-form-popup-sticky" action="{{:PluginsAdminUrl('backgroundad', 'admin', 'save')}}" method="POST" request-type="ajax-url" request-value="{{:PluginsAdminUrl('backgroundad', 'admin', 'index')}}" enctype="multipart/form-data">
+            <div class="am-form-group am-form-file">
+                <label class="am-block">背景图片<span class="am-form-group-label-tips">建议2560*1080px</span></label>
+                <div class="am-form-file-upload-container">
+                    <ul class="plug-file-upload-view plugins-images-view" data-form-name="bg_images" data-max-number="1" data-dialog-type="images">
+                        {{if !empty($data['bg_images'])}}
+                            <li>
+                                <input type="text" name="bg_images" value="{{$data.bg_images}}" data-validation-message="{{:MyLang('form_upload_images_message')}}" required />
+                                <img src="{{$data.bg_images}}" />
+                            </li>
+                        {{/if}}
+                    </ul>
+                    <div class="plug-file-upload-submit" data-view-tag="ul.plugins-images-view">
+                        <i class="iconfont icon-upload-add"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="am-form-group">
+                <label>顶部点击链接地址</label>
+                <input type="text" name="top_url" placeholder="顶部点击链接地址" data-validation-message="请填写顶部点击链接地址" class="am-radius" {{if !empty($data['top_url'])}} value="{{$data.top_url}}"{{/if}} />
+            </div>
+
+            <div class="am-form-group">
+                <label class="am-block">是否新窗口打开</label>
+                <input name="is_new_window_open" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_new_window_open']) and $data['is_new_window_open'] eq 1}}checked="true"{{/if}} />
+            </div>
+
+            <div class="am-form-group">
+                <label class="am-block">开启广告</label>
+                <input name="is_open" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_open']) and $data['is_open'] eq 1}}checked="true"{{/if}} />
+            </div>
+
+            <div class="am-form-popup-submit">
+                <a href="{{:PluginsAdminUrl('backgroundad', 'admin', 'index', $params)}}" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg">
+                    <i class="am-icon-mail-reply"></i>
+                    <span>{{:MyLang('retreat_title')}}</span>
+                </a>
+                <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('save_title')}}'}">
+                    <i class="am-icon-save"></i>
+                    <span>{{:MyLang('save_title')}}</span>
+                </button>
+            </div>
+        </form>
+        <!-- form end -->
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

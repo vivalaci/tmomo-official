@@ -1,0 +1,41 @@
+{
+    "base":{
+        "plugins":"weixinwebauthorization",
+        "name":"微信网页授权",
+        "logo":"\/static\/upload\/images\/plugins_weixinwebauthorization\/2019\/05\/24\/1558681549248354.jpg",
+        "author":"Devil",
+        "author_url":"https:\/\/shopxo.net\/",
+        "version":"3.2.3",
+        "desc":"微信授权登录、注册、配合公众号支付自动回调（支持unionid绑定）、自动登录",
+        "apply_terminal":[
+            "pc",
+            "h5"
+        ],
+        "apply_version":[
+            "6.4.0"
+        ],
+        "is_home":false
+    },
+    "hook":{
+        "plugins_view_user_login_info_top":[
+            "app\\plugins\\weixinwebauthorization\\Hook"
+        ],
+        "plugins_view_user_reg_info":[
+            "app\\plugins\\weixinwebauthorization\\Hook"
+        ],
+        "plugins_view_header_navigation_top_left_end":[
+            "app\\plugins\\weixinwebauthorization\\Hook"
+        ],
+        "plugins_service_system_begin":[
+            "app\\plugins\\weixinwebauthorization\\Hook"
+        ]
+    },
+    "history":[
+        {
+            "host":"shopxo.com",
+            "url":"http:\/\/shopxo.com\/",
+            "ip":"127.0.0.1",
+            "time":"2024-12-22 12:36:20"
+        }
+    ]
+}

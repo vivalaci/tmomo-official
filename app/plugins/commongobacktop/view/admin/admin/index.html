@@ -1,0 +1,53 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'commongobacktop',
+            'title'     => '回到顶部',
+        ])}}
+
+        <div class="commongobacktop-content">
+            <!-- 基础配置 -->
+            <div class="am-panel am-panel-default am-radius commononlineservice-content-base">
+                <div class="am-panel-hd">
+                    <span class="am-panel-title">{{:MyLang('base_config_title')}}</span>
+                    <a class="am-margin-left-lg" href="{{:PluginsAdminUrl('commongobacktop', 'admin', 'saveinfo')}}">
+                        <i class="am-icon-edit"></i>
+                        <span>{{:MyLang('edit_title')}}</span>
+                    </a>
+                </div>
+                <div class="am-panel-bd">
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items">
+                                <label>图片</label>
+                                <div class="immages-tag">
+                                    <img src="{{if !empty($data['images'])}}{{$data.images}}{{/if}}" />
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items">
+                                <label>是否全局</label>
+                                <div>
+                                    {{if isset($data['is_overall']) and $data['is_overall'] eq 1}}
+                                        是
+                                    {{else /}}
+                                        否
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

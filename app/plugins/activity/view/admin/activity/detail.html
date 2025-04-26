@@ -1,0 +1,56 @@
+<!-- 继承公共的 form -->
+{{extend name="../../../module/view/form_table/detail" /}}
+
+<!-- 重写数据模块 -->
+{{block name="detail_data"}}
+    {{:ModuleInclude('public/detail_nav_switch_tabs', [
+        'nav_data' => [
+            [
+                'name' => MyLang('form_base_data_title'),
+                'key'  => 'base',
+            ],
+            [
+                'name' => '关联商品',
+                'key'  => 'goods',
+            ],
+            [
+                'name' => MyLang('form_seo_data_title'),
+                'key'  => 'seo',
+            ],
+        ]
+    ])}}
+    <div class="detail-content-switch-data-item">
+        <!-- 父级内容 -->
+        <div class="item am-active" data-key="base">
+            {__block__}
+        </div>
+
+        <!-- 关联商品 -->
+        <div class="item" data-key="goods">
+            {{if !empty($data['goods_list'])}}
+                <ul data-am-widget="gallery" class="am-gallery am-avg-sm-4 am-avg-md-6 am-avg-lg-12 am-gallery-bordered content-goods-detail" data-am-gallery="{}">
+                    {{foreach $data.goods_list as $goods}}
+                        <li>
+                            <div class="am-gallery-item">
+                                <a href="{{$goods.goods_url}}" target="_blank">
+                                    <img src="{{$goods.images}}"  alt="{{$goods.title}}"/>
+                                    <h3 class="am-gallery-title">{{$goods.title}}</h3>
+                                    {{if isset($goods['is_recommend']) and $goods['is_recommend'] eq 1}}
+                                        <span class="am-badge am-badge-success am-round">推荐</span>
+                                    {{/if}}
+                                </a>
+                            </div>
+                        </li>
+                    {{/foreach}}
+                </ul>
+            {{else /}}
+                {{:ModuleInclude('public/not_data')}}
+            {{/if}}
+        </div>
+
+        <!-- SEO信息 -->
+        <div class="item" data-key="seo">
+            {{:ModuleInclude('lib/seo_data')}}
+        </div>
+    </div>
+{{/block}}

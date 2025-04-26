@@ -1,0 +1,9 @@
+{{if !empty($promotion_user_nav) and is_array($promotion_user_nav)}}
+    <ul class="am-nav am-nav-tabs am-nav-pills">
+        {{foreach $promotion_user_nav as $k=>$v}}
+            <li {{if (isset($params['type']) and $params['type'] eq $k or (!isset($params['type']) and $k eq 0))}}class="am-active"{{/if}}>
+                <a href="{{:PluginsHomeUrl($v['plugins'], $v['control'], $v['action'], ['type'=>$k, 'start'=>$start, 'end'=>$end])}}">{{$v.title}}</a>
+            </li>
+        {{/foreach}}
+    </ul>
+{{/if}}

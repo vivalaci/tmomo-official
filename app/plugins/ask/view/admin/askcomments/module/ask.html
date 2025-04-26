@@ -1,0 +1,9 @@
+{{if !empty($module_data['ask_info'])}}
+    {{if isset($module_data['ask_info']['is_show']) and $module_data['ask_info']['is_show'] eq 1}}
+        <a href="{{$module_data.ask_info.url}}" target="_blank">
+            <p class="am-text-truncate-2">{{$module_data.ask_info.title}}</p>
+        </a>
+    {{else /}}
+        <p class="am-text-truncate-2">{{$module_data.ask_info.title}}</p>
+    {{/if}}
+{{/if}}

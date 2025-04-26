@@ -1,0 +1,27 @@
+<div class="plugins-thirdpartylogin-login-scan {{if MyC('home_user_login_img_verify_state') neq 1}}not-login-verify{{/if}}" data-status-url="{{$status_url}}">
+    <div class="right-switch-icon am-cursor-pointer am-nbfc am-radius">
+        <i class="iconfont icon-login-right-scan icon-type-scan"></i>
+        <i class="iconfont icon-login-right-pc icon-type-pc am-hide"></i>
+    </div>
+    <div class="login-scan-content am-background-white am-padding-main am-text-center am-radius-lg am-hide">
+        <p class="login-scan-title am-margin-top-sm am-text-left">手机扫码，安全登录</p>
+        <div class="am-img-thumbnail am-radius am-padding-sm am-margin-top-xl login-scan-qrcode">
+            <div class="view-qrcode-init" data-width="200" data-height="200">{{$scan_url}}</div>
+            <div class="login-qrcode-tips am-hide">正在登录中...</div>
+        </div>
+        <div class="login-scan-buttom am-margin-top-sm">
+            <p>
+                <span>打开</span>
+                {{if isset($is_weixin_mini) and $is_weixin_mini eq 1}}
+                    <span class="am-text-danger">{{:MyC('home_site_name')}}小程序</span>
+                    <span class="am-text-grey">|</span>
+                {{/if}}
+                <span class="am-text-danger">微信</span>
+            </p>
+            <p>
+                <i class="iconfont icon-saoyisao"></i>
+                <span>扫一扫登录</span>
+            </p>
+        </div>
+    </div>
+</div>

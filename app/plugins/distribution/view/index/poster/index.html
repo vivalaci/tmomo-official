@@ -1,0 +1,112 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- header top nav -->
+{{:ModuleInclude('public/header_top_nav')}}
+
+<!-- header simple nav -->
+{{:ModuleInclude('public/header_nav_simple', [
+    'search' => 1,
+])}}
+
+<!-- content -->
+<div class="am-container user-main">
+
+    <!-- user menu start -->
+    {{:ModuleInclude('public/user_menu')}}
+    <!-- user menu end -->
+
+    <!-- content start -->
+    <div class="user-content">
+        <div class="user-content-body">
+            <!-- user center title -->
+            {{:ModuleInclude('public/user_center_main_title')}}
+            
+            {{:ModuleInclude('../../../plugins/distribution/view/index/public/nav')}}
+            
+            {{if !empty($user_level)}}
+                {{if !empty($plugins_config['user_poster_top_desc'])}}
+                    <div class="am-alert am-alert-warning" data-am-alert>
+                        <button type="button" class="am-close">&times;</button>
+                        <p>
+                            {{:implode('<br />', $plugins_config['user_poster_top_desc'])}}
+                        </p>
+                    </div>
+                {{/if}}
+
+                <div class="poster-content am-cf">
+                    {{if $poster['code'] eq 0}}
+                        <img src="{{$poster.data}}" alt="分享海报图片" class="am-fl poster-images common-annex-view-event" data-value="{{$poster.data}}" data-is-download="1" data-download-name="推广海报" />
+                    {{else /}}
+                        <div class="am-fl am-text-center am-text-danger">
+                            {{$poster.msg}} 海报生成失败！
+                        </div>
+                    {{/if}}
+                    <div class="poster-right am-fr am-text-left">
+                        <div data-am-widget="tabs" class="am-tabs am-tabs-default am-radius am-margin-0" data-am-tabs="{noSwipe: 1}">
+                            <ul class="am-tabs-nav am-cf">
+                                <li class="am-active"><a href="[data-tab-panel-0]">海报图片</a></li>
+                                <li class="share-onekey-tabs"><a href="[data-tab-panel-1]">一键推荐</a></li>
+                                <li><a href="[data-tab-panel-2]">二维码分享</a></li>
+                                <li><a href="[data-tab-panel-3]">链接分享</a></li>
+                            </ul>
+                            <div class="am-tabs-bd">
+                                <!-- 海报图片 -->
+                                <div data-tab-panel-0 class="am-tab-panel am-active">
+                                    <div class="am-alert" data-am-alert>
+                                        <button type="button" class="am-close">&times;</button>
+                                        <p>复制或保存海报图片后，发送给微信好友/群、QQ好友/群，分享到分朋友圈，微博等进行推广，轻轻松松赚返利！</p>
+                                    </div>
+                                    <a href="{{:MyUrl('index/qrcode/download', ['url'=>urlencode(base64_encode($poster.data)), 'filename'=>'推广海报'])}}" class="am-btn am-btn-success am-btn-sm am-radius am-icon-cloud-download"> 下载海报</a>
+                                    <button type="button" class="am-btn am-btn-secondary am-radius am-btn-sm am-margin-left-sm am-icon-refresh submit-ajax" data-url="{{:PluginsHomeUrl('distribution', 'poster', 'refresh')}}" data-id="{{$user.id}}" data-view="reload" data-msg="如生成成功后没有改变，请清除浏览器缓存再查看"> 重新生成海报</button>
+                                </div>
+
+                                <!-- 一键推荐 -->
+                                <div data-tab-panel-1 class="am-tab-panel share-onekey-content">
+                                    <div class="am-alert" data-am-alert>
+                                        <button type="button" class="am-close">&times;</button>
+                                        <p>点击下方图标，直接分享给好友或社交平台，轻轻松松赚返利！</p>
+                                    </div>
+                                    <div class="plugins-share-view" data-url="{{$user_share_url}}" data-title="{{if isset($plugins_config['user_poster_share_title'])}}{{$plugins_config.user_poster_share_title}}{{/if}}" data-desc="{{if isset($plugins_config['user_poster_share_desc'])}}{{$plugins_config.user_poster_share_desc}}{{/if}}" data-pic="{{$poster.data}}" data-share="qq,qzone,sina,weixin,facebook,twitter"></div>
+                                </div>
+
+                                <!-- 二维码分享 -->
+                                <div data-tab-panel-2 class="am-tab-panel share-qrcode-content">
+                                    <div class="am-alert" data-am-alert>
+                                        <button type="button" class="am-close">&times;</button>
+                                        <p>复制或保存二维码后，发送给微信好友/群、QQ好友/群，分享到分朋友圈，微博等进行推广，轻轻松松赚返利！</p>
+                                    </div>
+                                    {{if !empty($user_share_qrode)}}
+                                        <img src="{{$user_share_qrode}}" class="am-img-thumbnail am-block common-annex-view-event" data-value="{{$user_share_qrode}}" data-is-download="1" data-download-name="推广二维码" />
+                                        <a href="{{:MyUrl('index/qrcode/download', ['url'=>urlencode(base64_encode($user_share_qrode)), 'filename'=>'推广二维码'])}}" class="am-btn am-btn-success am-btn-sm am-radius am-margin-top-sm am-icon-cloud-download"> 下载二维码</a>
+                                    {{else /}}
+                                        <span class="am-text-center am-text-danger">
+                                            二维码生成失败
+                                        </span>
+                                    {{/if}}
+                                </div>
+
+                                <!-- 链接分享 -->
+                                <div data-tab-panel-3 class="am-tab-panel">
+                                    <div class="am-alert" data-am-alert>
+                                        <button type="button" class="am-close">&times;</button>
+                                        <p>复制以下内容，发送给微信好友/群、QQ好友/群，分享到分朋友圈，微博等进行推广，轻轻松松赚返利！</p>
+                                    </div>
+                                    <div class="am-input-group am-input-group-sm">
+                                        <input type="text" class="am-form-field" value="{{$user_share_url}}" />
+                                        <span class="am-input-group-btn">
+                                            <button class="am-btn am-btn-default am-icon-copy" type="button"> 复制</button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {{/if}}
+        </div>
+    </div>
+    <!-- content end -->
+</div>
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

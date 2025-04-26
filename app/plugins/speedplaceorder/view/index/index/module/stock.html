@@ -1,0 +1,12 @@
+<!-- 购买数量 -->
+{{if !empty($module_data)}}
+    {{if $module_data['is_error'] eq 1 and !empty($module_data['error_msg'])}}
+        <p class="am-text-danger am-text-center am-margin-top-xs">{{$module_data.error_msg}}</p>
+    {{else /}}
+        <div class="am-input-group am-input-group-sm am-radius am-nbfc am-cursor-pointer stock-tag" data-inventory="{{$module_data.inventory}}" data-price="{{$module_data.price}}" data-id="{{$module_data.id}}" data-gid="{{$module_data.goods_id}}" data-ajax-url="{{:PluginsHomeUrl('speedplaceorder', 'index', 'stock')}}">
+            <span class="am-input-group-label {{if $module_data['is_shelves'] eq 1 and $module_data['is_delete_time'] eq 0}}stock-submit{{/if}}" data-type="min">-</span>
+            <input type="number" class="am-form-field am-text-center" value="{{$module_data.stock}}" {{if $module_data['is_shelves'] neq 1 or $module_data['is_delete_time'] neq 0}}disabled{{/if}} data-is-clearout="0" />
+            <span class="am-input-group-label {{if $module_data['is_shelves'] eq 1 and $module_data['is_delete_time'] eq 0}}stock-submit{{/if}}" data-type="add">+</span>
+        </div>
+    {{/if}}
+{{/if}}

@@ -1,0 +1,57 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'payecoquick',
+            'title'     => '易联快捷支付',
+        ])}}
+
+        <div class="payecoquick-content am-padding-bottom-xs">
+            <!-- 基础配置 -->
+            <div class="am-panel am-panel-default payecoquick-content-base">
+                <div class="am-panel-hd">
+                    <span class="am-panel-title">{{:MyLang('base_config_title')}}</span>
+                    <a class="am-margin-left-lg" href="{{:PluginsAdminUrl('payecoquick', 'admin', 'saveinfo')}}">
+                        <i class="am-icon-edit"></i>
+                        <span>{{:MyLang('edit_title')}}</span>
+                    </a>
+                </div>
+                <div class="am-panel-bd">
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>支付页面右侧图片</label>
+                                {{if !empty($data['right_images'])}}
+                                    <div class="immages-tag">
+                                        <img src="{{$data.right_images}}" />
+                                    </div>
+                                {{else /}}
+                                    <div>{{:MyLang('no_setup_tips')}}</div>
+                                {{/if}}
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>支付页面右侧描述信息</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if !empty($data['right_desc'])}}
+                                        {{:implode('<br />', $data['right_desc'])}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 不展示 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

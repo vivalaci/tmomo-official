@@ -1,0 +1,395 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- header top nav -->
+{{:ModuleInclude('public/header_top_nav')}}
+
+<!-- header simple nav -->
+{{:ModuleInclude('public/header_nav_simple', [
+    'search' => 1,
+])}}
+
+<!-- content -->
+<div class="am-container user-main">
+    <!-- user menu start -->
+    {{:ModuleInclude('public/user_menu')}}
+    <!-- user menu end -->
+
+    <!-- content start -->
+    <div class="user-content">
+        <div class="user-content-body" data-url="{{:PluginsHomeUrl('distribution', 'index', 'stats')}}">
+            <!-- 基础信息 -->
+            <div class="base am-flex am-flex-justify-between am-margin-bottom-lg">
+                <div class="base-user am-flex am-flex-items-center am-width">
+                    <div class="base-left">
+                        <img src="{{$user.avatar}}" alt="用户头像" class="am-img-thumbnail am-circle user-avatar" width="80" />
+                    </div>
+                    <div class="am-padding-left-main">
+                        <div class="am-nbfc">
+                            <span class="am-text-xl am-font-weight am-line-height-xl am-text-white">{{$user.user_name_view}}</span>
+                            {{if !empty($user_referrer)}}
+                                <span class="am-margin-left am-text-white head-recommend-code text-copy-submit" data-value="{{$user_referrer}}">推荐码 {{$user_referrer}} <i class="iconfont icon-copy"></i></span>
+                            {{/if}}
+                        </div>
+                        <div class="am-nbfc am-margin-top">
+                            <!-- 等级信息 -->
+                            {{if !empty($user_level)}}
+                                <div class="am-radius certificate am-fl">
+                                    <img src="{{$user_level.images_url}}" alt="分销等级" width="16" />
+                                    <span class="name">{{$user_level.name}}</span>
+                                </div>
+                            {{/if}}
+                            <!-- 上级用户 -->
+                            {{if isset($plugins_config['is_show_superior']) and $plugins_config['is_show_superior'] eq 1 and (!empty($superior) or (isset($plugins_config['is_modify_superior']) and $plugins_config['is_modify_superior'] eq 1))}}
+                                <div class="superior am-fl {{if !empty($user_level)}}am-margin-left{{/if}}">
+                                    {{if !empty($superior) and isset($plugins_config['is_show_superior']) and $plugins_config['is_show_superior'] eq 1}}
+                                        <img src="{{$superior.avatar}}" class="am-img-thumbnail am-circle" width="20" height="20" alt="{{$superior.user_name_view}}" />
+                                        <span>{{$superior.user_name_view}}</span>
+                                        <span class="superior-name am-text-xs">(上级)</span>
+                                    {{/if}}
+                                    {{if isset($plugins_config['is_modify_superior']) and $plugins_config['is_modify_superior'] eq 1}}
+                                        <a href="javascript:;" class="am-icon-edit am-margin-left-xs" data-am-modal="{target: '#modify-superior-modal', closeViaDimmer: 0, width: 380, height: 220}"></a>
+                                    {{/if}}
+                                </div>
+                            {{/if}}
+                        </div>
+                    </div>
+                </div>
+                <!-- 右侧信息 -->
+                <div class="base-content am-pr">
+                    {{if isset($plugins_config['is_enable_self_extraction']) and $plugins_config['is_enable_self_extraction'] eq 1}}
+                        <a href="{{:PluginsHomeUrl('distribution', 'extraction', 'index')}}" class="pickup glideover-hover">
+                            <i class="iconfont icon-quhuodian_wdfx"></i>
+                            {{if empty($extraction_data)}}申请{{/if}}取货点
+                            <i class="iconfont icon-angle-right"></i>
+                        </a>
+                    {{/if}}
+                    <a href="{{:PluginsHomeUrl('wallet', 'cash', 'authinfo')}}" class="withdrawal glideover-hover">
+                        <i class="iconfont icon-qutixian_wdfx"></i>
+                        去提现
+                        <i class="iconfont icon-angle-right"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- 无分销权限 -->
+            {{if empty($user_level)}}
+                <div class="am-padding-horizontal-lg am-margin-top-lg">
+                    {{:ModuleInclude('../../../plugins/distribution/view/index/public/not_level_desc')}}
+                </div>
+            {{/if}}
+
+            <!-- 正常内容 -->
+            <div class="content">
+                <!-- 公告 -->
+                {{if !empty($plugins_config['user_center_notice'])}}
+                    <div class="am-alert am-alert-warning" data-am-alert>
+                        <button type="button" class="am-close">&times;</button>
+                        <p>{{:implode('<br />', $plugins_config['user_center_notice'])}}</p>
+                    </div>
+                {{/if}}
+
+                <!-- 阶梯返佣提示 -->
+                {{if !empty($profit_ladder)}}
+                    <div class="am-alert" data-am-alert>
+                        <button type="button" class="am-close">&times;</button>
+                        <p>
+                            <span>{{$profit_ladder.msg}}</span>
+                            <a href="{{:PluginsHomeUrl('distribution', 'poster', 'index')}}" class="am-btn am-btn-secondary am-radius am-btn-xs am-margin-left-xs">去推广</a>
+                        </p>
+                    </div>
+                {{/if}}
+
+                <!-- 导航 -->
+                {{if !empty($center_nav) and is_array($center_nav)}}
+                    <ul class="am-avg-sm-2 am-avg-md-3 am-avg-lg-4 nav-items">
+                        {{foreach $center_nav as $k=>$v}}
+                            {{if $k gt 0}}
+                                <li class="am-padding-module-half">
+                                    <div class="items glideover-hover">
+                                        <a href="{{:PluginsHomeUrl($v['plugins'], $v['control'], $v['action'])}}" class="am-block">
+                                            <p class="am-flex am-flex-justify-between am-flex-items-center">
+                                                {{$v.title}}
+                                                <span class="am-inline-block">
+                                                    <i class="iconfont icon-angle-right"></i>
+                                                </span>
+                                            </p>
+                                            <div class="am-text-right">
+                                                <img src="{{$v.icon}}" alt="{{$v.title}}" />
+                                            </div>
+                                        </a>
+                                    </div>
+                                </li>
+                            {{/if}}
+                        {{/foreach}}
+                    </ul>
+                {{/if}}
+
+                <!-- 基础统计 -->
+                <div class="echarts-container am-margin-top-main">
+                    <div class="echarts-title am-margin-bottom am-flex am-flex-warp am-flex-justify-between am-flex-items-center am-gap-12">
+                        <span class="title am-text-lg am-title-left-border">基础统计</span>
+                        <div class="right-operate am-text-right am-flex am-flex-warp am-flex-items-center am-flex-justify-right am-gap-12" data-type="base" data-empty-time="1">
+                            {{if !empty($time_data)}}
+                                <div class="quick-time am-flex am-flex-items-center">
+                                    {{foreach :array_values($time_data) as $k=>$v}}
+                                        {{if $k lt 3}}
+                                            <a class="recently time" href="javascript:;" data-start="{{$v.start}}" data-end="{{$v.end}}">{{$v.name}}</a>
+                                        {{/if}}
+                                    {{/foreach}}
+                                    <div id="doc-dropdown-justify">
+                                        <div class="am-dropdown" data-am-dropdown="{justify: '#doc-dropdown-justify'}">
+                                            <a href="javascript:;" class="am-dropdown-toggle">更多 <span class="am-icon-caret-down"></span></a>
+                                            <div class="am-dropdown-content am-radius">
+                                                <div class="am-flex am-flex-warp am-flex-items-center">
+                                                    {{foreach :array_values($time_data) as $k=>$v}}
+                                                        {{if $k gt 2}}
+                                                            <div class="item">
+                                                                <a class="am-inline-block time" href="javascript:;" data-start="{{$v.start}}" data-end="{{$v.end}}">{{$v.name}}</a>
+                                                            </div>
+                                                        {{/if}}
+                                                    {{/foreach}}
+                                                    <div class="item">
+                                                        <a class="am-inline-block time" href="javascript:;" data-start="" data-end="">{{:MyLang('all_title')}}</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {{/if}}
+                            {{:ModuleInclude('../../../plugins/distribution/view/index/index/public/stats_where')}}
+                        </div>
+                    </div>
+                    <!-- 推广客户 -->
+                    <ul class="am-avg-sm-3 promotion-user-content">
+                        <li class="am-text-center">
+                            <p class="am-color-grey-dark">已推广客户</p>
+                            <p class="am-text-truncate">
+                                <a href="javascript:;" class="total am-text-xl user-count submit-popup-custom" data-url="{{:PluginsHomeUrl('distribution', 'promotionuser', 'index', ['type'=>0])}}">{{$user_promotion_data.user_count}}</a>
+                                <span class="am-text-grey">人</span>
+                            </p>
+                        </li>
+                        <li class="am-text-center">
+                            <p class="am-color-grey-dark">已消费客户</p>
+                            <p class="am-text-truncate">
+                                <a href="javascript:;" class="total am-text-xl valid-user-count submit-popup-custom" data-url="{{:PluginsHomeUrl('distribution', 'promotionuser', 'index', ['type'=>1])}}">{{$user_promotion_data.valid_user_count}}</a>
+                                <span class="am-text-grey">人</span>
+                            </p>
+                        </li>
+                        <li class="am-text-center">
+                            <p class="am-color-grey-dark">未消费客户</p>
+                            <p class="am-text-truncate">
+                                <a href="javascript:;" class="total am-text-xl not-consumed-user-count submit-popup-custom" data-url="{{:PluginsHomeUrl('distribution', 'promotionuser', 'index', ['type'=>2])}}">{{$user_promotion_data.not_consumed_user_count}}</a>
+                                <span class="am-text-grey">人</span>
+                            </p>
+                        </li>
+                    </ul>
+                    <ul class="am-margin-top-sm am-cf am-avg-sm-2 am-avg-md-4 base-user-content">
+                        <li class="am-text-center">
+                            <p class="am-color-grey-dark">新增客户</p>
+                            <p class="am-text-truncate">
+                                <a href="javascript:;" class="total am-text-xl order-new-user-count submit-popup-custom" data-url="{{:PluginsHomeUrl('distribution', 'promotionuser', 'index', ['type'=>3])}}">{{$base_data.order_new_user_count}}</a>
+                                <span class="am-text-grey am-text-xs">人</span>
+                            </p>
+                            <p class="buttom-stats am-nbfc">
+                                <a href="javascript:;" class="am-text-grey am-text-xs submit-popup-custom" data-url="{{:PluginsHomeUrl('distribution', 'promotionuser', 'index', ['type'=>4])}}">
+                                    <span>有效</span>
+                                    <span>(</span>
+                                    <span class="order-new-user-valid-count">{{$base_data.order_new_user_valid_count}}</span>
+                                    <span>)</span>
+                                </a>
+                                <a href="javascript:;" class="am-text-grey am-text-xs am-margin-left submit-popup-custom" data-url="{{:PluginsHomeUrl('distribution', 'promotionuser', 'index', ['type'=>5])}}">
+                                    <span>需复购</span>
+                                    <span>(</span>
+                                    <span class="order-new-user-need-repurchase-count">{{$base_data.order_new_user_need_repurchase_count}}</span>
+                                    <span>)</span>
+                                </a>
+                            </p>
+                        </li>
+                        <li class="am-text-center">
+                            <p class="am-color-grey-dark">新增客户总GMV</p>
+                            <p class="am-text-truncate">
+                                <span class="am-text-grey">{{$currency_symbol}}</span>
+                                <a href="javascript:;" class="total am-text-xl order-new-user-total-price submit-popup-custom" data-url="{{:PluginsHomeUrl('distribution', 'promotionorder', 'index', ['type'=>0])}}">{{$base_data.order_new_user_total_price}}</a>
+                            </p>
+                        </li>
+                        <li class="am-text-center">
+                            <p class="am-color-grey-dark">订单总数</p>
+                            <p class="am-text-truncate">
+                                <a href="javascript:;" class="total am-text-xl order-user-count submit-popup-custom" data-url="{{:PluginsHomeUrl('distribution', 'promotionorder', 'index', ['type'=>1])}}">{{$base_data.order_user_count}}</a>
+                                <span class="am-text-grey">条</span>
+                            </p>
+                        </li>
+                        <li class="am-text-center">
+                            <p class="am-color-grey-dark">订单总GMV</p>
+                            <p class="am-text-truncate">
+                                <span class="am-text-grey">{{$currency_symbol}}</span>
+                                <a href="javascript:;" class="total am-text-xl order-user-total-price submit-popup-custom" data-url="{{:PluginsHomeUrl('distribution', 'promotionorder', 'index', ['type'=>2])}}">{{$base_data.order_user_total_price}}</a>
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 返利概况 -->
+                <div class="echarts-container am-margin-top-main">
+                    <div class="echarts-title">
+                        <span class="title am-text-lg am-title-left-border">返利概况</span>
+                    </div>
+                    <ul class="am-margin-top-sm am-avg-sm-2 am-avg-md-4 profit-content am-text-right am-margin-lr-clear">
+                        <li class="am-flex am-flex-col am-padding-module-half">
+                            <div class="am-radius-lg">
+                                <p class="am-color-grey-dark">返佣总额</p>
+                                <p class="am-text-truncate am-text-xl am-font-weight">
+                                    <span>{{$currency_symbol}}</span>
+                                    <strong class="total-price">{{$profit_data.total_price}}</strong>
+                                </p>
+                            </div>
+                        </li>
+                        <li class="am-flex am-flex-col am-padding-module-half">
+                            <div class="am-radius-lg">
+                                <p class="am-color-grey-dark">待生效</p>
+                                <p class="am-text-truncate am-text-xl am-font-weight">
+                                    <span>{{$currency_symbol}}</span>
+                                    <strong class="stay-price">{{$profit_data.stay_price}}</strong>
+                                </p>
+                            </div>
+                        </li>
+                        <li class="am-flex am-flex-col am-padding-module-half">
+                            <div class="am-radius-lg">
+                                <p class="am-color-grey-dark">待结算</p>
+                                <p class="am-text-truncate am-text-xl am-font-weight">
+                                    <span>{{$currency_symbol}}</span>
+                                    <strong class="vaild-price">{{$profit_data.vaild_price}}</strong>
+                                </p>
+                            </div>
+                        </li>
+                        <li class="am-flex am-flex-col am-padding-module-half">
+                            <div class="am-radius-lg">
+                                <p class="am-color-grey-dark">已结算</p>
+                                <p class="am-text-truncate am-text-xl am-font-weight">
+                                    <span>{{$currency_symbol}}</span>
+                                    <strong class="already-price">{{$profit_data.already_price}}</strong>
+                                </p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 收益走势 -->
+                <div class="echarts-container am-margin-top-main">
+                    <div class="echarts-title am-margin-bottom am-flex am-flex-warp am-flex-justify-between am-flex-items-center am-gap-12">
+                        <span class="title am-text-lg am-title-left-border">收益走势</span>
+                        <div class="right-operate am-text-right am-flex am-flex-warp am-flex-items-center am-flex-justify-right am-gap-12" data-init="1" data-type="profit" data-empty-time="1">
+                            {{if !empty($time_data)}}
+                                <div class="quick-time am-flex am-flex-items-center">
+                                    {{foreach :array_values($time_data) as $k=>$v}}
+                                        {{if $k lt 3}}
+                                            <a class="recently time" href="javascript:;" data-start="{{$v.start}}" data-end="{{$v.end}}">{{$v.name}}</a>
+                                        {{/if}}
+                                    {{/foreach}}
+                                    <div id="doc-dropdown-justify">
+                                        <div class="am-dropdown" data-am-dropdown="{justify: '#doc-dropdown-justify'}">
+                                            <a href="javascript:;" class="am-dropdown-toggle">更多 <span class="am-icon-caret-down"></span></a>
+                                            <div class="am-dropdown-content am-radius">
+                                                <div class="am-flex am-flex-warp am-flex-items-center">
+                                                    {{foreach :array_values($time_data) as $k=>$v}}
+                                                        {{if $k gt 2}}
+                                                            <div class="item">
+                                                                <a class="am-inline-block time" href="javascript:;" data-start="{{$v.start}}" data-end="{{$v.end}}">{{$v.name}}</a>
+                                                            </div>
+                                                        {{/if}}
+                                                    {{/foreach}}
+                                                    <div class="item">
+                                                        <a class="am-inline-block time" href="javascript:;" data-start="" data-end="">{{:MyLang('all_title')}}</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {{/if}}
+                            {{:ModuleInclude('../../../plugins/distribution/view/index/index/public/stats_where')}}
+                        </div>
+                    </div>
+                    <div id="echarts-profit" class="am-margin-top"></div>
+                </div>
+
+                <!-- 推广用户数 -->
+                <div class="echarts-container am-margin-top-main">
+                    <div class="echarts-title am-margin-bottom am-flex am-flex-warp am-flex-justify-between am-flex-items-center am-gap-12">
+                        <span class="title am-text-lg am-title-left-border">推广用户数</span>
+                        <div class="right-operate am-text-right am-flex am-flex-warp am-flex-items-center am-flex-justify-right am-gap-12" data-init="1" data-type="user" data-empty-time="1">
+                            {{if !empty($time_data)}}
+                            <div class="quick-time am-flex am-flex-items-center">
+                                {{foreach :array_values($time_data) as $k=>$v}}
+                                    {{if $k lt 3}}
+                                        <a class="recently time" href="javascript:;" data-start="{{$v.start}}" data-end="{{$v.end}}">{{$v.name}}</a>
+                                    {{/if}}
+                                {{/foreach}}
+                                <div id="doc-dropdown-justify">
+                                    <div class="am-dropdown" data-am-dropdown="{justify: '#doc-dropdown-justify'}">
+                                        <a href="javascript:;" class="am-dropdown-toggle">更多 <span class="am-icon-caret-down"></span></a>
+                                        <div class="am-dropdown-content am-radius">
+                                            <div class="am-flex am-flex-warp am-flex-items-center">
+                                                {{foreach :array_values($time_data) as $k=>$v}}
+                                                    {{if $k gt 2}}
+                                                        <div class="item">
+                                                            <a class="am-inline-block time" href="javascript:;" data-start="{{$v.start}}" data-end="{{$v.end}}">{{$v.name}}</a>
+                                                        </div>
+                                                    {{/if}}
+                                                {{/foreach}}
+                                                <div class="item">
+                                                    <a class="am-inline-block time" href="javascript:;" data-start="" data-end="">{{:MyLang('all_title')}}</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {{/if}}
+                            {{:ModuleInclude('../../../plugins/distribution/view/index/index/public/stats_where')}}
+                        </div>
+                    </div>
+                    <div id="echarts-user" class="am-margin-top"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- content end -->
+</div>
+
+<!-- 修改上级用户弹窗 -->
+<div class="am-modal am-modal-no-btn" tabindex="-1" id="modify-superior-modal">
+    <div class="am-modal-dialog am-radius">
+        <div class="am-modal-hd">
+            <span>修改上级用户</span>
+            <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
+        </div>
+        <div class="am-modal-bd am-padding-horizontal-lg">
+            <form class="am-form form-validation-modify-superior am-form-full-screen" action="{{:PluginsHomeUrl('distribution', 'index', 'superiorsave')}}" method="POST" request-type="ajax-reload">
+                <!-- 搜索用户模块 -->
+                <div class=" am-margin-top am-padding-bottom-sm am-text-left">
+                    {{:ModuleInclude('../../../plugins/distribution/view/index/public/search_user')}}
+                </div>
+
+                <div class="am-form-popup-submit am-text-right">
+                    {{if !empty($superior) and !empty($superior['can_modify_number_msg'])}}
+                        <span class="am-text-warning am-margin-right-lg">{{$superior.can_modify_number_msg}}</span>
+                    {{/if}}
+                    <input type="hidden" name="superior_id" value="{{if !empty($superior)}}{{$superior.id}}{{/if}}" />
+                    <button type="button" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg" data-am-modal-close>
+                        <i class="am-icon-paint-brush"></i>
+                        <span>{{:MyLang('cancel_title')}}</span>
+                    </button>
+                    <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('confirm_title')}}'}">
+                        <i class="am-icon-check"></i>
+                        <span>{{:MyLang('confirm_title')}}</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

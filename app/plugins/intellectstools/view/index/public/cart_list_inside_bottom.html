@@ -1,0 +1,5 @@
+{{if !empty($plugins_config['cart_view_bottom_desc']) and is_array($plugins_config['cart_view_bottom_desc'])}}
+    <div class="am-text-warning am-padding-main">
+        <p>{{:implode("<br />", $plugins_config['cart_view_bottom_desc'])}}</p>
+    </div>
+{{/if}}

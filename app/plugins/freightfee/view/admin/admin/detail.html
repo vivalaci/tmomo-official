@@ -1,0 +1,151 @@
+<!-- 继承公共的 form -->
+{{extend name="../../../module/view/form_table/detail" /}}
+
+<!-- 重写数据模块 -->
+{{block name="detail_data"}}
+    {{:ModuleInclude('public/detail_nav_switch_tabs', [
+        'nav_data' => [
+            [
+                'name' => MyLang('form_base_data_title'),
+                'key'  => 'base',
+            ],
+            [
+                'name' => '免运费支付方式',
+                'key'  => 'payment',
+            ],
+            [
+                'name' => '免运费商品',
+                'key'  => 'goods',
+            ],
+            [
+                'name' => '特定商品分类运费',
+                'key'  => 'goods-category-append',
+            ],
+            [
+                'name' => '运费模板',
+                'key'  => 'fee-template',
+            ],
+        ]
+    ])}}
+    <div class="detail-content-switch-data-item">
+        <!-- 父级内容 -->
+        <div class="item am-active" data-key="base">
+            {__block__}
+        </div>
+    
+    <!-- 免运费支付方式 -->
+    <div class="item" data-key="payment">
+        {{if !empty($data['payment_names'])}}
+            <dl class="dl-content dl-content-dd-only">
+                {{foreach $data.payment_names as $payment}}
+                    <dd title="{{$payment}}">{{$payment}}</dd>
+                {{/foreach}}
+            </dl>
+        {{else /}}
+            {{:ModuleInclude('public/not_data')}}
+        {{/if}}
+    </div>
+
+    <!-- 免运费商品 -->
+    <div class="item" data-key="goods">
+        {{if !empty($data['goods_list'])}}
+            <ul data-am-widget="gallery" class="am-gallery am-avg-sm-4 am-avg-md-4 am-avg-lg-6 am-gallery-bordered">
+                {{foreach $data.goods_list as $v}}
+                    <li>
+                        <div class="am-gallery-item">
+                            <a href="{{$v.goods_url}}" target="_blank" title="{{$v.title}}">
+                                <img src="{{$v.images}}" alt="{{$v.title}}" />
+                                <h3 class="am-gallery-title">{{$v.title}}</h3>
+                            </a>
+                            <div class="am-gallery-desc am-text-truncate">{{$currency_symbol}}{{$v.price}}</div>
+                        </div>
+                    </li>
+                {{/foreach}}
+            </ul>
+        {{else /}}
+            {{:ModuleInclude('public/not_data')}}
+        {{/if}}
+    </div>
+
+    <!-- 特定商品分类运费 -->
+    <div class="item" data-key="goods-category-append">
+        {{if !empty($data['goods_category_append']) and is_array($data['goods_category_append'])}}
+            <table class="am-table am-margin-bottom-0">
+                <thead>
+                    <tr>
+                        <th>分类名称</th>
+                        <th>金额</th>
+                        <th>显示名称</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{foreach $data.goods_category_append as $v}}
+                        <tr class="am-nbfc am-padding-xs data-item-{{$v.id}}">
+                            <td>
+                                <span>{{if !empty($v['name'])}}{{$v.name}}{{/if}}</span>
+                            </td>
+                            <td>
+                                <span class="am-text-danger">{{if !empty($v['price'])}}{{$v.price}}{{/if}}</span>
+                            </td>
+                            <td>
+                                <span>{{if !empty($v['icon'])}}{{$v.icon}}{{/if}}</span>
+                            </td>
+                        </tr>
+                    {{/foreach}}
+                </tbody>
+            </table>
+        {{else /}}
+            {{:ModuleInclude('public/not_data')}}
+        {{/if}}
+    </div>
+
+    <!-- 运费模板 -->
+    <div class="item" data-key="fee-template">
+        {{if !empty($data['data'])}}
+            <div class="freightfee-rules">
+                <table class="am-table am-table-striped am-margin-bottom-0">
+                    <thead>
+                        <tr>
+                            <th>运送到</th>
+                            <th>首件({{if empty($data['valuation']) or $data['valuation'] eq 0}}件{{elseif $data['valuation'] eq 1 /}}kg{{elseif $data['valuation'] eq 2 /}}m³{{/if}})</th>
+                            <th>续件({{if empty($data['valuation']) or $data['valuation'] eq 0}}件{{elseif $data['valuation'] eq 1 /}}kg{{elseif $data['valuation'] eq 2 /}}m³{{/if}})</th>
+                            <th width="180">名称 / 首费 / 续费</th>
+                            <th>订单金额满(免运费)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{foreach $data.data as $k=>$v}}
+                            <tr class="data-list-{{$k}}">
+                                <td class="first">
+                                    {{if $v['region'] eq 'default'}}
+                                        默认运费
+                                    {{else /}}
+                                        <div class="region-td am-radius">{{$v.region_names}}</div>
+                                    {{/if}}
+                                </td>
+                                <td>{{if isset($v['first'])}}{{$v.first}}{{/if}}</td>
+                                <td>{{if isset($v['continue'])}}{{$v.continue}}{{/if}}</td>
+                                <td>
+                                    {{if !empty($v['fee_list']) and is_array($v['fee_list'])}}
+                                        {{foreach $v.fee_list as $vs}}
+                                            <p>
+                                                <span>{{$vs.fee_name}}</span>
+                                                <span class="am-padding-horizontal-xs am-text-grey">/</span>
+                                                <span>{{$vs.first_price}}</span>
+                                                <span class="am-padding-horizontal-xs am-text-grey">/</span>
+                                                <span>{{$vs.continue_price}}</span>
+                                            </p>
+                                        {{/foreach}}
+                                    {{/if}}
+                                </td>
+                                <td>{{if isset($v['free_shipping_price'])}}{{$v.free_shipping_price}}{{/if}}</td>
+                            </tr>
+                        {{/foreach}}
+                    </tbody>
+                </table>
+            </div>
+        {{else /}}
+            {{:ModuleInclude('public/not_data')}}
+        {{/if}}
+    </div>
+{{/block}}

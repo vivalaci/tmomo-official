@@ -1,0 +1,62 @@
+<div class="customer-service-container {{if !empty($params) and isset($params['is_create']) and $params['is_create'] eq 1}}list-show{{/if}}">
+    <div class="am-panel am-panel-default am-radius">
+        <div class="am-panel-hd">{{:MyLang('orderaftersale.aftersale_service_title')}}</div>
+        <div class="am-panel-bd am-text-sm">
+            {{if !empty($service_msg)}}
+                <p class="am-color-red am-text-sm am-padding-bottom-sm">{{$service_msg}}</p>
+            {{/if}}
+            {{if !empty($service_tel)}}
+                <div class="item am-cf am-padding-vertical-xs">
+                    <a href="tel:{{$service_tel}}" class="am-decoration-none am-flex">
+                        <i class="am-icon-phone am-text-primary am-margin-right-sm am-icon-width"></i>
+                        <span>{{$service_tel}}</span>
+                    </a>
+                </div>
+            {{/if}}
+            {{if !empty($service_qq)}}
+                <div class="item am-cf am-padding-vertical-xs">
+                    <a href="https://wpa.qq.com/msgrd?v=3&uin={{$service_qq}}&site=qq&menu=yes" target="_blank" class="am-decoration-none am-flex">
+                        <i class="am-icon-qq am-text-primary am-margin-right-sm am-icon-width"></i>
+                        <span>{{$service_qq}}</span>
+                    </a>
+                </div>
+            {{/if}}
+            {{if !empty($service_weixin)}}
+                <div class="item am-cf am-padding-vertical-xs">
+                    <div class="am-dropdown am-inline-block" data-am-dropdown="{trigger: 'hover'}">
+                        <a href="javascript:;" class="am-dropdown-toggle am-decoration-none">
+                            <i class="am-icon-weixin am-text-primary am-margin-right-sm am-icon-width"></i>
+                            <span>微信客服</span>
+                        </a>
+                        <div class="am-dropdown-content am-padding-sm am-text-center am-radius">
+                            <img src="{{$service_weixin}}" class="am-radius" alt="微信咨询" width="140" height="140">
+                            <p class="am-margin-top-xs am-text-center">微信扫码咨询</p>
+                        </div>
+                    </div>
+                </div>
+            {{/if}}
+            {{if !empty($service_line)}}
+                <div class="item am-cf am-padding-vertical-xs">
+                    <div class="am-dropdown am-inline-block" data-am-dropdown="{trigger: 'hover'}">
+                        <a href="javascript:;" class="am-dropdown-toggle am-decoration-none">
+                            <i class="am-icon-linkedin am-text-primary am-margin-right-sm am-icon-width"></i>
+                            <span>line客服</span>
+                        </a>
+                        <div class="am-dropdown-content am-padding-sm am-text-center am-radius">
+                            <img src="{{$service_line}}" class="am-radius" alt="line咨询" width="140" height="140">
+                            <p class="am-margin-top-xs am-text-center">line扫码咨询</p>
+                        </div>
+                    </div>
+                </div>
+            {{/if}}
+            {{if !empty($chat)}}
+                <div class="item am-cf am-padding-vertical-xs">
+                    <a href="{{$chat.chat_url}}" target="_blank" class="am-decoration-none">
+                        <img src="{{$chat.icon}}" width="16" height="16" class="am-margin-right-sm" />
+                        <span class="am-text-middle">{{$chat.name}}</span>
+                    </a>
+                </div>
+            {{/if}}
+        </div>
+    </div>
+</div>

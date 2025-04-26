@@ -1,0 +1,14 @@
+{{if !empty($goods_price)}}
+    <div class="items goods-price plugins-membershiplevelvip-goods-price-top">
+        <dt>{{:MyLang('goods_sales_price_title')}}</dt>
+        <dd>
+            <span class="am-text-grey" data-original-price="{{$goods_original_price}}">
+                <em class="symbol">{{$currency_symbol}}</em>
+                <b>{{$goods_price}}</b>
+                {{if !empty($inventory_unit)}}
+                    <em class="unit"> / {{$inventory_unit}}</em>
+                {{/if}}
+            </span>
+        </dd>
+    </div>
+{{/if}}

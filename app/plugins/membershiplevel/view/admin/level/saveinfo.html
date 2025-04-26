@@ -1,0 +1,102 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'membershiplevel',
+            'title'     => '会员等级'.(empty($data['id']) ? MyLang('created_title') : MyLang('edit_title')),
+            'back_url'  => PluginsAdminUrl('membershiplevel', 'level', 'index', $params),
+        ])}}
+
+        <div class="membershiplevel-content">
+            <!-- form start -->
+            <form class="am-form form-validation am-form-full-screen am-form-popup-fixed" action="{{:PluginsAdminUrl('membershiplevel', 'level', 'save')}}" method="POST" request-type="ajax-url" request-value="{{:PluginsAdminUrl('membershiplevel', 'level', 'index', $params)}}" enctype="multipart/form-data">
+                <div class="am-form-group">
+                    <label>名称</label>
+                    <input type="text" name="name" placeholder="名称" minlength="1" maxlength="30" data-validation-message="名称格式 1~30 个字符" class="am-radius" {{if !empty($data['name'])}} value="{{$data.name}}"{{/if}} required />
+                </div>
+
+                <div class="am-form-group am-form-file">
+                    <label class="am-block">图标<span class="am-form-group-label-tips">建议50*50px</span></label>
+                    <div class="am-form-file-upload-container">
+                        <ul class="plug-file-upload-view images_url-images-view" data-form-name="images_url" data-max-number="1" data-delete="1" data-dialog-type="images">
+                            {{if !empty($data['images_url'])}}
+                                <li>
+                                    <input type="text" name="images_url" value="{{$data.images_url_old}}" data-validation-message="请上传图标" />
+                                    <img src="{{$data.images_url}}" />
+                                    <i class="iconfont icon-close"></i>
+                                </li>
+                            {{/if}}
+                        </ul>
+                        <div class="plug-file-upload-submit" data-view-tag="ul.images_url-images-view">
+                            <i class="iconfont icon-upload-add"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="am-alert am-alert-warning" data-am-alert="">
+                    <button type="button" class="am-close">&times;</button>
+                    <p>
+                        规则举例 <br>
+                        <span class="mini-tips-text">最小规则0 - 最大规则100 则是小于100
+                            <br> 最小规则1000 - 最大规则0 则是大于1000
+                            <br> 最小规则100 - 最大规则500 则是大于等于100并且小于500
+                        </span>
+                    </p>
+                </div>
+                <div class="am-form-group">
+                    <label>规则值</label>
+                    <div class="rules-value">
+                        <input type="number" placeholder="最小值" name="rules_min" min="0" step="0.01" data-validation-message="请填写规则最小值" class="am-radius" {{if isset($data['rules_min'])}} value="{{$data.rules_min}}"{{/if}} required />
+                        <span class="am-text-grey">~</span>
+                        <input type="number" placeholder="最大值" min="0" step="0.01" name="rules_max" data-validation-message="请填写规则最大值" class="am-radius" {{if isset($data['rules_max'])}} value="{{$data.rules_max}}"{{/if}} required />
+                    </div>
+                </div>
+
+                <div class="am-alert am-alert-warning" data-am-alert="">
+                    <button type="button" class="am-close">&times;</button>
+                    <p>
+                        优惠说明 <br>
+                        <span class="mini-tips-text">
+                            满减优惠 与 折扣率可<span class="am-text-red">叠加使用</span>，如需只使用其中一项优惠，则请注意只需配置该优惠项即可！！！
+                        </span>
+                    </p>
+                </div>
+                <div class="am-form-group">
+                    <label>满减优惠<span class="am-form-group-label-tips">计算规则，大于等于[订单满金额]则减[满减金额](不含运费)，空或0则无优惠</span></label>
+                    <div class="full-reduction-value">
+                        <span>满</span>
+                        <input type="number" name="order_price" min="0.00" step="0.01" placeholder="订单满金额" data-validation-message="请输入有效的订单满金额" class="am-radius" {{if !empty($data['order_price'])}} value="{{$data.order_price}}"{{/if}} />
+                        <span>减</span>
+                        <input type="number" name="full_reduction_price" min="0.00" step="0.01" placeholder="满减金额" data-validation-message="请输入有效的满减金额" class="am-radius" {{if !empty($data['full_reduction_price'])}} value="{{$data.full_reduction_price}}"{{/if}} />
+                    </div>
+                </div>
+                <div class="am-form-group">
+                    <label>折扣率<span class="am-form-group-label-tips">空或0则无折扣，最大0.99</span></label>
+                    <input type="number" name="discount_rate" placeholder="折扣率" min="0.00" max="0.99" step="0.01" data-validation-message="折扣率应输入 0.00~0.99 的数字,小数保留两位" class="am-radius" {{if !empty($data['discount_rate'])}} value="{{$data.discount_rate}}"{{/if}} />
+                </div>
+
+                {{:ModuleInclude('lib/is_enable')}}
+
+                <div class="am-form-popup-submit">
+                    <input type="hidden" name="id" {{if !empty($data['id'])}} value="{{$data.id}}"{{/if}} />
+                    <a href="{{:PluginsAdminUrl('membershiplevel', 'level', 'index', $params)}}" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg">
+                        <i class="am-icon-mail-reply"></i>
+                        <span>{{:MyLang('retreat_title')}}</span>
+                    </a>
+                    <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('save_title')}}'}">
+                        <i class="am-icon-save"></i>
+                        <span>{{:MyLang('save_title')}}</span>
+                    </button>
+                </div>
+            </form>
+            <!-- form end -->
+        </div>
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

@@ -1,0 +1,17 @@
+{{if !empty($brand_info)}}
+    <div class="plugins-brand-goods-detail am-radius {{if !empty($brand_info['describe'])}}brand-hover{{/if}}">
+        <a href="{{:MyUrl('index/search/index', ['brand'=>$brand_info['id']])}}" target="_blank" class="am-block">
+            {{if empty($brand_info['logo'])}}
+                <p class="am-padding-xs am-text-center">{{$brand_info.name}}</p>
+            {{else /}}
+                <img src="{{$brand_info.logo}}" alt="{{$brand_info.name}}" class="am-block" />
+            {{/if}}
+        </a>
+        <div class="brand-base-info am-hide am-margin-top-sm">
+            {{if !empty($brand_info['logo'])}}
+                <p class="brand-info-name am-text-center am-padding-top-sm">{{$brand_info.name}}</p>
+            {{/if}}
+            <p class="brand-info-desc am-margin-top-xs am-text-truncate-2">{{$brand_info.describe}}</p>
+        </div>
+    </div>
+{{/if}}

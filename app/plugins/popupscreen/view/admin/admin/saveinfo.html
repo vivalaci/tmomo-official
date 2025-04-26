@@ -1,0 +1,147 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'popupscreen',
+            'title'     => MyLang('base_config_title'),
+            'back_url'  => PluginsAdminUrl('popupscreen', 'admin', 'index'),
+        ])}}
+
+        <!-- form start -->
+        <form class="am-form form-validation am-form-full-screen am-form-popup-sticky" action="{{:PluginsAdminUrl('popupscreen', 'admin', 'save')}}" method="POST" request-type="ajax-url" request-value="{{:PluginsAdminUrl('popupscreen', 'admin', 'index')}}" enctype="multipart/form-data">
+            <!-- 基础 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">基础</h3>
+                </div>
+                <div class="am-panel-bd am-padding-vertical-xs">
+                    <div class="am-form-group">
+                        <label class="am-block">开启web端<span class="am-form-group-label-tips">默认否</span></label>
+                        <input name="is_web_enable" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_web_enable']) and $data['is_web_enable'] eq 1}}checked="true"{{/if}} />
+                    </div>
+                    <div class="am-form-group">
+                        <label class="am-block">开启手机端<span class="am-form-group-label-tips">默认否</span></label>
+                        <input name="is_app_enable" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_app_enable']) and $data['is_app_enable'] eq 1}}checked="true"{{/if}} />
+                    </div>
+                    <div class="am-form-group">
+                        <label class="am-block">是否全局<span class="am-form-group-label-tips">默认否、仅首页</span></label>
+                        <input name="is_overall" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_overall']) and $data['is_overall'] eq 1}}checked="true"{{/if}} />
+                    </div>
+                    <div class="am-form-group">
+                        <label class="am-block">是否新窗口打开<span class="am-form-group-label-tips">默认否、（该配置仅对web端有效）</span></label>
+                        <input name="is_new_window_open" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_new_window_open']) and $data['is_new_window_open'] eq 1}}checked="true"{{/if}} />
+                    </div>
+                    <div class="am-form-group">
+                        <label>自动关闭时间<span class="am-form-group-label-tips">0或空不关闭</span></label>
+                        <div class="am-input-group am-input-group-sm am-margin-top-xs">
+                            <input type="number" name="close_time" min="0" placeholder="自动关闭时间" data-validation-message="自动关闭时间格式有误" class="am-radius" value="{{if !empty($data['close_time'])}}{{$data.close_time}}{{/if}}" />
+                            <span class="am-input-group-btn">
+                                <button type="button" class="am-btn am-btn-default am-radius">{{:MyLang('second_title')}}</button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label>再次显示间隔时间<span class="am-form-group-label-tips">默认24小时（86400秒）</span></label>
+                        <div class="am-input-group am-input-group-sm am-margin-top-xs">
+                            <input type="number" name="interval_time" min="0" placeholder="再次显示间隔时间" data-validation-message="再次显示间隔时间格式有误" class="am-radius" value="{{if !empty($data['interval_time'])}}{{$data.interval_time}}{{/if}}" />
+                            <span class="am-input-group-btn">
+                                <button type="button" class="am-btn am-btn-default am-radius">{{:MyLang('second_title')}}</button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label>{{:MyLang('form_time_valid_title')}}<span class="am-form-group-label-tips">留空则不限制</span></label>
+                        <div class="form-multiple-where-input">
+                            <input type="text" autocomplete="off" name="time_start" class="Wdate am-radius" placeholder="起始时间" onclick="WdatePicker({firstDayOfWeek:1,dateFmt:'yyyy-MM-dd HH:mm:ss'})" {{if !empty($data['time_start'])}}value="{{$data.time_start}}"{{/if}}/>
+                            <span class="am-text-grey">~</span>
+                            <input type="text" autocomplete="off" class="Wdate am-radius" placeholder="{{:MyLang('form_time_end_title')}}" name="time_end" onclick="WdatePicker({firstDayOfWeek:1,dateFmt:'yyyy-MM-dd HH:mm:ss'})" {{if !empty($data['time_end'])}}value="{{$data.time_end}}"{{/if}}/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 图片 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">图片</h3>
+                </div>
+                <div class="am-panel-bd am-padding-vertical-xs">
+                    <div class="am-form-group am-form-file">
+                        <label class="am-block">图片<span class="am-form-group-label-tips">选传、尺寸500x320px</span></label>
+                        <div class="am-form-file-upload-container">
+                            <ul class="plug-file-upload-view images-view" data-form-name="images" data-max-number="1" data-delete="1" data-dialog-type="images">
+                                {{if !empty($data['images'])}}
+                                    <li>
+                                        <input type="text" name="images" value="{{$data.images}}" data-validation-message="{{:MyLang('form_upload_images_message')}}" required />
+                                        <img src="{{$data.images}}" />
+                                        <i class="iconfont icon-close"></i>
+                                    </li>
+                                {{/if}}
+                            </ul>
+                            <div class="plug-file-upload-submit" data-view-tag="ul.images-view">
+                                <i class="iconfont icon-upload-add"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label>图片链接地址</label>
+                        <div class="am-alert am-radius am-margin-top-0" data-am-alert>
+                            <div>
+                                <p><strong>WEB端(PC+H5)</strong></p>
+                                <div class="am-padding-left-lg">
+                                    <p>1. 以http开头</p>
+                                </div>
+                            </div>
+                            <div class="am-margin-top-xs">
+                                <p><strong>小程序/APP</strong></p>
+                                <div class="am-padding-left-lg">
+                                    <p>1. 小程序或APP内部地址</p>
+                                    <p>2. 小程序以/pages开始</p>
+                                    <p>3. 例如：/pages/user/user</p>
+                                    <p>4. 支持带参数 ?x=xx</p>
+                                    {{if !empty($site_store_links) and !empty($site_store_links['app_mini_pages'])}}
+                                    <p>
+                                        <a href="{{$site_store_links.app_mini_pages}}" target="_blank">小程序页面地址配置说明 <i class="am-icon-external-link"></i></a>
+                                    </p>
+                                {{/if}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="images-url-container am-margin-top-sm">
+                            {{if !empty($common_platform_type)}}
+                                {{foreach $common_platform_type as $v}}
+                                    <div class="am-input-group am-input-group-sm">
+                                        <span class="am-input-group-btn">
+                                            <button type="button" class="am-btn am-btn-default am-radius">{{$v.name}}</button>
+                                        </span>
+                                        <input type="text" name="images_url[{{$v.value}}]" placeholder="{{$v.name}}" class="am-form-field am-radius" value="{{if !empty($data['images_url']) and is_array($data['images_url']) and array_key_exists($v['value'], $data['images_url'])}}{{$data['images_url'][$v['value']]}}{{/if}}" />
+                                    </div>
+                                {{/foreach}}
+                            {{/if}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="am-form-popup-submit">
+                <a href="{{:PluginsAdminUrl('popupscreen', 'admin', 'index', $params)}}" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg">
+                    <i class="am-icon-mail-reply"></i>
+                    <span>{{:MyLang('retreat_title')}}</span>
+                </a>
+                <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('save_title')}}'}">
+                    <i class="am-icon-save"></i>
+                    <span>{{:MyLang('save_title')}}</span>
+                </button>
+            </div>
+        </form>
+        <!-- form end -->
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

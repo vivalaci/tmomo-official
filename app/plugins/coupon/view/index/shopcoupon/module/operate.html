@@ -1,0 +1,28 @@
+<!-- 操作栏 -->
+<button type="button" class="am-btn am-btn-default am-btn-xs am-radius am-btn-block submit-popup" data-url="{{:PluginsHomeUrl('coupon', 'shopcoupon', 'detail', ['id'=>$module_data['id']])}}" data-title="{{:MyLang('detail_title')}}">
+    <i class="am-icon-eye"></i>
+    <span>{{:MyLang('detail_title')}}</span>
+</button>
+<a href="{{:PluginsHomeUrl('coupon', 'index', 'detail', ['id'=>$module_data['id']])}}" class="am-btn am-btn-success am-btn-xs am-radius am-btn-block" target="_blank">
+    <i class="am-icon-eye"></i>
+    <span>{{:MyLang('view_title')}}</span>
+</a>
+<a href="{{:PluginsHomeUrl('coupon', 'shopcoupon', 'saveinfo', array_merge($params, ['id'=>$module_data['id']]))}}" class="am-btn am-btn-secondary am-btn-xs am-radius am-btn-block">
+    <i class="am-icon-edit"></i>
+    <span>{{:MyLang('edit_title')}}</span>
+</a>
+<a href="javascript:;" class="am-btn am-btn-success am-btn-xs am-radius am-btn-block submit-popup" data-url="{{:PluginsHomeUrl('coupon', 'shopcoupon', 'sendinfo', array_merge($params, ['id'=>$module_data['id']]))}}" data-full="1" data-full-max="1" data-offcanvas="right" data-title="{{:MyLang('grant_title')}}">
+    <i class="am-icon-send-o"></i>
+    <span>{{:MyLang('grant_title')}}</span>
+</a>
+{{if $module_data['already_send_count'] gt 0}}
+    <a href="javascript:;" class="am-btn am-btn-primary am-btn-xs am-radius am-btn-block submit-popup" data-url="{{:PluginsHomeUrl('coupon', 'shopcouponuser', 'index', array_merge($params, ['cid'=>$module_data['id']]))}}" data-full="1" data-full-max="1" data-offcanvas="right" data-title="{{:MyLang('user_title')}}">
+        <i class="am-icon-user"></i>
+        <span>{{:MyLang('user_title')}}</span>
+    </a>
+{{else /}}
+    <button type="button" class="am-btn am-btn-danger am-btn-xs am-radius am-btn-block submit-delete" data-url="{{:PluginsHomeUrl('coupon', 'shopcoupon', 'delete')}}" data-id="{{$module_data.id}}" data-key="ids">
+        <i class="iconfont icon-delete"></i>
+        <span>{{:MyLang('delete_title')}}</span>
+    </button>
+{{/if}}

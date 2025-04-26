@@ -1,0 +1,21 @@
+ {{if !empty($plugins_seckill_data) and !empty($plugins_seckill_data['goods']) and !empty($plugins_seckill_data['time'])}}
+     <div class="am-container plugins-seckill-home-adv am-radius am-margin-bottom-module-half" {{if !empty($plugins_seckill_data['home_bg'])}}style="background-image:url({{$plugins_seckill_data.home_bg}});"{{/if}}>
+        <div class="title am-cf">
+            <h3 class="am-fl am-margin-right-sm" {{if !empty($plugins_seckill_data['home_title_icon'])}}style="background-image: url({{$plugins_seckill_data.home_title_icon}});"{{/if}}></h3>
+            <div class="countdown am-fl">
+                <span class="iconfont icon-flash-killing"></span>
+                <span class="timer-title">{{$plugins_seckill_data.time.msg}}</span>
+                <span class="timer-hours hours am-radius">{{if isset($plugins_seckill_data['time']['hours'])}}{{$plugins_seckill_data.time.hours}}{{else /}}00{{/if}}</span>
+                <em>:</em>
+                <span class="timer-hours minutes am-radius">{{if isset($plugins_seckill_data['time']['minutes'])}}{{$plugins_seckill_data.time.minutes}}{{else /}}00{{/if}}</span>
+                <em>:</em>
+                <span class="timer-hours seconds am-radius">{{if isset($plugins_seckill_data['time']['seconds'])}}{{$plugins_seckill_data.time.seconds}}{{else /}}00{{/if}}</span>
+            </div>
+            <a href="{{:PluginsHomeUrl('seckill', 'index', 'index')}}" target="_blank" class="am-fr more">{{:MyLang('more_title')}} <i class="iconfont icon-angle-right"></i></a>
+        </div>
+        {{:ModuleInclude('module/goods/slider/piece', [
+            'goods_list'  => $plugins_seckill_data['goods'],
+            'type'        => 'seckill',
+        ])}}
+    </div>
+{{/if}}

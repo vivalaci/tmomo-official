@@ -1,0 +1,25 @@
+{{block name="form_header"}}
+    {{:ModuleInclude('public/header')}}
+    <div class="popup-pure-page am-padding-horizontal-xs am-padding-top-xs">
+{{/block}}
+
+<!-- 继承公共的 form -->
+{{extend name="../../../module/view/form_table/base_form" /}}
+
+<!-- 导航 -->
+{{block name="form_content_top"}}
+    {{:ModuleInclude('../../../plugins/distribution/view/index/promotionuser/nav')}}
+{{/block}}
+
+<!-- 表单顶部操作栏 -->
+{{block name="form_operate_top"}}
+    <div class="am-padding-top-sm">
+        <!-- 父级内容 -->
+        {__block__}
+    </div>
+{{/block}}
+
+{{block name="form_footer"}}
+    </div>
+    {{:ModuleInclude('public/footer')}}
+{{/block}}

@@ -1,0 +1,109 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- header top nav -->
+{{:ModuleInclude('public/header_top_nav')}}
+
+<!-- search -->
+{{:ModuleInclude('public/nav_search')}}
+
+<!-- header nav -->
+{{:ModuleInclude('public/header_nav')}}
+
+<!-- goods category -->
+{{:ModuleInclude('public/goods_category')}}
+
+<!-- content start -->
+<div class="am-container plugins-distribution-home-data-detail">
+    {{if !empty($data) and is_array($data)}}
+        <div class="am-padding-top-module-half">
+            <ul class="am-avg-sm-1 am-avg-md-2">
+                {{foreach $data.detail_list as $v}}
+                    {{if !empty($v['goods'])}}
+                        <li class="am-padding-module-half {{if $v['goods']['is_error'] eq 1}}lapse-no-drop{{/if}}" data-goods-id="{{$v.goods.id}}" data-buy-min-number="{{$v.goods.buy_min_number}}">
+                            {{if $v['goods']['is_error'] eq 1}}
+                                <div class="lapse">
+                                    <div class="lapse-content">已失效</div>
+                                </div>
+                            {{/if}}
+                            <div class="item-content am-flex am-flex-justify-between am-padding-main am-nbfc am-radius box-shadow-hover am-background-white {{if $v['goods']['is_error'] eq 1}}item-error{{/if}}">
+                                <a href="{{$v.goods.goods_url}}" target="_blank" class="am-fl">
+                                    <img src="{{$v.goods.images}}" alt="{{$v.goods.title}}" class="am-block am-radius scale-sm" />
+                                </a>
+                                <div class="am-fr base-right am-flex am-flex-col am-flex-justify-between">
+                                    <div>
+                                        {{if $v['goods']['is_error'] eq 0}}
+                                            <label class="am-checkbox-inline am-margin-right-0 checkbox-choice" data-spec="{{if !empty($v['spec'])}}{{:urlencode(base64_encode($v['spec']))}}{{/if}}">
+                                                <input type="checkbox" value="1" data-am-ucheck checked />
+                                            </label>
+                                        {{/if}}
+                                        <div class="am-padding-right-xl">
+                                            <p class="am-text-truncate-2 am-text-default">
+                                                <a href="{{$v.goods.goods_url}}" target="_blank">{{$v.goods.title}}</a>
+                                            </p>
+                                            <p class="am-text-truncate-2 am-color-red am-margin-top-sm">{{if !empty($v['spec_text_view'])}}{{$v.spec_text_view}}{{/if}}</p>
+                                        </div>
+                                    </div>
+
+                                    <p class="am-margin-top-xs am-text-truncate">
+                                        <strong class="am-text-default price" data-price="{{$v.goods.price}}">{{$currency_symbol}}{{$v.goods.price}}</strong>
+                                        {{if isset($v['goods']['original_price']) and $v['goods']['original_price'] neq 0}}
+                                            <span class="original-price am-margin-left-sm">{{$currency_symbol}}{{$v.goods.original_price}}</span>
+                                        {{/if}}
+                                    </p>
+                                    <div class="bottom-content am-nbfc am-margin-top-xs">
+                                        {{if $v['goods']['is_error'] eq 0}}
+                                            <a href="javascript:;" data-gid="{{$v.goods.id}}" data-is-many-spec="{{$v.goods.is_exist_many_spec}}" class="am-fl am-color-main common-goods-cart-submit-event">
+                                                <i class="iconfont icon-shopping_assembly am-text-sm"></i>
+                                            </a>
+                                            <p class="am-text-grey am-fl am-text-truncate am-margin-left-module am-text-xs inventory">{{$v.goods.inventory}}{{$v.goods.inventory_unit}}</p>
+
+                                            <div class="am-input-group am-input-group-sm am-fr stock-tag" data-inventory="{{$v.goods.inventory}}">
+                                                <span class="am-input-group-label am-radius {{if $v['goods']['is_shelves'] eq 1 and $v['goods']['is_delete_time'] eq 0}}stock-submit{{/if}}" data-type="min">-</span>
+                                                <input type="number" class="am-form-field am-radius am-text-center" value="{{$v.goods.buy_min_number}}" {{if $v['goods']['is_shelves'] neq 1 or $v['goods']['is_delete_time'] neq 0}}disabled{{/if}} data-min-limit="{{$v.goods.buy_min_number}}" data-max-limit="{{$v.goods.buy_max_number}}" data-unit="{{$v.goods.inventory_unit}}" data-is-clearout="0" />
+                                                <span class="am-input-group-label am-radius {{if $v['goods']['is_shelves'] eq 1 and $v['goods']['is_delete_time'] eq 0}}stock-submit{{/if}}" data-type="add">+</span>
+                                            </div>
+                                        {{else /}}
+                                            <span class="am-text-warning">{{$v.goods.error_msg}}</span>
+                                        {{/if}}
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    {{/if}}
+                {{/foreach}}
+            </ul>
+        </div>
+        <div class="nav am-cf am-margin-top-sm am-padding-sm am-radius am-background-white">
+            <div class="am-dropdown am-dropdown-up am-margin-top-sm" data-am-dropdown="{trigger: 'hover'}">
+                <a class="am-dropdown-toggle share-btn" href="javascript:;">
+                    <i class="am-icon-share"></i>
+                    <span>分享</span>
+                </a>
+                <div class="am-dropdown-content share-list am-radius">
+                    <div class="am-fl plugins-share-view" data-pic="{{$data.icon}}"></div>
+                </div>
+            </div>
+            <div class="am-fr am-text-right nav-right">
+                <div class="am-margin-right-main nav-total-price">
+                    <p class="am-text-truncate">
+                        <strong class="price am-text-xl">{{$currency_symbol}}{{$data.total_price}}</strong>
+                    </p>
+                </div>
+                <button type="button" class="am-btn am-btn-primary am-btn-xs am-radius buy-submit {{if empty($user)}}login-event{{/if}}">立即购买</button>
+            </div>
+            <!-- 购买表单 -->
+            <form action="{{:MyUrl('index/buy/index')}}" method="post" class="buy-form am-hide">
+                <input type="hidden" name="distribution_recommend_id" value="{{$data.id}}" />
+                <input type="hidden" name="buy_type" value="goods" />
+                <input type="hidden" name="goods_data" value="" />
+                <button type="submit"></button>
+            </form>
+        </div>
+    {{else /}}
+        {{:ModuleInclude('public/not_data')}}
+    {{/if}}
+</div>
+<!-- content end -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

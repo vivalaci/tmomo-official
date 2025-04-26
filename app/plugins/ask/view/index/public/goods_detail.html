@@ -1,0 +1,12 @@
+<!-- 商品详情问答模块-->
+<div class="table-no goods-ask-page-no-data am-padding-0 am-background-grey am-radius am-margin-bottom-xl am-pr">
+    <div class="am-flex am-flex-row am-flex-items-center am-gap-24 am-text-left">
+        <img class="no-data-comment" src="{{if !empty($data['images_url'])}}{{$data.images_url}}{{else /}}{{:StaticAttachmentUrl('no-ask.png')}}{{/if}}" />
+        <p class="no-data-tips am-text-truncate tips-width">心中有疑问就问问其他同学吧~</p>
+        <a href="javascript:;" class="am-radius am-btn am-btn-assist box-shadow-hover ask-question {{if empty($user)}}login-event{{else /}}submit-modal{{/if}}" {{if !empty($user)}}data-url="{{:PluginsHomeUrl('ask', 'ask', 'saveinfo', ['goods_id'=>$goods_id])}}"{{/if}} data-width="1200" data-height="800" data-close-via-dimmer="0" data-title="提问">
+            <span>我要提问</span>
+        </a>
+    </div>
+</div>
+
+<div class="ask-container" data-ajax-url="{{$goods_ask_url}}"></div>

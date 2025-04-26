@@ -1,0 +1,13 @@
+{{if !empty($platform_type_list) and is_array($platform_type_list)}}
+    <div class="am-fl">
+        {{foreach $platform_type_list as $k=>$v}}
+            {{if empty($v['config']['more_app'])}}
+                <a href="{{$v.login_url}}" {{if isset($platform_is_blank) and $platform_is_blank eq 1}}target="_blank"{{/if}} class="am-fl am-padding-xs am-circle am-margin-right-sm platform-{{$k}}" style="background: {{$v.bg_color}};">
+            {{else /}}
+                <a href="javascript:;" class="am-fl am-padding-xs am-circle am-margin-right-xs submit-popup platform-{{$k}}" style="background: {{$v.bg_color}};" data-url="{{:PluginsHomeUrl('thirdpartylogin', 'index', 'more', ['platform'=>$k])}}">
+            {{/if}}
+                <img src="{{$v.icon}}" alt="{{$v.name}}" class="am-block" width="14" height="14" />
+            </a>
+        {{/foreach}}
+    </div>
+{{/if}}

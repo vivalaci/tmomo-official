@@ -1,0 +1,17 @@
+<!-- 继承公共的 form -->
+{{extend name="../../../module/view/form_table/user_form" /}}
+
+<!-- 导航 -->
+{{block name="form_content_top"}}
+    {{:ModuleInclude('../../../plugins/distribution/view/index/public/nav')}}
+{{/block}}
+
+<!-- 表单顶部操作栏 -->
+{{block name="form_operate_top"}}
+    <a href="{{:PluginsHomeUrl('distribution', 'recommend', 'saveinfo')}}" class="am-btn am-btn-secondary am-radius am-btn-xs">
+        <i class="iconfont icon-btn-add am-show-sm-only"></i>
+        <span>{{:MyLang('add_title')}}</span>
+    </a>
+    <!-- 父级内容 -->
+    {__block__}
+{{/block}}

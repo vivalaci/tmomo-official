@@ -1,0 +1,5 @@
+<div class="plugins-backgroundad-top-url">
+    {{if !empty($plugins_config['top_url'])}}
+        <a href="{{$plugins_config.top_url}}" {{if isset($plugins_config['is_new_window_open']) and $plugins_config['is_new_window_open'] eq 1}}target="_blank"{{/if}} class="am-block"></a>
+    {{/if}}
+</div>

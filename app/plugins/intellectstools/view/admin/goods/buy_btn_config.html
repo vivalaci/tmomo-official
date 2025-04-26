@@ -1,0 +1,13 @@
+<div class="card-grey">
+    <h2 class="am-margin-vertical-0">智能工具插件商品页购买按钮跳转链接</h2>
+    <div>
+        <div class="am-form-group row">
+            <label class="am-block">按钮名称</label>
+            <input type="text" name="plugins_intellectstools_buy_btn_link_name" placeholder="按钮名称" data-validation-message="请填写按钮名称格式最多30个字符" maxlength="30" class="am-radius" value="{{if empty($data['plugins_intellectstools_buy_btn_link_name'])}}{{if !empty($config['admin_goods_saveinfo_config_default_name'])}}{{$config.admin_goods_saveinfo_config_default_name}}{{/if}}{{else /}}{{$data.plugins_intellectstools_buy_btn_link_name}}{{/if}}" />
+        </div>
+        <div class="am-form-group row">
+            <label class="am-block">按钮跳转链接</label>
+            <input type="text" name="plugins_intellectstools_buy_btn_link_url" placeholder="按钮跳转链接" data-validation-message="请填写按钮跳转链接" class="am-radius" value="{{if empty($data['plugins_intellectstools_buy_btn_link_url'])}}{{if !empty($config['admin_goods_saveinfo_config_default_url'])}}{{$config.admin_goods_saveinfo_config_default_url}}{{/if}}{{else /}}{{$data.plugins_intellectstools_buy_btn_link_url}}{{/if}}" />
+        </div>
+    </div>
+</div>

@@ -1,0 +1,62 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'membershiplevel',
+            'title'     => '会员等级',
+        ])}}
+
+        <div class="membershiplevel-content">
+            <!-- 基础数据 -->
+            <div class="am-panel am-panel-secondary">
+                <div class="am-panel-hd">
+                    <span class="am-panel-title">{{:MyLang('form_base_data_title')}}</span>
+                    <a class="am-margin-left-lg" href="{{:PluginsAdminUrl('membershiplevel', 'admin', 'saveinfo')}}">
+                        <i class="am-icon-edit"></i>
+                        <span>{{:MyLang('edit_title')}}</span>
+                    </a>
+                </div>
+                <div class="am-panel-bd">
+                    <div class="items">
+                        <label>等级规则模式</label>
+                        <div>
+                            {{if isset($data['level_rules']) and isset($members_level_rules_list[$data['level_rules']])}}
+                                {{:$members_level_rules_list[$data['level_rules']]['name']}}
+                            {{else /}}
+                                {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 积分（可用积分）]
+                            {{/if}}
+                        </div>
+                    </div>
+
+                    <div class="items">
+                        <label>默认等级图标</label>
+                        <div class="immages-tag">
+                            <img src="{{if !empty($data['default_level_images'])}}{{$data.default_level_images}}{{else /}}{{:StaticAttachmentUrl('level-default-images.png')}}{{/if}}" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 会员等级 -->
+            <div class="am-panel am-panel-default am-radius membershiplevel-level-list">
+                <div class="am-panel-hd">
+                    <span class="am-panel-title">会员等级</span>
+                    <a class="am-margin-left-lg" href="{{:PluginsAdminUrl('membershiplevel', 'level', 'index')}}">
+                        <i class="am-icon-edit"></i>
+                        <span>{{:MyLang('edit_title')}}</span>
+                    </a>
+                </div>
+                <div class="am-panel-bd">
+                    <iframe src="{{:PluginsAdminUrl('membershiplevel', 'level', 'index', ['is_admin_index'=>1])}}" width="100%" height="100%"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

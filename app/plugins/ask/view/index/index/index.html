@@ -1,0 +1,71 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- header top nav -->
+{{:ModuleInclude('public/header_top_nav')}}
+
+<!-- ask header -->
+{{:ModuleInclude('../../../plugins/ask/view/index/public/head')}}
+
+<!-- content start -->
+<div class="am-container plugins-ask">
+    {{if !empty($slider_list)}}
+        <div class="ask-top">
+            <!-- 幻灯片 -->
+            <div class="ask-slider">
+                <div data-am-widget="slider" class="am-slider am-slider-c2" data-am-slider='{&quot;directionNav&quot;:false}' >
+                    <ul class="am-slides">
+                        {{foreach $slider_list as $sk=>$sv}}
+                        <li {{if !empty($sv['bg_color'])}}style="background: {{$sv.bg_color}};"{{/if}}>
+                                {{switch sv.event_type}}
+                                    {{case 3}}
+                                        <!-- 地图 -->
+                                        <a href="javascript:;" {{if !empty($sv['event_value_data']) and !empty($sv['event_value_data'][2]) and !empty($sv['event_value_data'][3])}}class="submit-map-popup" data-lng="{{$sv['event_value_data'][2]}}" data-lat="{{$sv['event_value_data'][3]}}"{{/if}}><img src="{{$sv.images_url}}" alt="{{$sv.name}}" />
+                                    {{/case}}
+                                    {{case 4}}
+                                        <!-- 电话 -->
+                                        <a {{if !empty($sv['event_value'])}}href="tel:{{$sv.event_value}}"{{else /}}href="javascript:;"{{/if}}><img src="{{$sv.images_url}}" alt="{{$sv.name}}" />
+                                    {{/case}}
+                                    {{default /}}
+                                        <!-- 默认url地址 -->
+                                        <a {{if !empty($sv['event_value'])}}href="{{$sv.event_value}}" target="_blank"{{else /}}href="javascript:;"{{/if}}><img src="{{$sv.images_url}}" alt="{{$sv.name}}" />
+                                {{/switch}}
+                                    <div class="am-slider-desc">{{$sv.name}}</div>
+                                </a>
+                            </li>
+                        {{/foreach}}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    {{/if}}
+    
+    <div class="am-g ask-middle">
+        <!-- 左侧 -->
+        <div class="am-u-md-{{if empty($recommend_ask_list) and empty($recommend_goods_list)}}12{{else /}}8{{/if}} ask-middle-list">
+            <!-- 热门问答 -->
+            {{:ModuleInclude('../../../plugins/ask/view/index/public/hot')}}
+
+            <!-- 最新问答 -->
+            {{if !empty($new_ask_list) and is_array($new_ask_list)}}
+                {{:ModuleInclude('../../../plugins/ask/view/index/module/list', [
+                    'ask_list'  => $new_ask_list,
+                    'type'          => 'index',
+                    'icon'          => 'icon-new_tw',
+                    'title'         => empty($plugins_config['middle_new_name']) ? '最新问答' : $plugins_config['middle_new_name'],
+                ])}}
+            {{/if}}
+
+            <!-- 最新问答和热门问答都为空则提示无数据 -->
+            {{if empty($hot_ask_list) and empty($new_ask_list)}}
+                {{:ModuleInclude('public/not_data')}}
+            {{/if}}
+        </div>
+
+        <!-- 右侧 -->
+        {{:ModuleInclude('../../../plugins/ask/view/index/public/right')}}
+    </div>
+</div>
+<!-- content end -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

@@ -1,0 +1,95 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- header top nav -->
+{{:ModuleInclude('public/header_top_nav')}}
+
+<!-- search -->
+{{:ModuleInclude('public/nav_search')}}
+
+<!-- header nav -->
+{{:ModuleInclude('public/header_nav')}}
+
+<!-- goods category -->
+{{:ModuleInclude('public/goods_category')}}
+
+<!-- content start -->
+<div class="plugins-seckill" {{if !empty($seckill_data['current']['header_bg'])}}style="background-image: url({{$seckill_data.current.header_bg}});"{{/if}}>
+    <div class="am-container">
+        {{if empty($seckill_data['periods_list'])}}
+            {{:ModuleInclude('public/not_data')}}
+        {{else /}}
+            {{if !empty($seckill_data['current']['header_logo'])}}
+                <div class="am-text-center seckill-logo">
+                    <img src="{{$seckill_data.current.header_logo}}" />
+                </div>
+            {{/if}}
+            <div class="seckill-nav am-radius am-nbfc" data-am-sticky="{animation: 'slide-top'}">
+                <div class="am-slider am-slider-default am-slider-carousel title-slider" data-am-flexslider="{itemWidth: 360, itemMargin: 0, slideshow: false,controlNav:false}">
+                    <!-- 导航 -->
+                    <ul class="am-slides">
+                        {{foreach $seckill_data.periods_list as $k=>$v}}
+                            <li class="active-time-event {{if $seckill_data['current']['id'] eq $v['id']}}am-active{{/if}}" data-index="{{$k}}">
+                                <a href="javascript:;">
+                                    <div class="item">
+                                        <p class="title am-text-xl am-font-weight am-margin-right-xs">{{$v.name}}</p>
+                                        <div class="content am-text-sm">
+                                            <div class="seckill-title-unchecked am-text-left">
+                                                <p class="content-msg am-text-xs">{{$v.time.msg}}</p>
+                                            </div>
+                                            <div class="seckill-title-checked am-text-left">
+                                                <p>{{$v.time.msg}}</p>
+                                                <!-- status 0未开始, 1进行中(距离结束还有), 2已结束, 3异常错误 -->
+                                                {{if isset($v['time']['status']) and in_array($v['time']['status'], [0,1])}}
+                                                    <p class="countdown content-time">
+                                                        <span>{{$v.time.time_first_text}}</span>
+                                                        <span class="timer-hours hours">{{if isset($v['time']['hours'])}}{{$v.time.hours}}{{else /}}00{{/if}}</span>
+                                                        <em>:</em>
+                                                        <span class="timer-hours minutes">{{if isset($v['time']['minutes'])}}{{$v.time.minutes}}{{else /}}00{{/if}}</span>
+                                                        <em>:</em>
+                                                        <span class="timer-hours seconds">{{if isset($v['time']['seconds'])}}{{$v.time.seconds}}{{else /}}00{{/if}}</span>
+                                                    </p>
+                                                {{/if}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                        {{/foreach}}
+                    </ul>
+                </div>
+            </div>
+            <!-- 通知 -->
+            {{if !empty($plugins_config['content_notice'])}}
+                <div class="am-alert notice am-radius" data-am-alert>
+                    <button type="button" class="am-close">&times;</button>
+                    <p>{{:implode("<br />", $plugins_config['content_notice'])}}</p>
+                </div>
+            {{/if}}
+            <!-- 商品 -->
+            <div class="seckill-content am-margin-top-module-half">
+                {{foreach $seckill_data.periods_list as $k=>$v}}
+                    <div class="seckill-item am-padding-0 {{if $seckill_data['current']['id'] eq $v['id']}} am-active{{/if}}" data-index="{{$k}}">
+                        {{if empty($v['goods'])}}
+                            {{:ModuleInclude('public/not_data')}}
+                        {{else /}}
+                            {{:ModuleInclude('module/goods/grid/base', [
+                                'goods_list'         => $v.goods,
+                                'type'               => 'index',
+                                'value_type'         => '1',
+                                'button_text'        => $v.time.buy_text,
+                                'is_disabled'        => (isset($v['time']['status']) and $v['time']['status'] == 1) ?  0 : 1,
+                                'price_key'          => 'seckill_min_price',
+                                'original_price_key' => 'min_original_price',
+                                
+                            ])}}
+                        {{/if}}
+                    </div>
+                {{/foreach}}
+            </div>
+        {{/if}}
+    </div>
+</div>
+<!-- content end -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

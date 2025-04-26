@@ -1,0 +1,133 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- content start  -->
+<div class="am-padding-main">
+    {{if !empty($data)}}
+        <!-- form start -->
+        <form class="am-form form-validation am-form-full-screen am-form-popup-fixed" action="{{:PluginsHomeUrl('coupon', 'shopcoupon', 'send')}}" method="POST" request-type="ajax-reload" request-value="parent" timeout="180000">
+            <!-- 优惠劵信息 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">{{:MyLang('coupon_info_title')}}</div>
+                <div class="am-panel-bd">
+                    <dl class="dl-content">
+                        <dt>{{:MyLang('name_text')}}</dt>
+                        <dd>
+                            {{$data.name}}
+                            <span class="am-badge am-radius {{if $data['type'] eq 0}}am-badge-success{{else /}}am-badge-warning{{/if}}">{{$data.type_name}}</span>
+                        </dd>
+
+                        <dt>{{:MyLang('desc_text')}}</dt>
+                        <dd>{{$data.desc}}</dd>
+
+                        <dt>{{:MyLang('overdue_type_text')}}</dt>
+                        <dd>
+                            {{$data.expire_type_name}}
+                            {{if $data['expire_type'] eq 0}}
+                                <span class="am-badge am-radius">{{:MyLang('effective_text')}} {{$data.expire_hour}} {{:MyLang('min_hour_text')}}</span>
+                            {{else /}}
+                                <span class="am-badge am-radius">{{$data.fixed_time_start}} ~ {{$data.fixed_time_end}}</span>
+                            {{/if}}
+                        </dd>
+
+                        <dt>{{:MyLang('use_limit_text')}}</dt>
+                        <dd>
+                            {{$data.use_limit_type_name}}
+                            {{if $data['use_limit_type'] eq 1}}
+                                <p class="am-text-warning">{{:MyLang('only_application_related_categories_tips')}}</p>
+                            {{elseif $data['use_limit_type'] eq 2}}
+                                <p class="am-text-warning">{{:MyLang('only_application_related_commodity_tips')}}</p>
+                            {{/if}}
+                        </dd>
+
+                        <dt>{{:MyLang('offer_info_text')}}</dt>
+                        <dd>
+                            {{if $data['type'] eq 0}}
+                                {{:MyLang('reduce_text')}} <span class="am-text-success">{{$data.discount_value}}</span> {{:MyLang('price_unit_text')}}
+                            {{else /}}
+                                {{:MyLang('strike_text')}} <span class="am-text-warning">{{$data.discount_value}}</span> {{:MyLang('break_name')}}
+                                {{/if}}
+                        </dd>
+
+                        <dt>{{:MyLang('grant_limit_text')}}</dt>
+                        <dd>
+                            {{if $data['limit_send_count'] gt 0}}
+                                {{:MyLang('mast_grant_text')}} <span class="am-text-danger">{{$data.limit_send_count}}</span> {{:MyLang('sheet_name')}}
+                            {{else /}}
+                                {{:MyLang('unlimit_grant_num_text')}}
+                            {{/if}}
+                            {{if $data['already_send_count'] gt 0}}
+                                <br />{{:MyLang('granted_text')}}<span class="am-text-success">{{$data.already_send_count}}</span>{{:MyLang('sheet_name')}}
+                            {{/if}}
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+
+            <!-- 搜索用户 -->
+            <div class="am-panel am-panel-default am-radius not-user-panel">
+                <div class="am-panel-hd">{{:MyLang('search_user_text')}}</div>
+                <div class="am-panel-bd">
+                    <div class="search-container am-cf" data-search-url="{{:PluginsHomeUrl('coupon', 'shopcoupon', 'usersearch')}}">
+                        {{if !empty($level_list)}}
+                            <div class="level-search-container am-fl am-margin-right-xs">
+                                <select name="level_id" class="am-radius chosen-select" data-placeholder="{{:MyLang('select_level_placeholder')}}" data-validation-message="{{:MyLang('select_member_level_message')}}">
+                                    <option value="">{{:MyLang('select_level_placeholder')}}</option>
+                                    {{foreach $level_list as $v}}
+                                        <option value="{{$v.id}}">{{$v.name}}</option>
+                                    {{/foreach}}
+                                </select>
+                            </div>
+                        {{/if}}
+                        <div class="am-input-group am-input-group-sm secondary user-search-container am-fl">
+                            <input type="text" autocomplete="off" class="am-radius am-form-field user-input-keywords" placeholder="{{:MyLang('user_name_phone_email_key_placeholder')}}" value="">
+                            <span class="am-input-group-btn">
+                                <button class="am-btn am-btn-default am-radius am-icon-search" type="button"> {{:MyLang('search_title')}}</button>
+                            </span>
+                        </div>
+                    </div>
+                    <ul class="am-avg-sm-2 am-avg-md-6 am-avg-lg-10 user-items"></ul>
+                    <div class="table-no"><i class="am-icon-warning"></i> {{:MyLang('input_key_user_key_tips')}}</div>
+                </div>
+            </div>
+
+            <!-- 已选用户 -->
+            <div class="am-panel am-panel-success am-radius already-user-panel">
+                <div class="am-panel-hd">{{:MyLang('selected_user_text')}}</div>
+                <div class="am-panel-bd">
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-8 user-items"></ul>
+                    <div class="table-no"><i class="am-icon-warning"></i> {{:MyLang('not_select_user_tips')}}</div>
+                </div>
+            </div>
+
+            <!-- 基础 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">{{:MyLang('base_title')}}</div>
+                <div class="am-panel-bd">
+                    <div class="am-form-group">
+                        <label>{{:MyLang('coupon_send_number')}}</label>
+                        <input type="number" name="send_number" min="1" placeholder="{{:MyLang('coupon_send_number')}}" data-validation-message="{{:MyLang('coupon_send_number_message')}}" class="am-radius" value="1" required />
+                    </div>
+                </div>
+            </div>
+
+            <div class="am-form-popup-submit am-text-left">
+                <input type="hidden" name="coupon_id" {{if !empty($data['id'])}} value="{{$data.id}}"{{/if}} />
+                <button type="button" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg" data-am-modal-close>
+                    <i class="am-icon-paint-brush"></i>
+                    <span>{{:MyLang('cancel_title')}}</span>
+                </button>
+                <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('grant_text')}}'}">
+                    <i class="am-icon-send"></i>
+                    <span>{{:MyLang('grant_text')}}</span>
+                </button>
+            </div>
+        </form>
+        <!-- form end -->
+    {{else /}}
+        <div class="table-no"><i class="am-icon-warning"></i> {{:MyLang('incorrect_coupon_data_tips')}}</div>
+    {{/if}}
+</div>
+<!-- content end  -->
+        
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

@@ -1,0 +1,46 @@
+{
+    "base":{
+        "plugins":"sms",
+        "name":"短信",
+        "logo":"\/static\/upload\/images\/plugins_sms\/2023\/11\/18\/1700311471385893.jpg",
+        "author":"Devil",
+        "author_url":"https:\/\/shopxo.net\/",
+        "version":"2.2.2",
+        "desc":"支持【腾讯云、华为云、百度云、云片、LoginSms】平台的短信、系统自带阿里云短信，如需要支持更多短信平台请联系我们！",
+        "apply_terminal":[
+            "pc",
+            "h5",
+            "ios",
+            "android",
+            "weixin",
+            "alipay",
+            "baidu",
+            "toutiao",
+            "qq",
+            "kuaishou"
+        ],
+        "apply_version":[
+            "6.4.0"
+        ],
+        "is_home":false
+    },
+    "hook":{
+        "plugins_service_config_sms_template_value":[
+            "app\\plugins\\sms\\Hook"
+        ],
+        "plugins_service_const_data":[
+            "app\\plugins\\sms\\Hook"
+        ],
+        "plugins_extend_sms_send_request_handle":[
+            "app\\plugins\\sms\\Hook"
+        ]
+    },
+    "history":[
+        {
+            "host":"shopxo.com",
+            "url":"http:\/\/shopxo.com\/",
+            "ip":"127.0.0.1",
+            "time":"2024-12-22 12:13:44"
+        }
+    ]
+}

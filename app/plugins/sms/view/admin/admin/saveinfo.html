@@ -1,0 +1,216 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'sms',
+            'title'     => MyLang('base_config_title'),
+            'back_url'  => PluginsAdminUrl('sms', 'admin', 'index'),
+        ])}}
+
+        <!-- form start -->
+        <form class="am-form form-validation am-form-full-screen am-form-popup-sticky" action="{{:PluginsAdminUrl('sms', 'admin', 'save')}}" method="POST" request-type="ajax-url" request-value="{{:PluginsAdminUrl('sms', 'admin', 'index')}}" enctype="multipart/form-data">
+            <p class="am-color-red am-margin-bottom-sm am-text-sm am-animation-shake am-animation-delay-1">注意：系统默认支持阿里云短信、如使用阿里云短信则不需要使用当前插件。</p>
+            <!-- 基础配置 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">{{:MyLang('base_config_title')}}</h3>
+                </div>
+                <div class="am-panel-bd am-padding-vertical-xs">
+                    <div class="am-form-group">
+                        <label class="am-block">{{:MyLang('backstage_admin.is_sms_open')}}</label>
+                        <input name="is_sms_open" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_sms_open']) and $data['is_sms_open'] eq 1}}checked="true"{{/if}} />
+                    </div>
+
+                    <div class="am-form-group">
+                        <label class="am-block">{{:MyLang('backstage_admin.platform')}}</label>
+                        {{foreach $sms_platform_list as $v}}
+                            <label class="am-radio-inline">
+                                <input type="radio" name="platform" value="{{$v.value}}" data-am-ucheck {{if isset($data['platform']) and $data['platform'] eq $v['value']}}checked{{/if}} data-validation-message="{{:MyLang('backstage_admin.platform_message')}}" required /> {{$v.name}}
+                            </label>
+                        {{/foreach}}
+                    </div>
+                </div>
+            </div>
+
+            <!-- 平台配置 -->
+            <div data-am-widget="tabs" class="am-tabs am-tabs-default am-radius am-margin-0" data-am-tabs="{noSwipe: 1}">
+                <ul class="am-tabs-nav am-cf am-radius am-nbfc">
+                    {{foreach $sms_platform_list as $k=>$v}}
+                        <li {{if (isset($data['platform']) and $data['platform'] eq $v['value']) or (!isset($data['platform']) and $v eq 0)}}class="am-active"{{/if}}><a href="[data-tab-panel-{{$k}}]">{{$v.name}}</a></li>
+                    {{/foreach}}
+                </ul>
+                <div class="am-tabs-bd">
+                    {{foreach $sms_platform_list as $k=>$v}}
+                        <div data-tab-panel-{{$k}} class="am-tab-panel {{if (isset($data['platform']) and $data['platform'] eq $v['value']) or (!isset($data['platform']) and $v eq 0)}} am-active{{/if}}">
+                            <!-- 根据平台处理的基础配置 -->
+                            {{switch $v.value}}
+                                {{case tencent}}
+                                    <div class="am-nbfc">
+                                        <label>基础配置</label>
+                                        <div class="am-fr">
+                                            <a href="https://curl.qcloud.com/dWSNIDeL" target="_blank">去腾讯云平台申请权限 >></a>
+                                        </div>
+                                    </div>
+                                    <div class="am-form-group">
+                                        <label>SdkAppId</label>
+                                        <input type="text" name="system_template[tencent][sdk_appid]" placeholder="SdkAppId" data-validation-message="请填写腾讯短信SdkAppId" class="am-radius" value="{{if !empty($data['system_template']) and !empty($data['system_template']['tencent']) and !empty($data['system_template']['tencent']['sdk_appid'])}}{{$data.system_template.tencent.sdk_appid}}{{/if}}" />
+                                    </div>
+                                    <div class="am-form-group">
+                                        <label>AppKey</label>
+                                        <input type="text" name="system_template[tencent][app_key]" placeholder="AppKey" data-validation-message="请填写腾讯短信AppKey" class="am-radius" value="{{if !empty($data['system_template']) and !empty($data['system_template']['tencent']) and !empty($data['system_template']['tencent']['app_key'])}}{{$data.system_template.tencent.app_key}}{{/if}}" />
+                                    </div>
+                                    <div class="am-form-group">
+                                        <label>签名</label>
+                                        <input type="text" name="system_template[tencent][sign_name]" placeholder="签名" data-validation-message="请填写腾讯短信签名" class="am-radius" value="{{if !empty($data['system_template']) and !empty($data['system_template']['tencent']) and !empty($data['system_template']['tencent']['sign_name'])}}{{$data.system_template.tencent.sign_name}}{{/if}}" />
+                                    </div>
+                                {{/case}}
+                                {{case huawei}}
+                                    <div class="am-nbfc">
+                                        <label>基础配置</label>
+                                        <div class="am-fr">
+                                            <a href="https://www.huaweicloud.com/product/msgsms.html" target="_blank">去华为云平台申请权限 >></a>
+                                        </div>
+                                    </div>
+                                    <div class="am-form-group">
+                                        <label>API接口地址</label>
+                                        <input type="text" name="system_template[huawei][api_url]" placeholder="API接口地址" data-validation-message="请填写华为短信API接口地址" class="am-radius" value="{{if !empty($data['system_template']) and !empty($data['system_template']['huawei']) and !empty($data['system_template']['huawei']['api_url'])}}{{$data.system_template.huawei.api_url}}{{/if}}" />
+                                    </div>
+                                    <div class="am-form-group">
+                                        <label>AppKey</label>
+                                        <input type="text" name="system_template[huawei][app_key]" placeholder="AppKey" data-validation-message="请填写华为短信AppKey" class="am-radius" value="{{if !empty($data['system_template']) and !empty($data['system_template']['huawei']) and !empty($data['system_template']['huawei']['app_key'])}}{{$data.system_template.huawei.app_key}}{{/if}}" />
+                                    </div>
+                                    <div class="am-form-group">
+                                        <label>AppSecret</label>
+                                        <input type="text" name="system_template[huawei][app_secret]" placeholder="AppSecret" data-validation-message="请填写华为短信AppSecret" class="am-radius" value="{{if !empty($data['system_template']) and !empty($data['system_template']['huawei']) and !empty($data['system_template']['huawei']['app_secret'])}}{{$data.system_template.huawei.app_secret}}{{/if}}" />
+                                    </div>
+                                    <div class="am-form-group">
+                                        <label>签名</label>
+                                        <input type="text" name="system_template[huawei][sign_name]" placeholder="签名" data-validation-message="请填写华为短信签名" class="am-radius" value="{{if !empty($data['system_template']) and !empty($data['system_template']['huawei']) and !empty($data['system_template']['huawei']['sign_name'])}}{{$data.system_template.huawei.sign_name}}{{/if}}" />
+                                    </div>
+                                    <div class="am-form-group">
+                                        <label>签名通道号</label>
+                                        <input type="text" name="system_template[huawei][sign_sender]" placeholder="签名通道号" data-validation-message="请填写华为短信签名通道号" class="am-radius" value="{{if !empty($data['system_template']) and !empty($data['system_template']['huawei']) and !empty($data['system_template']['huawei']['sign_sender'])}}{{$data.system_template.huawei.sign_sender}}{{/if}}" />
+                                    </div>
+                                {{/case}}
+                                {{case baidu}}
+                                    <div class="am-nbfc">
+                                        <label>基础配置</label>
+                                        <div class="am-fr">
+                                            <a href="https://cloud.baidu.com/product/sms.html" target="_blank">去百度云平台申请权限 >></a>
+                                        </div>
+                                    </div>
+                                    <div class="am-form-group">
+                                        <label>AccessKey</label>
+                                        <input type="text" name="system_template[baidu][access_key]" placeholder="AccessKey" data-validation-message="请填写百度短信AccessKey" class="am-radius" value="{{if !empty($data['system_template']) and !empty($data['system_template']['baidu']) and !empty($data['system_template']['baidu']['access_key'])}}{{$data.system_template.baidu.access_key}}{{/if}}" />
+                                    </div>
+                                    <div class="am-form-group">
+                                        <label>SecretKey</label>
+                                        <input type="text" name="system_template[baidu][secret_key]" placeholder="SecretKey" data-validation-message="请填写百度短信SecretKey" class="am-radius" value="{{if !empty($data['system_template']) and !empty($data['system_template']['baidu']) and !empty($data['system_template']['baidu']['secret_key'])}}{{$data.system_template.baidu.secret_key}}{{/if}}" />
+                                    </div>
+                                    <div class="am-form-group">
+                                        <label>签名ID</label>
+                                        <input type="text" name="system_template[baidu][sign_id]" placeholder="签名ID" data-validation-message="请填写百度短信签名ID" class="am-radius" value="{{if !empty($data['system_template']) and !empty($data['system_template']['baidu']) and !empty($data['system_template']['baidu']['sign_id'])}}{{$data.system_template.baidu.sign_id}}{{/if}}" />
+                                    </div>
+                                {{/case}}
+                                {{case yunpian}}
+                                    <div class="am-nbfc">
+                                        <label>基础配置</label>
+                                        <div class="am-fr">
+                                            <a href="https://www.yunpian.com/" target="_blank">去云片平台申请权限 >></a>
+                                        </div>
+                                    </div>
+                                    <div class="am-form-group">
+                                        <label>AccessKey</label>
+                                        <input type="text" name="system_template[yunpian][api_key]" placeholder="AccessKey" data-validation-message="请填写百度短信AccessKey" class="am-radius" value="{{if !empty($data['system_template']) and !empty($data['system_template']['yunpian']) and !empty($data['system_template']['yunpian']['api_key'])}}{{$data.system_template.yunpian.api_key}}{{/if}}" />
+                                    </div>
+                                {{/case}}
+                                {{case loginsms}}
+                                    <div class="am-nbfc">
+                                        <label>基础配置</label>
+                                        <div class="am-fr">
+                                            <a href="https://www.login-sms.com/" target="_blank">去LoginSms平台申请权限 >></a>
+                                        </div>
+                                    </div>
+                                    <div class="am-form-group">
+                                        <label>CLIENT_ID</label>
+                                        <input type="text" name="system_template[loginsms][client_id]" placeholder="CLIENT_ID" data-validation-message="请填写loginsms短信CLIENT_ID" class="am-radius" value="{{if !empty($data['system_template']) and !empty($data['system_template']['loginsms']) and !empty($data['system_template']['loginsms']['client_id'])}}{{$data.system_template.loginsms.client_id}}{{/if}}" />
+                                    </div>
+                                    <div class="am-form-group">
+                                        <label>CLIENT_SECRET</label>
+                                        <input type="text" name="system_template[loginsms][client_secret]" placeholder="CLIENT_SECRET" data-validation-message="请填写loginsms短信CLIENT_SECRET" class="am-radius" value="{{if !empty($data['system_template']) and !empty($data['system_template']['loginsms']) and !empty($data['system_template']['loginsms']['client_secret'])}}{{$data.system_template.loginsms.client_secret}}{{/if}}" />
+                                    </div>
+                                    <div class="am-form-group">
+                                        <label>签名</label>
+                                        <input type="text" name="system_template[loginsms][sign_name]" placeholder="签名" data-validation-message="请填写loginsms短信签名" class="am-radius" value="{{if !empty($data['system_template']) and !empty($data['system_template']['loginsms']) and !empty($data['system_template']['loginsms']['sign_name'])}}{{$data.system_template.loginsms.sign_name}}{{/if}}" />
+                                    </div>
+                                {{/case}}
+                            {{/switch}}
+
+                            <!-- 系统基础短信模板 -->
+                            <div class="am-nbfc am-margin-top-lg">
+                                <label>系统基础短信模板</label>
+                                <span class="am-margin-left-lg am-color-red">
+                                    <span>默认验证码变量</span> 
+                                    <strong class="text-copy-submit">${code}</strong>
+                                    <span class="am-margin-left-sm">【华为、腾讯】格式要求</span>
+                                    <strong class="text-copy-submit">${1}</strong>
+                                    <span class="am-margin-left-sm">【云片】格式要求</span>
+                                    <strong class="text-copy-submit">#code#</strong>
+                                </span>
+                            </div>
+                            <div class="template-list">
+                                {{foreach $sms_template_list as $tv}}
+                                    <div class="am-input-group am-input-group-sm am-margin-top-sm">
+                                        <span class="am-input-group-label am-radius">{{$tv.name}}</span>
+                                        <input type="text" name="system_template[{{$v.value}}][{{$tv.key}}]" class="am-form-field am-radius" placeholder="{{$tv.name}}短信内容，验证码变量：${code}" value="{{if !empty($data['system_template']) and !empty($data['system_template'][$v['value']]) and !empty($data['system_template'][$v['value']][$tv['key']])}}{{$data.system_template[$v['value']][$tv['key']]}}{{/if}}" />
+                                    </div>
+                                {{/foreach}}
+                            </div>
+
+                            <!-- 更多短信模板 -->
+                            <div class="am-nbfc am-margin-top-xl">
+                                <label>更多短信模板</label>
+                                <span class="am-margin-left-lg am-color-red">
+                                    <span>发送短信的位置配置的短信模板ID -> 当前短信平台申请的模板ID或者</span> 
+                                </span>
+                            </div>
+                            <ul class="more-template-container {{$v.value}}">
+                                {{if !empty($data['more_template']) and !empty($data['more_template'][$v['value']]) and is_array($data['more_template'][$v['value']])}}
+                                    {{foreach $data.more_template[$v['value']] as $mk=>$mv}}
+                                        <li class="am-padding-vertical-xs">
+                                            <input type="text" name="more_template[{{$v['value']}}][{{$mk}}][key]" placeholder="模板key" data-validation-message="请填写{{$v.value}}更多模板key" class="am-radius" value="{{if !empty($mv['key'])}}{{$mv.key}}{{/if}}" />
+                                            <input type="text" name="more_template[{{$v['value']}}][{{$mk}}][value]" placeholder="模板内容" data-validation-message="请填写{{$v.value}}更多模板value" class="am-radius" value="{{if !empty($mv['value'])}}{{$mv.value}}{{/if}}" />
+                                            <button type="button" class="am-close am-fr delete">×</button>
+                                        </li>
+                                    {{/foreach}}
+                                {{/if}}
+                            </ul>
+                            <div class="am-margin-top-sm">
+                                <span class="business-operations-submit more-template-add" data-value="{{$v.value}}">+ 添加模板</span>
+                            </div>
+                        </div>
+                    {{/foreach}}
+                </div>
+            </div>
+
+            <div class="am-form-popup-submit">
+                <a href="{{:PluginsAdminUrl('sms', 'admin', 'index', $params)}}" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg">
+                    <i class="am-icon-mail-reply"></i>
+                    <span>{{:MyLang('retreat_title')}}</span>
+                </a>
+                <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('save_title')}}'}">
+                    <i class="am-icon-save"></i>
+                    <span>{{:MyLang('save_title')}}</span>
+                </button>
+            </div>
+        </form>
+        <!-- form end -->
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer -->
+{{:ModuleInclude('public/footer')}}

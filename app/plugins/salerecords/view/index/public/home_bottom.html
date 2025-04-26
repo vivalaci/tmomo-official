@@ -1,0 +1,64 @@
+{{if !empty($data) and is_array($data)}}
+    <div data-am-widget="list_news" class="am-list-news am-list-news-default am-container plugins-salerecords-home-bottom">
+        <div class="items-nav-title">
+            <p class="floor-title am-title-left-border">{{if empty($plugins_config['home_bottom_title'])}}最新购买{{else /}}{{$plugins_config.home_bottom_title}}{{/if}}</p>
+            {{if !empty($plugins_config['home_bottom_desc'])}}
+                <p class="floor-desc">{{$plugins_config.home_bottom_desc}}</p>
+            {{/if}}
+        </div>
+        <div class="am-list-news-bd am-margin-vertical-module-half">
+            <div class="am-container">
+                <div class="am-hr-shadow"></div>
+                <ul class="am-list am-list-border am-margin-top-sm scroll-list">
+                    {{foreach $data as $v}}
+                        {{if !empty($v['user']) and !empty($v['user']['avatar']) and !empty($v['user']['user_name_view'])}}
+                            <li class="am-g am-padding-xs">
+                                <div class="am-u-sm-4 am-u-md-3">
+                                    <img src="{{$v.user.avatar}}" alt="{{$v.user.user_name_view}}" class="am-img-thumbnail am-circle am-block am-fl am-margin-right-xs" />
+                                    <p class="am-padding-top-xs am-text-truncate">
+                                        <span>{{$v.user.user_name_view}}</span>
+                                        {{if !empty($v['user']['province'])}}
+                                            <span> -  </span>
+                                            <i class="am-icon-map-marker"></i>
+                                            <span>{{$v.user.province}}</span>
+                                        {{/if}}
+                                    </p>
+                                </div>
+                                <div class="am-u-sm-3 am-u-md-2 am-text-left am-padding-top-xs am-text-truncate">{{$v.add_time}}</div>
+                                <div class="am-u-sm-5 am-u-md-7 am-text-truncate">
+                                    <a href="{{$v.goods_url}}" target="_blank">
+                                        <p class="am-padding-top-xs am-text-truncate">{{$v.title}}</p>
+                                    </a>
+                                </div>
+                            </li>
+                        {{/if}}
+                    {{/foreach}}
+                    <!-- 内部添加两个盒子的原因是为了循环滚动，要个盒子从下向上滚动一个盒子，另一个盒子接着上一个盒子继续滚动 -->
+                    {{foreach $data as $v}}
+                        {{if !empty($v['user']) and !empty($v['user']['avatar']) and !empty($v['user']['user_name_view'])}}
+                            <li class="am-g am-padding-xs">
+                                <div class="am-u-sm-4 am-u-md-3">
+                                    <img src="{{$v.user.avatar}}" alt="{{$v.user.user_name_view}}" class="am-img-thumbnail am-circle am-block am-fl am-margin-right-xs" />
+                                    <p class="am-padding-top-xs am-text-truncate">
+                                        <span>{{$v.user.user_name_view}}</span>
+                                        {{if !empty($v['user']['province'])}}
+                                            <span> -  </span>
+                                            <i class="am-icon-map-marker"></i>
+                                            <span>{{$v.user.province}}</span>
+                                        {{/if}}
+                                    </p>
+                                </div>
+                                <div class="am-u-sm-3 am-u-md-2 am-text-left am-padding-top-xs am-text-truncate">{{$v.add_time}}</div>
+                                <div class="am-u-sm-5 am-u-md-7 am-text-truncate">
+                                    <a href="{{$v.goods_url}}" target="_blank">
+                                        <p class="am-padding-top-xs am-text-truncate">{{$v.title}}</p>
+                                    </a>
+                                </div>
+                            </li>
+                        {{/if}}
+                    {{/foreach}}
+                </ul>
+            </div>
+        </div>
+    </div>
+{{/if}}

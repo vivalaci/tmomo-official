@@ -1,0 +1,64 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'intellectstools',
+            'title'     => '评价导入',
+            'back_url'  => PluginsAdminUrl('intellectstools', 'comments', 'index'),
+        ])}}
+
+        <!-- form start -->
+        <form class="am-form form-validation am-form-full-screen am-form-popup-sticky" action="{{:PluginsAdminUrl('intellectstools', 'comments', 'save')}}" method="POST" request-type="ajax-url" request-value="{{:PluginsAdminUrl('intellectstools', 'comments', 'index')}}" enctype="multipart/form-data">
+            <div class="am-form-group">
+                <label>限定商品分类<span class="am-form-group-label-tips">可选</span></label>
+                <select name="goods_category_id" class="am-radius chosen-select" data-placeholder="{{:MyLang('please_select_tips')}}" data-validation-message="请选择限定商品分类">
+                    <option value="">{{:MyLang('please_select_tips')}}</option>
+                    {{if !empty($goods_category_list)}}
+                        {{foreach $goods_category_list as $v}}
+                            <option value="{{$v.id}}">{{$v.name}}</option>
+                            {{if !empty($v['items'])}}
+                                {{foreach $v.items as $vs}}
+                                    <option value="{{$vs.id}}" style="padding-left: 30px;">{{$vs.name}}</option>
+                                {{/foreach}}
+                            {{/if}}
+                        {{/foreach}}
+                    {{/if}}
+                </select>
+                <div class="am-tips-card">
+                    <p>1. 未选择则表示全部有效</p>
+                    <p>2. 包含子级、如选择一级则所有下级都包含</p>
+                    <p>3. 包含父级、如模板同时配置了一级和二级、商品关联的是二级，则二级和一级的模板都有效，商品关联的是一级、则配置的二级模板无效</p>
+                </div>
+            </div>
+
+            <div class="am-form-group">
+                <label class="am-block">评价内容<span class="am-form-group-label-tips-must">*</span></label>
+                <textarea rows="15" name="content" class="am-radius am-max-wh-auto" placeholder="输入评价内容、一行为一条" data-validation-message="请填写评价内容" required></textarea>
+                <div class="am-tips-card">
+                    <p>1. 按行计算、一行为一条评价内容、每行内容不要超过200个字符</p>
+                    <p>2. 如不希望相同内容重复录入、请自行处理、系统不会处理重复数据</p>
+                    <p>3. 建议每次不要超过1000条记录、很多数据可以分次导入</p>
+                </div>
+            </div>
+
+            <div class="am-form-popup-submit">
+                <a href="{{:PluginsAdminUrl('intellectstools', 'comments', 'index', $params)}}" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg">
+                    <i class="am-icon-mail-reply"></i>
+                    <span>{{:MyLang('retreat_title')}}</span>
+                </a>
+                <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('save_title')}}'}">
+                    <i class="am-icon-save"></i>
+                    <span>{{:MyLang('save_title')}}</span>
+                </button>
+            </div>
+        </form>
+        <!-- form end -->
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

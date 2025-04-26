@@ -1,0 +1,8 @@
+{{if !empty($goods_price)}}
+    <div class="items goods-price plugins-distribution-goods-price-top">
+        <dt>销售价</dt>
+        <dd>
+            <b class="original-price-value" data-original-price="{{$goods_original_price}}">{{$currency_symbol}}{{$goods_price}}</b>
+        </dd>
+    </div>
+{{/if}}

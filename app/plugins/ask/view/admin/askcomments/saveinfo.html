@@ -1,0 +1,44 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- content start  -->
+<div class="am-padding-horizontal-sm">
+    {{if empty($data)}}
+        {{:ModuleInclude('public/not_data')}}
+    {{else /}}
+        <!-- form start -->
+        <form class="am-form form-validation am-form-full-screen am-form-popup-fixed" action="{{:PluginsAdminUrl('ask', 'askcomments', 'save')}}" method="POST" request-type="ajax-reload" request-value="parent">
+            <div class="am-padding-sm am-padding-top-lg">
+                <div class="am-form-group">
+                    <textarea rows="10" name="content" maxlength="500" class="am-radius" placeholder="评论内容格式最多500个字符" data-validation-message="评论内容最大500个字符">{{if !empty($data['content'])}}{{$data.content}}{{/if}}</textarea>
+                </div>
+                <div class="am-form-group">
+                    <label>状态</label>
+                    <div class="am-radio-group">
+                        {{foreach $ask_comments_status_list as $v}}
+                            <label class="am-radio-inline">
+                                <input type="radio" name="status" value="{{$v.value}}" {{if (isset($data['status']) and $data['status'] eq $v['value']) or (!isset($data['status']) and isset($v['checked']) and $v['checked'] eq true)}}checked{{/if}} data-am-ucheck /> {{$v.name}}
+                            </label>
+                        {{/foreach}}
+                    </div>
+                </div>
+
+                <div class="am-form-popup-submit">
+                    <input type="hidden" name="id" value="{{$data.id}}" />
+                    <button type="button" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg" data-am-modal-close>
+                        <i class="am-icon-paint-brush"></i>
+                        <span>{{:MyLang('cancel_title')}}</span>
+                    </button>
+                    <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('confirm_title')}}'}">
+                        <i class="am-icon-check"></i>
+                        <span>{{:MyLang('confirm_title')}}</span>
+                    </button>
+                </div>
+            </div>
+        </form>
+    {{/if}}
+    <!-- form end -->
+</div>
+<!-- content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

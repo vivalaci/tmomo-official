@@ -1,0 +1,15 @@
+{{if !empty($data)}}
+    <ul class="am-gallery am-avg-sm-4 am-avg-md-5 am-avg-lg-5 am-gallery-bordered">
+        {{foreach $data as $v}}
+            <li class="am-animation-slide-bottom" data-gid="{{$v.id}}">
+                <a class="am-icon-external-link link" href="{{$v.goods_url}}" target="_blank"></a>
+                <div class="am-gallery-item am-radius">
+                    <img src="{{$v.images}}" alt="{{$v.title}}" />
+                    <h3 class="am-gallery-title">{{$v.title}}</h3>
+                </div>
+            </li>
+        {{/foreach}}
+    </ul>
+{{else /}}
+    <div class="table-no"><i class="am-icon-warning"></i> {{:MyLang('no_goods')}}</div>
+{{/if}}

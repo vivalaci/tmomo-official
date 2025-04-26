@@ -1,0 +1,79 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- header top nav -->
+{{:ModuleInclude('public/header_top_nav')}}
+
+<!-- header simple nav -->
+{{:ModuleInclude('public/header_nav_simple', [
+    'search' => 1,
+])}}
+
+<!-- content -->
+<div class="am-container user-main">
+    <!-- user menu start -->
+    {{:ModuleInclude('public/user_menu')}}
+    <!-- user menu end -->
+
+    <!-- content start -->
+    <div class="user-content">
+        <div class="user-content-body">
+            <!-- user center title -->
+            {{:ModuleInclude('public/user_center_main_title')}}
+
+            {{:ModuleInclude('../../../plugins/distribution/view/index/public/nav')}}
+
+            <form class="am-form form-validation am-form-full-screen am-form-popup-sticky" action="{{:PluginsHomeUrl('distribution', 'visit', 'save')}}" method="POST" request-type="ajax-url" request-value="{{:PluginsHomeUrl('distribution', 'visit', 'index')}}">
+                <div class="am-form-popup-content">
+                    {{:ModuleInclude('public/admin_nav', [
+                        'title'     => '客户拜访'.(empty($data['id']) ? MyLang('created_title') : MyLang('edit_title')),
+                        'back_url'  => $form_back_url
+                    ])}}
+
+                    <!-- 搜索用户模块 -->
+                    {{:ModuleInclude('../../../plugins/distribution/view/index/public/search_user')}}
+
+                    <div class="am-form-group">
+                        <label>拜访内容<span class="am-form-group-label-tips-must">*</span></label>
+                        <textarea rows="4" name="content" class="am-radius am-field-valid" placeholder="拜访内容、格式1~230个字符" data-validation-message="拜访内容、格式1~230个字符" required>{{if !empty($data['content'])}}{{$data.content}}{{/if}}</textarea>
+                    </div>
+                    <div class="am-form-group am-form-file">
+                        <label class="am-block">拜访照片<span class="am-form-group-label-tips-must">*</span></label>
+                        <div class="am-form-file-upload-container">
+                            <ul class="plug-file-upload-view images" data-max-number="30" data-form-name="images[]"data-dialog-type="images">
+                                {{if !empty($data['images'])}}
+                                    {{foreach $data.images as $iv}}
+                                        <li>
+                                            <input type="text" name="images[]" value="{{$iv}}" data-validation-message="请上传拜访照片" />
+                                            <img src="{{$iv}}" />
+                                            <i class="iconfont icon-close"></i>
+                                        </li>
+                                    {{/foreach}}
+                                {{/if}}
+                            </ul>
+                            <div class="plug-file-upload-submit" data-view-tag="ul.plug-file-upload-view.images">
+                                <i class="iconfont icon-upload-add"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="am-form-popup-submit">
+                    <input type="hidden" name="custom_user_id" value="{{if !empty($data['custom_user_id'])}}{{$data.custom_user_id}}{{/if}}" />
+                    <input type="hidden" name="id" value="{{if !empty($data['id'])}}{{$data.id}}{{/if}}" />
+                    <a href="{{:PluginsHomeUrl('distribution', 'visit', 'index', $params)}}" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg">
+                        <i class="am-icon-mail-reply"></i>
+                        <span>{{:MyLang('retreat_title')}}</span>
+                    </a>
+                    <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('save_title')}}'}">
+                        <i class="am-icon-save"></i>
+                        <span>{{:MyLang('save_title')}}</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- content end -->
+</div>
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

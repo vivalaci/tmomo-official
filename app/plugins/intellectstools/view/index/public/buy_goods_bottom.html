@@ -1,0 +1,5 @@
+{{if !empty($plugins_config['buy_view_goods_bottom_desc']) and is_array($plugins_config['buy_view_goods_bottom_desc'])}}
+    <div class="am-text-warning">
+        <p>{{:implode("<br />", $plugins_config['buy_view_goods_bottom_desc'])}}</p>
+    </div>
+{{/if}}

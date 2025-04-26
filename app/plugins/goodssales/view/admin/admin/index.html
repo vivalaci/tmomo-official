@@ -1,0 +1,54 @@
+{{include file="public/header" /}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <legend>
+            <span class="fs-16">商品销量</span>
+            <a href="{{:MyUrl('admin/pluginsadmin/index')}}" class="fr fs-14 m-t-5 am-icon-mail-reply"> 返回</a>
+        </legend>
+
+        <div class="am-alert am-alert-warning" data-am-alert>
+            <button type="button" class="am-close">&times;</button>
+            <p>
+                1、编辑/添加商品的时候可以直接编辑销量！<br>
+				2、销量初始化只用在商品添加时，编辑的时候是不受影响的！<br>
+				3、访问量初始化是随机销量的10倍，如觉得数字不太符合实际，请自由改写
+            </p>
+        </div>
+		
+		<div class="goodssales-content">
+			<div class="items">
+                <label>销量初始化</label>
+                <div>
+                    {{if isset($data['begin_style']) and $data['begin_style'] eq 1}}
+                        随机
+                    {{else /}}
+                        固定
+                    {{/if}}
+                </div>
+            </div>
+			
+			<div class="items">
+                <label>初始销量数值</label>
+                <div>
+                    {{if isset($data['begin_style']) and $data['begin_style'] eq 1}}
+                        {{$data['begin_num']}}~{{$data['end_num']}}
+                    {{else /}}
+						{{if isset($data['begin_num'])}}
+							{{$data['begin_num']}}
+						{{else /}}
+							0
+						{{/if}}
+                    {{/if}}
+                </div>
+            </div>
+			<a href="{{:PluginsAdminUrl('goodssales', 'admin', 'saveinfo')}}" class="am-btn am-btn-secondary am-radius btn-loading-example am-btn-sm am-btn-block edit-submit">编辑</a>
+		</div>
+    </div>
+</div>
+<!-- right content end  -->
+        
+<!-- footer start -->
+{{include file="public/footer" /}}
+<!-- footer end -->

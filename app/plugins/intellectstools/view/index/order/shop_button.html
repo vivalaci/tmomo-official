@@ -1,0 +1,12 @@
+{{if !empty($operate_edit_button_info) and isset($plugins_config['is_admin_order_operate_edit_shop']) and $plugins_config['is_admin_order_operate_edit_shop'] eq 1}}
+    <button type="button" class="am-btn am-btn-danger am-btn-xs am-radius am-btn-block submit-popup" data-url="{{:PluginsHomeUrl('intellectstools', 'order', 'editinfo', ['id'=>$plugins_data['id'], 'status'=>$plugins_data['status']])}}" data-title="{{:MyLang('modify_title')}}">
+        <i class="am-icon-edit"></i>
+        <span>{{:MyLang('modify_title')}}</span>
+    </button>
+{{/if}}
+{{if isset($plugins_config['is_order_note_shop']) and $plugins_config['is_order_note_shop'] eq 1}}
+    <button type="button" class="am-btn am-btn-default am-btn-xs am-radius am-btn-block submit-popup" data-url="{{:PluginsHomeUrl('intellectstools', 'order', 'noteinfo', ['id'=>$plugins_data['id']])}}" data-title="{{:MyLang('note_title')}}">
+        <i class="am-icon-sticky-note-o"></i>
+        <span>{{:MyLang('note_title')}}</span>
+    </button>
+{{/if}}

@@ -1,0 +1,34 @@
+{
+    "base":{
+        "plugins":"searchrightad",
+        "name":"搜索右侧广告",
+        "logo":"\/static\/upload\/images\/plugins_searchrightad\/2021\/06\/27\/1624805059243734.jpg",
+        "author":"Devil",
+        "author_url":"https:\/\/shopxo.net\/",
+        "version":"4.2.2",
+        "desc":"PC端搜索右侧广告展示",
+        "apply_terminal":[
+            "pc"
+        ],
+        "apply_version":[
+            "6.4.0"
+        ],
+        "is_home":false
+    },
+    "hook":{
+        "plugins_common_header":[
+            "app\\plugins\\searchrightad\\Hook"
+        ],
+        "plugins_view_common_search_right":[
+            "app\\plugins\\searchrightad\\Hook"
+        ]
+    },
+    "history":[
+        {
+            "host":"shopxo.com",
+            "url":"http:\/\/shopxo.com\/",
+            "ip":"127.0.0.1",
+            "time":"2024-12-22 12:19:23"
+        }
+    ]
+}

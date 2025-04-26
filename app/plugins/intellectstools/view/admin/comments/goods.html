@@ -1,0 +1,63 @@
+<div class="am-alert am-alert-secondary">
+    <h2 class="am-margin-vertical-0">智能工具插件自动评价配置</h2>
+    <div class="am-alert am-radius am-margin-top-sm am-margin-vertical-0">
+        <p>不建议将区间值过大配置、提倡数据真实性</p>
+    </div>
+    <div class="am-form-group am-padding-horizontal-0">
+        <label>首次随机范围值<span class="am-form-group-label-tips">最小范围默认[ 10 ]条、最大范围默认[ 30 ]条</span></label>
+        <div class="am-input-group am-input-group-sm group-compose-input">
+            <input type="number" name="first_number_min" min="0" placeholder="首次随机范围最小值" data-validation-message="首次随机范围最小值格式有误" class="am-radius" value="{{if !empty($plugins_data['first_number_min'])}}{{$plugins_data.first_number_min}}{{/if}}" />
+            <input type="number" name="first_number_max" min="0" placeholder="首次随机范围最大值" data-validation-message="首次随机范围最大值格式有误" class="am-radius" value="{{if !empty($plugins_data['first_number_max'])}}{{$plugins_data.first_number_max}}{{/if}}" />
+            <span class="am-input-group-btn">
+                <button type="button" class="am-btn am-btn-default am-radius">{{:MyLang('strip_title')}}</button>
+            </span>
+        </div>
+    </div>
+    <div class="am-form-group am-padding-horizontal-0">
+        <label>续增随机范围值<span class="am-form-group-label-tips">最小范围默认[ 1 ]条、最大范围默认[ 5 ]条</span></label>
+        <div class="am-input-group am-input-group-sm group-compose-input">
+            <input type="number" name="last_number_min" min="0" placeholder="续增随机范围最小值" data-validation-message="续增随机范围最小值格式有误" class="am-radius" value="{{if !empty($plugins_data['last_number_min'])}}{{$plugins_data.last_number_min}}{{/if}}" />
+            <input type="number" name="last_number_max" min="0" placeholder="续增随机范围最大值" data-validation-message="续增随机范围最大值格式有误" class="am-radius" value="{{if !empty($plugins_data['last_number_max'])}}{{$plugins_data.last_number_max}}{{/if}}" />
+            <span class="am-input-group-btn">
+                <button type="button" class="am-btn am-btn-default am-radius">{{:MyLang('strip_title')}}</button>
+            </span>
+        </div>
+    </div>
+    <div class="am-form-group am-padding-horizontal-0">
+        <label>续增间隔时间<span class="am-form-group-label-tips">0或空则默认一天[ 1440 ]分钟</span></label>
+        <div class="am-input-group am-input-group-sm">
+            <input type="number" name="last_interval_time" min="0" placeholder="续增间隔时间" data-validation-message="续增间隔时间格式有误" class="am-radius" value="{{if !empty($plugins_data['last_interval_time'])}}{{$plugins_data.last_interval_time}}{{/if}}" />
+            <span class="am-input-group-btn">
+                <button type="button" class="am-btn am-btn-default am-radius">{{:MyLang('minute_title')}}</button>
+            </span>
+        </div>
+    </div>
+    <div class="am-form-group am-padding-horizontal-0">
+        <label>数据每条时间间隔<span class="am-form-group-label-tips">最小范围默认[ 30 ]分钟、最大范围默认[ 180 ]分钟</span></label>
+        <div class="am-input-group am-input-group-sm group-compose-input">
+            <input type="number" name="time_interval_min" min="0" placeholder="每条时间间隔最小值" data-validation-message="每条时间间隔最小值格式有误" class="am-radius" value="{{if !empty($plugins_data['time_interval_min'])}}{{$plugins_data.time_interval_min}}{{/if}}" />
+            <input type="number" name="time_interval_max" min="0" placeholder="每条时间间隔最大值" data-validation-message="每条时间间隔最大值格式有误" class="am-radius" value="{{if !empty($plugins_data['time_interval_max'])}}{{$plugins_data.time_interval_max}}{{/if}}" />
+            <span class="am-input-group-btn">
+                <button type="button" class="am-btn am-btn-default am-radius">{{:MyLang('minute_title')}}</button>
+            </span>
+        </div>
+    </div>
+    <div class="am-form-group am-padding-horizontal-0">
+        <label>数据评分随机最小值<span class="am-form-group-label-tips">默认[ 1 ]、最大值默认为5、随机最小值~5之间</span></label>
+        <div class="am-input-group am-input-group-sm">
+            <input type="number" name="rating_rand_min" min="1" max="5" placeholder="数据评分随机最小值" data-validation-message="数据评分随机最小值格式有误" class="am-radius" value="{{if empty($plugins_data['rating_rand_min'])}}1{{else /}}{{$plugins_data.rating_rand_min}}{{/if}}" />
+            <span class="am-input-group-btn">
+                <button type="button" class="am-btn am-btn-default am-radius">评分</button>
+            </span>
+        </div>
+    </div>
+    <div class="am-form-group am-padding-horizontal-0">
+        <label>自动控制<span class="am-form-group-label-tips">0或空则不控制、以100个销量为基准单位可生成评价条数、以此类推</span></label>
+        <div class="am-input-group am-input-group-sm">
+            <input type="number" name="auto_control_number" min="0" placeholder="自动控制数量" data-validation-message="自动控制数量格式有误" class="am-radius" value="{{if !empty($plugins_data['auto_control_number'])}}{{$plugins_data.auto_control_number}}{{/if}}" />
+            <span class="am-input-group-btn">
+                <button type="button" class="am-btn am-btn-default am-radius">{{:MyLang('strip_title')}}</button>
+            </span>
+        </div>
+    </div>
+</div>

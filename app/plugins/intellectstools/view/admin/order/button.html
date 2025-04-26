@@ -1,0 +1,18 @@
+{{if !empty($operate_edit_button_info)}}
+    <button type="button" class="am-btn am-btn-danger am-btn-xs am-radius am-btn-block submit-popup" data-url="{{:PluginsAdminUrl('intellectstools', 'order', 'editinfo', ['id'=>$plugins_data['id'], 'status'=>$plugins_data['status']])}}" data-title="{{:MyLang('modify_title')}}">
+        <i class="am-icon-edit"></i>
+        <span>{{:MyLang('modify_title')}}</span>
+    </button>
+{{/if}}
+{{if isset($plugins_config['is_order_note']) and $plugins_config['is_order_note'] eq 1}}
+    <button type="button" class="am-btn am-btn-default am-btn-xs am-radius am-btn-block submit-popup" data-url="{{:PluginsAdminUrl('intellectstools', 'order', 'noteinfo', ['id'=>$plugins_data['id']])}}" data-title="{{:MyLang('note_title')}}">
+        <i class="am-icon-sticky-note-o"></i>
+        <span>{{:MyLang('note_title')}}</span>
+    </button>
+{{/if}}
+{{if isset($plugins_config['is_order_aftersale']) and $plugins_config['is_order_aftersale'] eq 1 and in_array($plugins_data['status'], [2,3,4])}}
+    <button type="button" class="am-btn am-btn-danger am-btn-xs am-radius am-btn-block submit-popup" data-url="{{:PluginsAdminUrl('intellectstools', 'order', 'aftersaleinfo', ['id'=>$plugins_data['id']])}}" data-full="1" data-full-max="1" data-title="售后">
+        <i class="am-icon-legal"></i>
+        <span>售后</span>
+    </button>
+{{/if}}

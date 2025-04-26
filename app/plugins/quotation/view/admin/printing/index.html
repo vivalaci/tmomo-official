@@ -1,0 +1,82 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- 非打印内容 -->
+        <div class="not-print-container">
+            <!-- nav -->
+            {{:ModuleInclude('public/plugins_admin_nav', [
+                'plugins'   => 'quotation',
+                'title'     => '打印预览',
+                'back_url'  => PluginsAdminUrl('quotation', 'goods', 'index'),
+            ])}}
+
+            {{if !empty($data['value'])}}
+                <div class="am-g am-margin-top-sm">
+                    <button type="button" class="am-btn am-btn-secondary am-radius am-btn-xs am-icon-print print-submit"> 打印</button>
+                </div>
+            {{/if}}
+        </div>
+
+        {{if !empty($data['value'])}}
+            <!-- list start -->
+            <table class="am-table am-table-bordered am-table-centered am-table-compact am-margin-top-sm goods-list">
+                <thead>
+                    <tr>
+                        {{if !empty($data['title'])}}
+                            {{foreach $data.title as $v}}
+                                <th>{{$v}}</th>
+                            {{/foreach}}
+                        {{/if}}
+                    </tr>
+                </thead>
+                <tbody>
+                    {{foreach $data.value as $k=>$v}}
+                        <tr>
+                            {{foreach $v as $ks=>$vs}}
+                                {{if in_array($vs['field'], ['spec', 'vip'])}}
+                                    {{foreach $vs.value as $spec_k=>$spec_v}} 
+                                        {{if $spec_k gt 0}}
+                                            </tr>
+                                            <tr>
+                                        {{/if}}
+                                        {{foreach $spec_v as $sk=>$sv}}
+                                            <td>
+                                                {{if $sk eq 'images'}}
+                                                    {{if !empty($sv)}}
+                                                        <img src="{{$sv}}" width="45" height="45" />
+                                                    {{/if}}
+                                                {{else /}}
+                                                    {{$sv}}
+                                                {{/if}}
+                                            </td>
+                                        {{/foreach}}
+                                        </tr>
+                                    {{/foreach}}
+                                {{else /}}
+                                    <td {{if isset($v['spec'])}}rowspan="{{:count($v['spec']['value'])}}"{{/if}} {{if isset($v['vip'])}}rowspan="{{:count($v['vip']['value'])}}"{{/if}}>
+                                        {{if $vs['type'] eq 'images'}}
+                                            <img src="{{$vs.value}}" width="45" height="45" />
+                                        {{else /}}
+                                            {{$vs.value}}
+                                        {{/if}}
+                                    </td>
+                                {{/if}}
+                            {{/foreach}}
+                        </tr>
+                    {{/foreach}}
+                </tbody>
+            </table>
+        {{/if}}
+
+        {{if empty($data['value'])}}
+            <div class="table-no"><i class="am-icon-warning"></i> {{if empty($msg)}}没有相关数据{{else /}}{{$msg}}{{/if}}</div>
+        {{/if}}
+        <!-- list end -->
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

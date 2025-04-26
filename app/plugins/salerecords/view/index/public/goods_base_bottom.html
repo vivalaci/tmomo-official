@@ -1,0 +1,3 @@
+{{if !empty($data) and is_array($data)}}
+    <div class="plugins-salerecords-goods-detail-base-bottom-data am-hide" {{if !empty($plugins_config)}}data-pause="{{if isset($plugins_config['goods_detail_time_pause'])}}{{$plugins_config.goods_detail_time_pause}}{{/if}}" data-interval="{{if isset($plugins_config['goods_detail_time_interval'])}}{{$plugins_config.goods_detail_time_interval}}{{/if}}" data-location="{{if isset($plugins_config['goods_detail_tips_location'])}}{{$plugins_config.goods_detail_tips_location}}{{/if}}"{{/if}} data-json="{{:urlencode(json_encode($data))}}"></div>
+{{/if}}

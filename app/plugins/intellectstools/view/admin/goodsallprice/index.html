@@ -1,0 +1,183 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'intellectstools',
+            'nav_data'  => $plugins_nav_menu_list,
+        ])}}
+
+        <!-- form start -->
+        <form class="am-form form-validation am-form-full-screen am-form-popup-sticky" action="{{:PluginsAdminUrl('intellectstools', 'goodsallprice', 'edit')}}" method="POST" timeout="100000" request-type="ajax-reload">
+            <!-- 商品条件 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">商品条件</h3>
+                </div>
+                <div class="am-panel-bd am-padding-vertical-xs">
+                    <div class="am-alert am-margin-top-sm" data-am-alert>
+                        <button type="button" class="am-close">&times;</button>
+                        <p>1.【 指定商品id 、商品分类 、品牌 】条件为或关系</p>
+                        <p>2. 选择商品分类、可多选，所选的商品分类自动包含下级分类、所有商品</p>
+                        <p>3. 选择品牌、单选，所选品牌相关联的所有商品</p>
+                        <p class="am-text-danger am-margin-top-xs">PS：请至少选择一个条件</p>
+                    </div>
+                    <div class="am-cf">
+                        <div class="am-u-md-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label>指定商品id<span class="am-form-group-label-tips">多个id以英文逗号分割[ , ] 如：1,2,3</span></label>
+                                <input type="text" name="goods_ids" placeholder="指定商品id" data-validation-message="请填写指定商品id" class="am-radius" value="{{if !empty($data['goods_ids']) and is_array($data['goods_ids'])}}{{:implode(',', $data['goods_ids'])}}{{/if}}" />
+                            </div>
+                        </div>
+                        <div class="am-u-md-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label>{{:MyLang('form_goods_category_title')}}<span class="am-form-group-label-tips">可多选（包含子级）、商品关联的分类</span></label>
+                                <select name="category_ids" class="am-radius chosen-select" multiple="multiple" data-placeholder="{{:MyLang('please_select_tips')}}" data-validation-message="{{:MyLang('form_goods_category_message')}}">
+                                    {{if !empty($goods_category_list)}}
+                                        {{foreach $goods_category_list as $v}}
+                                            <option value="{{$v.id}}" {{if !empty($data['category_ids']) and is_array($data['category_ids']) and in_array($v['id'], $data['category_ids'])}}selected{{/if}}>{{$v.name}}</option>
+                                            {{if !empty($v['items'])}}
+                                                {{foreach $v.items as $vs}}
+                                                    <option style="padding-left: 15px;" value="{{$vs.id}}" {{if !empty($data['category_ids']) and is_array($data['category_ids']) and in_array($vs['id'], $data['category_ids'])}}selected{{/if}}>{{if empty($vs['items'])}}├{{else /}}└{{/if}}² {{$vs.name}}</option>
+                                                    {{if !empty($vs['items'])}}
+                                                        {{foreach $vs.items as $kss=>$vss}}
+                                                            <option style="padding-left: 30px;" value="{{$vss.id}}" {{if !empty($data['category_ids']) and is_array($data['category_ids']) and in_array($vss['id'], $data['category_ids'])}}selected{{/if}}>{{if $kss eq count($vs['items'])-1}}└{{else /}}├{{/if}}³ {{$vss.name}}</option>
+                                                        {{/foreach}}
+                                                    {{/if}}
+                                                {{/foreach}}
+                                            {{/if}}
+                                        {{/foreach}}
+                                    {{/if}}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="am-cf">
+                        <div class="am-u-md-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label>品牌<span class="am-form-group-label-tips">可选、商品关联的品牌</span></label>
+                                <select name="brand_ids" class="am-radius chosen-select" multiple="multiple" data-placeholder="{{:MyLang('please_select_tips')}}" data-validation-message="请选择品牌">
+                                    {{if !empty($brand_list)}}
+                                        {{foreach $brand_list as $v}}
+                                            <option value="{{$v.id}}" {{if !empty($data['brand_ids']) and is_array($data['brand_ids']) and in_array($v['id'], $data['brand_ids'])}}selected{{/if}}>{{$v.name}}</option>
+                                        {{/foreach}}
+                                    {{/if}}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="am-u-md-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                    <label>价格类型<span class="am-form-group-label-tips-must">*</span></label>
+                                    <div class="am-checkbox-group">
+                                        {{foreach $price_type_list as $v}}
+                                            <label class="am-checkbox-inline am-margin-right-sm">
+                                                <input type="checkbox" name="modify_price_type" value="{{$v.value}}" {{if !empty($data['modify_price_type']) and is_array($data['modify_price_type']) and in_array($v['value'], $data['modify_price_type'])}}checked="checked"{{else /}}{{if !isset($data['modify_price_type']) and isset($v['checked']) and $v['checked'] eq true}}checked="checked"{{/if}}{{/if}} data-validation-message="请至少选择一个价格类型" data-am-ucheck required /> {{$v.name}}
+                                            </label>
+                                        {{/foreach}}
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="am-cf modify-price-rules-container">
+                <div class="am-u-md-6 am-padding-left-0 am-padding-right-xs">
+                    <!-- 调整规则 -->
+                    <div class="am-panel am-panel-default am-radius">
+                        <div class="am-panel-hd">
+                            <h3 class="am-panel-title">调整规则</h3>
+                        </div>
+                        <div class="am-panel-bd am-padding-vertical-xs">
+                            <div class="am-form-group">
+                                <label>调整规则<span class="am-form-group-label-tips-must">*</span></label>
+                                <div class="am-checkbox-group">
+                                    {{foreach $modify_price_rules_list as $v}}
+                                        <label class="am-radio-inline am-margin-right-sm">
+                                            <input type="radio" name="modify_rules" value="{{$v.value}}" {{if isset($data['modify_rules']) and $data['modify_rules'] eq $v['value']}}checked="checked"{{else /}}{{if !isset($data['modify_rules']) and isset($v['checked']) and $v['checked'] eq true}}checked="checked"{{/if}}{{/if}} data-validation-message="请选择调整规则" data-am-ucheck required /> {{$v.name}}
+                                        </label>
+                                    {{/foreach}}
+                                </div>
+                            </div>
+
+                            <div class="am-form-group">
+                                <label>调整值<span class="am-form-group-label-tips-must">*</span></label>
+                                <input type="number" name="modify_value" placeholder="调整值" min="0" max="1000000000" step="0.01" data-validation-message="请填写调整值、最大数1000000000" class="am-radius" value="{{if !empty($data['modify_value']) and $data['modify_value'] gt 0}}{{$data.modify_value}}{{/if}}" required />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="am-u-md-6 am-padding-right-0 am-padding-left-xs">
+                    <!-- 复原规则 -->
+                    <div class="am-panel am-panel-default am-radius">
+                        <div class="am-panel-hd">
+                            <h3 class="am-panel-title">复原规则</h3>
+                        </div>
+                        <div class="am-panel-bd am-padding-vertical-xs">
+                            <div class="am-form-group">
+                                <label>复原规则</label>
+                                <div class="am-checkbox-group">
+                                    {{foreach $modify_price_rules_list as $v}}
+                                        <label class="am-radio-inline am-margin-right-sm">
+                                            <input type="radio" name="crontab_restore_rules" value="{{$v.value}}" {{if isset($data['crontab_restore_rules']) and $data['crontab_restore_rules'] eq $v['value']}}checked="checked"{{else /}}{{if !isset($data['crontab_restore_rules']) and isset($v['checked']) and $v['checked'] eq true}}checked="checked"{{/if}}{{/if}} data-validation-message="请选择复原规则" data-am-ucheck /> {{$v.name}}
+                                        </label>
+                                    {{/foreach}}
+                                </div>
+                            </div>
+
+                            <div class="am-form-group">
+                                <label>复原值</label>
+                                <input type="number" name="crontab_restore_value" placeholder="复原值" min="0" max="1000000000" step="0.01" data-validation-message="请填写复原值、最大数1000000000" class="am-radius" value="{{if !empty($data['crontab_restore_value']) and $data['crontab_restore_value'] gt 0}}{{$data.crontab_restore_value}}{{/if}}" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="am-form-group">
+                <label>脚本访问密码<span class="am-form-group-label-tips">默认随机生成</span></label>
+                <input type="text" name="crontab_password" placeholder="脚本访问密码" data-validation-message="请填写脚本访问密码" class="am-radius" value="{{if empty($data['crontab_password'])}}{{:rand(1000000, 9999999)}}{{else /}}{{$data.crontab_password}}{{/if}}" />
+            </div>
+
+            <div class="am-alert am-alert-warning am-margin-top-sm" data-am-alert>
+                <button type="button" class="am-close">&times;</button>
+                <p>1. 配置定时规则后，配置脚本定时执行即可、或者手动访问</p>
+                <p>2. 如果执行了调价脚本，则根据配置的【调整规则、调整值】改价</p>
+                <p>3. 如果执行了复原脚本，则根据配置的【复原规则、复原值】改价</p>
+                <p>4. 定时执行的业务场景、如（生鲜业务每天晚上8点降价，凌晨恢复原价）通过【调整规则、调整值】完成改价后，再通过【复原规则】恢复价格</p>
+                <p class="am-text-warning am-margin-top">建议将该地址添加到linux定时任务定时请求，先请求调价脚本，再请求复原脚本</p>
+                {{if empty($data['crontab_password'])}}
+                    <p class="am-text-danger">
+                        <strong>PS：请先保存配置后再查看执行脚本！</strong>
+                    </p>
+                {{else /}}
+                    <p>
+                        <span>调价脚本：</span>
+                        <a href="javascript:;" class="contab-submit" data-url="{{:PluginsHomeUrl('intellectstools', 'crontab', 'goodspriceeditexecute', ['password'=>$data['crontab_password']])}}">{{:PluginsHomeUrl('intellectstools', 'crontab', 'goodspriceeditexecute', ['password'=>$data['crontab_password']])}}</a>
+                    </p>
+                    <p class="am-margin-top-xs">
+                        <span>复原脚本：</span>
+                        <a href="javascript:;" class="contab-submit" data-url="{{:PluginsHomeUrl('intellectstools', 'crontab', 'goodspricerestoreexecute', ['password'=>$data['crontab_password']])}}">{{:PluginsHomeUrl('intellectstools', 'crontab', 'goodspricerestoreexecute', ['password'=>$data['crontab_password']])}}</a>
+                    </p>
+                    <p class="am-margin-top am-text-danger">
+                        <strong>PS：如果仅需要调价，请保存后点击一下调价脚本地址即可</strong>
+                    </p>
+                {{/if}}
+            </div>
+
+            <div class="am-form-popup-submit">
+                <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('save_title')}}'}">
+                    <i class="am-icon-save"></i>
+                    <span>{{:MyLang('save_title')}}</span>
+                </button>
+            </div>
+        </form>
+        <!-- form end -->
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

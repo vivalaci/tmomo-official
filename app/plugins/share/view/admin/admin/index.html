@@ -1,0 +1,197 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'share',
+            'title'     => '分享',
+        ])}}
+
+        <!-- 配置信息 -->
+        <div class="share-content">
+            <div class="am-panel am-panel-default am-radius share-content-base">
+                <div class="am-panel-hd">
+                    <span class="am-panel-title">{{:MyLang('base_config_title')}}</span>
+                    <a class="am-margin-left-lg" href="{{:PluginsAdminUrl('share', 'admin', 'saveinfo')}}">
+                        <i class="am-icon-edit"></i>
+                        <span>{{:MyLang('edit_title')}}</span>
+                    </a>
+                </div>
+                <div class="am-panel-bd">
+                    <!-- 基础配置 -->
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>默认标题</label>
+                                <div>
+                                    {{if !empty($data['title'])}}
+                                        {{$data.title}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>默认url地址</label>
+                                <div>
+                                    {{if !empty($data['url'])}}
+                                        {{$data.url}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>默认描述</label>
+                                <div>
+                                    {{if !empty($data['desc'])}}
+                                        {{$data.desc}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>默认图片</label>
+                                {{if empty($data['pic'])}}
+                                    <div>{{:MyLang('no_setup_tips')}}</div>
+                                {{else /}}
+                                    <div class="immages-tag">
+                                        <img src="{{$data.pic}}" />
+                                    </div>
+                                {{/if}}
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>分享类型</label>
+                                <div>
+                                    {{if empty($data['share_type']) or empty($base_shar_type_list) or !is_array($data['share_type'])}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{else /}}
+                                        {{foreach $base_shar_type_list as $k=>$v}}
+                                            {{if in_array($k, $data['share_type'])}}
+                                                <span class="am-padding-horizontal-xs">{{$v.name}}</span>
+                                            {{/if}}
+                                        {{/foreach}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>商品详情相册底部分享</label>
+                                <div>
+                                    {{if isset($data['is_goods_photo_bottom']) and $data['is_goods_photo_bottom'] eq 1}}
+                                        开启
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 关闭 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>商品详情相册底部分享</label>
+                                <div>
+                                    {{if isset($data['is_goods_photo_top_right']) and $data['is_goods_photo_top_right'] eq 1}}
+                                        开启
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 关闭 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <!-- 微信环境配置 -->
+                    <hr data-am-widget="divider" style="" class="am-divider am-divider-default" />
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>公众号/服务号AppID</label>
+                                <div>
+                                    {{if !empty($data['weixin_appid'])}}
+                                        {{$data.weixin_appid}}
+                                    {{else /}}
+                                        未配置
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>公众号/服务号AppSecret</label>
+                                <div>
+                                    {{if !empty($data['weixin_secret'])}}
+                                        {{$data.weixin_secret}}
+                                    {{else /}}
+                                        未配置
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- 操作提示 -->
+        <div class="am-operate-stretch-tips">
+            <div class="title">
+                <i class="iconfont icon-tips"></i>
+                <strong title="{{:MyLang('operate_list_tips_msg')}}">{{:MyLang('operate_list_tips_button_text')}}</strong>
+                <i class="iconfont icon-contract contract" title="{{:MyLang('operate_list_tips_retract_text')}}"></i> 
+            </div>
+            <!-- 使用提醒 -->
+            <p><label>{{:MyLang('base_config_title')}}</label></p>
+            <div class="am-margin-left-lg">
+                <p>1. 建议不要设置默认内容，采用自动获取页面相应的内容</p>
+                <p>2. 1元素配置默认 -> 2插件配置默认 -> 3页面对应内容</p>
+                <p>3. 商品详情页面会自动读取相册第一张图片作为封面图</p>
+            </div>
+            <p class="am-margin-top-sm"><label>微信公众号后台分享配置</label></p>
+            <div class="am-margin-left-lg">
+                <p>1. 左侧菜单 -> 设置 -> 公众号设置 -> 功能设置（配置JS接口安全域名）</p>
+                <p>2. 左侧菜单 -> 开发 -> 基本配置 -> 公众号开发信息下 -> IP白名单（配置服务器ip）</p>
+            </div>
+
+            <!-- 开发使用说明 -->
+            <div class="am-text-danger am-text-lg am-margin-top-lg">开发者调用插件使用说明</div>
+            <p><label>分享类型</label></p>
+            <p class="am-margin-left-lg">
+                {{if empty($base_shar_type_list)}}
+                    <span>未定义分享数据</span>
+                {{else /}}
+                    {{foreach $base_shar_type_list as $k=>$v}}
+                        <span class="am-padding-horizontal-sm">{{$v.name}}[{{$k}}]</span>
+                    {{/foreach}}
+                {{/if}}
+            </p>
+
+            <p class="am-margin-top-sm"><label>元素配置规则</label></p>
+            <div class="am-margin-left-lg">
+                <p>类型：data-share="自定义分享类型，以英文逗号分割，默认全部分享类型，自定义分享如: qq,weixin "</p>
+                <p>标题：data-title="分享标题"</p>
+                <p>描述：data-desc="分享描述内容"</p>
+                <p>网址：data-url="分享url地址"</p>
+                <p>图片：data-pic="图片地址"</p>
+            </div>
+
+            <p class="am-margin-top-sm"><label>使用插件</label></p>
+            <p class="am-margin-left-lg">标签上添加类即可自动初始化 [plugins-share-view]</p>
+        </div>
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

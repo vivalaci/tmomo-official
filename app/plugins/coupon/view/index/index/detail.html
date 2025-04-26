@@ -1,0 +1,33 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- header top nav -->
+{{:ModuleInclude('public/header_top_nav')}}
+
+<!-- search -->
+{{:ModuleInclude('public/nav_search')}}
+
+<!-- header nav -->
+{{:ModuleInclude('public/header_nav')}}
+
+<!-- goods category -->
+{{:ModuleInclude('public/goods_category')}}
+
+<!-- content start -->
+<div class="plugins-coupon">
+    <div class="am-container">
+        {{if !empty($coupon_list) and is_array($coupon_list)}}
+            <div class="am-margin-top-xs">
+                {{:ModuleInclude('../../../plugins/coupon/view/index/module/coupon', [
+                    'coupon_list'  => $coupon_list,
+                    'color'        => 'grey',
+                ])}}
+            </div>
+        {{else /}}
+            {{:ModuleInclude('public/not_data')}}
+        {{/if}}
+    </div>
+</div>
+<!-- content end -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

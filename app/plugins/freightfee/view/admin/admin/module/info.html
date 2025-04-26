@@ -1,0 +1,9 @@
+<!-- 基础信息 -->
+{{if !empty($module_data)}}
+    {{if !empty($module_data['warehouse_name'])}}
+        <span>{{$module_data.warehouse_name}}</span>
+    {{/if}}
+    {{if !empty($module_data['warehouse_alias'])}}
+        <span class="am-badge am-badge-secondary am-radius">{{$module_data.warehouse_alias}}</span>
+    {{/if}}
+{{/if}}

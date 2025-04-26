@@ -1,0 +1,62 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- header top nav -->
+{{:ModuleInclude('public/header_top_nav')}}
+
+<!-- content start -->
+<div class="am-g plugins-signin am-pr am-nbfc">
+    <img src="{{$data.bg_images}}">
+    <div class="am-container am-pr">
+        {{if !empty($data)}}
+            <div class="am-margin-top-sm am-cf top-container">
+                <img src="{{$data.logo}}" />
+                <a href="javascript:;" class="coming-submit {{if empty($user)}}login-event{{/if}} {{if !empty($user_signin_data) and !empty($user_signin_data['current_day'])}}already-coming{{/if}}" data-value="{{$data.id}}" data-url="{{:PluginsHomeUrl('signin', 'index', 'coming')}}">
+                    <span>{{if !empty($user_signin_data) and !empty($user_signin_data['current_day'])}}已签到{{else/}}立即签到{{/if}}</span>
+                </a>
+            </div>
+
+            <!-- 签到成功提示 -->
+            {{if empty($user_signin_data) or empty($user_signin_data['current_day'])}}
+                <div class="coming-tips-container am-text-center" style="display: none;">
+                    <div class="coming-content">
+                        <a href="javascript:;" class="am-close am-close-alt"></a>
+                        <img src="{{$data.success_icon}}" alt="签到成功" class="am-margin-top-xl" />
+                        <div class="coming-tips-content am-margin-top-sm">
+                            <p>恭喜您获得</p>
+                            <p class="signin-integral am-font-weight"><span>...</span>积分</p>
+                            <a href="{{$home_url}}" class="am-btn am-btn-danger am-round am-margin-top-sm" target="_blank">立即使用</a>
+                        </div>
+                    </div>
+                </div>
+            {{/if}}
+            {{:ModuleInclude('../../../plugins/signin/view/index/public/calendar')}}
+
+            <!-- 关联商品 -->
+            {{if !empty($data['goods_list'])}}
+                <div class="am-container am-padding-top-lg signin-shop">
+                    <div class="items-nav-title">
+                        <p class="floor-title am-title-left-border">推荐商品</p>
+                    </div>      
+                    <div class="goods-list am-nbfc">
+                        {{:ModuleInclude('module/goods/slider/base', [
+                            'goods_list'     => $data['goods_list'],
+                            'type'           => 'activity',
+                            'is_control_nav' => false
+                        ])}}
+                    </div>
+                </div>
+            {{/if}}
+
+            <!-- 底部代码 -->
+            {{if !empty($data['footer_code'])}}
+                <div class="am-container fooer-code-container">{{$data.footer_code|raw}}</div>
+            {{/if}}
+        {{else /}}
+            {{:ModuleInclude('public/not_data')}}
+        {{/if}}
+    </div>
+</div>
+<!-- content end -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

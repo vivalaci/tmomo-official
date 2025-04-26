@@ -1,0 +1,48 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- content start  -->
+<div class="am-padding-sm">
+    {{if !empty($order_data)}}
+        <dl class="dl-content">
+            <dt class="am-text-truncate title"><strong>订单编号</strong></dt>
+            <dd><span class="data-order-no">{{$order_data.order_no}}</span></dd>
+            <dt class="am-text-truncate title"><strong>订单单价</strong></dt>
+            <dd> 
+                <em>{{$order_data.currency_data.currency_symbol}}</em>
+                <span class="data-price">{{$order_data.price}}</span>
+            </dd>
+            <dt class="am-text-truncate title"><strong>订单总价</strong></dt>
+            <dd class="am-color-price">
+                <em>{{$order_data.currency_data.currency_symbol}}</em>
+                <span class="data-total-price">{{$order_data.total_price}}</span>
+            </dd>
+
+            <!-- 扩展数据 -->
+            {{if !empty($data['extension_data'])}}
+                {{foreach $order_data.extension_data as $v}}
+                    <dt class="am-text-truncate"><strong>{{$v.name}}</strong></dt>
+                    <dd>{{$v.tips}}</dd>
+                {{/foreach}}
+            {{/if}}
+
+            <dt class="am-text-truncate"><strong>{{$main_note_name}}信息</strong></dt>
+            <dd>
+                {{if !empty($note_data['content'])}}{{:str_replace("\\n", '<br />', $note_data.content)}}{{/if}}
+            </dd>
+            {{if !empty($note_data)}}
+                <dt class="am-text-truncate"><strong>{{$main_note_name}}时间</strong></dt>
+                <dd>{{$note_data.add_time}}</dd>
+                {{if !empty($note_data['upd_time'])}}
+                    <dt class="am-text-truncate"><strong>更新时间</strong></dt>
+                    <dd>{{$note_data.upd_time}}</dd>
+                {{/if}}
+            {{/if}}
+        </dl>
+    {{else /}}
+        {{:ModuleInclude('public/not_data', ['msg'=>MyLang('order_info_incorrect_tips')])}}
+    {{/if}}
+</div>
+<!-- content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

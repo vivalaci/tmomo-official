@@ -1,0 +1,27 @@
+{{if !empty($module_data) and !empty($module_data['referrer_info'])}}
+    <div class="am-flex am-flex-items-center am-gap-1-half am-pr user-info-data-container">
+        <img src="{{$module_data.referrer_info.avatar}}" alt="{{$module_data.referrer_info.user_name_view}}" class="am-img-thumbnail am-radius am-margin-0" width="35" height="35" />
+        <div class="user-info-dropdown-data-container am-flex-1">
+            <a href="javascript:;" class="am-text-truncate am-color-333">
+                {{$module_data.referrer_info.user_name_view}}
+                <i class="iconfont icon-angle-down"></i>
+            </a>
+            <div class="user-info-content" style="display: none;">
+                <div class="am-flex am-gap-1">
+                    {{if !empty($module_data['referrer_info']['username'])}}
+                        <a href="javascript:;" class="iconfont icon-table-user-username am-color-333 text-copy-submit" data-value="{{$module_data.referrer_info.username}}" data-am-popover="{content: '账号：{{$module_data.referrer_info.username}}{{if !empty($module_data['referrer_info']['nickname'])}}<br />昵称：{{$module_data.referrer_info.nickname}}{{/if}}', trigger: 'hover focus', theme: 'sm'}"></a>
+                    {{/if}}
+                    {{if !empty($module_data['referrer_info']['mobile'])}}
+                        <a href="javascript:;" class="iconfont icon-table-user-mobile am-color-333 text-copy-submit" data-value="{{$module_data.referrer_info.mobile}}" data-am-popover="{content: '{{$module_data.referrer_info.mobile}}', trigger: 'hover focus', theme: 'sm'}"></a>
+                    {{/if}}
+                    {{if !empty($module_data['referrer_info']['email'])}}
+                        <a href="javascript:;" class="iconfont icon-table-user-email am-color-333 text-copy-submit" data-value="{{$module_data.referrer_info.email}}" data-am-popover="{content: '{{$module_data.referrer_info.email}}', trigger: 'hover focus', theme: 'sm'}"></a>
+                    {{/if}}
+                    {{if !empty($module_data['referrer_info']['gender_text'])}}
+                        <a href="javascript:;" class="iconfont icon-table-user-gender am-color-333 text-copy-submit" data-value="{{$module_data.referrer_info.gender_text}}" data-am-popover="{content: '{{$module_data.referrer_info.gender_text}}', trigger: 'hover focus', theme: 'sm'}"></a>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+    </div>
+{{/if}}

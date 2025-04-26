@@ -1,0 +1,14 @@
+{{if !empty($plugins_config['goods_detail_base_tips_msg'])}}
+    {{if empty($plugins_config['goods_detail_base_tips_title'])}}
+        <div class="am-margin-top-main goods-shop-tips am-alert am-flex am-flex-items-center">
+            <i class="am-icon-bell-o am-margin-right-xs am-color-blue"></i>
+            <span>{{$plugins_config.goods_detail_base_tips_msg}}</span>
+        </div>
+    {{else /}}
+        <div class="am-margin-top-main goods-shop-tips am-alert">
+            <i class="am-icon-bell-o am-margin-right-xs am-color-blue"></i>
+            <strong>{{$plugins_config.goods_detail_base_tips_title}}</strong>
+            <p>{{$plugins_config.goods_detail_base_tips_msg}}</p>
+        </div>
+    {{/if}}
+{{/if}}

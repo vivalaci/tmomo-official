@@ -1,0 +1,10 @@
+{{if !empty($plugins_config['buy_user_note_fast_choice_data']) and is_array($plugins_config['buy_user_note_fast_choice_data'])}}
+    <div class="plugins-intellectstools-user-note-choice-container am-nbfc">
+        <span class="am-text-grey am-text-xs am-margin-right-xs">快捷输入</span>
+        <div class="am-scrollable-horizontal">
+            {{foreach $plugins_config.buy_user_note_fast_choice_data as $v}}
+                <a href="javascript:;" class="am-text-xs">{{$v}}</a>
+            {{/foreach}}
+        </div>
+    </div>
+{{/if}}

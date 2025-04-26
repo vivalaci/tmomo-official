@@ -1,0 +1,160 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- header top nav -->
+{{:ModuleInclude('public/header_top_nav')}}
+
+<!-- header simple nav -->
+{{:ModuleInclude('public/header_nav_simple', [
+    'search' => 1,
+])}}
+
+<!-- content -->
+<div class="am-container user-main">
+    <!-- user menu start -->
+    {{:ModuleInclude('public/user_menu')}}
+    <!-- user menu end -->
+
+    <!-- content start -->
+    <div class="user-content">
+        <div class="user-content-body">
+            <!-- user center title -->
+            {{:ModuleInclude('public/user_center_main_title')}}
+            
+            {{:ModuleInclude('../../../plugins/distribution/view/index/public/nav')}}
+
+            <form class="am-form form-validation am-form-full-screen am-form-popup-sticky" action="{{:PluginsHomeUrl('distribution', 'recommend', 'save')}}" method="POST" request-type="ajax-url" request-value="{{:PluginsHomeUrl('distribution', 'recommend', 'index')}}" enctype="multipart/form-data">
+                <div class="am-form-popup-content">
+                    {{:ModuleInclude('public/admin_nav', [
+                        'title'     => '推荐宝'.(empty($data['id']) ? MyLang('created_title') : MyLang('edit_title')),
+                        'back_url'  => $form_back_url
+                    ])}}
+
+                    <div class="am-cf">
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label>标题<span class="am-form-group-label-tips-must">*</span></label>
+                                <input type="text" name="title" placeholder="标题"" maxlength="60" data-validation-message="标题格式1~60个字符" class="am-radius" value="{{if !empty($data['title'])}}{{$data.title}}{{/if}}" required />
+                            </div>
+                        </div>
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group am-form-file">
+                                <label class="am-block">图标<span class="am-form-group-label-tips">建议100*100px</span></label>
+                                <div class="am-form-file-upload-container">
+                                    <ul class="plug-file-upload-view icon" data-form-name="icon" data-delete="0" data-dialog-type="images">
+                                        <li>
+                                            <input type="text" name="icon" value="{{if !empty($data['icon'])}}{{$data.icon}}{{/if}}" data-validation-message="请上传图标" />
+                                            <img src="{{if !empty($data['icon'])}}{{$data.icon}}{{else /}}{{:StaticAttachmentUrl('default-images.jpg')}}{{/if}}" />
+                                        </li>
+                                    </ul>
+                                    <div class="plug-file-upload-submit" data-view-tag="ul.icon">
+                                        <i class="iconfont icon-upload-add"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="am-cf">
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label>描述</label>
+                                <textarea rows="1" name="describe" maxlength="200" class="am-radius" placeholder="描述格式最多200个字符" data-validation-message="描述最大200个字符">{{if !empty($data['describe'])}}{{$data.describe}}{{/if}}</textarea>
+                            </div>
+                        </div>
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            {{:ModuleInclude('lib/is_enable')}}
+                        </div>
+                    </div>
+
+                    <div class="am-margin-top-sm">
+                        <label class="am-padding-horizontal-xs">关联商品</label>
+                        <div class="forth-selection-container" data-original-list-bottom-tips="当前展示{val}条数据">
+                            <div class="forth-selection-form am-padding-horizontal-xs" data-search-url="{{:PluginsHomeUrl('distribution', 'recommend', 'goodssearch')}}">
+                                <select class="am-radius chosen-select forth-selection-form-category" data-placeholder="{{:MyLang('optional_tips')}}" data-validation-message="{{:MyLang('form_goods_category_message')}}">
+                                    <option value="">{{:MyLang('optional_tips')}}</option>
+                                    {{if !empty($goods_category_list)}}
+                                        {{foreach $goods_category_list as $v}}
+                                            <option value="{{$v.id}}">{{$v.name}}</option>
+                                            {{if !empty($v['items'])}}
+                                                {{foreach $v.items as $vs}}
+                                                    <option style="padding-left: 15px;" value="{{$vs.id}}">{{if empty($vs['items'])}}├{{else /}}└{{/if}}² {{$vs.name}}</option>
+                                                    {{if !empty($vs['items'])}}
+                                                        {{foreach $vs.items as $kss=>$vss}}
+                                                            <option style="padding-left: 30px;" value="{{$vss.id}}">{{if $kss eq count($vs['items'])-1}}└{{else /}}├{{/if}}³ {{$vss.name}}</option>
+                                                        {{/foreach}}
+                                                    {{/if}}
+                                                {{/foreach}}
+                                            {{/if}}
+                                        {{/foreach}}
+                                    {{/if}}
+                                </select>
+                                <input type="text" placeholder="{{:MyLang('goods_name')}}" class="am-radius forth-selection-form-keywords" />
+                                <button type="button" class="am-btn am-btn-primary-light am-radius am-btn-xs btn-loading-example search-submit" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('search_title')}}'}">
+                                    <i class="iconfont icon-search"></i>
+                                    <span>{{:MyLang('search_title')}}</span>
+                                </button>
+                            </div>
+                            <div class="forth-selection-list">
+                                <input type="hidden" name="goods_data" value="{{if !empty($goods_data_value)}}{{$goods_data_value}}{{/if}}" data-validation-message="请选择商品" />
+                                <div class="forth-selection-items am-fl">
+                                    <div class="title am-text-grey">可选</div>
+                                    <ul class="forth-selection-content am-list ul-left">
+                                        <div class="table-no">没有相关数据</div>
+                                    </ul>
+                                </div>
+                                <i class="am-icon-angle-double-right selected-all"></i>
+                                <div class="forth-selection-items am-fr">
+                                    <div class="title am-text-grey">已选</div>
+                                    <ul class="forth-selection-content am-list ul-right">
+                                        <div class="table-no {{if !empty($data['detail_list'])}}none{{/if}}">没有相关数据</div>
+                                        {{if !empty($data['detail_list'])}}
+                                            {{foreach $data['detail_list'] as $v}}
+                                                {{if !empty($v['goods'])}}
+                                                    <li class="am-animation-slide-bottom items-li-{{$v.goods.id}}{{if !empty($v['spec_text_value'])}}（{{$v.spec_text_value}}）{{/if}}" data-value="{{$v.goods.id}}" data-spec="{{if !empty($v['spec'])}}{{:urlencode(base64_encode($v['spec']))}}{{/if}}">
+                                                        <img src="{{$v.goods.images}}" class="am-radius" />
+                                                        <p class="name am-text-truncate">
+                                                            <a href="{{$v.goods.goods_url}}" target="_blank" title="{{if !empty($v['spec_text_value'])}}（{{$v.spec_text_value}}）{{/if}}{{$v.goods.title}}">{{if !empty($v['spec_text_value'])}}（{{$v.spec_text_value}}）{{/if}}{{$v.goods.title}}</a>
+                                                        </p>
+                                                        <p class="price-inventory am-text-truncate am-fr">
+                                                            <strong class="am-text-danger">{{$currency_symbol}}{{$v.goods.price}}</strong>
+                                                            <span class="am-fr">{{$v.goods.inventory}}{{$v.goods.inventory_unit}}</span>
+                                                        </p>
+                                                        <i class="iconfont icon-delete am-fr"></i>
+                                                    </li>
+                                                {{/if}}
+                                            {{/foreach}}
+                                        {{/if}}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{:ModuleInclude('lib/seo')}}
+                </div>
+
+                <div class="am-form-popup-submit">
+                    <input type="hidden" name="id" value="{{if !empty($data['id'])}}{{$data.id}}{{/if}}" />
+                    <a href="{{:PluginsHomeUrl('distribution', 'recommend', 'index', $params)}}" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg">
+                        <i class="am-icon-mail-reply"></i>
+                        <span>{{:MyLang('retreat_title')}}</span>
+                    </a>
+                    <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('save_title')}}'}">
+                        <i class="am-icon-save"></i>
+                        <span>{{:MyLang('save_title')}}</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- content end -->
+</div>
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}
+<script type="text/javascript">
+function GoodsChoiceBackHandle(data)
+{
+    GoodsChoiceBackHandleSpecDetail(data);
+}
+</script>

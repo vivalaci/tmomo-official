@@ -1,0 +1,325 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'freightfee',
+            'title'     => '运费设置',
+            'back_url'  => PluginsAdminUrl('freightfee', 'admin', 'index'),
+        ])}}
+
+        <!-- form start -->
+        <form class="am-form form-validation am-form-full-screen am-form-popup-sticky" action="{{:PluginsAdminUrl('freightfee', 'admin', 'save')}}" method="POST" request-type="ajax-url" request-value="{{:PluginsAdminUrl('freightfee', 'admin', 'index')}}">
+            <div class="am-form-group">
+                <label>运费展示名称<span class="am-form-group-label-tips">默认 运费</span></label>
+                <input type="text" name="show_name" placeholder="运费展示名称" maxlength="16" data-validation-message="运费展示名称格式最多 16 个字符" class="am-radius" value="{{if !empty($data['show_name'])}}{{$data.show_name}}{{else /}}运费{{/if}}" />
+            </div>
+
+            <div class="am-form-group">
+                <label>免运费支付方式</label>
+                <select name="payment" class="am-radius chosen-select" multiple="multiple" data-placeholder="{{:MyLang('optional_tips')}}" data-validation-message="请选择一个免运费支付方式">
+                    {{foreach $payment_list as $v}}
+                        <option value="{{$v.id}}-{{$v.payment}}-{{$v.name}}" {{if isset($data['payment']) and in_array($v['id'].'-'.$v['payment'].'-'.$v['name'], $data['payment'])}}selected{{/if}}>{{$v.name}}</option>
+                    {{/foreach}}
+                </select>
+            </div>
+
+            <div class="am-form-group">
+                <label>免运费商品</label>
+                <div class="forth-selection-container">
+                    <div class="forth-selection-form" data-search-url="{{:PluginsAdminUrl('freightfee', 'admin', 'goodssearch')}}">
+                        <select class="am-radius chosen-select forth-selection-form-category" data-placeholder="{{:MyLang('optional_tips')}}" data-validation-message="{{:MyLang('form_goods_category_message')}}">
+                            <option value="">{{:MyLang('optional_tips')}}</option>
+                            {{if !empty($goods_category_list)}}
+                                {{foreach $goods_category_list as $v}}
+                                    <option value="{{$v.id}}">{{$v.name}}</option>
+                                    {{if !empty($v['items'])}}
+                                        {{foreach $v.items as $vs}}
+                                            <option style="padding-left: 15px;" value="{{$vs.id}}">{{if empty($vs['items'])}}├{{else /}}└{{/if}}² {{$vs.name}}</option>
+                                            {{if !empty($vs['items'])}}
+                                                {{foreach $vs.items as $kss=>$vss}}
+                                                    <option style="padding-left: 30px;" value="{{$vss.id}}">{{if $kss eq count($vs['items'])-1}}└{{else /}}├{{/if}}³ {{$vss.name}}</option>
+                                                {{/foreach}}
+                                            {{/if}}
+                                        {{/foreach}}
+                                    {{/if}}
+                                {{/foreach}}
+                            {{/if}}
+                        </select>
+                        <input type="text" placeholder="{{:MyLang('goods_name')}}" class="am-radius forth-selection-form-keywords" />
+                        <button type="button" class="am-btn am-btn-primary-light am-radius am-btn-xs search-submit" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('search_title')}}'}">
+                            <i class="iconfont icon-search"></i>
+                            <span>{{:MyLang('search_title')}}</span>
+                        </button>
+                    </div>
+                    <div class="forth-selection-list am-margin-top-sm">
+                        <input type="text" name="goods_ids" value="{{if !empty($data['goods_ids'])}}{{$data.goods_ids}}{{/if}}" data-validation-message="请选择商品" />
+                        <div class="forth-selection-items am-fl">
+                            <div class="title">可选</div>
+                            <ul class="forth-selection-content am-list ul-left">
+                                <div class="table-no">没有相关数据</div>
+                            </ul>
+                        </div>
+                        <button type="button" class="am-btn am-btn-default am-btn-xs am-radius selected-all">全选 <i class="am-icon-angle-double-right"></i></button>
+                        <div class="forth-selection-items am-fr">
+                            <div class="title">已选</div>
+                            <ul class="forth-selection-content am-list ul-right">
+                                <div class="table-no {{if !empty($data['goods_list'])}}am-hide{{/if}}">没有相关数据</div>
+                                {{if !empty($data['goods_list'])}}
+                                    {{foreach $data['goods_list'] as $v}}
+                                        <li class="am-animation-slide-bottom items-li-{{$v.id}}">
+                                            <span class="name" data-value="{{$v.id}}">{{$v.title}}</span>
+                                            <i class="iconfont icon-delete am-fr"></i>
+                                        </li>
+                                    {{/foreach}}
+                                {{/if}}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="am-form-group">
+                <label>特定商品分类运费<span class="am-form-group-label-tips">含下级分类</span></label>
+                <ul class="am-list goods-category-append-list am-radius">
+                    {{if !empty($data['goods_category_append']) and is_array($data['goods_category_append'])}}
+                        {{foreach $data.goods_category_append as $v}}
+                            <li class="am-nbfc am-padding-xs data-item-{{$v.id}}">
+                                <input type="hidden" name="goods_category_append[{{$v.id}}][id]" value="{{if !empty($v['id'])}}{{$v.id}}{{/if}}" />
+                                <input type="hidden" name="goods_category_append[{{$v.id}}][name]" value="{{if !empty($v['name'])}}{{$v.name}}{{/if}}" />
+                                <p class="name am-fl am-text-truncate am-padding-vertical-xs">{{$v.name}}</p>
+                                <input type="number" name="goods_category_append[{{$v.id}}][price]" step="0.01" min="0" placeholder="额外增加运费" value="{{if !empty($v['price'])}}{{$v.price}}{{/if}}" class="am-radius am-fl" />
+                                <input type="text" name="goods_category_append[{{$v.id}}][icon]" placeholder="显示名称" value="{{if !empty($v['icon'])}}{{$v.icon}}{{/if}}" class="am-radius am-fl am-margin-left-xs" />
+                                <button type="button" class="am-close am-fr">&times;</button>
+                            </li>
+                        {{/foreach}}
+                    {{/if}}
+                </ul>
+                <select class="am-radius chosen-select business-operations-submit goods-category-append-submit" data-placeholder="+ 追加分类">
+                    <option value="">+ 追加分类</option>
+                    {{if !empty($goods_category_list)}}
+                        {{foreach $goods_category_list as $v}}
+                            <option value="{{$v.id}}" data-name="{{$v.name}}">{{$v.name}}</option>
+                            {{if !empty($v['items'])}}
+                                {{foreach $v.items as $vs}}
+                                    <option style="padding-left: 15px;" value="{{$vs.id}}" data-name="{{$vs.name}}">{{if empty($vs['items'])}}├{{else /}}└{{/if}}² {{$vs.name}}</option>
+                                    {{if !empty($vs['items'])}}
+                                        {{foreach $vs.items as $kss=>$vss}}
+                                            <option style="padding-left: 30px;" value="{{$vss.id}}" data-name="{{$vss.name}}">{{if $kss eq count($vs['items'])-1}}└{{else /}}├{{/if}}³ {{$vss.name}}</option>
+                                        {{/foreach}}
+                                    {{/if}}
+                                {{/foreach}}
+                            {{/if}}
+                        {{/foreach}}
+                    {{/if}}
+                </select>
+            </div>
+
+            <div class="am-form-group" data-value="{{if isset($data['valuation'])}}{{$data.valuation}}{{else /}}0{{/if}}">
+                <label>计价方式</label>
+                <div class="am-radio-group valuation-list">
+                    {{foreach $is_whether_list as $v}}
+                        <label class="am-radio-inline">
+                            <input type="radio" name="valuation" value="{{$v.id}}" {{if isset($data['valuation']) and $data['valuation'] eq $v['id']}}checked="checked"{{else /}}{{if !isset($data['valuation']) and isset($v['checked']) and $v['checked'] eq true}}checked="checked"{{/if}}{{/if}} data-am-ucheck /> {{$v.name}}
+                        </label>
+                    {{/foreach}}
+                </div>
+            </div>
+
+            <div class="am-form-group">
+                <label class="am-block">首(件/重量/体积)不满足按首费计算<span class="am-form-group-label-tips">默认否</span></label>
+                <input name="is_insufficient_first_price" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_insufficient_first_price']) and $data['is_insufficient_first_price'] eq 1}}checked="true"{{/if}} />
+            </div>
+
+            <div class="am-form-group">
+                <label>续费计算方式</label>
+                <div class="am-radio-group">
+                    {{foreach $is_continue_type_list as $v}}
+                        <label class="am-radio-inline">
+                            <input type="radio" name="is_continue_type" value="{{$v.id}}" {{if isset($data['is_continue_type']) and $data['is_continue_type'] eq $v['id']}}checked="checked"{{else /}}{{if !isset($data['is_continue_type']) and isset($v['checked']) and $v['checked'] eq true}}checked="checked"{{/if}}{{/if}} data-am-ucheck /> {{$v.name}}
+                        </label>
+                    {{/foreach}}
+                </div>
+            </div>
+
+            <div class="freightfee-rules am-margin-bottom-lg" 
+                data-default-first-continue-name="默认快递" 
+                data-default-freightfee-name="默认运费" 
+                data-default-add-region-name="添加地区" 
+                data-default-line-remove-name="{{:MyLang('delete_title')}}" 
+            >
+                <label>运费模板</label>
+                <table class="am-table am-table-striped">
+                    <thead>
+                        <tr>
+                            <th>运送到<span class="am-form-group-label-tips-must">*</span></th>
+                            <th>首数(<span class="first-unit">{{if empty($data['valuation']) or $data['valuation'] eq 0}}件{{elseif $data['valuation'] eq 1 /}}kg{{elseif $data['valuation'] eq 2 /}}m³{{/if}}</span>)<span class="am-form-group-label-tips-must">*</span></th>
+                            <th>续数(<span class="continue-unit">{{if empty($data['valuation']) or $data['valuation'] eq 0}}件{{elseif $data['valuation'] eq 1 /}}kg{{elseif $data['valuation'] eq 2 /}}m³{{/if}}</span>)<span class="am-form-group-label-tips-must">*</span></th>
+                            <th width="370">名称 / 首费 / 续费<span class="am-form-group-label-tips-must">*</span></th>
+                            <th>订单金额满(免运费)</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{if empty($data['data'])}}
+                            <tr>
+                                <td class="first">
+                                    <div class="region-td am-radius am-hide"></div>默认运费
+                                    <input type="text" class="am-radius region-name" name="data[0][region]" data-validation-message="请选择地区" value="default" required data-is-clearout="0" />
+                                    <input type="hidden" class="am-radius region-name-show" name="data[0][region_show]" value="" data-is-clearout="0" />
+                                </td>
+                                <td>
+                                    <input type="number" class="am-radius first" name="data[0][first]" min="1" max="9999999" data-validation-message="输入首件数" placeholder="首件数" required data-is-clearout="0" />
+                                </td>
+                                <td>
+                                    <input type="number" class="am-radius continue" name="data[0][continue]" min="1" max="9999999" data-validation-message="输入续件数" placeholder="续件数" required data-is-clearout="0" />
+                                </td>
+                                <td>
+                                    <div class="group-input-list">
+                                        <div class="item">
+                                            <input type="text" class="am-form-field am-radius fee-name" placeholder="运费名称" name="data[0][fee_list][0][fee_name]" data-validation-message="请填写运费名称" value="默认快递" required data-is-clearout="0" />
+                                            <input type="number" class="am-form-field am-radius first-price" placeholder="首运费" name="data[0][fee_list][0][first_price]" min="0.00" max="9999999.99" step="0.01" data-validation-message="首运费应输入0.00~9999999.99的数字,小数保留两位" required data-is-clearout="0" />
+                                            <input type="number" class="am-form-field am-radius continue-price" placeholder="续运费" name="data[0][fee_list][0][continue_price]" min="0.00" max="9999999.99" step="0.01" data-validation-message="续运费应输入0.00~9999999.99的数字,小数保留两位" required data-is-clearout="0" />
+                                            <a href="javascript:;" class="am-icon-remove am-text-grey am-margin-top-xs first-continue-submit-remove"></a>
+                                        </div>
+                                    </div>
+                                    <div class="am-margin-top-xs">
+                                        <a href="javascript:;" class="am-text-blue first-continue-submit-add">+ 继续添加</a>
+                                    </div>
+                                </td>
+                                <td>
+                                    <input type="number" class="am-radius continue-free-shipping-price-name" name="data[0][free_shipping_price]" min="0.00" step="0.01" data-validation-message="满免运费,小数保留两位" placeholder="满免运费" data-is-clearout="0" />
+                                </td>
+                                <td><!--operation--></td>
+                            </tr>
+                        {{else /}}
+                            {{foreach $data.data as $k=>$v}}
+                                <tr class="data-list-{{$k}}">
+                                    <td class="first">
+                                        {{if $v['region'] eq 'default'}}
+                                            <div class="region-td am-radius am-hide"></div>默认运费
+                                            <input type="text" class="am-radius region-name" name="data[{{$k}}][region]" data-validation-message="请选择地区" value="default" required data-is-clearout="0" />
+                                            <input type="hidden" class="am-radius region-name-show" name="data[{{$k}}][region_show]" value="{{$v.region_show}}" data-is-clearout="0" />
+                                        {{else /}}
+                                            <div class="region-td am-radius">{{$v.region_names}}</div>
+                                            <a href="javascript:;" class="am-text-primary line-edit" data-index="{{$k}}">添加地区</a>
+                                            <input type="text" class="am-radius region-name" name="data[{{$k}}][region]" data-validation-message="请选择地区" value="{{$v.region}}" required data-is-clearout="0" />
+                                            <input type="hidden" class="am-radius region-name-show" name="data[{{$k}}][region_show]" value="{{$v.region_show}}" data-is-clearout="0" />
+                                        {{/if}}
+                                    </td>
+                                    <td>
+                                        <input type="number" class="am-radius first" name="data[{{$k}}][first]" max="9999999" {{if !isset($data['valuation']) or $data['valuation'] eq 0}}min="1"{{else /}}min="0.01" step="0.01"{{/if}} placeholder="首件数" data-validation-message="输入首件数" value="{{$v.first}}" required data-is-clearout="0" />
+                                    </td>
+                                    <td>
+                                        <input type="number" class="am-radius continue" name="data[{{$k}}][continue]" max="9999999" {{if !isset($data['valuation']) or $data['valuation'] eq 0}}min="1"{{else /}}min="0.01" step="0.01"{{/if}} placeholder="续件数" data-validation-message="输入续件数" value="{{$v.continue}}"  required data-is-clearout="0" />
+                                    </td>
+                                    <td>
+                                        <div class="group-input-list">
+                                            {{if empty($v['fee_list']) or !is_array($v['fee_list'])}}
+                                                <div class="item">
+                                                    <input type="text" class="am-form-field am-radius fee-name" placeholder="运费名称" name="data[{{$k}}][fee_list][0][fee_name]" data-validation-message="请填写运费名称" value="默认快递" required data-is-clearout="0" />
+                                                    <input type="number" class="am-form-field am-radius first-price" placeholder="首运费" name="data[{{$k}}][fee_list][0][first_price]" min="0.00" max="9999999.99" step="0.01" data-validation-message="首运费应输入0.00~9999999.99的数字,小数保留两位" required data-is-clearout="0" />
+                                                    <input type="number" class="am-form-field am-radius continue-price" placeholder="续运费" name="data[{{$k}}][fee_list][0][continue_price]" min="0.00" max="9999999.99" step="0.01" data-validation-message="续运费应输入0.00~9999999.99的数字,小数保留两位" required data-is-clearout="0" />
+                                                    <button type="button" class="am-close first-continue-submit-remove">&times;</button>
+                                                </div>
+                                            {{else /}}
+                                                {{foreach $v.fee_list as $ks=>$vs}}
+                                                    <div class="item">
+                                                        <input type="text" class="am-form-field am-radius fee-name" placeholder="运费名称" name="data[{{$k}}][fee_list][{{$ks}}][fee_name]" data-validation-message="请填写运费名称" value="{{if isset($vs['fee_name'])}}{{$vs.fee_name}}{{/if}}" required data-is-clearout="0" />
+                                                        <input type="number" class="am-form-field am-radius first-price" placeholder="首运费" name="data[{{$k}}][fee_list][{{$ks}}][first_price]" min="0.00" max="9999999.99" step="0.01" data-validation-message="首运费应输入0.00~9999999.99的数字,小数保留两位" required data-is-clearout="0" value="{{if isset($vs['first_price'])}}{{$vs.first_price}}{{/if}}" />
+                                                        <input type="number" class="am-form-field am-radius continue-price" placeholder="续运费" name="data[{{$k}}][fee_list][{{$ks}}][continue_price]" min="0.00" max="9999999.99" step="0.01" data-validation-message="续运费应输入0.00~9999999.99的数字,小数保留两位" required data-is-clearout="0" value="{{if isset($vs['continue_price'])}}{{$vs.continue_price}}{{/if}}" />
+                                                        <button type="button" class="am-close first-continue-submit-remove">&times;</button>
+                                                    </div>
+                                                {{/foreach}}
+                                            {{/if}}
+                                        </div>
+                                        <div class="am-margin-top-xs">
+                                            <a href="javascript:;" class="am-text-blue first-continue-submit-add">+ 继续添加</a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <input type="number" class="am-radius continue-free-shipping-price-name" name="data[{{$k}}][free_shipping_price]" min="0.00" step="0.01" data-validation-message="满免运费,小数保留两位" placeholder="满免运费" value="{{if isset($v['free_shipping_price']) and $v['free_shipping_price'] gt 0}}{{$v.free_shipping_price}}{{/if}}" data-is-clearout="0" />
+                                    </td>
+                                    {{if $v['region'] eq 'default'}}
+                                        <td><!--operation--></td>
+                                    {{else /}}
+                                        <td>
+                                            <a href="javascript:;" class="am-text-danger line-remove">{{:MyLang('delete_title')}}</a>
+                                        </td>
+                                    {{/if}}
+                                </tr>
+                            {{/foreach}}
+                        {{/if}}
+                    </tbody>
+                </table>
+                <span class="business-operations-submit rules-submit-add">+ 为指定地区城市设置运费</span>
+            </div>
+
+            {{:ModuleInclude('lib/is_enable')}}
+
+            <div class="am-form-popup-submit">
+                <input type="hidden" name="warehouse_id" value="{{if !empty($data) and !empty($data['warehouse_id'])}}{{$data.warehouse_id}}{{/if}}" />
+                <a href="{{:PluginsAdminUrl('freightfee', 'admin', 'index', $params)}}" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg">
+                    <i class="am-icon-mail-reply"></i>
+                    <span>{{:MyLang('retreat_title')}}</span>
+                </a>
+                <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('save_title')}}'}">
+                    <i class="am-icon-save"></i>
+                    <span>{{:MyLang('save_title')}}</span>
+                </button>
+            </div>
+        </form>
+        <!-- form end -->
+
+        <!-- popup -->
+        <div class="am-popup am-radius" id="freightfee-region-popup">
+            <div class="am-popup-inner">
+                <div class="am-popup-hd">
+                    <h4 class="am-popup-title">选择区域</h4>
+                    <span data-am-modal-close class="am-close">&times;</span>
+                </div>
+                <div class="am-popup-bd">
+                    {{if empty($region_list)}}
+                        <div class="table-no"><i class="am-icon-warning"></i> 没有相关数据</div>
+                    {{else /}}
+                        <form class="am-form-popup-fixed">
+                            <ul class="province-list">
+                                {{foreach $region_list as $v}}
+                                    <li>
+                                        <p class="province-name am-radius region-node-{{$v.id}}" data-id="{{$v.id}}">{{$v.name}}</p>
+                                        {{if !empty($v['items'])}}
+                                            <ul class="city-list">
+                                                {{foreach $v.items as $vs}}
+                                                    <li class="am-radius">
+                                                        <span class="city-name region-node-{{$vs.id}}" data-province-id="{{$v.id}}" data-city-id="{{$vs.id}}">{{$vs.name}}</span>
+                                                    </li>
+                                                {{/foreach}}
+                                            </ul>
+                                        {{/if}}
+                                    </li>
+                                {{/foreach}}
+                            </ul>
+
+                            <div class="am-form-popup-submit">
+                                <button type="button" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg" data-am-modal-close>
+                                    <i class="am-icon-paint-brush"></i>
+                                    <span>{{:MyLang('cancel_title')}}</span>
+                                </button>
+                                <button type="button" class="am-btn am-btn-primary am-radius am-btn-xs confirm-submit">
+                                    <i class="am-icon-check"></i>
+                                    <span>{{:MyLang('confirm_title')}}</span>
+                                </button>
+                            </div>
+                        </form>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

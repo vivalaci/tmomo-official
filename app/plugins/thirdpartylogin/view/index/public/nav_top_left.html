@@ -1,0 +1,24 @@
+{{if !empty($plugins_config) and !empty($plugins_config['nav_top_left_ent_name']) and !empty($platform_type_list) and is_array($platform_type_list)}}
+    <div class="am-dropdown" data-am-dropdown>
+        <a href="javascript:;" class="am-dropdown-toggle am-margin-left-xs" data-am-dropdown-toggle>{{$plugins_config.nav_top_left_ent_name}} <span class="am-icon-angle-down"></span></a>
+        <ul class="am-dropdown-content am-radius">
+            {{foreach $platform_type_list as $k=>$v}}
+                {{if key($platform_type_list) neq $k}}
+                    <li class="am-divider"></li>
+                {{/if}}
+                <li>
+                    {{if empty($v['config']['more_app'])}}
+                        <a href="{{$v.login_url}}">
+                    {{else /}}
+                        <a href="javascript:;" class="submit-popup" data-url="{{:PluginsHomeUrl('thirdpartylogin', 'index', 'more', ['platform'=>$k])}}">
+                    {{/if}}
+                        <div class="am-padding-vertical-xs">
+                            <img src="{{$v.icon}}" alt="{{$v.name}}" class="am-fl am-padding-xs am-circle am-margin-right-sm" style="background: {{$v.bg_color}};" width="25" height="25" />
+                            <span class="am-vertical-align-middle">{{$v.name}}</span>
+                        </div>
+                    </a>
+                </li>
+            {{/foreach}}
+        </ul>
+    </div>
+{{/if}}

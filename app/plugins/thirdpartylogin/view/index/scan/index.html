@@ -1,0 +1,59 @@
+{{:ModuleInclude('public/header')}}
+
+<div class="am-padding-sm am-cf am-text-center body-content">
+    {{if isset($scan_data['status']) and $scan_data['status'] eq 3}}
+        <p class="am-text-center am-margin-top-xl am-text-warning">请在PC端完成账号绑定！</p>
+    {{else /}}
+        {{if empty($user)}}
+            <p class="am-text-center am-margin-top-xl am-text-warning">用户登录信息有误！</p>
+        {{else /}}
+            <img src="{{$user.avatar}}" class="am-img-thumbnail am-circle" width="80" height="80" />
+            <p class="am-margin-top-xs">{{$user.user_name_view}}</p>
+            {{if isset($scan_data['status']) and $scan_data['status'] eq 1}}
+                <div class="am-margin-top-xl">
+                    <p class="tips-title">授权登录{{:MyC('home_site_name')}}</p>
+                    <p class="am-text-grey am-margin-top-sm">若非本人操作，请忽略申请</p>
+                </div>
+                <div class="am-margin-top-lg">
+                    <button type="button" class="am-btn am-btn-primary am-btn-lg am-radius btn-loading-example submit-ajax" data-url="{{:PluginsHomeUrl('thirdpartylogin', 'scan', 'login', ['id'=>$params['id']])}}" data-is-confirm="0" data-is-reset="0" data-view="fun" data-value="ConfirmLoginBackHandle" data-am-loading="{spinner: 'circle-o-notch', loadingText:'确认登录'}">
+                        <i class="am-icon-check"></i>
+                        <span>确认登录</span>
+                    </button>
+                    <div class="am-margin-top-lg">
+                        <button type="button" class="am-btn am-btn-default am-btn-lg am-radius window-close-event">
+                            <span>{{:MyLang('cancel_title')}}</span>
+                        </button>
+                    </div>
+                </div>
+            {{else /}}
+                <p class="tips-title am-text-success am-margin-top-xl">
+                    <i class="am-icon-check"></i>
+                    <span>已登录成功</span>
+                </p>
+                <div class="am-margin-top-lg">
+                    <button type="button" class="am-btn am-btn-default am-btn-lg am-radius window-close-event">
+                        <span>{{:MyLang('close_title')}}</span>
+                    </button>
+                </div>
+            {{/if}}
+        {{/if}}
+    {{/if}}
+</div>
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}
+<script type="text/javascript">
+function ConfirmLoginBackHandle(e)
+{
+    if(e.code == 0)
+    {
+        Prompt(e.msg, 'success');
+        setTimeout(function()
+        {
+            window.location.reload();
+        }, 1000);
+    } else {
+        Prompt(e.msg);
+    }
+}
+</script>

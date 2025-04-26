@@ -1,0 +1,133 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'exchangerate',
+            'nav_data'  => $plugins_nav_menu_list,
+        ])}}
+
+        <div class="exchangerate-content am-padding-bottom-xs">
+            <!-- 基础配置 -->
+            <div class="am-panel am-radius am-panel-default exchangerate-content-base">
+                <div class="am-panel-hd">
+                    <span class="am-panel-title">{{:MyLang('base_config_title')}}</span>
+                    <a class="am-margin-left-lg" href="{{:PluginsAdminUrl('exchangerate', 'admin', 'saveinfo')}}">
+                        <i class="am-icon-edit"></i>
+                        <span>{{:MyLang('edit_title')}}</span>
+                    </a>
+                </div>
+                <div class="am-panel-bd">
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>手机端快捷导航</label>
+                                <div>
+                                    {{if isset($data['is_user_quick_select']) and $data['is_user_quick_select'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>web端顶部小导航右侧</label>
+                                <div>
+                                    {{if isset($data['is_user_header_top_right_select']) and $data['is_user_header_top_right_select'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>商品金额转换</label>
+                                <div>
+                                    {{if isset($data['is_goods_to_rate']) and $data['is_goods_to_rate'] eq 1}}是
+                                    {{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>商品原始金额转换</label>
+                                <div>
+                                    {{if isset($data['is_goods_od_to_rate']) and $data['is_goods_od_to_rate'] eq 1}}是
+                                    {{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>仅使用默认货币下单</label>
+                                <div>
+                                    {{if isset($data['is_use_default_currency_buy']) and $data['is_use_default_currency_buy'] eq 1}}是
+                                    {{else /}}{{:MyLang('no_title')}}{{/if}}
+                                    {{if isset($data['is_only_buy_order_use_currency']) and $data['is_only_buy_order_use_currency'] eq 1}}
+                                        <span class="am-badge am-badge-success am-radius am-margin-left-xs">仅订单使用货币</span>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 支付方式默认货币 -->
+            <div class="am-panel am-radius am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <span class="am-panel-title">支付方式默认货币</span>
+                </div>
+                <div class="am-panel-bd">
+                    <table class="am-table">
+                        <thead>
+                            <tr>
+                                <th>支付方式</th>
+                                <th>货币</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{if !empty($payment_list)}}
+                                {{foreach $payment_list as $v}}
+                                    <tr>
+                                        <td>{{$v.name}}</td>
+                                        <td>{{if !empty($currency_list) and !empty($data['payment_currency_data']) and !empty($data['payment_currency_data'][$v['id']]) and !empty($currency_list[$data['payment_currency_data'][$v['id']]])}}{{$currency_list[$data['payment_currency_data'][$v['id']]]}}{{/if}}</td>
+                                    </tr>
+                                {{/foreach}}
+                            {{/if}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 跟随语言自动识别 -->
+            <div class="am-panel am-radius am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <span class="am-panel-title">跟随语言自动识别</span>
+                </div>
+                <div class="am-panel-bd">
+                    <table class="am-table">
+                        <thead>
+                            <tr>
+                                <th>语言</th>
+                                <th>货币</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{if !empty($multilingual_list)}}
+                                {{foreach $multilingual_list as $k=>$v}}
+                                    <tr>
+                                        <td>{{$v}}</td>
+                                        <td>{{if !empty($currency_list) and !empty($data['multilingual_currency_data']) and !empty($data['multilingual_currency_data'][$k]) and !empty($currency_list[$data['multilingual_currency_data'][$k]])}}{{$currency_list[$data['multilingual_currency_data'][$k]]}}{{/if}}</td>
+                                    </tr>
+                                {{/foreach}}
+                            {{/if}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

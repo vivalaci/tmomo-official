@@ -1,0 +1,9 @@
+<p>
+    <span>{{$module_data.name}}</span>
+    {{if !empty($module_data['shop_id'])}}
+        <span class="am-badge am-badge-secondary am-radius">{{:MyLang('shop_text')}}</span>
+    {{/if}}
+</p>
+{{if !empty($module_data['desc'])}}
+    <p class="am-text-warning am-margin-top-xs">{{$module_data.desc}}</p>
+{{/if}}

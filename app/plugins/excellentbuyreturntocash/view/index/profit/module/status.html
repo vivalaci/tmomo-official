@@ -1,0 +1,18 @@
+<span {{if !empty($module_data['success_time']) and !empty($module_data['success_estimate_icon'])}}data-am-popover="{theme: 'sm', content: '{{$module_data.success_estimate_icon}}{{$module_data.success_time}}', trigger: 'hover focus'}"{{/if}}>
+    {{switch $module_data.status}}
+        {{case 1}}
+            <span class="am-badge am-badge-warning am-radius">{{$module_data.status_name}}</span>
+        {{/case}}
+        {{case 2}}
+            <span class="am-badge am-badge-secondary am-radius">{{$module_data.status_name}}</span>
+        {{/case}}
+        {{case 3}}
+            <span class="am-badge am-badge-success am-radius">{{$module_data.status_name}}</span>
+        {{/case}}
+        {{case 4}}
+            <span class="am-badge am-badge-danger am-radius">{{$module_data.status_name}}</span>
+        {{/case}}
+        {{default /}}
+            <span class="am-badge am-radius">{{$module_data.status_name}}</span>
+    {{/switch}}
+</span>

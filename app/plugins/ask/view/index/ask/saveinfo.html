@@ -1,0 +1,62 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- content start -->
+<div class="user-content-body">
+    <!-- form start -->
+    <form class="am-form form-validation am-form-full-screen am-form-popup-fixed" action="{{:PluginsHomeUrl('ask', 'ask', 'save')}}" method="POST" request-type="ajax-reload" request-value="parent">
+        <div class="am-padding-sm">
+            <div class="am-form-group">
+                <label>{{:MyLang('ask.form_item_title')}}<span class="am-form-group-label-tips-must">*</span></label>
+                <input type="text" name="title" placeholder="{{:MyLang('ask.form_item_title_message')}}" minlength="2" maxlength="120" data-validation-message="{{:MyLang('ask.form_item_title_message')}}" class="am-radius" value="{{if !empty($data['title'])}}{{$data.title}}{{/if}}" />
+            </div>
+            <div class="am-form-group">
+                <label class="am-block">{{:MyLang('ask.form_item_content')}}<span class="am-form-group-label-tips-must">*</span></label>
+                <textarea name="content" id="editor-content" rows="5" minlength="5" placeholder="{{:MyLang('ask.form_item_content_message')}}" data-validation-message="{{:MyLang('ask.form_item_content_message')}}">{{if !empty($data['content'])}}{{$data.content|raw}}{{/if}}</textarea>
+            </div>
+            {{if !empty($ask_category_list)}}
+                <div class="am-form-group">
+                    <label class="am-block">{{:MyLang('ask.form_item_category_id')}}</label>
+                    <select name="category_id" class="am-radius chosen-select" data-placeholder="{{:MyLang('please_select_tips')}}" data-validation-message="{{:MyLang('ask.form_item_category_id_message')}}">
+                        <option value="0">{{:MyLang('please_select_tips')}}</option>
+                        {{foreach $ask_category_list as $v}}
+                            <option value="{{$v.id}}" {{if isset($data['category_id']) and $data['category_id'] eq $v['id']}}selected{{/if}}>{{$v.name}}</option>
+                        {{/foreach}}
+                    </select>
+                </div>
+            {{/if}}
+            {{if isset($plugins_config['is_show_email_notice']) and $plugins_config['is_show_email_notice'] eq 1}}
+                <div class="am-form-group">
+                    <label>{{:MyLang('ask.form_item_email_notice')}}</label>
+                    <input type="email" name="email_notice" placeholder="{{:MyLang('ask.form_item_email_notice')}}" maxlength="60" data-validation-message="{{:MyLang('ask.form_item_email_notice_message')}}" class="am-radius" value="{{if empty($data['email_notice'])}}{{if !empty($user['email'])}}{{$user.email}}{{/if}}{{else /}}{{$data.email_notice}}{{/if}}" />
+                </div>
+            {{/if}}
+            {{if isset($plugins_config['is_show_mobile_notice']) and $plugins_config['is_show_mobile_notice'] eq 1}}
+                <div class="am-form-group">
+                    <label>{{:MyLang('ask.form_item_mobile_notice')}}</label>
+                    <input type="text" name="mobile_notice" pattern="{{:MyConst('common_regex_mobile')}}" placeholder="{{:MyLang('ask.form_item_mobile_notice')}}" maxlength="60" data-validation-message="{{:MyLang('ask.form_item_mobile_notice_message')}}" class="am-radius" value="{{if empty($data['mobile_notice'])}}{{if !empty($user['mobile'])}}{{$user.mobile}}{{/if}}{{else /}}{{$data.mobile_notice}}{{/if}}" />
+                </div>
+            {{/if}}
+        </div>
+        <div class="am-form-popup-submit">
+            <input type="hidden" name="id" value="{{if !empty($data['id'])}}{{$data.id}}{{/if}}" />
+            <input type="hidden" name="goods_id" value="{{if !empty($data['goods_id'])}}{{$data.goods_id}}{{else /}}{{if !empty($params['goods_id'])}}{{$params.goods_id}}{{/if}}{{/if}}" />
+            <!-- <div class="am-checkbox am-margin-right-main am-margin-top-0 am-margin-bottom-0">
+                <label class="am-checkbox am-flex am-flex-row am-flex-items-center am-gap-1 am-margin-0">
+                    <input type="checkbox" name="is_anonymous" value="1" data-am-ucheck {{if isset($data['is_anonymous']) and $data['is_anonymous'] eq 1}}checked{{/id}} /> 匿名提问
+                </label>
+            </div> -->
+            <button type="button" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg" data-am-modal-close>
+                <i class="am-icon-paint-brush"></i>
+                <span>{{:MyLang('cancel_title')}}</span>
+            </button>
+            <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('submit_title')}}'}">
+                <i class="am-icon-save"></i>
+                <span>{{:MyLang('submit_title')}}</span>
+            </button>
+        </div>
+    </form>
+    <!-- form end -->
+</div>
+<!-- content end -->
+
+{{:ModuleInclude('public/footer')}}

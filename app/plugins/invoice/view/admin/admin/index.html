@@ -1,0 +1,153 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'invoice',
+            'nav_data'  => $plugins_nav_menu_list,
+        ])}}
+
+        <div class="invoice-content">
+            <!-- 基础配置 -->
+            <div class="am-panel am-panel-default am-radius invoice-content-base">
+                <div class="am-panel-hd">
+                    <span class="am-panel-title">{{:MyLang('base_config_title')}}</span>
+                    <a class="am-margin-left-lg" href="{{:PluginsAdminUrl('invoice', 'admin', 'saveinfo')}}">
+                        <i class="am-icon-edit"></i>
+                        <span>{{:MyLang('edit_title')}}</span>
+                    </a>
+                </div>
+                <div class="am-panel-bd">
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>快捷导航-开启发票管理入口</label>
+                                <div>
+                                    {{if isset($data['is_user_quick_select']) and $data['is_user_quick_select'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启购物订单开票</label>
+                                <div>
+                                    {{if isset($data['is_invoice_order']) and $data['is_invoice_order'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启钱包充值开票</label>
+                                <div>
+                                    {{if isset($data['is_invoice_recharge']) and $data['is_invoice_recharge'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>下单即可开票</label>
+                                <div>
+                                    {{if isset($data['is_order_submit_invoice']) and $data['is_order_submit_invoice'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>订单完成起始时间</label>
+                                <div>
+                                    {{if !empty($data['order_success_start_time'])}}
+                                        {{:MyLang('already_setup_tips')}}[ {{$data.order_success_start_time}}分钟/{{:intval($data.order_success_start_time/60/24)}}天 ]
+                                    {{else /}}
+                                        未配置、默认[ 43200分钟/30天 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>可开具多久时间的购物订单</label>
+                                <div>
+                                    {{if !empty($data['order_add_max_time'])}}
+                                        {{:MyLang('already_setup_tips')}}[ {{$data.order_add_max_time}}分钟/{{:intval($data.order_add_max_time/60/24)}}天 ]
+                                    {{else /}}
+                                        未配置、默认[ 525600分分钟/365天 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>可开具多久时间的充值订单</label>
+                                <div>
+                                    {{if !empty($data['recharge_add_max_time'])}}
+                                        {{:MyLang('already_setup_tips')}}[ {{$data.recharge_add_max_time}}分钟/{{:intval($data.recharge_add_max_time/60/24)}}天 ]
+                                    {{else /}}
+                                        未配置、默认[ 525600分分钟/365天 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>可选发票类型</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if !empty($data['can_invoice_type'])}}
+                                        {{:implode('<br />', $data['can_invoice_type'])}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 全部可选 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开具发票内容</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if !empty($data['invoice_content_type'])}}
+                                        {{:implode('<br />', $data['invoice_content_type'])}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 不可选 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>提示信息</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if !empty($data['invoice_desc'])}}
+                                        {{:implode('<br />', $data['invoice_desc'])}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 不展示 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开票默认上一次开票信息（web端）</label>
+                                <div>
+                                    {{if isset($data['is_web_invoice_default_last_info']) and $data['is_web_invoice_default_last_info'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开票默认上一次开票信息（手机端）</label>
+                                <div>
+                                    {{if isset($data['is_app_invoice_default_last_info']) and $data['is_app_invoice_default_last_info'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

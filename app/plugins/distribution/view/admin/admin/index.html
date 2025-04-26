@@ -1,0 +1,1031 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right" data-url="{{:PluginsAdminUrl('distribution', 'admin', 'stats')}}">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'distribution',
+            'nav_data'  => $plugins_nav_menu_list,
+        ])}}
+
+        <div class="distribution-content-base am-padding-bottom-xs">
+            <!-- 操作提示 -->
+            <div class="am-operate-stretch-tips">
+                <div class="title">
+                    <i class="iconfont icon-tips"></i>
+                    <strong title="{{:MyLang('operate_list_tips_msg')}}">{{:MyLang('operate_list_tips_button_text')}}</strong>
+                    <i class="iconfont icon-contract contract" title="{{:MyLang('operate_list_tips_retract_text')}}"></i> 
+                </div>
+                <p>依赖插件[ 钱包、分享 ]</p>
+                <p>1. 分销依赖插件有[ 钱包 、分享 ]，插件可在应用商店下载安装，安装不分先后顺序。</p>
+                <p>2. 佣金实际返佣至用户钱包余额需要脚本定时执行，访问分销后台也会自动执行一次。</p>
+                <p>3. 订单提交的同时自动创建分销返佣订单，届时被返佣用户将可在收益明细查看、同时发送站内信。</p>
+                <p>4. 当订单发生售后金额改变，分佣订单也会重新计算、所以不用担心佣金被多计算问题（注意：仅处理待结算的返佣订单）。</p>
+                <p>5. 佣金结算请配置[基础数据->佣金结算周期]的配置，默认订单收货时间开始计算30天后结算佣金。</p>
+                <p>6. 建议在佣金结算周期之后不要再发生订单售后，以免造成资金损失。</p>
+                <p>7. 支持用户消费向下返佣、仅用户邀请的下级用户获得返佣。</p>
+            </div>
+
+            <!-- 基础数据 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <span class="am-panel-title">{{:MyLang('form_base_data_title')}}</span>
+                    <a class="am-margin-left-lg" href="{{:PluginsAdminUrl('distribution', 'admin', 'saveinfo')}}">
+                        <i class="am-icon-edit"></i>
+                        <span>{{:MyLang('edit_title')}}</span>
+                    </a>
+                </div>
+                <div class="am-panel-bd am-padding-sm">
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>默认等级图标</label>
+                                <div class="immages-tag">
+                                    {{if empty($data['default_level_images'])}}
+                                        <span class="am-text-grey">{{:MyLang('no_setup_tips')}}</span>
+                                    {{else /}}
+                                        <img src="{{$data.default_level_images}}" class="am-img-thumbnail am-radius common-annex-view-event" data-value="{{$data.default_level_images}}" />
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>默认二维码logo</label>
+                                <div class="immages-tag">
+                                    {{if empty($data['default_qrcode_logo'])}}
+                                        <span class="am-text-grey">{{:MyLang('no_setup_tips')}}</span>
+                                    {{else /}}
+                                        <img src="{{$data.default_qrcode_logo}}" class="am-img-thumbnail am-radius common-annex-view-event" data-value="{{$data.default_qrcode_logo}}" />
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>用户列表展示等级</label>
+                                <div>
+                                    {{if isset($data['is_admin_user_level_show']) and $data['is_admin_user_level_show'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>订单列表展示邀请用户</label>
+                                <div>
+                                    {{if isset($data['is_admin_order_user_referrer_show']) and $data['is_admin_order_user_referrer_show'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启用户中心菜单入口</label>
+                                <div>
+                                    {{if isset($data['is_user_menu']) and $data['is_user_menu'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                    {{if isset($data['is_user_menu_must_power']) and $data['is_user_menu_must_power'] eq 1}}
+                                        <span class="am-badge am-badge-success am-radius am-margin-left-xs">必须有分销权限</span>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>强制受邀首单形成上下级关系</label>
+                                <div>
+                                    {{if isset($data['is_first_order_bind_invite_relation']) and $data['is_first_order_bind_invite_relation'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启自提地址切换</label>
+                                <div>
+                                    {{if isset($data['is_user_extraction_switch']) and $data['is_user_extraction_switch'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>商品自定义返佣金额倍数</label>
+                                <div>
+                                    {{if isset($data['is_fixed_price_multiple']) and $data['is_fixed_price_multiple'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>0元佣金不添加收益明细</label>
+                                <div>
+                                    {{if isset($data['is_no_price_profit_no_add_order']) and $data['is_no_price_profit_no_add_order'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>后台分销用户管理一级仅展示手动数据</label>
+                                <div>
+                                    {{if isset($data['is_admin_team_appoint_model']) and $data['is_admin_team_appoint_model'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>用户分销中心展示上级用户</label>
+                                <div>
+                                    {{if isset($data['is_show_superior']) and $data['is_show_superior'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                    {{if isset($data['is_modify_superior']) and $data['is_modify_superior'] eq 1}}
+                                        <span class="am-badge am-badge-success am-radius am-margin-left-xs">可修改上级用户</span>
+                                    {{/if}}
+                                    {{if !empty($data['superior_modify_number_limit'])}}
+                                        <span class="am-badge am-badge-success am-radius am-margin-left-xs">可修改{{$data.superior_modify_number_limit}}次</span>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启商品详情页海报</label>
+                                <div>
+                                    {{if isset($data['is_goods_detail_poster']) and $data['is_goods_detail_poster'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>从门店插件下单不返佣</label>
+                                <div>
+                                    {{if isset($data['is_realstore_order_not_profit']) and $data['is_realstore_order_not_profit'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>支持多商户</label>
+                                <div>
+                                    {{if isset($data['is_profit_shop']) and $data['is_profit_shop'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                    {{if isset($data['is_profit_down_return_shop']) and $data['is_profit_down_return_shop'] eq 1}}
+                                        <span class="am-badge am-badge-success am-radius am-margin-left-xs">支持向下返佣</span>
+                                    {{/if}}
+                                    {{if isset($data['is_profit_self_buy_shop']) and $data['is_profit_self_buy_shop'] eq 1}}
+                                        <span class="am-badge am-badge-success am-radius am-margin-left-xs">支持内购返佣</span>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启客户拜访</label>
+                                <div>
+                                    {{if isset($data['is_enable_visit']) and $data['is_enable_visit'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启推荐宝</label>
+                                <div>
+                                    {{if isset($data['is_enable_recommend']) and $data['is_enable_recommend'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>返佣时间范围</label>
+                                <div>
+                                    {{if !empty($data['profit_time_start']) and !empty($data['profit_time_end'])}}
+                                        {{$data.profit_time_start}} ~ {{$data.profit_time_end}}
+                                    {{elseif !empty($data['profit_time_start']) and empty($data['profit_time_end'])}}
+                                        {{$data.profit_time_start}} ~ 长期有效
+                                    {{elseif empty($data['profit_time_start']) and !empty($data['profit_time_end'])}}
+                                        立即生效 ~ {{$data.profit_time_end}}
+                                    {{else /}}
+                                        <span class="am-text-grey">无限制</span>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>手机端首页地址</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if !empty($data['mobile_home_page'])}}
+                                        {{$data.mobile_home_page}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ pages/index/index ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>用户海报页面顶部描述</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if !empty($data['user_poster_top_desc'])}}
+                                        {{:implode('<br />', $data['user_poster_top_desc'])}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 不展示 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>用户海报分享标题</label>
+                                <div>
+                                    {{if !empty($data['user_poster_share_title'])}}
+                                        {{$data.user_poster_share_title}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 浏览器标题 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>用户海报分享描述</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if !empty($data['user_poster_share_desc'])}}
+                                        {{$data.user_poster_share_desc}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 站点页面描述 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>H5自定义地址</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if !empty($data['h5_url'])}}
+                                        {{$data.h5_url}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>PC自定义分享地址</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if !empty($data['pc_url'])}}
+                                        {{$data.pc_url}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>APP自定义分享地址</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if !empty($data['app_url'])}}
+                                        {{$data.app_url}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>向上返佣</label>
+                                <div>
+                                    {{if isset($data['is_upper_return']) and isset($distribution_is_enable_list[$data['is_upper_return']])}}
+                                        {{$distribution_is_enable_list[$data['is_upper_return']]['name']}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 关闭 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>分销层级</label>
+                                <div>
+                                    {{if isset($data['level']) and isset($distribution_level_list[$data['level']])}}
+                                        {{$distribution_level_list[$data['level']]['name']}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 三级 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>分销商内购</label>
+                                <div>
+                                    {{if isset($data['self_buy']) and isset($distribution_is_enable_list[$data['self_buy']])}}
+                                        {{$distribution_is_enable_list[$data['self_buy']]['name']}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 关闭 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>向下返佣</label>
+                                <div>
+                                    {{if isset($data['is_down_return']) and isset($distribution_is_enable_list[$data['is_down_return']])}}
+                                        {{$distribution_is_enable_list[$data['is_down_return']]['name']}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 关闭 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>向下最多分摊佣金人数</label>
+                                <div>
+                                    {{if !empty($data['down_return_number'])}}
+                                        {{$data.down_return_number}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 佣金÷实际用户数量 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>向上返积分</label>
+                                <div>
+                                    {{if isset($data['is_upper_return_integral']) and isset($distribution_is_enable_list[$data['is_upper_return_integral']])}}
+                                        {{$distribution_is_enable_list[$data['is_upper_return_integral']]['name']}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 关闭 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>向上返积分数量</label>
+                                <div>
+                                    {{if !empty($data['upper_return_integral'])}}
+                                        {{$data.upper_return_integral}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 不返积分 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>向下返积分</label>
+                                <div>
+                                    {{if isset($data['is_down_return_integral']) and isset($distribution_is_enable_list[$data['is_down_return_integral']])}}
+                                        {{$distribution_is_enable_list[$data['is_down_return_integral']]['name']}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 关闭 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>向下返积分数量</label>
+                                <div>
+                                    {{if !empty($data['down_return_integral'])}}
+                                        {{$data.down_return_integral}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 不返积分 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>向下最多分摊积分人数</label>
+                                <div>
+                                    {{if !empty($data['down_return_integral_people'])}}
+                                        {{$data.down_return_integral_people}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 积分÷实际用户数量 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启仅参加分佣商品</label>
+                                <div>
+                                    {{if !empty($data['is_only_join_profit_goods'])}}
+                                        {{$data.is_only_join_profit_goods}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 关闭 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>仅参加分佣的商品-商品列表</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if !empty($data['appoint_only_join_profit_goods_list']) and is_array($data['appoint_only_join_profit_goods_list'])}}
+                                        <a href="javascript:;" data-am-modal="{target: '#appoint-only-join-profit-popup'}">查看商品 >></a>
+                                        <div class="am-popup am-radius" id="appoint-only-join-profit-popup">
+                                            <div class="am-popup-inner">
+                                                <div class="am-popup-hd">
+                                                    <h4 class="am-popup-title">查看商品</h4>
+                                                    <span data-am-modal-close class="am-close">&times;</span>
+                                                </div>
+                                                <div class="am-popup-bd">
+                                                    <ul class="am-list">
+                                                        {{foreach $data.appoint_only_join_profit_goods_list as $g}}
+                                                            <li>
+                                                                <a href="{{$g.goods_url}}" target="_blank" class="am-text-truncate">
+                                                                    <img src="{{$g.images}}" alt="{{$g.title}}" class="am-fl am-radius am-margin-right-xs" width="20" height="20" />
+                                                                    <span>{{$g.title}}</span>
+                                                                </a>
+                                                            </li>
+                                                        {{/foreach}}
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启不参加分佣商品</label>
+                                <div>
+                                    {{if !empty($data['is_not_join_profit_goods'])}}
+                                        {{$data.is_not_join_profit_goods}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 关闭 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>不参加分佣的商品-商品列表</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if !empty($data['appoint_not_join_profit_goods_list']) and is_array($data['appoint_not_join_profit_goods_list'])}}
+                                        <a href="javascript:;" data-am-modal="{target: '#appoint-not-join-profit-popup'}">查看商品 >></a>
+                                        <div class="am-popup am-radius" id="appoint-not-join-profit-popup">
+                                            <div class="am-popup-inner">
+                                                <div class="am-popup-hd">
+                                                    <h4 class="am-popup-title">查看商品</h4>
+                                                    <span data-am-modal-close class="am-close">&times;</span>
+                                                </div>
+                                                <div class="am-popup-bd">
+                                                    <ul class="am-list">
+                                                        {{foreach $data.appoint_not_join_profit_goods_list as $g}}
+                                                            <li>
+                                                                <a href="{{$g.goods_url}}" target="_blank" class="am-text-truncate">
+                                                                    <img src="{{$g.images}}" alt="{{$g.title}}" class="am-fl am-radius am-margin-right-xs" width="20" height="20" />
+                                                                    <span>{{$g.title}}</span>
+                                                                </a>
+                                                            </li>
+                                                        {{/foreach}}
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启购买指定商品获得分销等级</label>
+                                <div>
+                                    {{if !empty($data['is_appoint_appoint_level'])}}
+                                        {{$data.is_appoint_appoint_level}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 关闭 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>购买指定商品成为指定分销等级</label>
+                                <div>
+                                    {{if !empty($data['appoint_level_buy_data'])}}
+                                        <a href="javascript:;" data-am-modal="{target: '#appoint-level-buy-popup'}">查看配置 >></a>
+                                        <div class="am-popup am-radius" id="appoint-level-buy-popup">
+                                            <div class="am-popup-inner">
+                                                <div class="am-popup-hd">
+                                                    <h4 class="am-popup-title">购买商品分销配置</h4>
+                                                    <span data-am-modal-close class="am-close">&times;</span>
+                                                </div>
+                                                <div class="am-popup-bd">
+                                                    {{foreach $level_data_list as $k=>$v}}
+                                                        {{if $k gt 0}}
+                                                              <hr data-am-widget="divider" class="am-divider am-divider-default am-margin-vertical-xl" />
+                                                        {{/if}}
+                                                        <p class="level-name am-text-truncate">
+                                                            <strong>{{$v.name}}</strong>
+                                                        </p>
+                                                        <div class="am-margin-top-xs">
+                                                            <span class="am-margin-right-sm">需要满足订单数量</span>
+                                                            <span>{{if empty($data['appoint_level_buy_data']) or empty($data['appoint_level_buy_data'][$v['id']]) or empty($data['appoint_level_buy_data'][$v['id']]['order_min_number'])}}1{{else /}}{{$data['appoint_level_buy_data'][$v['id']]['order_min_number']}}{{/if}}</span>
+                                                        </div>
+                                                        <div class="am-margin-top-xs">
+                                                            <span class="am-margin-right-sm">需要满足商品购买数量</span>
+                                                            <span>{{if empty($data['appoint_level_buy_data']) or empty($data['appoint_level_buy_data'][$v['id']]) or empty($data['appoint_level_buy_data'][$v['id']]['goods_min_number'])}}1{{else /}}{{$data['appoint_level_buy_data'][$v['id']]['goods_min_number']}}{{/if}}</span>
+                                                        </div>
+                                                        <ul class="am-list am-list-border am-margin-top-xs">
+                                                            {{if !empty($data['appoint_level_buy_data']) and !empty($data['appoint_level_buy_data'][$v['id']]) and !empty($data['appoint_level_buy_data'][$v['id']]['goods_list']) and is_array($data['appoint_level_buy_data'][$v['id']]['goods_list'])}}
+                                                                {{foreach $data['appoint_level_buy_data'][$v['id']]['goods_list'] as $g}}
+                                                                    <li>
+                                                                        <a href="{{$g.goods_url}}" target="_blank" class="am-text-truncate">
+                                                                            <img src="{{$g.images}}" alt="{{$g.title}}" class="am-fl am-radius am-margin-right-xs" width="20" height="20" />
+                                                                            <span>{{$g.title}}</span>
+                                                                        </a>
+                                                                    </li>
+                                                                {{/foreach}}
+                                                            {{/if}}
+                                                        </ul>
+                                                    {{/foreach}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>指定商品及返佣折扣</label>
+                                <div>
+                                    {{if !empty($data['is_appoint_goods'])}}
+                                        {{$data.is_appoint_goods}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 关闭 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>推荐多少个用户购买指定商品后返现商品的金额-指定用户数量</label>
+                                <div>
+                                    {{if !empty($data['appoint_goods_profit_number'])}}
+                                        {{$data.appoint_goods_profit_number}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>推荐多少个用户购买指定商品后返现商品的金额-商品列表</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if !empty($data['appoint_profit_goods_list']) and is_array($data['appoint_profit_goods_list'])}}
+                                        <a href="javascript:;" data-am-modal="{target: '#appoint-profit-popup'}">查看商品 >></a>
+                                        <div class="am-popup am-radius" id="appoint-profit-popup">
+                                            <div class="am-popup-inner">
+                                                <div class="am-popup-hd">
+                                                    <h4 class="am-popup-title">查看商品</h4>
+                                                    <span data-am-modal-close class="am-close">&times;</span>
+                                                </div>
+                                                <div class="am-popup-bd">
+                                                    <ul class="am-list">
+                                                        {{foreach $data.appoint_profit_goods_list as $g}}
+                                                            <li>
+                                                                <a href="{{$g.goods_url}}" target="_blank" class="am-text-truncate">
+                                                                    <img src="{{$g.images}}" alt="{{$g.title}}" class="am-fl am-radius am-margin-right-xs" width="20" height="20" />
+                                                                    <span>{{$g.title}}</span>
+                                                                </a>
+                                                            </li>
+                                                        {{/foreach}}
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>推荐用户购买指定商品后返现商品的金额-是否安装用户纬度限制</label>
+                                <div>
+                                    {{if isset($data['appoint_goods_sale_is_user']) and $data['appoint_goods_sale_is_user'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>推荐用户购买指定商品后返现商品的金额-商品购买最低数量</label>
+                                <div>
+                                    {{if !empty($data['appoint_goods_sale_number'])}}
+                                        {{$data.appoint_goods_sale_number}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>推荐用户购买指定商品后返现商品的金额-返佣固定金额</label>
+                                <div>
+                                    {{if !empty($data['appoint_goods_sale_price'])}}
+                                        {{$data.appoint_goods_sale_price}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>推荐用户购买指定商品后返现商品的金额-返佣比例</label>
+                                <div>
+                                    {{if !empty($data['appoint_goods_sale_rate'])}}
+                                        {{$data.appoint_goods_sale_rate}}%
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>推荐用户购买指定商品后返现商品的金额-商品列表</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if !empty($data['appoint_sale_goods_list']) and is_array($data['appoint_sale_goods_list'])}}
+                                        <a href="javascript:;" data-am-modal="{target: '#appoint-sale-goods-list-popup'}">查看商品 >></a>
+                                        <div class="am-popup am-radius" id="appoint-sale-goods-list-popup">
+                                            <div class="am-popup-inner">
+                                                <div class="am-popup-hd">
+                                                    <h4 class="am-popup-title">查看商品</h4>
+                                                    <span data-am-modal-close class="am-close">&times;</span>
+                                                </div>
+                                                <div class="am-popup-bd">
+                                                    <ul class="am-list">
+                                                        {{foreach $data.appoint_sale_goods_list as $g}}
+                                                            <li>
+                                                                <a href="{{$g.goods_url}}" target="_blank" class="am-text-truncate">
+                                                                    <img src="{{$g.images}}" alt="{{$g.title}}" class="am-fl am-radius am-margin-right-xs" width="20" height="20" />
+                                                                    <span>{{$g.title}}</span>
+                                                                </a>
+                                                            </li>
+                                                        {{/foreach}}
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>指定商品复购折扣</label>
+                                <div>
+                                    {{if !empty($data['appoint_goods_repurchase_discount'])}}
+                                        {{$data.appoint_goods_repurchase_discount}}折
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>商品详情折扣图标</label>
+                                <div>
+                                    {{if empty($data['goods_detail_icon'])}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 复购优惠 ]
+                                    {{else /}}
+                                        {{$data.goods_detail_icon}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>指定商品复购折扣列表</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if !empty($data['appoint_repurchase_goods_list']) and is_array($data['appoint_repurchase_goods_list'])}}
+                                        <a href="javascript:;" data-am-modal="{target: '#appoint-repurchase-goods-list-popup'}">查看商品 >></a>
+                                        <div class="am-popup am-radius" id="appoint-repurchase-goods-list-popup">
+                                            <div class="am-popup-inner">
+                                                <div class="am-popup-hd">
+                                                    <h4 class="am-popup-title">查看商品</h4>
+                                                    <span data-am-modal-close class="am-close">&times;</span>
+                                                </div>
+                                                <div class="am-popup-bd">
+                                                    <ul class="am-list">
+                                                        {{foreach $data.appoint_repurchase_goods_list as $g}}
+                                                            <li>
+                                                                <a href="{{$g.goods_url}}" target="_blank" class="am-text-truncate">
+                                                                    <img src="{{$g.images}}" alt="{{$g.title}}" class="am-fl am-radius am-margin-right-xs" width="20" height="20" />
+                                                                    <span>{{$g.title}}</span>
+                                                                </a>
+                                                            </li>
+                                                        {{/foreach}}
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>指定商品阶梯返佣-推广提示信息</label>
+                                <div>
+                                    {{if isset($data['is_show_profit_ladder_tips']) and $data['is_show_profit_ladder_tips'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>指定商品阶梯返佣-间隔时间</label>
+                                <div>
+                                    {{if empty($data['appoint_goods_ladder_interval_time'])}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 不限制 ]
+                                    {{else /}}
+                                        {{:MyLang('already_setup_tips')}}[ {{$data.appoint_goods_ladder_interval_time}} ]分钟
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>指定商品阶梯返佣-商品列表</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if !empty($data['appoint_goods_ladder_config']) and !empty($data['appoint_goods_ladder_config']['rate']) and !empty($data['appoint_goods_ladder_config']['price'])}}
+                                        <ul class="am-list">
+                                            {{foreach $data.appoint_goods_ladder_config.rate as $k=>$v}}
+                                                <li class="am-padding-sm">
+                                                    比例：{{if $v gt 0}}{{$v}}{{else /}}无{{/if}} ， 固定金额：{{if isset($data['appoint_goods_ladder_config']['price'][$k]) and $data['appoint_goods_ladder_config']['price'][$k] gt 0}}{{$data.appoint_goods_ladder_config.price[$k]}}{{else /}}无{{/if}}
+                                                </li>
+                                            {{/foreach}}
+                                        </ul>
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>指定商品阶梯返佣-商品列表</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if !empty($data['appoint_ladder_goods_list']) and is_array($data['appoint_ladder_goods_list'])}}
+                                        <a href="javascript:;" data-am-modal="{target: '#appoint-ladder-goods-list-popup'}">查看商品 >></a>
+                                        <div class="am-popup am-radius" id="appoint-ladder-goods-list-popup">
+                                            <div class="am-popup-inner">
+                                                <div class="am-popup-hd">
+                                                    <h4 class="am-popup-title">查看商品</h4>
+                                                    <span data-am-modal-close class="am-close">&times;</span>
+                                                </div>
+                                                <div class="am-popup-bd">
+                                                    <ul class="am-list">
+                                                        {{foreach $data.appoint_ladder_goods_list as $g}}
+                                                            <li>
+                                                                <a href="{{$g.goods_url}}" target="_blank" class="am-text-truncate">
+                                                                    <img src="{{$g.images}}" alt="{{$g.title}}" class="am-fl am-radius am-margin-right-xs" width="20" height="20" />
+                                                                    <span>{{$g.title}}</span>
+                                                                </a>
+                                                            </li>
+                                                        {{/foreach}}
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>下单默认取货地址</label>
+                                <div>
+                                    {{if isset($data['is_buy_default_extraction_address']) and isset($distribution_is_enable_list[$data['is_buy_default_extraction_address']])}}
+                                        {{$distribution_is_enable_list[$data['is_buy_default_extraction_address']]['name']}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 关闭 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>取货点返佣</label>
+                                <div>
+                                    {{if isset($data['is_self_extraction']) and isset($distribution_is_enable_list[$data['is_self_extraction']])}}
+                                        {{$distribution_is_enable_list[$data['is_self_extraction']]['name']}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 关闭 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>取货点返佣后不再向上返佣逻辑</label>
+                                <div>
+                                    {{if isset($data['is_self_extraction_close_upper']) and isset($distribution_is_enable_list[$data['is_self_extraction_close_upper']])}}
+                                        {{$distribution_is_enable_list[$data['is_self_extraction_close_upper']]['name']}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 关闭 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>取货点返佣层级</label>
+                                <div>
+                                    {{if isset($data['extraction_profit_level']) and isset($distribution_extraction_profit_level_list[$data['extraction_profit_level']])}}
+                                        {{$distribution_extraction_profit_level_list[$data['extraction_profit_level']]['name']}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 关闭 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>自提取货点申请介绍</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if !empty($data['self_extraction_apply_desc'])}}
+                                        {{:implode('<br />', $data['self_extraction_apply_desc'])}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 不展示 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>自提取货点顶部公告</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if !empty($data['self_extraction_common_notice'])}}
+                                        {{:implode('<br />', $data['self_extraction_common_notice'])}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 不展示 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>返佣类型</label>
+                                <div>
+                                    {{if isset($data['profit_type']) and isset($distribution_profit_type_list[$data['profit_type']])}}
+                                        {{$distribution_profit_type_list[$data['profit_type']]['name']}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 所有订单 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>佣金结算周期</label>
+                                <div>
+                                    {{if !empty($data['profit_settlement_limit_time'])}}
+                                        {{:MyLang('already_setup_tips')}}[ {{$data.profit_settlement_limit_time}}分钟/{{:intval($data.profit_settlement_limit_time/60/24)}}天 ]
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 43200分钟/30天 ]
+                                    {{/if}}
+                                    <div>
+                                        <a href="{{:PluginsHomeUrl('distribution', 'crontab', 'profit')}}" target="_blank">定时脚本地址 <i class="am-icon-external-link"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>结算转换订单货币汇率</label>
+                                <div>
+                                    {{if isset($data['is_profit_transform_currency_rate']) and $data['is_profit_transform_currency_rate'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>订单地址坐标逆解析脚本</label>
+                                <div>
+                                    {{if isset($data['is_order_address_location_geocoder']) and isset($distribution_is_enable_list[$data['is_order_address_location_geocoder']])}}
+                                        {{$distribution_is_enable_list[$data['is_order_address_location_geocoder']]['name']}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 关闭 ]
+                                    {{/if}}
+                                    <div>
+                                        <a href="{{:PluginsHomeUrl('distribution', 'crontab', 'ordergeocoder')}}" target="_blank">定时脚本地址 <i class="am-icon-external-link"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>推广员端可以查看全部用户分布</label>
+                                <div>
+                                    {{if isset($data['is_promotion_view_all_user_distribution']) and isset($distribution_is_enable_list[$data['is_promotion_view_all_user_distribution']])}}
+                                        {{$distribution_is_enable_list[$data['is_promotion_view_all_user_distribution']]['name']}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 关闭 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>分布客户订单范围</label>
+                                <div>
+                                    {{if empty($data['user_order_map_distance'])}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 10公里 ]
+                                    {{else /}}
+                                        {{$data.user_order_map_distance}}公里
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>分销中心开启等级介绍</label>
+                                <div>
+                                    {{if isset($data['is_show_introduce']) and isset($distribution_is_enable_list[$data['is_show_introduce']])}}
+                                        {{$distribution_is_enable_list[$data['is_show_introduce']]['name']}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 开启 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>等级介绍顶部描述</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if !empty($data['user_center_level_desc'])}}
+                                        {{:implode('<br />', $data['user_center_level_desc'])}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 不展示 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>不符合分销条件描述</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if !empty($data['non_conformity_desc'])}}
+                                        {{:implode('<br />', $data['non_conformity_desc'])}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 不展示 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>分销中心公告</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if !empty($data['user_center_notice'])}}
+                                        {{:implode('<br />', $data['user_center_notice'])}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 不展示 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

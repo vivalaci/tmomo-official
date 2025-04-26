@@ -1,0 +1,15 @@
+{{if !empty($module_data['share_qrcode']) and is_array($module_data['share_qrcode'])}}
+    <ul data-am-widget="gallery" class="am-gallery am-avg-sm-5 am-avg-md-5 am-gallery-default am-padding-0" data-am-gallery="{pureview: true}">
+        {{foreach $module_data.share_qrcode as $k=>$v}}
+            <li class="am-padding-0 {{if $k gt 0}}am-margin-left-xs{{/if}}">
+                <div class="am-gallery-item">
+                    <img src="{{$v.url}}" alt="{{$v.name}}" class="am-block" />
+                    <div class="am-gallery-desc am-text-center am-text-truncate">
+                        <a href="{{:MyUrl('index/qrcode/download', ['url'=>urlencode(base64_encode($v['url'])), 'filename'=>(empty($module_data['user']) ? '' : $module_data['user']['user_name_view'].'-').$v['name'].'-分享二维码'])}}" class="am-icon-download"></a>
+                        <span title="{{$v.name}}">{{$v.name}}</span>
+                    </div>
+                </div>
+            </li>
+        {{/foreach}}
+    </ul>
+{{/if}}

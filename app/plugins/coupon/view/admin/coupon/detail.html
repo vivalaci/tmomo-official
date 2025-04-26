@@ -1,0 +1,61 @@
+<!-- 继承公共的 form -->
+{{extend name="../../../module/view/form_table/detail" /}}
+
+<!-- 重写数据模块 -->
+{{block name="detail_data"}}
+    {{:ModuleInclude('public/detail_nav_switch_tabs', [
+        'nav_data' => [
+            [
+                'name' => MyLang('form_base_data_title'),
+                'key'  => 'base',
+            ],
+            [
+                'name' => $data['use_limit_type'] == 0 ? MyLang('universal_throughout_venue_tips') : ($data['use_limit_type'] == 1 ? MyLang('restricted_classification_text') : MyLang('restricted_goods_text')),
+                'key'  => 'use-limit-type',
+            ],
+        ]
+    ])}}
+    <div class="detail-content-switch-data-item">
+        <!-- 父级内容 -->
+        <div class="item am-active" data-key="base">
+            {__block__}
+        </div>
+
+        <!-- 限定分类 -->
+        <div class="item" data-key="use-limit-type">
+            <!-- 全场适用 -->
+            {{if $data['use_limit_type'] eq 0}}
+                <p class="am-text-center am-text-warning">
+                    {{if empty($data['shop_id'])}}{{:MyLang('universal_throughout_venue_tips')}}{{else /}}
+                        <span>{{:MyLang('only_current_shop_user_tips')}}</span>
+                        <a class="am-margin-left-sm am-text-primary" href="{{:PluginsHomeUrl('shop', 'index', 'detail', ['id'=>$data['shop_id']])}}" target="_blank">{{:MyLang('view_shop_text')}} >></a>
+                    {{/if}}
+                </p>
+            {{/if}}
+
+            <!-- 限定分类 -->
+            {{if $data['use_limit_type'] eq 1}}
+                {{if !empty($data['category_names'])}}
+                    <p>{{:implode('，', $data['category_names'])}}</p>
+                {{else /}}
+                    {{:ModuleInclude('public/not_data')}}
+                {{/if}}
+            {{/if}}
+
+            <!-- 限定商品 -->
+            {{if $data['use_limit_type'] eq 2}}
+                {{if !empty($data['goods_items'])}}
+                    <ul class="ul-list">
+                        {{foreach $data.goods_items as $v}}
+                            <li>
+                                <a href="{{$v.goods_url}}" target="_blank">{{$v.title}}</a>
+                            </li>
+                        {{/foreach}}
+                    </ul>
+                {{else /}}
+                    {{:ModuleInclude('public/not_data')}}
+                {{/if}}
+            {{/if}}
+        </div>
+    </div>
+{{/block}}

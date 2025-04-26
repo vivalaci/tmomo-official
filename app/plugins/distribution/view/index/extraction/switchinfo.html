@@ -1,0 +1,42 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- content start  -->
+<div class="am-padding-sm extraction-address-container">
+    <ul class="am-list">
+        {{foreach $extraction_address as $key=>$address}}
+            <li class="extraction-address-item am-nbfc">
+                {{if !empty($address['logo'])}}
+                    <div class="am-fl am-margin-right-xs">
+                        <img src="{{$address.logo}}" alt="{{$address.name}}" class="am-img-thumbnail am-radius address-logo" />
+                    </div>
+                {{/if}}
+                <div class="am-fl">
+                    <p>
+                        {{if !empty($address['alias'])}}
+                            <span class="am-badge am-badge-secondary-plain am-radius am-margin-right-xs">{{$address.alias}}</span>
+                        {{/if}}
+                        <span>{{$address.name}}</span>
+                        <span>{{$address.tel}}</span>
+                    </p>
+                    <p class="address-detail">
+                        <span>{{$address.province_name}}</span>
+                        <span>{{$address.city_name}}</span>
+                        <span>{{$address.county_name}}</span>
+                        <span>{{$address.address}}</span>
+                        {{if !empty($address['lng']) and !empty($address['lat']) and $address['lng'] neq 0 and $address['lat'] neq 0}}
+                            <a href="javascript:;" class="am-badge am-badge-default am-radius am-icon-map-marker am-margin-left-sm submit-map-popup" data-lng="{{$address.lng}}" data-lat="{{$address.lat}}"> {{:MyLang('view_map_title')}}</a>
+                        {{/if}}
+                    </p>
+                </div>
+                {{if isset($address['is_default']) and $address['is_default'] eq 1}}
+                    <button type="button" class="am-btn am-btn-default am-radius" disabled>{{:MyLang('default_title')}}</button>
+                {{else /}}
+                    <button type="button" class="am-btn am-btn-default am-radius submit-ajax" data-url="{{:PluginsHomeUrl('distribution', 'extraction', 'switchsave')}}" data-id="{{$key}}" data-value="{{if empty($address['id_old'])}}0{{else /}}{{$address.id_old}}{{/if}}" data-view="reload" data-is-confirm="0">{{:MyLang('choice_title')}}</button>
+                {{/if}}
+            </li>
+        {{/foreach}}
+    </ul>
+</div>
+<!-- content end  -->
+
+{{:ModuleInclude('public/footer')}}

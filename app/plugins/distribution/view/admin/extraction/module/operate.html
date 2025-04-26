@@ -1,0 +1,35 @@
+<!-- 操作栏 -->
+<button type="button" class="am-btn am-btn-default am-btn-xs am-radius am-btn-block submit-popup" data-url="{{:PluginsAdminUrl('distribution', 'extraction', 'detail', ['id'=>$module_data['id']])}}" data-title="{{:MyLang('detail_title')}}">
+    <i class="am-icon-eye"></i>
+    <span>{{:MyLang('detail_title')}}</span>
+</button>
+{{switch $module_data.status}}
+    {{case 0}}
+        <button type="button" class="am-btn am-btn-secondary am-btn-xs am-radius am-btn-block submit-ajax" data-url="{{:PluginsAdminUrl('distribution', 'extraction', 'audit')}}" data-id="{{$module_data.id}}" data-view="reload" data-msg="正在操作审核通过、确认操作吗？">
+            <i class="am-icon-gavel"></i>
+            <span>{{:MyLang('audit_title')}}</span>
+        </button>
+
+        <button type="button" class="am-btn am-btn-danger am-btn-xs am-radius am-btn-block am-btn-block submit-fail" data-id="{{$module_data.id}}">
+            <i class="am-icon-warning"></i>
+            <span>{{:MyLang('refuse_title')}}</span>
+        </button>
+    {{/case}}
+    {{case 1}}
+        <a href="{{:PluginsAdminUrl('distribution', 'extractionorder', 'index', ['uid'=>$module_data['user_id']])}}" class="am-btn am-btn-primary am-btn-xs am-radius am-btn-block">
+            <i class="am-icon-list"></i>
+            <span>{{:MyLang('order_title')}}</span>
+        </a>
+
+        <button type="button" class="am-btn am-btn-danger am-btn-xs am-radius am-btn-block am-btn-block submit-ajax" data-url="{{:PluginsAdminUrl('distribution', 'extraction', 'relieve')}}" data-id="{{$module_data.id}}" data-view="reload">
+            <i class="am-icon-warning"></i>
+            <span>{{:MyLang('termination_title')}}</span>
+        </button>
+    {{/case}}
+    {{case 2}}
+        <button class="am-btn am-btn-danger am-btn-xs am-radius am-btn-block submit-delete" data-url="{{:PluginsAdminUrl('distribution', 'extraction', 'delete')}}" data-id="{{$module_data.id}}">
+            <i class="iconfont icon-delete"></i>
+            <span>{{:MyLang('delete_title')}}</span>
+        </button>
+    {{/case}}
+{{/switch}}

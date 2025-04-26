@@ -1,0 +1,61 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'themestyle',
+            'nav_data'  => $plugins_nav_menu_list,
+        ])}}
+
+        <div class="themestyle-content">
+            <!-- 基础配置 -->
+            <div class="am-panel am-panel-default am-radius themestyle-content-base">
+                <div class="am-panel-hd">
+                    <span class="am-panel-title">{{:MyLang('base_config_title')}}</span>
+                    <a class="am-margin-left-lg" href="{{:PluginsAdminUrl('themestyle', 'admin', 'saveinfo')}}">
+                        <i class="am-icon-edit"></i>
+                        <span>{{:MyLang('edit_title')}}</span>
+                    </a>
+                </div>
+                <div class="am-panel-bd">
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('backstage_admin.is_web_open')}}</label>
+                                <div>
+                                    {{if isset($data['is_web_open']) and $data['is_web_open'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('backstage_admin.is_app_open')}}</label>
+                                <div>
+                                    {{if isset($data['is_app_open']) and $data['is_app_open'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('backstage_admin.app_theme')}}</label>
+                                <div>
+                                    {{if empty($data['app_theme'])}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ {{$app_theme_style_list.red.name}} ]
+                                    {{else /}}
+                                        {{:MyLang('already_setup_tips')}}[ {{$app_theme_style_list[$data['app_theme']]['name']}} ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer -->
+{{:ModuleInclude('public/footer')}}

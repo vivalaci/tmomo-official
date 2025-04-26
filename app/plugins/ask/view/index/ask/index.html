@@ -1,0 +1,15 @@
+<!-- 继承公共的 form -->
+{{extend name="../../../module/view/form_table/user_form" /}}
+
+<!-- 表单顶部操作栏 -->
+{{block name="form_operate_top"}}
+    {{if isset($plugins_config['is_user_add_ask']) and $plugins_config['is_user_add_ask'] eq 1}}
+        <button type="button" class="am-btn am-btn-primary am-btn-xs am-radius am-btn-xs submit-modal" data-url="{{:PluginsHomeUrl('ask', 'ask', 'saveinfo')}}" data-title="{{:MyLang('add_title')}}" data-width="1200" data-height="800" data-close-via-dimmer="0">
+            <i class="iconfont icon-btn-add am-show-sm-only"></i>
+            <span>{{:MyLang('add_title')}}</span>
+        </button>
+    {{/if}}
+
+    <!-- 父级内容 -->
+    {__block__}
+{{/block}}

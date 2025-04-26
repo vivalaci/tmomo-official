@@ -1,0 +1,7 @@
+{{if !empty($data) and is_array($data)}}
+    <div class="am-margin-top-xs">
+        {{foreach $data as $v}}
+            <span class="am-badge am-round" style="{{if !empty($v['text_color'])}}color:{{$v.text_color}};{{/if}}{{if !empty($v['bg_color'])}}background:{{$v.bg_color}};{{/if}}">{{$v.name}}</span>
+        {{/foreach}}
+    </div>
+{{/if}}

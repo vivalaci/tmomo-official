@@ -1,0 +1,37 @@
+{
+    "base":{
+        "plugins":"backgroundad",
+        "name":"背景广告",
+        "logo":"\/static\/upload\/images\/plugins_backgroundad\/2023\/09\/26\/1695719759593581.jpg",
+        "author":"Devil",
+        "author_url":"https:\/\/shopxo.net\/",
+        "version":"2.2.3",
+        "desc":"背景大图片广告、支持顶部设置自定义点击链接",
+        "apply_terminal":[
+            "pc"
+        ],
+        "apply_version":[
+            "6.4.0"
+        ],
+        "is_home":false
+    },
+    "hook":{
+        "plugins_css":[
+            "app\\plugins\\backgroundad\\Hook"
+        ],
+        "plugins_common_header":[
+            "app\\plugins\\backgroundad\\Hook"
+        ],
+        "plugins_view_common_top":[
+            "app\\plugins\\backgroundad\\Hook"
+        ]
+    },
+    "history":[
+        {
+            "host":"shopxo.com",
+            "url":"http:\/\/shopxo.com\/",
+            "ip":"127.0.0.1",
+            "time":"2025-01-02 10:59:58"
+        }
+    ]
+}

@@ -1,0 +1,30 @@
+{
+    "base":{
+        "plugins":"payecoquick",
+        "name":"易联银行卡快捷支付",
+        "logo":"\/static\/upload\/images\/plugins_payecoquick\/2022\/04\/27\/1650990652978166.jpg",
+        "author":"Devil",
+        "author_url":"https:\/\/shopxo.net\/",
+        "version":"3.2.2",
+        "desc":"配合易联快捷支付插件提供表单收集用户付款信息、短信验证。",
+        "apply_terminal":[
+            "pc",
+            "h5"
+        ],
+        "apply_version":[
+            "6.4.0"
+        ],
+        "is_home":false
+    },
+    "hook":[
+        
+    ],
+    "history":[
+        {
+            "host":"shopxo.com",
+            "url":"http:\/\/shopxo.com\/",
+            "ip":"127.0.0.1",
+            "time":"2024-12-22 12:19:17"
+        }
+    ]
+}

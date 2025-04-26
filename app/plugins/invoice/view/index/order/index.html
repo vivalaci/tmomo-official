@@ -1,0 +1,25 @@
+<!-- 继承公共的 form -->
+{{extend name="../../../module/view/form_table/user_form" /}}
+
+<!-- 导航 -->
+{{block name="form_content_top"}}
+    {{:ModuleInclude('../../../plugins/invoice/view/index/public/nav')}}
+{{/block}}
+
+<!-- 表单顶部操作栏 -->
+{{block name="form_operate_top"}}
+    <button type="button" class="am-btn am-btn-primary am-radius am-btn-xs batch-invoice-submit" data-url="{{:PluginsHomeUrl('invoice', 'user', 'saveinfo', ['type'=>0])}}">
+        <i class="iconfont icon-btn-add am-show-sm-only"></i>
+        <span>批量开票</span>
+    </button>
+    <!-- 父级内容 -->
+    {__block__}
+{{/block}}
+
+<!-- 扩展信息 -->
+{{block name="form_extend"}}
+    <div class="am-tips-card">
+        <p>1. 已完成的订单、订单完成配置的时间范围、并且未开票</p>
+        <p>2. 支付金额必须大于0</p>
+    </div>
+{{/block}}

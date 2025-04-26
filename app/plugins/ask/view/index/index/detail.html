@@ -1,0 +1,141 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- header top nav -->
+{{:ModuleInclude('public/header_top_nav')}}
+
+<!-- ask header -->
+{{:ModuleInclude('../../../plugins/ask/view/index/public/head')}}
+
+<!-- content start -->
+<div class="am-container plugins-ask plugins-ask-detail"
+    data-ask-id="{{if !empty($data)}}{{$data.id}}{{/if}}" 
+    data-ask-comments-id="0" 
+    data-reply-comments-id="0" 
+    data-is-give-thumbs="{{if isset($plugins_config['is_ask_give_thumbs']) and $plugins_config['is_ask_give_thumbs'] eq 1}}1{{else /}}0{{/if}}" 
+    data-givethumbs-url="{{:PluginsHomeUrl('ask', 'index', 'givethumbs')}}" 
+    data-comments-url="{{:PluginsHomeUrl('ask', 'index', 'comments')}}" 
+    data-comments-reply-url="{{:PluginsHomeUrl('ask', 'index', 'commentsreplylist')}}" 
+    data-commentsinfo-url="{{if !empty($data)}}{{:PluginsHomeUrl('ask', 'index', 'commentsinfo', ['id'=>$data['id']])}}{{/if}}" 
+    data-text-reply-name="回复" 
+    data-text-give-thumbs-name="点赞" 
+    data-text-comments-input-tips="请先输入评论内容" 
+>
+    <div class="am-g">
+        <!-- 详情 -->
+        <div class="am-u-md-{{if empty($recommend_ask_list) and empty($recommend_goods_list)}}12{{else /}}8{{/if}}">
+            <div class="ask-content am-background-white am-radius">
+                {{if !empty($data['content'])}}
+                    <div class="base-title">
+                        {{if !empty($data['title']) and $data['title'] neq $data['content']}}
+                            <h2>{{$data.title}}</h2>
+                        {{/if}}
+                        <div class="base-footer">
+                            留言时间：{{$data.add_time_time}}
+                            <strong class="am-padding-right-xs">·</strong>{{$data.access_count}}浏览
+                            {{if !empty($data['name'])}}
+                                <strong class="am-padding-right-xs">·</strong>
+                                留言人：{{$data.name}}
+                            {{/if}}
+                        </div>
+                    </div>
+                    <div class="richtext base-content am-margin-bottom-main">
+                        <div>
+                            {{$data.content|raw}}
+                        </div>
+                        {{if !empty($data.goods_data)}}
+                            <a href="{{$data.goods_data.goods_url}}" target="_blank">
+                                <div class="am-margin-top-main am-background-grey-f9 am-radius am-padding-sm am-flex">
+                                    <div class="ask-project-img">
+                                        <image src="{{$data.goods_data.images}}" class="am-width am-radius" />
+                                    </div>
+                                    <div class="am-flex-1 am-flex-width">
+                                        <div class="am-text-truncate-2">{{$data.goods_data.title}}</div>
+                                        <div class="am-flex am-flex-items-center am-margin-top-sm">
+                                            <div class="am-text-lg am-font-weight price">{{$currency_symbol}}{{$data.goods_data.price}}</div>
+                                            <div class="am-color-grey am-margin-left-sm original-price">{{$currency_symbol}}{{$data.goods_data.original_price}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        {{/if}}
+                    </div>
+                    {{if isset($data['is_reply']) and $data['is_reply'] eq 1 and isset($data['reply'])}}
+                        <div class="base am-margin-vertical-main {{if isset($data['is_reply']) and $data['is_reply'] eq 1}} am-panel-success{{else /}} am-panel-warning{{/if}}">
+                            <div class="am-flex am-flex-warp am-flex-justify-between">
+                                <span class="am-badge am-badge-success am-margin-bottom-xs"><i class="iconfont icon-admin_tw am-margin-right-xs"></i>管理员已回答</span>
+                                {{if !empty($data['reply_time_date'])}}
+                                    <div class="base-footer gray-text reply-footer">
+                                        回复时间：{{$data.reply_time_date}}
+                                    </div>
+                                {{/if}}
+                            </div>
+                            <div class="richtext reply-content am-margin-top-sm">{{$data.reply|raw}}</div>
+                        </div>
+                    {{/if}}
+                    <!-- 底部操作 -->
+                    {{if (isset($plugins_config['is_ask_comments_show']) and $plugins_config['is_ask_comments_show'] eq 1) or (isset($plugins_config['is_ask_give_thumbs']) and $plugins_config['is_ask_give_thumbs'] eq 1)}}
+                        <div class="am-text-center detail-bottom-container am-background-white am-radius am-margin-bottom-main">
+                            {{if isset($plugins_config['is_ask_comments_show']) and $plugins_config['is_ask_comments_show'] eq 1}}
+                                <a href="javascript:;" class="item am-flex am-flex-col am-flex-items-center am-flex-justify-center am-color-grey-dark {{if empty($user)}}login-event{{else /}} comments-submit{{/if}}" data-value="{{$data.comments_count}}" data-text="评论">
+                                    <i class="iconfont icon-review"></i>
+                                    <font>{{$data.comments_count}}</font>
+                                </a>
+                            {{/if}}
+                            {{if isset($plugins_config['is_ask_give_thumbs']) and $plugins_config['is_ask_give_thumbs'] eq 1}}
+                                <a href="javascript:;" class="item am-flex am-flex-col am-flex-items-center am-flex-justify-center am-color-grey-dark {{if empty($user)}}login-event{{else /}} give-thumbs-submit{{/if}} {{if isset($data['is_give_thumbs']) and $data['is_give_thumbs'] eq 1}} am-active{{/if}}" data-ask-id="{{$data.id}}" data-text="点赞">
+                                    <i class="iconfont icon-a-givealike"></i>
+                                    <font> {{$data.give_thumbs_count}}</font>
+                                </a>
+                            {{/if}}
+                            <div class="item am-dropdown share-container" data-am-dropdown="{trigger: 'hover'}">
+                                <a href="javascript:;" class="am-dropdown-toggle am-flex am-flex-col am-flex-items-center am-flex-justify-center am-color-grey-dark">
+                                    <i class="iconfont icon-share-dark"></i>
+                                    <font>分享</font>
+                                </a>
+                                <div class="am-dropdown-content am-radius">
+                                    <div class="plugins-share-view" data-url="{{$data.url}}" data-title="{{if empty($data.title)}}{{$data.content}}{{else /}}{{$data.title}}{{/if}}" data-desc="{{$data.content}}"></div>
+                                </div>
+                            </div>
+                        </div>
+                    {{else /}}
+                        <div class="am-margin-top-lg am-nbfc">
+                            <div class="plugins-share-view am-fr" data-url="{{$data.url}}" data-title="{{if empty($data.title)}}{{$data.content}}{{else /}}{{$data.title}}{{/if}}" data-desc="{{$data.content}}"></div>
+                            <span class="am-fr am-text-black am-margin-right-sm am-margin-top-xs">分享至</span>
+                        </div>
+                    {{/if}}
+                    <div class="am-margin-top-xl">
+                        <!-- 评论回复 -->
+                        {{:ModuleInclude('../../../plugins/ask/view/index/index/public/comments_form')}}
+
+                        <!-- 评论内容 -->
+                        {{:ModuleInclude('../../../plugins/ask/view/index/index/public/comments_list')}}
+                    </div>
+                {{else /}}
+                    {{:ModuleInclude('public/not_data')}}
+                {{/if}}
+            </div>
+
+            <!-- 热门问答 -->
+            {{:ModuleInclude('../../../plugins/ask/view/index/public/hot')}}
+        </div>
+
+        <!-- 右侧列表 -->
+        {{:ModuleInclude('../../../plugins/ask/view/index/public/right')}}
+    </div>
+</div>
+<!-- content end -->
+
+<!-- 评论回复弹窗 -->
+{{:ModuleInclude('../../../plugins/ask/view/index/index/public/comments_reply_modal')}}
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}
+
+<!-- footer end -->
+<script>
+    // 评论数据展示
+    function IframePluginsAskCommentsView(data)
+    {
+        PluginsAskCommentsView(data, true);
+    }
+</script>

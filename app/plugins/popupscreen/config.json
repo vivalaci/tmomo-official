@@ -1,0 +1,45 @@
+{
+    "base":{
+        "plugins":"popupscreen",
+        "name":"弹屏广告",
+        "logo":"\/static\/upload\/images\/plugins_popupscreen\/2019\/06\/23\/1561268005795322.jpg",
+        "author":"Devil",
+        "author_url":"https:\/\/shopxo.net\/",
+        "version":"3.2.3",
+        "desc":"首页弹屏广告，提高活动曝光率",
+        "apply_terminal":[
+            "pc",
+            "h5",
+            "ios",
+            "android",
+            "weixin",
+            "alipay",
+            "baidu",
+            "toutiao",
+            "qq"
+        ],
+        "apply_version":[
+            "6.5.0"
+        ],
+        "is_home":false
+    },
+    "hook":{
+        "plugins_css":[
+            "app\\plugins\\popupscreen\\Hook"
+        ],
+        "plugins_view_common_bottom":[
+            "app\\plugins\\popupscreen\\Hook"
+        ],
+        "plugins_common_page_bottom":[
+            "app\\plugins\\popupscreen\\Hook"
+        ]
+    },
+    "history":[
+        {
+            "host":"shopxo.com",
+            "url":"http:\/\/shopxo.com\/",
+            "ip":"127.0.0.1",
+            "time":"2025-03-03 17:59:03"
+        }
+    ]
+}

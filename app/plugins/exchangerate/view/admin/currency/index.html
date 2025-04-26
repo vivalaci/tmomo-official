@@ -1,0 +1,29 @@
+<!-- 继承公共的 form -->
+{{extend name="../../../module/view/form_table/form" /}}
+
+<!-- 表单顶部操作栏 -->
+{{block name="form_operate_top"}}
+    <!-- nav -->
+    {{:ModuleInclude('public/plugins_admin_nav', [
+        'plugins'   => 'exchangerate',
+        'nav_data'  => $plugins_nav_menu_list,
+    ])}}
+
+    <a href="{{:PluginsAdminUrl('exchangerate', 'currency', 'saveinfo')}}" class="am-btn am-btn-primary am-radius am-btn-xs">
+        <i class="iconfont icon-btn-add am-show-sm-only"></i>
+        <span>{{:MyLang('add_title')}}</span>
+    </a>
+    <!-- 父级内容 -->
+    {__block__}
+{{/block}}
+
+<!-- 底部提示信息 -->
+{{block name="form_operate_bottom"}}
+    <div class="am-tips-card">
+        <p>1. 由于每日汇率不一样，需每日自行配置汇率</p>
+        <p>2. 转换规则（价格乘以汇率）</p>
+        <p>3. 排序数值以越大排在前面</p>
+        <p>4. 未设置默认货币则使用第一个</p>
+        <p>5. 如开启用户自由选择货币、则以用户选择最优先</p>
+    </div>
+{{/block}}

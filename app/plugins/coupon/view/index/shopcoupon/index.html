@@ -1,0 +1,45 @@
+{{block name="form_header"}}
+    {{:ModuleInclude('public/header')}}
+    <div class="popup-pure-page am-padding-main">
+{{/block}}
+
+<!-- 继承公共的 form -->
+{{extend name="../../../module/view/form_table/base_form" /}}
+
+<!-- 表单顶部导航 -->
+{{block name="form_navigation"}}
+    {{:ModuleInclude('public/plugins_admin_nav', [
+        'plugins'   => 'coupon',
+        'nav_data'  => [
+            [
+                'name'       => MyLang('coupon_manage_text'),
+                'plugins'    => 'coupon',
+                'control'    => 'shopcoupon',
+                'action'     => 'index',
+                'is_active'  => 1,
+            ],
+            [
+                'name'       => MyLang('user_coupon_text'),
+                'plugins'    => 'coupon',
+                'control'    => 'shopcouponuser',
+                'action'     => 'index',
+                'is_active'  => 0,
+            ],
+        ],
+    ])}}
+{{/block}}
+
+<!-- 表单顶部操作栏 -->
+{{block name="form_operate_top"}}
+    <a href="{{:PluginsHomeUrl('coupon', 'shopcoupon', 'saveinfo')}}" class="am-btn am-btn-primary am-radius am-btn-xs">
+        <i class="iconfont icon-btn-add am-show-sm-only"></i>
+        <span>{{:MyLang('add_title')}}</span>
+    </a>
+    <!-- 父级内容 -->
+    {__block__}
+{{/block}}
+
+{{block name="form_footer"}}
+    </div>
+    {{:ModuleInclude('public/footer')}}
+{{/block}}

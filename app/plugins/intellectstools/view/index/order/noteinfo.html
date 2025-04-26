@@ -1,0 +1,82 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content am-padding-sm">
+        {{if !empty($order_data)}}
+            <!-- form start -->
+            <form class="am-form form-validation am-form-full-screen am-form-popup-fixed" action="{{:PluginsHomeUrl('intellectstools', 'order', 'notesave')}}" method="POST" request-type="ajax-reload" request-value="parent">
+                <!-- 基础数据 -->
+                <div class="am-form-group row">
+                    <label>订单编号</label>
+                    <div class="value">
+                        <span class="am-text-primary data-order-no">{{$order_data.order_no}}</span>
+                    </div>
+                </div>
+                <div class="am-form-group row">
+                    <label>订单单价</label>
+                    <div class="value">
+                        <em>{{$currency_symbol}}</em>
+                        <span class="am-text-secondary data-price">{{$order_data.price}}</span>
+                    </div>
+                </div>
+                <div class="am-form-group row">
+                    <label>订单总价</label>
+                    <div class="value">
+                        <em>{{$currency_symbol}}</em>
+                        <span class="am-text-success data-total-price">{{$order_data.total_price}}</span>
+                    </div>
+                </div>
+
+                <!-- 扩展数据 -->
+                {{if !empty($data['extension_data'])}}
+                    <ul class="am-list am-list-static am-list-border am-margin-left-lg am-padding-left">
+                        {{foreach $order_data.extension_data as $v}}
+                            <li>
+                                <span class="am-margin-right-sm">{{$v.name}}</span>
+                                <span>{{$v.tips}}</span>
+                            </li>
+                        {{/foreach}}
+                    </ul>
+                {{/if}}
+                
+                <div class="am-form-group row">
+                    <label class="am-flex-align-self-start">备注信息</label>
+                    <textarea rows="3" name="content" class="am-radius" placeholder="备注信息" data-validation-message="请填写备注信息">{{if !empty($note_data['content'])}}{{$note_data.content}}{{/if}}</textarea>
+                </div>
+
+                
+                {{if !empty($note_data)}}
+                    <div class="am-form-group row">
+                        <label></label>
+                        <div class="am-tips-card">
+                            <span class="am-fl">添加时间 {{$note_data.add_time}}</span>
+                            {{if !empty($note_data['upd_time'])}}
+                                <span class="am-fr">更新时间 {{$note_data.upd_time}}</span>
+                            {{/if}}
+                        </div>
+                    </div>
+                {{/if}}
+
+                <div class="am-form-popup-submit">
+                    <input type="hidden" name="id" value="{{$order_data.id}}" />
+                    <button type="button" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg" data-am-modal-close>
+                        <i class="am-icon-paint-brush"></i>
+                        <span>{{:MyLang('cancel_title')}}</span>
+                    </button>
+                    <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('save_title')}}'}">
+                        <i class="am-icon-save"></i>
+                        <span>{{:MyLang('save_title')}}</span>
+                    </button>
+                </div>
+            </form>
+            <!-- form end -->
+        {{else /}}
+            <div class="table-no"><i class="am-icon-warning"></i> {{:MyLang('order_info_incorrect_tips')}}</div>
+        {{/if}}
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

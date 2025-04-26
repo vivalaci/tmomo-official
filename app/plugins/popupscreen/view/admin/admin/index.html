@@ -1,0 +1,166 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'popupscreen',
+            'title'     => '弹屏广告',
+        ])}}
+
+        <div class="popupscreen-content">
+            <!-- 基础配置 -->
+            <div class="am-panel am-panel-default am-radius popupscreen-content-base">
+                <div class="am-panel-hd">
+                    <span class="am-panel-title">{{:MyLang('base_config_title')}}</span>
+                    <a class="am-margin-left-lg" href="{{:PluginsAdminUrl('popupscreen', 'admin', 'saveinfo')}}">
+                        <i class="am-icon-edit"></i>
+                        <span>{{:MyLang('edit_title')}}</span>
+                    </a>
+                </div>
+                <div class="am-panel-bd">
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>图片</label>
+                                <div class="immages-tag">
+                                    {{if !empty($data['images'])}}
+                                        <a href="javascript:;" data-am-modal="{target: '#modal-images', closeViaDimmer: 0, width: 300, height: 225}">
+                                            <img src="{{$data.images}}" />
+                                        </a>
+                                    {{else /}}
+                                        未配置
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启web端</label>
+                                <div>
+                                    {{if isset($data['is_web_enable']) and $data['is_web_enable'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启手机端</label>
+                                <div>
+                                    {{if isset($data['is_app_enable']) and $data['is_app_enable'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>是否全局（该配置仅对web端有效）</label>
+                                <div>
+                                    {{if isset($data['is_overall']) and $data['is_overall'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>是否新窗口打开（该配置仅对web端有效）</label>
+                                <div>
+                                    {{if isset($data['is_new_window_open']) and $data['is_new_window_open'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>自动关闭时间</label>
+                                <div>
+                                    {{if isset($data['close_time']) and $data['close_time'] gt 0}}
+                                        {{$data.close_time}}秒
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}[ 不关闭 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>再次显示间隔时间</label>
+                                <div>
+                                    {{if isset($data['interval_time']) and $data['interval_time'] gt 0}}
+                                        {{:MyLang('already_setup_tips')}}[ {{$data.interval_time}}秒 ]
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 86400秒 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('form_time_valid_title')}}</label>
+                                <div>
+                                    {{if !empty($data['time_start']) and !empty($data['time_end'])}}
+                                        {{$data.time_start}} ~ {{$data.time_end}}
+                                    {{elseif !empty($data['time_start']) and empty($data['time_end'])}}
+                                        {{$data.time_start}} ~ 长期有效
+                                    {{elseif empty($data['time_start']) and !empty($data['time_end'])}}
+                                        立即生效 ~ {{$data.time_end}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}限制
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                {{if !empty($data['images'])}}
+                    <div class="am-modal am-modal-no-btn" tabindex="-1" id="modal-images">
+                        <div class="am-modal-dialog">
+                            <div class="am-modal-hd">
+                                <a href="javascript: void(0)" class="am-close" data-am-modal-close>&times;</a>
+                            </div>
+                            <div class="am-modal-bd">
+                                <img src="{{$data.images}}" width="280" />
+                            </div>
+                        </div>
+                    </div>
+                {{/if}}
+            </div>
+
+            <!-- 图片链接地址 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <span class="am-panel-title">图片链接地址</span>
+                    <a class="am-margin-left-lg" href="{{:PluginsAdminUrl('popupscreen', 'admin', 'saveinfo')}}">
+                        <i class="am-icon-edit"></i>
+                        <span>{{:MyLang('edit_title')}}</span>
+                    </a>
+                </div>
+                <div class="am-panel-bd am-padding-sm">
+                    {{if !empty($data['images_url'])}}
+                        <table class="am-table am-table-bordered am-table-radius am-table-striped am-margin-bottom-0">
+                            <thead>
+                                <tr>
+                                    <th>平台</th>
+                                    <th>链接地址</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{if !empty($common_platform_type)}}
+                                    {{foreach $common_platform_type as $v}}
+                                        <tr>
+                                            <td>{{$v.name}}</td>
+                                            <td>{{if !empty($data['images_url']) and is_array($data['images_url']) and array_key_exists($v['value'], $data['images_url'])}}{{$data['images_url'][$v['value']]}}{{/if}}</td>
+                                        </tr>
+                                    {{/foreach}}
+                                {{/if}}
+                            </tbody>
+                        </table>
+                    {{else /}}
+                        <div class="am-padding-vertical-xl am-text-center">未配置链接地址</div>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

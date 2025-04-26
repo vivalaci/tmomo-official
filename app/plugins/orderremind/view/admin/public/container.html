@@ -1,0 +1,40 @@
+<!-- 新订单通知弹窗 -->
+<div class="am-modal am-modal-no-btn" tabindex="-1" id="plugins-orderremind-voice-notice-modal" data-url="{{:PluginsAdminUrl('orderremind', 'notice', 'order')}}">
+    <div class="am-modal-dialog">
+        <div class="am-modal-hd">你有新订单了
+            <a href="javascript: void(0)" class="am-close" data-am-modal-close>&times;</a>
+        </div>
+        <div class="am-modal-bd">
+            <dl class="dl-content am-text-left">
+                <dt>订单号</dt>
+                <dd>
+                    <span class="text-copy-submit">
+                        <strong class="order-no"></strong>
+                        <i class="iconfont icon-copy"></i>
+                    </span>
+                    <a href="javascript:;" class="am-margin-left submit-popup" data-url="" data-title="{{:MyLang('order_title')}}{{:MyLang('detail_title')}}">{{:MyLang('view_title')}}{{:MyLang('order_title')}}</a>
+                </dd>
+
+                <dt>订单单价</dt>
+                <dd>
+                    <strong class="price am-text-primary"></strong>
+                </dd>
+
+                <dt>订单总价</dt>
+                <dd>
+                    <strong class="total-price am-text-secondary"></strong>
+                </dd>
+
+                <dt>支付金额</dt>
+                <dd>
+                    <strong class="pay-price am-text-success"></strong>
+                </dd>
+
+                <dt>下单时间</dt>
+                <dd class="add-time"></dd>
+            </dl>
+        </div>
+        <div class="audio-container"></div>
+    </div>
+</div>
+

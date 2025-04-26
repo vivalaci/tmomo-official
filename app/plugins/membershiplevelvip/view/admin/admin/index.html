@@ -1,0 +1,741 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'membershiplevelvip',
+            'nav_data'  => $plugins_nav_menu_list,
+        ])}}
+
+        <div class="membershiplevelvip-content">
+            <!-- 操作提示 -->
+            <div class="am-operate-stretch-tips">
+                <div class="title">
+                    <i class="iconfont icon-tips"></i>
+                    <strong title="{{:MyLang('operate_list_tips_msg')}}">{{:MyLang('operate_list_tips_button_text')}}</strong>
+                    <i class="iconfont icon-contract contract" title="{{:MyLang('operate_list_tips_retract_text')}}"></i> 
+                </div>
+                <p>依赖插件[ 钱包、分享 ]</p>
+                <p>1. 等级权重 [ 手动设定 -> 付费购买 -> 自动分配（使用等级规则模式） ]</p>
+                <p>2. 基础配置中会员 [ 开启购买 ] 开启后，主菜单才会展示相应的入口（未开启用户则不能直接购买会员）</p>
+                <p>3. 基础配置中会员 [ 开启购买 或 用户续费采用原订单 ] 开启后，用户中心菜单才会展示相应的入口</p>
+                <div class="am-margin-top-sm">
+                    <span class="am-color-red">如站点地址变更可清除已生成的二维码、系统会自动重新创建新的二维码</span>
+                    <button type="button" class="am-btn am-btn-danger am-radius am-btn-sm am-margin-left-xs submit-ajax" data-url="{{:PluginsAdminUrl('membershiplevelvip', 'admin', 'qrcodedelete')}}" data-id="1">清除二维码</button>
+                </div>
+            </div>
+
+            <!-- 基础配置 -->
+            <div class="am-panel am-panel-default am-radius membershiplevelvip-content-base">
+                <div class="am-panel-hd">
+                    <span class="am-panel-title">{{:MyLang('base_config_title')}}</span>
+                    <a class="am-margin-left-lg" href="{{:PluginsAdminUrl('membershiplevelvip', 'admin', 'saveinfo')}}">
+                        <i class="am-icon-edit"></i>
+                        <span>{{:MyLang('edit_title')}}</span>
+                    </a>
+                </div>
+                <div class="am-panel-bd">
+                    <!-- 基础配置 -->
+                    <h2 class="am-margin-top am-margin-left-sm">{{:MyLang('base_config_title')}}</h2>
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>应用导航名称</label>
+                                <div>
+                                    {{if empty($data['application_name'])}}
+                                        {{:MyLang('no_setup_tips')}}应用导航名称
+                                    {{else /}}
+                                        {{$data.application_name}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>等级规则模式</label>
+                                <div>
+                                    {{if isset($data['level_rules']) and isset($members_level_rules_list[$data['level_rules']])}}
+                                        {{:$members_level_rules_list[$data['level_rules']]['name']}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 积分（可用积分）]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>后台用户列表展示等级</label>
+                                <div>
+                                    {{if isset($data['is_admin_user_level_show']) and $data['is_admin_user_level_show'] eq 1}}
+                                        {{:MyLang('yes_title')}}
+                                    {{else /}}
+                                        <span class="am-color-grey">{{:MyLang('no_title')}}</span>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启用户中心菜单入口</label>
+                                <div>
+                                    {{if isset($data['is_user_menu']) and $data['is_user_menu'] eq 1}}
+                                        {{:MyLang('yes_title')}}
+                                    {{else /}}
+                                        <span class="am-color-grey">{{:MyLang('no_title')}}</span>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>不显示原价</label>
+                                <div>
+                                    {{if isset($data['is_user_hide_original_price']) and $data['is_user_hide_original_price'] eq 1}}
+                                        {{:MyLang('yes_title')}}
+                                    {{else /}}
+                                        <span class="am-color-grey">{{:MyLang('no_title')}}</span>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>不显示售价（仅web端）</label>
+                                <div>
+                                    {{if isset($data['is_user_hide_sales_price']) and $data['is_user_hide_sales_price'] eq 1}}
+                                        {{:MyLang('yes_title')}}
+                                    {{else /}}
+                                        <span class="am-color-grey">{{:MyLang('no_title')}}</span>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>用户端商品鼠标悬停展示价格</label>
+                                <div>
+                                    {{if isset($data['is_user_goods_hover_price']) and $data['is_user_goods_hover_price'] eq 1}}
+                                        {{:MyLang('yes_title')}}
+                                    {{else /}}
+                                        <span class="am-color-grey">{{:MyLang('no_title')}}</span>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>默认等级图标</label>
+                                <div class="immages-tag">
+                                    {{if empty($data['default_level_images'])}}
+                                        <span class="am-color-grey">{{:MyLang('no_setup_tips')}}</span>
+                                    {{else /}}
+                                        <img src="{{$data.default_level_images}}" class="am-img-thumbnail am-radius common-annex-view-event" data-value="{{$data.default_level_images}}" />
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启购买会员</label>
+                                <div>
+                                    {{if isset($data['is_user_buy']) and $data['is_user_buy'] eq 1}}
+                                        {{:MyLang('yes_title')}}
+                                    {{else /}}
+                                        <span class="am-color-grey">{{:MyLang('no_title')}}</span>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>用户续费采用原订单</label>
+                                <div>
+                                    {{if isset($data['is_supported_renew_old_order']) and $data['is_supported_renew_old_order'] eq 1}}
+                                        {{:MyLang('yes_title')}}
+                                    {{else /}}
+                                        <span class="am-color-grey">{{:MyLang('no_title')}}</span>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>会员费购买返佣</label>
+                                <div>
+                                    {{if isset($data['is_commission']) and $data['is_commission'] eq 1}}
+                                        {{:MyLang('yes_title')}}
+                                    {{else /}}
+                                        <span class="am-color-grey">{{:MyLang('no_title')}}</span>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>订单超时关闭</label>
+                                <div>
+                                    {{if !empty($data['order_close_time'])}}
+                                        {{:MyLang('already_setup_tips')}}[ {{$data.order_close_time}}分钟 ]
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 30分钟 ]
+                                    {{/if}}
+                                    <div>
+                                        <a href="{{:PluginsHomeUrl('membershiplevelvip', 'crontab', 'orderclose')}}" target="_blank" class="">定时脚本地址 <i class="am-icon-external-link"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>佣金订单创建间隔时间</label>
+                                <div>
+                                    {{if !empty($data['profit_order_create_time'])}}
+                                        {{:MyLang('already_setup_tips')}}[ {{$data.profit_order_create_time}}分钟 ]
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 5分钟 ]
+                                    {{/if}}
+                                    <div>
+                                        <a href="{{:PluginsHomeUrl('membershiplevelvip', 'crontab', 'profitcreate')}}" target="_blank" class="">定时脚本地址 <i class="am-icon-external-link"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>佣金订单结算周期</label>
+                                <div>
+                                    {{if !empty($data['profit_order_settlement_time'])}}
+                                        {{:MyLang('already_setup_tips')}}[ {{$data.profit_order_settlement_time}}分钟/{{:intval($data.profit_order_settlement_time/60/24)}}天 ]
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 10080分钟/7天 ]
+                                    {{/if}}
+                                    <div>
+                                        <a href="{{:PluginsHomeUrl('membershiplevelvip', 'crontab', 'profitsettlement')}}" target="_blank" class="">定时脚本地址 <i class="am-icon-external-link"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>购买会员可选支付方式</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if !empty($data['user_buy_can_payment']) and is_array($data['user_buy_can_payment'])}}
+                                        {{foreach $payment_list as $v}}
+                                            {{if in_array($v['payment'], $data['user_buy_can_payment'])}}
+                                                <span class="am-margin-right-sm">{{$v.name}}</span>
+                                            {{/if}}
+                                        {{/foreach}}
+                                    {{else /}}
+                                        <span class="am-color-grey">{{:MyLang('no_setup_tips')}}</span>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <!-- 会员统一折扣商品 -->
+                    <h2 class="am-margin-top am-margin-left-sm">会员统一折扣商品</h2>
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启仅参加会员统一折扣商品</label>
+                                <div>
+                                    {{if isset($data['is_only_join_vip_discount_goods']) and $data['is_only_join_vip_discount_goods'] eq 1}}
+                                        {{:MyLang('yes_title')}}
+                                    {{else /}}
+                                        <span class="am-color-grey">{{:MyLang('no_title')}}</span>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>仅参加会员统一折扣的商品-商品列表</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if !empty($data['appoint_only_join_vip_discount_goods_list']) and is_array($data['appoint_only_join_vip_discount_goods_list'])}}
+                                        <a href="javascript:;" data-am-modal="{target: '#appoint-only-join-vip-discount-popup'}">查看商品 >></a>
+                                        <div class="am-popup am-radius" id="appoint-only-join-vip-discount-popup">
+                                            <div class="am-popup-inner">
+                                                <div class="am-popup-hd">
+                                                    <h4 class="am-popup-title">查看商品</h4>
+                                                    <span data-am-modal-close class="am-close">&times;</span>
+                                                </div>
+                                                <div class="am-popup-bd">
+                                                    <ul class="am-list">
+                                                        {{foreach $data.appoint_only_join_vip_discount_goods_list as $g}}
+                                                            <li>
+                                                                <a href="{{$g.goods_url}}" target="_blank" class="am-text-truncate">
+                                                                    <img src="{{$g.images}}" alt="{{$g.title}}" class="am-fl am-radius am-margin-right-xs" width="20" height="20" />
+                                                                    <span>{{$g.title}}</span>
+                                                                </a>
+                                                            </li>
+                                                        {{/foreach}}
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启不参加会员统一折扣商品</label>
+                                <div>
+                                    {{if isset($data['is_not_join_vip_discount_goods']) and $data['is_not_join_vip_discount_goods'] eq 1}}
+                                        {{:MyLang('yes_title')}}
+                                    {{else /}}
+                                        <span class="am-color-grey">{{:MyLang('no_title')}}</span>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>不参加会员统一折扣的商品-商品列表</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if !empty($data['appoint_not_join_vip_discount_goods_list']) and is_array($data['appoint_not_join_vip_discount_goods_list'])}}
+                                        <a href="javascript:;" data-am-modal="{target: '#appoint-not-join-vip-discount-popup'}">查看商品 >></a>
+                                        <div class="am-popup am-radius" id="appoint-not-join-vip-discount-popup">
+                                            <div class="am-popup-inner">
+                                                <div class="am-popup-hd">
+                                                    <h4 class="am-popup-title">查看商品</h4>
+                                                    <span data-am-modal-close class="am-close">&times;</span>
+                                                </div>
+                                                <div class="am-popup-bd">
+                                                    <ul class="am-list">
+                                                        {{foreach $data.appoint_not_join_vip_discount_goods_list as $g}}
+                                                            <li>
+                                                                <a href="{{$g.goods_url}}" target="_blank" class="am-text-truncate">
+                                                                    <img src="{{$g.images}}" alt="{{$g.title}}" class="am-fl am-radius am-margin-right-xs" width="20" height="20" />
+                                                                    <span>{{$g.title}}</span>
+                                                                </a>
+                                                            </li>
+                                                        {{/foreach}}
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <!-- 用户推广 -->
+                    <h2 class="am-margin-top am-margin-left-sm">用户推广</h2>
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启用户推广工具</label>
+                                <div>
+                                    {{if isset($data['is_propaganda']) and $data['is_propaganda'] eq 1}}
+                                        {{:MyLang('yes_title')}}
+                                    {{else /}}
+                                        <span class="am-color-grey">{{:MyLang('no_title')}}</span>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>用户分享标题</label>
+                                <div>
+                                    {{if !empty($data['user_poster_share_title'])}}
+                                        {{$data.user_poster_share_title}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 浏览器标题 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>用户分享描述</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if !empty($data['user_poster_share_desc'])}}
+                                        {{$data.user_poster_share_desc}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 站点页面描述 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>H5自定义地址</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if !empty($data['h5_url'])}}
+                                        {{$data.h5_url}}
+                                    {{else /}}
+                                        <span class="am-color-grey">{{:MyLang('no_setup_tips')}}</span>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>手机端首页地址</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if !empty($data['mobile_home_page'])}}
+                                        {{$data.mobile_home_page}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ pages/index/index ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>用户推广封面图片</label>
+                                <div class="immages-tag">
+                                    {{if empty($data['user_poster_share_images'])}}
+                                        <span class="am-color-grey">{{:MyLang('no_setup_tips')}}</span>
+                                    {{else /}}
+                                        <img src="{{$data.user_poster_share_images}}" class="am-img-thumbnail am-radius common-annex-view-event" data-value="{{$data.user_poster_share_images}}" />
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <!-- 会员首页 -->
+                    <h2 class="am-margin-top am-margin-left-sm">会员首页</h2>
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>首页banner大标题</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if !empty($data['banner_top_title'])}}
+                                        {{$data.banner_top_title}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}，默认不展示
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>首页banner按钮背景图</label>
+                                <div class="immages-tag">
+                                    {{if empty($data['default_btn_bg'])}}
+                                        <span class="am-color-grey">{{:MyLang('no_setup_tips')}}</span>
+                                    {{else /}}
+                                        <img src="{{$data.default_btn_bg}}" class="am-img-thumbnail am-radius common-annex-view-event" data-value="{{$data.default_btn_bg}}" />
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>首页banner按钮文字</label>
+                                <div>
+                                    {{if !empty($data['banner_middle_name'])}}
+                                        {{$data.banner_middle_name}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 开通会员 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>默认背景图片</label>
+                                <div class="immages-tag">
+                                    {{if empty($data['default_bg_images'])}}
+                                        <span class="am-color-grey">{{:MyLang('no_setup_tips')}}</span>
+                                    {{else /}}
+                                        <img src="{{$data.default_bg_images}}" class="am-img-thumbnail am-radius common-annex-view-event" data-value="{{$data.default_bg_images}}" />
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>默认logo</label>
+                                <div class="immages-tag">
+                                    {{if empty($data['default_logo'])}}
+                                        <span class="am-color-grey">{{:MyLang('no_setup_tips')}}</span>
+                                    {{else /}}
+                                        <img src="{{$data.default_logo}}" class="am-img-thumbnail am-radius common-annex-view-event" data-value="{{$data.default_logo}}" />
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>首页底部内容</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if !empty($data['banner_bottom_content'])}}
+                                        {{$data.banner_bottom_content|raw}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}，默认不展示
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <!-- 会员中心 -->
+                    <h2 class="am-margin-top am-margin-left-sm">会员中心</h2>
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>未开通会员介绍</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if !empty($data['not_opening_vip_desc'])}}
+                                        {{:implode('<br />', $data['not_opening_vip_desc'])}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}，默认不展示
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>会员中心公告</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if !empty($data['user_vip_center_notice'])}}
+                                        {{:implode('<br />', $data['user_vip_center_notice'])}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}，默认不展示
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <!-- SEO信息 -->
+                    <h2 class="am-margin-top am-margin-left-sm">{{:MyLang('form_seo_data_title')}}</h2>
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('form_seo_title_title')}}</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if empty($data['seo_title'])}}
+                                        <span class="am-color-grey">{{:MyLang('no_setup_tips')}}</span>
+                                    {{else /}}
+                                        {{$data.seo_title}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('form_seo_keywords_title')}}</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if empty($data['seo_keywords'])}}
+                                        <span class="am-color-grey">{{:MyLang('no_setup_tips')}}字</span>
+                                    {{else /}}
+                                        {{$data.seo_keywords}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>{{:MyLang('form_seo_desc_title')}}</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if empty($data['seo_desc'])}}
+                                        <span class="am-color-grey">{{:MyLang('no_setup_tips')}}</span>
+                                    {{else /}}
+                                        {{$data.seo_desc}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+             <!-- 推广客户 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <span class="am-panel-title">推广客户</span>
+                </div>
+                <div class="am-panel-bd am-padding-sm">
+                    <ul class="am-margin-top-xs am-cf am-avg-sm-2">
+                        <li class="am-fl am-text-center">
+                            <p>已推广用户总数</p>
+                            <p class="am-text-truncate">
+                                <strong class="am-text-primary am-text-lg">{{$user_total.user_count}}</strong>
+                                <span>人</span>
+                            </p>
+                        </li>
+                        <li class="am-fl am-text-center">
+                            <p>已消费用户总数</p>
+                            <p class="am-text-truncate">
+                                <strong class="am-text-success am-text-lg">{{$user_total.valid_user_count}}</strong>
+                                <span>人</span>
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 返利概况 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <span class="am-panel-title">返利概况</span>
+                </div>
+                <div class="am-panel-bd am-padding-sm">
+                    <ul class="am-margin-top-xs am-cf am-avg-sm-3">
+                        <li class="am-fl am-text-center">
+                            <p>返佣总金额</p>
+                            <p class="am-text-truncate">
+                                <strong class="am-text-primary am-text-lg">{{$currency_symbol}}{{$user_profit_total_price}}</strong>
+                            </p>
+                        </li>
+                        <li class="am-fl am-text-center">
+                            <p>待结算金额</p>
+                            <p class="am-text-truncate">
+                                <strong class="am-text-secondary am-text-lg">{{$currency_symbol}}{{$user_profit_stay_price}}</strong>
+                            </p>
+                        </li>
+                        <li class="am-fl am-text-center">
+                            <p>已结算金额</p>
+                            <p class="am-text-truncate">
+                                <strong class="am-text-success am-text-lg">{{$currency_symbol}}{{$user_profit_already_price}}</strong>
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 近15日收益走势 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <span class="am-panel-title">近15日收益走势</span>
+                </div>
+                <div class="am-panel-bd am-padding-sm">
+                    <div id="echarts-profit"></div>
+                </div>
+            </div>
+
+            <!-- 近15日推广用户数 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <span class="am-panel-title">近15日推广用户数</span>
+                </div>
+                <div class="am-panel-bd am-padding-sm">
+                    <div id="echarts-user"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}
+
+<script type="text/javascript">
+$(function()
+{
+    // 近7日订单交易走势
+    var profit_chart = echarts.init(document.getElementById('echarts-profit'), 'macarons');
+    var option = {
+        tooltip : {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross',
+                    label: {
+                        backgroundColor: '#6a7985'
+                    }
+                }
+            },
+        grid: {
+            top: '13%',
+            left: '3%',
+            right: '5%',
+            bottom: '3%',
+            containLabel: true
+        },
+        toolbox: {
+            show : true,
+            feature : {
+                mark : {show: true},
+                dataView : {show: true, readOnly: false},
+                magicType : {show: true, type: ['line', 'bar']},
+                restore : {show: false},
+                saveAsImage : {name:'近15日收益走势', show: true}
+            }
+        },
+        xAxis: {
+            type: 'category',
+            boundaryGap : false,
+            data: {{:json_encode($profit_chart.name_arr)}}
+        },
+        yAxis: {
+            type: 'value'
+        },
+        series: [{
+            data: {{:json_encode($profit_chart.data)}},
+            type: 'line'
+        }]
+    };
+    profit_chart.setOption(option);
+
+    // 近15日推广用户数
+    var user_chart = echarts.init(document.getElementById('echarts-user'), 'macarons');
+    var option = {
+        tooltip : {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross',
+                    label: {
+                        backgroundColor: '#6a7985'
+                    }
+                }
+            },
+        grid: {
+            top: '13%',
+            left: '3%',
+            right: '5%',
+            bottom: '3%',
+            containLabel: true
+        },
+        toolbox: {
+            show : true,
+            feature : {
+                mark : {show: true},
+                dataView : {show: true, readOnly: false},
+                magicType : {show: true, type: ['line', 'bar']},
+                restore : {show: false},
+                saveAsImage : {name:'近15日推广用户数', show: true}
+            }
+        },
+        xAxis: {
+            type: 'category',
+            boundaryGap : false,
+            data: {{:json_encode($user_chart.name_arr)}}
+        },
+        yAxis: {
+            type: 'value'
+        },
+        series: [{
+            data: {{:json_encode($user_chart.data)}},
+            type: 'bar',
+            areaStyle: {}
+        }]
+    };
+    user_chart.setOption(option);
+
+    // 浏览器大小改变则实时更新图表大小
+    window.onresize = function ()
+    {
+        profit_chart.resize();
+        user_chart.resize();
+    };
+});
+</script>

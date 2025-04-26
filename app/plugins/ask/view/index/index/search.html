@@ -1,0 +1,44 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- header top nav -->
+{{:ModuleInclude('public/header_top_nav')}}
+
+<!-- ask header -->
+{{:ModuleInclude('../../../plugins/ask/view/index/public/head')}}
+
+<!-- content start -->
+<div class="am-container plugins-ask plugins-ask-search">
+    <div class="am-g">
+        <!-- 详情 -->
+        <div class="am-u-md-{{if empty($recommend_ask_list) and empty($recommend_goods_list)}}12{{else /}}8{{/if}}">
+            <div class="am-background-white am-radius am-padding-top-main">
+                {{if !empty($search_tab_list) and is_array($search_tab_list)}}
+                    <div class="ask-tabs">
+                        <ul class="am-nav am-nav-pills am-flex am-flex-warp am-border-bottom-main">
+                            {{foreach $search_tab_list as $v}}
+                                <li {{if isset($v['active']) and $v['active'] eq 1}}class="am-active"{{/if}}><a href="{{$v.url}}">{{$v.name}}</a></li>
+                            {{/foreach}}
+                        </ul>
+                    </div>
+                {{/if}}
+                {{if !empty($data_list) and is_array($data_list)}}
+                    {{:ModuleInclude('../../../plugins/ask/view/index/module/list', [
+                        'ask_list'  => $data_list,
+                        'type'          => 'search',
+                        'is_more'       => false
+                    ])}}
+                {{else /}}
+                    {{:ModuleInclude('public/not_data')}}
+                {{/if}}
+            </div>
+            {{$page_html|raw}}
+        </div>
+
+        <!-- 右侧 -->
+        {{:ModuleInclude('../../../plugins/ask/view/index/public/right')}}
+    </div>
+</div>
+<!-- content end -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

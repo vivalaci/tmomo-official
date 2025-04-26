@@ -1,0 +1,9 @@
+{{if $module_data['type'] eq 0}}
+    <span>{{:MyLang('reduce_text')}}</span>
+    <span class="am-text-success">{{$module_data.discount_value}}</span>
+    <span>{{:MyLang('price_unit_text')}}</span>
+{{else /}}
+    <span>{{:MyLang('strike_text')}}</span>
+    <span class="am-text-warning">{{$module_data.discount_value}}</span>
+    <span>{{:MyLang('break_name')}}</span>
+{{/if}}

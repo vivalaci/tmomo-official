@@ -1,0 +1,40 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- header top nav -->
+{{:ModuleInclude('public/header_top_nav')}}
+
+<!-- search -->
+{{:ModuleInclude('public/nav_search')}}
+
+<!-- header nav -->
+{{:ModuleInclude('public/header_nav')}}
+
+<!-- goods category -->
+{{:ModuleInclude('public/goods_category')}}
+
+<!-- content start -->
+<div class="plugins-coupon">
+    {{if !empty($plugins_base['banner_images'])}}
+        <div class="plugins-coupon-banner am-text-center am-margin-bottom-xs" {{if !empty($plugins_base['banner_bg_color'])}}style="background:{{$plugins_base.banner_bg_color}};"{{/if}}>
+            <a {{if empty($plugins_base['url'])}}href="javascript:;"{{else /}}href="{{$plugins_base.url}}" target="_blank"{{/if}}>
+                <img src="{{$plugins_base.banner_images}}" alt="{{:MyLang('coupon_name')}}" />
+            </a>
+        </div>
+    {{/if}}
+    <div class="am-container">
+        {{if !empty($coupon_list) and is_array($coupon_list)}}
+            <div class="am-margin-top-xs">
+                {{:ModuleInclude('../../../plugins/coupon/view/index/module/coupon', [
+                    'coupon_list'  => $coupon_list,
+                    'color'        => 'grey',
+                ])}}
+            </div>
+        {{else /}}
+            {{:ModuleInclude('public/not_data')}}
+        {{/if}}
+    </div>
+</div>
+<!-- content end -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

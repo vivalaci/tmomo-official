@@ -1,0 +1,16 @@
+<!-- 继承公共的 form -->
+{{extend name="../../../module/view/form_table/form" /}}
+
+<!-- 表单顶部操作栏 -->
+{{block name="form_operate_top"}}
+    {{if empty($params['cid'])}}
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'coupon',
+            'nav_data'  => $plugins_nav_menu_list,
+        ])}}
+    {{/if}}
+
+    <!-- 父级内容 -->
+    {__block__}
+{{/block}}
