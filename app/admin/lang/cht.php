@@ -191,7 +191,7 @@ return [
         'base_item_site_manual_mode_title'      => '手動模式',
         'base_item_default_payment_title'       => '默認支付方式',
         'base_item_display_type_title'          => '展示型',
-        'base_item_self_extraction_title'       => '自提點',
+        'base_item_self_extraction_title'       => '自取點',
         'base_item_fictitious_title'            => '虛擬銷售',
         'choice_upload_logo_title'              => '選擇logo',
         'add_goods_title'                       => '商品添加',

@@ -579,7 +579,7 @@ return [
     'gift_title'                                            => '禮物',
     'continue_scan_title'                                   => '繼續掃碼',
     'self_pickup_title'                                     => '自提',
-    'self_pickup_point_title'                               => '自提點',
+    'self_pickup_point_title'                               => '自取點',
     'web_title'                                             => 'WEB端',
     'app_title'                                             => '手機端',
     'custom_title'                                          => '自定義',
@@ -3777,8 +3777,8 @@ return [
             'desc' => '空則不展示',
         ],
         'common_self_extraction_address'  => [
-            'name' => '自提點地址',
-            'tips' => '請填寫自提點地址',
+            'name' => '自取點地址',
+            'tips' => '請填寫自取點地址',
         ],
         'common_customer_store_address'  => [
             'name' => '商店地址',
