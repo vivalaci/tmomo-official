@@ -42,8 +42,8 @@ return [
         'header_top_nav_left_login_first'       => '您好',
         'header_top_nav_left_login_last'        => '，歡迎來到',
         // 搜索
-        'search_input_placeholder'              => '其實搜尋很簡單^_^！',
-        'search_button_text'                    => '搜尋',
+        'search_input_placeholder'              => '其實蒐索很簡單^_^！',
+        'search_button_text'                    => '蒐索',
         // 用户
         'avatar_upload_tips'                    => [
             '請在工作區域放大縮小及移動選取框，選擇要裁剪的範圍，裁切寬高比例固定；',
@@ -180,7 +180,7 @@ return [
         'article_category_name'                 => '文章分類',
         'recommended_article_name'              => '推薦文章',
         'article_nav_text'                      => '側欄導航',
-        'article_search_placeholder'            => '輸入關鍵字搜尋',
+        'article_search_placeholder'            => '輸入關鍵字蒐索',
     ],
 
     // 自定义页面
@@ -470,6 +470,7 @@ return [
             'goods_placeholder'     => '請輸入商品名稱/簡述/SEO資訊',
             'price'                 => '銷售價格',
             'original_price'        => '原價',
+            'access_count'          => '流覽量',
             'add_time'              => '創建時間',
         ],
     ],

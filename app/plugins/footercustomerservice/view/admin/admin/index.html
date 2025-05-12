@@ -1,0 +1,75 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'footercustomerservice',
+            'title'     => '底部客户服务介绍',
+        ])}}
+
+        <div class="footercustomerservice-content">
+            <!-- 基础数据 -->
+            <div class="am-panel am-panel-default am-radius footercustomerservice-middle-banner">
+                <div class="am-panel-hd">
+                    <span class="am-panel-title">{{:MyLang('form_base_data_title')}}</span>
+                    <a class="am-margin-left-lg" href="{{:PluginsAdminUrl('footercustomerservice', 'admin', 'saveinfo')}}">
+                        <i class="am-icon-edit"></i>
+                        <span>{{:MyLang('edit_title')}}</span>
+                    </a>
+                </div>
+                <div class="am-panel-bd">
+                    <div class="items">
+                        <label>是否仅首页</label>
+                        <div>
+                            {{if isset($data['is_only_home']) and $data['is_only_home'] eq 1}}
+                                是
+                            {{else /}}
+                                否
+                            {{/if}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 广告图片 -->
+            <div class="am-panel am-panel-default footercustomerservice-data-list">
+                <div class="am-panel-hd">
+                    <span class="am-panel-title">服务介绍</span>
+                    <a class="am-margin-left-lg" href="{{:PluginsAdminUrl('footercustomerservice', 'admin', 'dataindex')}}">
+                        <i class="am-icon-edit"></i>
+                        <span>{{:MyLang('edit_title')}}</span>
+                    </a>
+                </div>
+                <div class="am-panel-bd customer-service">
+                    {{if !empty($data_list)}}
+                        <ul data-am-widget="gallery" class="am-gallery am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-overlay" data-am-gallery="{}">
+                            {{foreach $data_list as $k=>$v}}
+                                {{if isset($v['is_enable']) and $v['is_enable'] eq 1}}
+                                    <li>
+                                        <div class="am-gallery-item">
+                                            <img src="{{$v.images_url}}" alt="{{$v.name}}" title="{{$v.name}}" />
+                                            <div class="base">
+                                                <p class="title">{{$v.name}}</p>
+                                                {{if !empty($v['desc'])}}
+                                                    <p class="desc">{{$v.desc}}</p>
+                                                {{/if}}
+                                            </div>
+                                        </div>
+                                    </li>
+                                {{/if}}
+                            {{/foreach}}
+                        </ul>
+                    {{else /}}
+                        没有数据
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

@@ -30,7 +30,7 @@
             <!-- 手机端搜索 -->
             <form class="am-topbar-form am-topbar-left am-form-inline am-show-sm-only navigation-search" role="search" action="{{:MyUrl('index/search/index')}}" method="POST">
                 <div class="am-input-group am-input-group-sm">
-                    <input type="text" name="wd" class="am-form-field" placeholder="{{:MyLang('common.search_input_placeholder')}}" value="{{if !empty($params['wd'])}}{{$params.wd}}{{/if}}" autocomplete="off" />
+                    <input type="text" name="wd" class="am-form-field" placeholder="{{:MyLang('common.search_input_placeholder')}}" value="{{if !empty($params['wd'])}}{{$params.wd}}{{/if}}" autocomplete="off" data-is-clearout="0" />
                     <span class="am-input-group-btn">
                         <button class="am-btn am-btn-default" type="submit">
                             <span class="am-icon-search am-icon-xs"></span>
@@ -93,7 +93,7 @@
                                     <a class="am-dropdown-toggle {{if isset($nav['active']) and $nav['active'] eq 1}}active{{/if}}" data-am-dropdown-toggle href="javascript:;">
                                         {{$nav.name}} <span class="am-icon-caret-down"></span>
                                     </a>
-                                    <ul class="am-dropdown-content">
+                                    <ul class="am-dropdown-content am-radius">
                                         {{foreach $nav.items as $navs}}
                                             <li>
                                                 <a href="{{$navs.url}}" {{if isset($navs['active']) and $navs['active'] eq 1}}class="active"{{/if}}>{{$navs.name}}</a>

@@ -1,0 +1,43 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'footercustomerservice',
+            'title'     => MyLang('base_config_title'),
+            'back_url'  => PluginsAdminUrl('footercustomerservice', 'admin', 'index'),
+        ])}}
+
+        <!-- form start -->
+        <form class="am-form form-validation am-form-full-screen am-form-popup-sticky" action="{{:PluginsAdminUrl('footercustomerservice', 'admin', 'save')}}" method="POST" request-type="ajax-url" request-value="{{:PluginsAdminUrl('footercustomerservice', 'admin', 'index')}}" enctype="multipart/form-data">            
+            <div class="am-form-group">
+                <label>是否仅首页<span class="am-form-group-label-tips">默认全局</span></label>
+                <div class="am-margin-top-sm">
+                    {{foreach $is_whether_list as $v}}
+                        <label class="am-radio-inline">
+                            <input type="radio" name="is_only_home" value="{{$v.id}}" {{if isset($data['is_only_home']) and $data['is_only_home'] eq $v['id']}}checked="checked"{{else /}}{{if !isset($data['is_only_home']) and isset($v['checked']) and $v['checked'] eq true}}checked="checked"{{/if}}{{/if}} data-am-ucheck /> {{$v.name}}
+                        </label>
+                    {{/foreach}}
+                </div>
+            </div>
+
+            <div class="am-form-popup-submit">
+                <a href="{{:PluginsAdminUrl('footercustomerservice', 'admin', 'index', $params)}}" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg">
+                    <i class="am-icon-mail-reply"></i>
+                    <span>{{:MyLang('retreat_title')}}</span>
+                </a>
+                <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('save_title')}}'}">
+                    <i class="am-icon-save"></i>
+                    <span>{{:MyLang('save_title')}}</span>
+                </button>
+            </div>
+        </form>
+        <!-- form end -->
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

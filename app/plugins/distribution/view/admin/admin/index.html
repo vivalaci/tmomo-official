@@ -316,13 +316,29 @@
                         </li>
                         <li>
                             <div class="items am-padding-sm">
-                                <label>分销商内购</label>
+                                <label>向上结算佣金转为积分</label>
                                 <div>
-                                    {{if isset($data['self_buy']) and isset($distribution_is_enable_list[$data['self_buy']])}}
-                                        {{$distribution_is_enable_list[$data['self_buy']]['name']}}
+                                    {{if isset($data['is_upper_return_settlement_convert_integral']) and $data['is_upper_return_settlement_convert_integral'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>内购返佣</label>
+                                <div>
+                                    {{if isset($data['is_self_buy']) and isset($distribution_is_enable_list[$data['is_self_buy']])}}
+                                        {{$distribution_is_enable_list[$data['is_self_buy']]['name']}}
                                     {{else /}}
                                         {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 关闭 ]
                                     {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>内购返佣结算佣金转为积分</label>
+                                <div>
+                                    {{if isset($data['is_self_buy_settlement_convert_integral']) and $data['is_self_buy_settlement_convert_integral'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
                                 </div>
                             </div>
                         </li>
@@ -347,6 +363,14 @@
                                     {{else /}}
                                         {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 佣金÷实际用户数量 ]
                                     {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>向下返佣结算佣金转为积分</label>
+                                <div>
+                                    {{if isset($data['is_sdown_return_settlement_convert_integral']) and $data['is_sdown_return_settlement_convert_integral'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
                                 </div>
                             </div>
                         </li>
@@ -566,13 +590,21 @@
 
                         <li>
                             <div class="items am-padding-sm">
-                                <label>指定商品及返佣折扣</label>
+                                <label>指定商品返佣及折扣</label>
                                 <div>
                                     {{if !empty($data['is_appoint_goods'])}}
                                         {{$data.is_appoint_goods}}
                                     {{else /}}
                                         {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 关闭 ]
                                     {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>指定商品后返现金额转为积分</label>
+                                <div>
+                                    {{if isset($data['is_appoint_profit_goods_settlement_convert_integral']) and $data['is_appoint_profit_goods_settlement_convert_integral'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
                                 </div>
                             </div>
                         </li>
@@ -622,9 +654,17 @@
                         </li>
                         <li>
                             <div class="items am-padding-sm">
-                                <label>推荐用户购买指定商品后返现商品的金额-是否安装用户纬度限制</label>
+                                <label>推荐用户购买指定商品后返现商品的金额-是否按照用户纬度计算</label>
                                 <div>
                                     {{if isset($data['appoint_goods_sale_is_user']) and $data['appoint_goods_sale_is_user'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>推荐用户购买指定商品后返现商品的金额-返现商品的金额转为积分</label>
+                                <div>
+                                    {{if isset($data['is_appoint_goods_sale_settlement_convert_integral']) and $data['is_appoint_goods_sale_settlement_convert_integral'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
                                 </div>
                             </div>
                         </li>
@@ -762,6 +802,14 @@
                         </li>
                         <li>
                             <div class="items am-padding-sm">
+                                <label>指定商品阶梯返佣-指定商品阶梯返佣转为积分</label>
+                                <div>
+                                    {{if isset($data['is_show_profit_ladder_settlement_convert_integral']) and $data['is_show_profit_ladder_settlement_convert_integral'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
                                 <label>指定商品阶梯返佣-间隔时间</label>
                                 <div>
                                     {{if empty($data['appoint_goods_ladder_interval_time'])}}
@@ -872,6 +920,14 @@
                         </li>
                         <li>
                             <div class="items am-padding-sm">
+                                <label>取货点返佣转为积分</label>
+                                <div>
+                                    {{if isset($data['is_self_extraction_settlement_convert_integral']) and $data['is_self_extraction_settlement_convert_integral'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
                                 <label>自提取货点申请介绍</label>
                                 <div class="am-scrollable-vertical">
                                     {{if !empty($data['self_extraction_apply_desc'])}}
@@ -897,10 +953,10 @@
 
                         <li>
                             <div class="items am-padding-sm">
-                                <label>返佣类型</label>
+                                <label>订单返佣类型</label>
                                 <div>
-                                    {{if isset($data['profit_type']) and isset($distribution_profit_type_list[$data['profit_type']])}}
-                                        {{$distribution_profit_type_list[$data['profit_type']]['name']}}
+                                    {{if isset($data['order_profit_type']) and isset($distribution_order_profit_type_list[$data['order_profit_type']])}}
+                                        {{$distribution_order_profit_type_list[$data['order_profit_type']]['name']}}
                                     {{else /}}
                                         {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 所有订单 ]
                                     {{/if}}
@@ -919,14 +975,6 @@
                                     <div>
                                         <a href="{{:PluginsHomeUrl('distribution', 'crontab', 'profit')}}" target="_blank">定时脚本地址 <i class="am-icon-external-link"></i></a>
                                     </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="items am-padding-sm">
-                                <label>结算转换订单货币汇率</label>
-                                <div>
-                                    {{if isset($data['is_profit_transform_currency_rate']) and $data['is_profit_transform_currency_rate'] eq 1}}{{:MyLang('yes_title')}}{{else /}}{{:MyLang('no_title')}}{{/if}}
                                 </div>
                             </div>
                         </li>

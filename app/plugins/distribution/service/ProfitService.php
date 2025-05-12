@@ -76,21 +76,15 @@ class ProfitService
             {
                 if(isset($user_integral[$v['user_id']]))
                 {
-                    // 积分减少
-                    if(!Db::name('User')->where(['id'=>$v['user_id']])->dec('integral', $v['integral'])->update())
+                    // 积分退回
+                    $ret = IntegralService::UserIntegralUpdate($v['user_id'], null, $v['integral'], '分销积分退回', 0);
+                    if($ret['code'] != 0)
                     {
-                        return DataReturn('分销积分退回失败', -10);
-                    }
-
-                    // 积分日志
-                    if(!IntegralService::UserIntegralLogAdd($v['user_id'], $user_integral[$v['user_id']], $v['integral'], '分销推广', 0))
-                    {
-                        return DataReturn('分销积分日志添加失败', -1);
+                        return $ret;
                     }
                 }
             }
         }
-        
         return DataReturn('success', 0);
     }
 
@@ -203,17 +197,7 @@ class ProfitService
         }
 
         // 积分增加
-        if(!Db::name('User')->where(['id'=>$user_id])->inc('integral', $integral)->update())
-        {
-            return DataReturn('分销积分发放失败', -10);
-        }
-
-        // 发放积分
-        if(!IntegralService::UserIntegralLogAdd($user['id'], $user['integral'], $integral, '分销推广', 1))
-        {
-            return DataReturn('分销积分日志添加失败', -1);
-        }
-        return DataReturn(MyLang('grant_success'), 0);
+        return IntegralService::UserIntegralUpdate($user_id, $user['integral'], $integral, '分销推广', 1);
     }
 
     /**
@@ -574,7 +558,7 @@ class ProfitService
      * @param   [array]             $currency       [订单汇率]
      * @param   [float]             $profit_price   [收益金额]
      * @param   [int]               $goods_id       [商品id]
-     * @param   [int]               $level          [等级类型（8指定商品返现、9指定商品销售返佣）]
+     * @param   [int]               $level          [等级类型（8指定商品返现、9指定商品销售返佣）、10指定商品阶梯返佣]
      * @param   [int]               $level          [返佣比例]
      * @param   [array]             $config         [插件配置]
      */
@@ -586,13 +570,17 @@ class ProfitService
             return DataReturn('0元收益，无需添加记录', 0);
         }
 
+        // 返佣处理
+        $profit_res = self::ProfitSettlementType($level, $profit_price, $config);
+
         // 收益明细
         $data = [
             'user_id'           => $user_id,
             'order_id'          => $order_id,
             'order_user_id'     => $order['user_id'],
             'total_price'       => $order['total_price'],
-            'profit_price'      => $profit_price,
+            'profit_type'       => $profit_res['profit_type'],
+            'profit_price'      => $profit_res['profit_price'],
             'rate'              => $rate,
             'level'             => $level,
             'user_level_id'     => $goods_id,
@@ -611,7 +599,8 @@ class ProfitService
 
             // 消息通知
             $user_name_view = (empty($user) || empty($user['user_name_view'])) ? '' : $user['user_name_view'];
-            $msg = $user_name_view.'用户下单'.$currency['currency_symbol'].$data['total_price'].', 预计收益'.$currency_symbol.$data['profit_price'];
+            $profit_value = ($data['profit_type'] == 1) ? $data['profit_price'].'积分' : $currency_symbol.$data['profit_price'];
+            $msg = $user_name_view.'用户下单'.$currency['currency_symbol'].$data['total_price'].', 预计收益'.$profit_value;
             MessageService::MessageAdd($user_id, '分销收益新增', $msg, BaseService::$message_business_type, $log_id);
             return DataReturn('分销订单添加成功', 0);
         }
@@ -662,7 +651,7 @@ class ProfitService
 
         // 返佣类型
         // 判断是否仅首单返佣
-        if(isset($config['profit_type']) && $config['profit_type'] == 1)
+        if(isset($config['order_profit_type']) && $config['order_profit_type'] == 1)
         {
             $where = [
                 ['user_id', '=', $params['order']['user_id']],
@@ -725,7 +714,7 @@ class ProfitService
         }
 
         // 是否开启内购
-        if(isset($config['self_buy']) && $config['self_buy'] == 1 && (empty($shop_id) || ($is_profit_self_buy_shop == 1 && !empty($shop_id))))
+        if(isset($config['is_self_buy']) && $config['is_self_buy'] == 1 && (empty($shop_id) || ($is_profit_self_buy_shop == 1 && !empty($shop_id))))
         {
             // 下单用户分销等级
             $user_level = BaseService::UserDistributionLevel($params['order']['user_id'], $config);
@@ -1144,8 +1133,10 @@ class ProfitService
         // 配置的返佣数量
         $down_return_number = isset($base['down_return_number']) ? intval($base['down_return_number']) : 0;
 
+        // 是否返积分
+        $is_sdown_return_settlement_convert_integral = isset($base['is_sdown_return_settlement_convert_integral']) && $base['is_sdown_return_settlement_convert_integral'] == 1;
         // 金额最大数量计算
-        $profit_price_number = ($profit_price > 0) ? intval($profit_price*100) : 0;
+        $profit_price_number = ($profit_price > 0) ? ($is_sdown_return_settlement_convert_integral ? intval($profit_price) : intval($profit_price*100)) : 0;
 
         // 配置的数量不能大于系统计算的数量
         if($down_return_number > $profit_price_number)
@@ -1822,13 +1813,17 @@ class ProfitService
         // 不参与计算佣金的金额
         $no_participation_total = self::OrderNoParticipationTotal($order['extension_data']);
 
+        // 返佣处理
+        $profit_res = self::ProfitSettlementType($level, $profit_price, $config);
+
         // 收益明细
         $data = [
             'user_id'           => $user_id,
             'order_id'          => $order_id,
             'order_user_id'     => $order['user_id'],
             'total_price'       => $order['total_price']-$no_participation_total,
-            'profit_price'      => $profit_price,
+            'profit_type'       => $profit_res['profit_type'],
+            'profit_price'      => $profit_res['profit_price'],
             'rate'              => $rate,
             'level'             => intval($level),
             'user_level_id'     => $user_level_id,
@@ -1847,11 +1842,80 @@ class ProfitService
 
             // 消息通知
             $user_name_view = (empty($user) || empty($user['user_name_view'])) ? '' : $user['user_name_view'];
-            $msg = $user_name_view.'用户下单'.$currency['currency_symbol'].$data['total_price'].', 预计收益'.$currency_symbol.$data['profit_price'];
+            $profit_value = ($data['profit_type'] == 1) ? $data['profit_price'].'积分' : $currency_symbol.$data['profit_price'];
+            $msg = $user_name_view.'用户下单'.$currency['currency_symbol'].$data['total_price'].', 预计收益'.$profit_value;
             MessageService::MessageAdd($user_id, '分销收益新增', $msg, BaseService::$message_business_type, $log_id);
             return DataReturn('分销订单添加成功', 0);
         }
         return DataReturn('分销订单添加失败', -1);
+    }
+
+    /**
+     * 结算金额类型处理
+     * @author  Devil
+     * @blog    http://gong.gg/
+     * @version 1.0.0
+     * @date    2025-04-29
+     * @desc    description
+     * @param   [int]          $level        [级别]
+     * @param   [float]        $profit_price [返佣金额]
+     * @param   [array]        $config       [插件配置]
+     */
+    public static function ProfitSettlementType($level, $profit_price, $config = [])
+    {
+        // 当前级别（0向下，1一级，2二级，3三级，4内购，5自提点一级，6自提点二级，7自提点三级，8指定商品返现，9指定商品销售返佣，10指定商品阶梯返佣）
+        $field = '';
+        $profit_type = 0;
+        switch($level)
+        {
+            // 向下
+            case 0 :
+                $field = 'is_sdown_return_settlement_convert_integral';
+                break;
+
+            // 向上
+            case 1 :
+            case 2 :
+            case 3 :
+                $field = 'is_upper_return_settlement_convert_integral';
+                break;
+
+            // 内购
+            case 4 :
+                $field = 'is_self_buy_settlement_convert_integral';
+                break;
+
+            // 自提点
+            case 5 :
+            case 6 :
+            case 7 :
+                $field = 'is_self_extraction_settlement_convert_integral';
+                break;
+
+            // 指定商品返现
+            case 8 :
+                $field = 'is_appoint_profit_goods_settlement_convert_integral';
+                break;
+
+            // 指定商品销售返佣
+            case 9 :
+                $field = 'is_appoint_goods_sale_settlement_convert_integral';
+                break;
+
+            // 指定商品阶梯返佣
+            case 10 :
+                $field = 'is_show_profit_ladder_settlement_convert_integral';
+                break;
+        }
+        if(isset($config[$field]) && $config[$field] == 1)
+        {
+            $profit_price = intval($profit_price);
+            $profit_type = 1;
+        }
+        return [
+            'profit_price'  => $profit_price,
+            'profit_type'   => $profit_type,
+        ];
     }
 
     /**
@@ -2086,6 +2150,13 @@ class ProfitService
                                 return DataReturn('返佣订单类型无需处理['.$v['level'].']', 0);
                         }
 
+                        // 返佣处理
+                        $profit_type = isset($v['profit_type']) && $v['profit_type'] == 1;
+                        if($profit_type)
+                        {
+                            $profit_price = intval($profit_price);
+                        }
+
                         // 重新计算收益
                         $data = [
                             'total_price'   => $order['total_price'],
@@ -2093,8 +2164,9 @@ class ProfitService
                             'spec_extends'  => json_encode($ret_ext['data']),
                             'upd_time'      => time(),
                         ];
-
-                        $msg = '用户订单发生变更, 订单金额'.$currency['currency_symbol'].$order['total_price'].', 增加金额'.$currency['currency_symbol'].$order['increase_price'].', 优惠金额'.$currency['currency_symbol'].$order['preferential_price'].', 退款金额'.$currency['currency_symbol'].$order['refund_price'].', 原收益'.$currency_symbol.$v['profit_price'].' / 变更后收益'.$currency_symbol.$data['profit_price'];
+                        $old_profit_value = $profit_type ? intval($v['profit_price']).'积分' : $currency_symbol.$v['profit_price'];
+                        $profit_value = $profit_type ? $data['profit_price'].'积分' : $currency_symbol.$data['profit_price'];
+                        $msg = '用户订单发生变更, 订单金额'.$currency['currency_symbol'].$order['total_price'].', 增加金额'.$currency['currency_symbol'].$order['increase_price'].', 优惠金额'.$currency['currency_symbol'].$order['preferential_price'].', 退款金额'.$currency['currency_symbol'].$order['refund_price'].', 原收益'.$old_profit_value.' / 变更后收益'.$profit_value;
                         $data['msg'] = $v['msg'].'['.$msg.']';
                         if(Db::name('PluginsDistributionProfitLog')->where(['id'=>$v['id']])->update($data))
                         {

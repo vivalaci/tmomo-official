@@ -107,6 +107,22 @@ class Profit
                     ],
                 ],
                 [
+                    'label'         => '收益类型',
+                    'view_type'     => 'field',
+                    'view_key'      => 'profit_type_name',
+                    'width'         => 130,
+                    'is_sort'       => 1,
+                    'search_config' => [
+                        'form_type'         => 'select',
+                        'form_name'         => 'pdl.profit_type',
+                        'where_type'        => 'in',
+                        'data'              => BaseService::$profit_profit_type_list,
+                        'data_key'          => 'value',
+                        'data_name'         => 'name',
+                        'is_multiple'       => 1,
+                    ],
+                ],
+                [
                     'label'         => '当前级别',
                     'view_type'     => 'field',
                     'view_key'      => 'level_name',
@@ -128,7 +144,6 @@ class Profit
                     'is_round_point'     => 1,
                     'round_point_key'    => 'status',
                     'round_point_style'  => [1=>'secondary', 2=>'success', 3=>'danger'],
-                    'align'              => 'center',
                     'is_sort'            => 1,
                     'search_config'      => [
                         'form_type'         => 'select',

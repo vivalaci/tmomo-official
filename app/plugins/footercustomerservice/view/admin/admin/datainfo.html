@@ -1,0 +1,62 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'footercustomerservice',
+            'title'     => '底部客户服务介绍'.(empty($data['id']) ? MyLang('created_title') : MyLang('edit_title')),
+            'back_url'  => PluginsAdminUrl('footercustomerservice', 'admin', 'dataindex', $params),
+        ])}}
+
+        <div class="footercustomerservice-content">
+            <!-- form start -->
+            <form class="am-form form-validation am-form-full-screen am-form-popup-sticky" action="{{:PluginsAdminUrl('footercustomerservice', 'admin', 'datasave')}}" method="POST" request-type="ajax-url" request-value="{{:PluginsAdminUrl('footercustomerservice', 'admin', 'dataindex')}}" enctype="multipart/form-data">
+                <div class="am-form-group">
+                    <label>名称</label>
+                    <input type="text" name="name" placeholder="名称" minlength="1" maxlength="8" data-validation-message="名称格式 1~8 个字符" class="am-radius" {{if !empty($data['name'])}} value="{{$data.name}}"{{/if}} required />
+                </div>
+                
+                <div class="am-form-group">
+                    <label>描述</label>
+                    <input type="text" placeholder="描述" name="desc" maxlength="30"  data-validation-message="描述格式最多 30 个字符" class="am-radius" {{if !empty($data)}} value="{{$data.desc}}"{{/if}} />
+                </div>
+
+                <div class="am-form-group am-form-file">
+                    <label class="am-block">图片<span class="am-form-group-label-tips">建议100*100px</span></label>
+                    <div class="am-form-file-upload-container">
+                        <ul class="plug-file-upload-view slide-images_url-images-view" data-form-name="images_url" data-max-number="1" data-delete="0" data-dialog-type="images">
+                            <li>
+                                <input type="text" name="images_url" value="{{if !empty($data['images_url'])}}{{$data.images_url}}{{/if}}" data-validation-message="{{:MyLang('form_upload_images_message')}}" required />
+                                <img src="{{if !empty($data['images_url'])}}{{$data.images_url}}{{else /}}{{:StaticAttachmentUrl('default-images.jpg')}}{{/if}}" />
+                            </li>
+                        </ul>
+                        <div class="plug-file-upload-submit" data-view-tag="ul.slide-images_url-images-view">
+                            <i class="iconfont icon-upload-add"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                {{:ModuleInclude('lib/is_enable')}}
+                
+                <div class="am-form-popup-submit">
+                    <input type="hidden" name="id" value="{{if !empty($data['id'])}}{{$data.id}}{{/if}}" />
+                    <a href="{{:PluginsAdminUrl('footercustomerservice', 'admin', 'dataindex', $params)}}" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg">
+                        <i class="am-icon-mail-reply"></i>
+                        <span>{{:MyLang('retreat_title')}}</span>
+                    </a>
+                    <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('save_title')}}'}">
+                        <i class="am-icon-save"></i>
+                        <span>{{:MyLang('save_title')}}</span>
+                    </button>
+                </div>
+            </form>
+            <!-- form end -->
+        </div>
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

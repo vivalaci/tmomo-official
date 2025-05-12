@@ -137,14 +137,12 @@ class BaseService
      * @version 1.0.0
      * @date    2022-04-21
      * @desc    description
-     * @param   [string]          $url        [url地址]
-     * @param   [string]          $controller [控制器]
-     * @param   [string]          $mca        [当前模块控制器方法]
+     * @param   [string]          $url  [url地址]
+     * @param   [string]          $mca  [当前模块控制器方法]
      */
-    public static function UrlDiscernHandle($url, $controller, $mca)
+    public static function UrlDiscernHandle($url, $mca)
     {
-        // 当前访问的url地址不行存在当前控制器名称，避免入口文件路由参数
-        if(!empty($url) && stripos(__MY_VIEW_URL__, $controller) !== false)
+        if(!empty($url))
         {
             // 当前地址不存在参数则不处理，避免入口文件路由参数
             $temp_url = str_replace('://', '', __MY_VIEW_URL__);
@@ -226,9 +224,9 @@ class BaseService
 
                     // 插件
                     case 'indexpluginsindex' :
-                        $pluginsname = MyInput('pluginsname');
-                        $pluginscontrol = MyInput('pluginscontrol', 'index');
-                        $pluginsaction = MyInput('pluginsaction', 'index');
+                        $pluginsname = PluginsRequestName();
+                        $pluginscontrol = PluginsRequestController();
+                        $pluginsaction = PluginsRequestAction();
                         $nca = $pluginsname.$pluginscontrol.$pluginsaction;
                         switch($nca)
                         {

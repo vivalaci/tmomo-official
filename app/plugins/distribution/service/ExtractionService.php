@@ -130,16 +130,13 @@ class ExtractionService
             [
                 'checked_type'      => 'length',
                 'key_name'          => 'name',
-                'checked_data'      => '30',
-                'is_checked'        => 1,
-                'error_msg'         => '联系人格式最多30个字符之间',
+                'checked_data'      => '2,16',
+                'error_msg'         => '联系人格式 2~16 个字符之间',
             ],
             [
-                'checked_type'      => 'length',
+                'checked_type'      => 'empty',
                 'key_name'          => 'tel',
-                'checked_data'      => '30',
-                'is_checked'        => 1,
-                'error_msg'         => '联系电话格式最多 30 个字符话',
+                'error_msg'         => '联系电话不能为空',
             ],
             [
                 'checked_type'      => 'empty',
@@ -168,15 +165,17 @@ class ExtractionService
                 'error_msg'         => MyLang('user_info_incorrect_tips'),
             ],
         ];
-        
-        
         $ret = ParamsChecked($params, $p);
         if($ret !== true)
         {
             return DataReturn($ret, -1);
         }
 
-      
+        // 联系电话格式校验
+        if(!CheckMobile($params['tel']) && !CheckTel($params['tel']))
+        {
+            return DataReturn('联系电话格式有误', -1);
+        }
 
         // 获取地址信息
         $temp = self::ExtractionData($params['user']['id']);

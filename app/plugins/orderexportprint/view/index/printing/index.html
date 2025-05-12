@@ -1,0 +1,100 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content am-padding-sm">
+        {{if !empty($data)}}
+            <!-- top -->
+            <div class="am-cf">
+                <!-- base -->
+                <div class="am-fl am-margin-top-xs">
+                    <div class="am-fl am-margin-right-lg">
+                        <span>订单模式 : </span>
+                        <strong>{{$data.order_model_name}}</strong>
+                    </div>
+                    <div class="am-fl am-margin-right-lg">
+                        <span>订单号 : </span>
+                        <strong>{{$data.order_no}}</strong>
+                    </div>
+                    <div class="am-fl">
+                        <span>共</span>
+                        <strong class="am-text-primary">{{$data.buy_number_count}}</strong>
+                        <span>件</span>
+                        <span class="am-margin-left-xs">合计 : </span>
+                        <strong class="am-text-primary">{{$data.currency_data.currency_symbol}}{{$data.total_price}}</strong>
+                    </div>
+                </div>
+
+                <!-- not print -->
+                <div class="not-print-container am-fr">
+                    <div class="am-g am-text-right">
+                        <button type="button" class="am-btn am-btn-secondary am-radius am-btn-xs print-submit"><i class="am-icon-print am-show-sm-only"></i> 打印</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- list start -->
+            <table class="am-table am-table-bordered am-table-centered am-table-compact am-margin-vertical-xs am-sm-only-text-justify data-list">
+                <thead>
+                    <tr>
+                        <th>商品名称</th>
+                        <th>{{:MyLang('spec_title')}}</th>
+                        <th>单价</th>
+                        <th>数量</th>
+                        <th>型号</th>
+                        <th>重量</th>
+                        <th>编码</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{foreach $data.items as $k=>$v}}
+                        {{if $v['returned_quantity'] lt $v['buy_number']}}
+                            <tr>
+                                <td>{{$v.title}}</td>
+                                <td>{{if !empty($v['spec_text'])}}{{$v.spec_text}}{{/if}}</td>
+                                <td>{{$data.currency_data.currency_symbol}}{{$v.price}}</td>
+                                <td>{{$v.buy_number-$v.returned_quantity}}</td>
+                                <td>{{if !empty($v['model'])}}{{$v.model}}{{/if}}</td>
+                                <td>{{if $v.spec_weight gt 0}}{{$v.spec_weight}}{{/if}}</td>
+                                <td>{{if !empty($v['spec_coding'])}}{{$v.spec_coding}}{{/if}}</td>
+                            </tr>
+                        {{/if}}
+                    {{/foreach}}
+                </tbody>
+            </table>
+
+            <!-- bottom -->
+            <div class="am-cf">
+                {{if !empty($data['address_data'])}}
+                    <div class="am-fl">
+                        <span>地址 : </span>
+                        <strong>{{$data.address_data.province_name}}</strong>
+                        <strong>{{$data.address_data.city_name}}</strong>
+                        <strong>{{$data.address_data.county_name}}</strong>
+                        <strong>{{$data.address_data.address}}</strong>
+                        <strong class="am-margin-left-sm">{{$data.address_data.name}}</strong>
+                        <span>/</span>
+                        <strong>{{$data.address_data.tel}}</strong>
+                    </div>
+                {{/if}}
+                <div class="am-fr">
+                    <div class="am-fl am-margin-right-lg">
+                        <span>支付方式 : </span>
+                        <strong>{{$data.payment_name}}</strong>
+                    </div>
+                    <div class="am-fl">
+                        <span>支付金额 : </span>
+                        <strong class="am-text-success">{{$data.currency_data.currency_symbol}}{{$data.pay_price}}</strong>
+                    </div>
+                </div>
+            </div>
+        {{else /}}
+            <div class="table-no"><i class="am-icon-warning"></i> {{if empty($msg)}}没有相关数据{{else /}}{{$msg}}{{/if}}</div>
+        {{/if}}
+        <!-- list end -->
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

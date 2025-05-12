@@ -76,7 +76,6 @@ class Integral
                     'is_round_point'     => 1,
                     'round_point_key'    => 'status',
                     'round_point_style'  => [1=>'success', 2=>'danger'],
-                    'align'              => 'center',
                     'is_sort'            => 1,
                     'search_config'      => [
                         'form_type'         => 'select',

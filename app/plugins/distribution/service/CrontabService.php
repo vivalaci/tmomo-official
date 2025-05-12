@@ -13,6 +13,7 @@ namespace app\plugins\distribution\service;
 use think\facade\Db;
 use app\service\UserService;
 use app\service\MessageService;
+use app\service\IntegralService;
 use app\plugins\wallet\service\WalletService;
 use app\plugins\distribution\service\BaseService;
 
@@ -49,7 +50,7 @@ class CrontabService
             ['o.status', '=', 4],
             ['pp.status', '=', 1],
         ];
-        $data = Db::name('PluginsDistributionProfitLog')->alias('pp')->join('order o', 'o.id=pp.order_id')->where($where)->field('o.*,pp.id,pp.user_id,pp.order_user_id,pp.profit_price,pp.total_price')->limit(50)->select()->toArray();
+        $data = Db::name('PluginsDistributionProfitLog')->alias('pp')->join('order o', 'o.id=pp.order_id')->where($where)->field('o.*,pp.id,pp.user_id,pp.order_user_id,pp.profit_type,profit_price,pp.total_price')->limit(50)->select()->toArray();
 
         // 状态
         $sucs = 0;
@@ -61,8 +62,8 @@ class CrontabService
 
             // 更新状态
             $upd_data = [
-                'status'        => 2,
-                'upd_time'      => time(),
+                'status'    => 2,
+                'upd_time'  => time(),
             ];
             foreach($data as $v)
             {
@@ -74,12 +75,23 @@ class CrontabService
                     $user = UserService::GetUserViewInfo($v['order_user_id']);
                     $user_name_view = (empty($user) || empty($user['user_name_view'])) ? '' : $user['user_name_view'];
 
-                    // 用户佣金发放
+                    // 发放值
+                    $profit_price = ($v['profit_type'] == 1) ? intval($v['profit_price']) : $v['profit_price'];
+
                     // 消息通知
-                    $msg = $user_name_view.'用户订单佣金结算'.$v['total_price'].', 收益'.$v['profit_price'].', 已发放至钱包';
+                    $profit_type_name = ($v['profit_type'] == 1) ? '积分' : '钱包';
+                    $msg = $user_name_view.'用户订单佣金结算'.$v['total_price'].', 收益'.$profit_price.', 已发放至'.$profit_type_name;
                     MessageService::MessageAdd($v['user_id'], '分销收益新增', $msg, BaseService::$message_business_type, $v['id']);
-                    // 钱包变更
-                    WalletService::UserWalletMoneyUpdate($v['user_id'], $v['profit_price'], 1, 'normal_money', 0, '分销收益新增');
+
+                    // 用户佣金发放
+                    if($v['profit_type'] == 1)
+                    {
+                        // 积分变更
+                        IntegralService::UserIntegralUpdate($v['user_id'], null, $profit_price, '分销收益新增', 1);
+                    } else {
+                        // 钱包变更
+                        WalletService::UserWalletMoneyUpdate($v['user_id'], $profit_price, 1, 'normal_money', 0, '分销收益新增');
+                    }
 
                     // 多商户订单则扣除店主钱包金额
                     if(!empty($v['shop_id']) && $is_profit_shop)
@@ -87,11 +99,18 @@ class CrontabService
                         $shop = BaseService::ShopInfo($v['shop_id']);
                         if(!empty($shop))
                         {
-                        // 消息通知
-                            $msg = $user_name_view.'用户订单佣金结算'.$v['total_price'].', 发放'.$v['profit_price'].', 已从钱包扣除';
+                            // 消息通知
+                            $msg = $user_name_view.'用户订单佣金结算'.$v['total_price'].', 发放'.$profit_price.', 已从'.$profit_type_name.'扣除';
                             MessageService::MessageAdd($shop['user_id'], '分销佣金扣除', $msg, BaseService::$message_business_type, $v['id']);
-                            // 钱包变更
-                            WalletService::UserWalletMoneyUpdate($shop['user_id'], $v['profit_price'], 0, 'normal_money', 0, '分销佣金扣除');
+
+                            if($v['profit_type'] == 1)
+                            {
+                                // 积分变更
+                                IntegralService::UserIntegralUpdate($shop['user_id'], null, intval($profit_price), '分销佣金扣除', 0);
+                            } else {
+                                // 钱包变更
+                                WalletService::UserWalletMoneyUpdate($shop['user_id'], $profit_price, 0, 'normal_money', 0, '分销佣金扣除');
+                            }
                         }
                     }
 

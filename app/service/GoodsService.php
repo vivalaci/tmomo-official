@@ -424,7 +424,7 @@ class GoodsService
                 // 数据主键id
                 $data_id = isset($v[$data_key_field]) ? $v[$data_key_field] : 0;
 
-                // 当前库存单位
+                // 当前计量单位
                 $inventory_unit = empty($v['inventory_unit']) ? '' : ' / '.$v['inventory_unit'];
                 // 原价基础字段数据
                 // 原价标题名称
@@ -565,6 +565,7 @@ class GoodsService
                 if(isset($v['brand_id']))
                 {
                     $v['brand_name'] = (!empty($brand_list) && is_array($brand_list) && array_key_exists($v['brand_id'], $brand_list)) ? $brand_list[$v['brand_id']] : '';
+                    $v['brand_goods_url'] = (APPLICATION == 'app') ? '/pages/goods-search/goods-search?brand='.$v['brand_id'] : MyUrl('index/search/index', ['brand'=>$v['brand_id']]);
                 }
 
                 // 时间
@@ -1301,8 +1302,8 @@ class GoodsService
         }
 
         // 编辑器内容
-        $content_web = empty($params['content_web']) ? '' : ResourcesService::ContentStaticReplace(htmlspecialchars_decode($params['content_web']), 'add');
-        $fictitious_goods_value = empty($params['fictitious_goods_value']) ? '' : ResourcesService::ContentStaticReplace(htmlspecialchars_decode($params['fictitious_goods_value']), 'add');
+        $content_web = empty($params['content_web']) ? '' : str_replace("\n", '', ResourcesService::ContentStaticReplace(htmlspecialchars_decode($params['content_web']), 'add'));
+        $fictitious_goods_value = empty($params['fictitious_goods_value']) ? '' : str_replace("\n", '', ResourcesService::ContentStaticReplace(htmlspecialchars_decode($params['fictitious_goods_value']), 'add'));
 
         // 封面图片、默认相册第一张
         $images = empty($attachment['data']['images']) ? (isset($photo['data'][0]) ? $photo['data'][0] : '') : $attachment['data']['images'];
@@ -1550,9 +1551,10 @@ class GoodsService
      * @version 1.0.0
      * @date    2018-07-09
      * @desc    description
-     * @param   [array]          $params [输入参数]
+     * @param   [array]          $params     [输入参数]
+     * @param   [array]          $base_count [教程参数个数，默认9]
      */
-    public static function GetFormGoodsSpecificationsParams($params = [])
+    public static function GetFormGoodsSpecificationsParams($params = [], $base_count = 9)
     {
         $data = [];
         $title = [];
@@ -1560,7 +1562,6 @@ class GoodsService
 
         // 基础字段数据字段长度
         // 销售价、原价、起购数、限购数、重量、体积、编码、条形码、扩展
-        $base_count = 9;
 
         // 规格值
         foreach($params as $k=>$v)
@@ -3296,52 +3297,20 @@ class GoodsService
             if(!empty($category_ids))
             {
                 $category_ids = GoodsCategoryService::GoodsCategoryParentIds(GoodsCategoryService::GoodsCategoryItemsIds($category_ids));
-                
-                // 首先尝试从相同分类获取商品
-                $goods_ids = Db::name('Goods')->alias('g')
-                    ->join('goods_category_join gci', 'g.id=gci.goods_id')
-                    ->where([
+                $params = [
+                    'where'     => [
                         ['g.is_shelves', '=', 1],
                         ['g.is_delete_time', '=', 0],
                         ['gci.category_id', 'in', $category_ids],
-                        ['g.id', '<>', $goods_id],
-                    ])
-                    ->order(Db::raw('RAND()'))
-                    ->limit(16)
-                    ->column('g.id');
-                
-                // 如果相同分类的商品不足16个，从其他分类补充
-                if(count($goods_ids) < 16)
-                {
-                    $needed_count = 16 - count($goods_ids);
-                    $exclude_ids = array_merge($goods_ids, [$goods_id]);
-                    
-                    $additional_goods_ids = Db::name('Goods')->alias('g')
-                        ->join('goods_category_join gci', 'g.id=gci.goods_id')
-                        ->where([
-                            ['g.is_shelves', '=', 1],
-                            ['g.is_delete_time', '=', 0],
-                            ['g.id', 'not in', $exclude_ids],
-                        ])
-                        ->order(Db::raw('RAND()'))
-                        ->limit($needed_count)
-                        ->column('g.id');
-                    
-                    $goods_ids = array_merge($goods_ids, $additional_goods_ids);
-                }
-                
-                if(!empty($goods_ids))
-                {
-                    $params = [
-                        'where'     => [
-                            ['id', 'in', $goods_ids],
-                        ],
-                        'is_spec'   => 1,
-                        'is_cart'   => 1,
-                    ];
-                    $ret = self::GoodsList($params);
-                    $goods_list = empty($ret['data']) ? [] : $ret['data'];
-                }
+                        ['g.id', 'not in', $goods_id],
+                    ],
+                    'order_by'  => 'g.sales_count desc',
+                    'n'         => 16,
+                    'is_spec'   => 1,
+                    'is_cart'   => 1,
+                ];
+                $ret = self::CategoryGoodsList($params);
+                $goods_list = empty($ret['data']) ? [] : $ret['data'];
             }
         }
         return $goods_list;
@@ -3358,58 +3327,22 @@ class GoodsService
      */
     public static function GoodsDetailSeeingYouData($goods_id)
     {
-        $cache_key = 'seeing_you_goods_'.$goods_id;
-        $goods_list = cache($cache_key);
-        if(!empty($goods_list)) {
-            return $goods_list;
-        }
-        
         $goods_list = [];
         if(!empty($goods_id) && MyC('common_is_goods_detail_show_seeing_you', 0) == 1)
         {
-            // 获取访问量最高的3个商品
-            $top_goods_ids = Db::name('Goods')
-                ->where([
+            $params = [
+                'where'     => [
                     ['is_shelves', '=', 1],
                     ['is_delete_time', '=', 0],
-                    ['id', '<>', $goods_id],
-                ])
-                ->order('access_count desc')
-                ->limit(3)
-                ->column('id');
-
-            // 获取7个随机商品（排除已选中的商品和当前商品）
-            $exclude_ids = array_merge($top_goods_ids, [$goods_id]);
-            $random_goods_ids = Db::name('Goods')
-                ->where([
-                    ['is_shelves', '=', 1],
-                    ['is_delete_time', '=', 0],
-                    ['id', 'not in', $exclude_ids],
-                ])
-                ->order(Db::raw('RAND()'))
-                ->limit(7)
-                ->column('id');
-
-            // 合并所有商品ID并随机打乱顺序
-            $goods_ids = array_merge($top_goods_ids, $random_goods_ids);
-            shuffle($goods_ids);
-
-            if(!empty($goods_ids))
+                    ['id', 'not in', $goods_id],
+                ],
+                'order_by'  => 'access_count desc',
+                'n'         => 10,
+            ];
+            $ret = self::GoodsList($params);
+            if(!empty($ret['data']))
             {
-                $params = [
-                    'where'     => [
-                        ['id', 'in', $goods_ids],
-                    ],
-                    'is_spec'   => 1,
-                    'is_cart'   => 1,
-                ];
-                $ret = self::GoodsList($params);
-                $goods_list = empty($ret['data']) ? [] : $ret['data'];
-                
-                // 只有在成功获取数据时才设置缓存
-                if(!empty($goods_list)) {
-                    cache($cache_key, $goods_list, 3600);
-                }
+                $goods_list = $ret['data'];
             }
         }
         return $goods_list;

@@ -69,6 +69,7 @@ class ConfigService
         'home_site_logo_wap',
         'home_site_logo_app',
         'home_site_logo_square',
+        'home_site_title_icon',
         'common_customer_store_qrcode',
         'home_site_user_register_bg_images',
         'home_site_user_login_ad1_images',
@@ -310,6 +311,13 @@ class ConfigService
                 return $ret;
             }
 
+            // 浏览器图标
+            $ret = self::SiteTitleIconHandle($params);
+            if($ret['code'] != 0)
+            {
+                return $ret;
+            }
+
             // 站点默认首页配置
             $ret = self::SiteDefaultIndexHandle($params);
             if($ret['code'] != 0)
@@ -525,6 +533,36 @@ class ConfigService
     }
 
     /**
+     * 浏览器图标处理
+     * @author   Devil
+     * @blog     http://gong.gg/
+     * @version  0.0.1
+     * @datetime 2017-01-02T23:08:19+0800
+     * @param   [array]          $params [输入参数]
+     */
+    public static function SiteTitleIconHandle($params = [])
+    {
+        if(!empty($params['home_site_title_icon']))
+        {
+            $file = RequestGet($params['home_site_title_icon']);
+            if(!empty($file))
+            {
+                $ico_file = ROOT.'public'.DS.'favicon.ico';
+                if(!is_writable($ico_file))
+                {
+                    return DataReturn(MyLang('common_service.config.site_title_icon_power_tips').'['.$ico_file.']', -1);
+                }
+                if(file_put_contents($ico_file, $file) === false)
+                {
+                    return DataReturn(MyLang('common_service.config.site_title_icon_fail_tips').'['.$ico_file.']', -1);
+                }
+                return DataReturn(MyLang('handle_success'), 0);
+            }
+        }
+        return DataReturn(MyLang('handle_noneed'), 0);
+    }
+
+    /**
      * 路由规则处理
      * @author   Devil
      * @blog     http://gong.gg/
@@ -600,25 +638,6 @@ class ConfigService
      */
     public static function ConfigContentRow($key)
     {
-        // 不参与缓存的配置直接查询数据库
-        if(in_array($key, self::$not_cache_field_list))
-        {
-            $data = Db::name('Config')->where(['only_tag'=>$key])->field('name,value,type,upd_time')->find();
-            if(!empty($data))
-            {
-                // 富文本处理
-                if(in_array($key, self::$rich_text_list))
-                {
-                    $data['value'] = ResourcesService::ContentStaticReplace($data['value'], 'get');
-                }
-                $data['upd_time_time'] = empty($data['upd_time']) ? null : date('Y-m-d H:i:s', $data['upd_time']);
-            } else {
-                $data = [];
-            }
-            return DataReturn(MyLang('operate_success'), 0, $data);
-        }
-
-        // 其他配置走缓存
         $cache_key = $key.'_row_data';
         $data = MyCache($cache_key);
         if($data === null)

@@ -231,28 +231,9 @@
                         <li>
                             <div class="am-form-group">
                                 <label>向上返佣<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="开启后，依次向上读取1~3级邀请人进行返佣"></a></label>
-                                <div class="am-radio-group">
-                                    {{foreach $distribution_is_enable_list as $v}}
-                                        <label class="am-radio-inline am-margin-right-sm">
-                                            <input type="radio" name="is_upper_return" value="{{$v.value}}" {{if isset($data['is_upper_return']) and $data['is_upper_return'] eq $v['value']}}checked="checked"{{else /}}{{if !isset($data['is_upper_return']) and isset($v['checked']) and $v['checked'] eq true}}checked="checked"{{/if}}{{/if}} data-am-ucheck /> {{$v.name}}
-                                        </label>
-                                    {{/foreach}}
-                                </div>
+                                <input name="is_upper_return" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_upper_return']) and $data['is_upper_return'] eq 1}}checked="true"{{/if}} />
                             </div>
                         </li>
-                        <li>
-                            <div class="am-form-group">
-                                <label>分销商内购<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="开启则分销商自己购买商品，获得佣金，需要在分销等级中配置好好自购返佣"></a></label>
-                                <div class="am-radio-group">
-                                    {{foreach $distribution_is_enable_list as $v}}
-                                        <label class="am-radio-inline am-margin-right-sm">
-                                            <input type="radio" name="self_buy" value="{{$v.value}}" {{if isset($data['self_buy']) and $data['self_buy'] eq $v['value']}}checked="checked"{{else /}}{{if !isset($data['self_buy']) and isset($v['checked']) and $v['checked'] eq true}}checked="checked"{{/if}}{{/if}} data-am-ucheck /> {{$v.name}}
-                                        </label>
-                                    {{/foreach}}
-                                </div>
-                            </div>
-                        </li>
-
                         <li>
                             <div class="am-form-group">
                                 <label>分销层级<span class="am-form-group-label-tips">默认三级</span></label>
@@ -262,6 +243,39 @@
                                             <input type="radio" name="level" value="{{$v.value}}" {{if isset($data['level']) and $data['level'] eq $v['value']}}checked="checked"{{else /}}{{if !isset($data['level']) and isset($v['checked']) and $v['checked'] eq true}}checked="checked"{{/if}}{{/if}} data-am-ucheck /> {{$v.name}}
                                         </label>
                                     {{/foreach}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="am-u-sm-6 am-padding-horizontal-0">
+                                <div class="am-form-group">
+                                    <label class="am-block">向上结算佣金转为积分<span class="am-form-group-label-tips">自动舍去小数点值</span></label>
+                                    <input name="is_upper_return_settlement_convert_integral" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_upper_return_settlement_convert_integral']) and $data['is_upper_return_settlement_convert_integral'] eq 1}}checked="true"{{/if}} />
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 内购返佣 -->
+            <div class="am-panel am-panel-default am-radius">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">内购返佣</h3>
+                </div>
+                <div class="am-panel-bd">
+                    <ul class="am-avg-sm-1 am-avg-md-2">
+                        <li>
+                            <div class="am-form-group">
+                                <label>内购返佣<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="开启则分销商自己购买商品，获得佣金，需要在分销等级中配置好好自购返佣"></a></label>
+                                <input name="is_self_buy" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_self_buy']) and $data['is_self_buy'] eq 1}}checked="true"{{/if}} />
+                            </div>
+                        </li>
+                        <li>
+                            <div class="am-u-sm-6 am-padding-horizontal-0">
+                                <div class="am-form-group">
+                                    <label class="am-block">内购返佣结算佣金转为积分<span class="am-form-group-label-tips">自动舍去小数点值</span></label>
+                                    <input name="is_self_buy_settlement_convert_integral" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_self_buy_settlement_convert_integral']) and $data['is_self_buy_settlement_convert_integral'] eq 1}}checked="true"{{/if}} />
                                 </div>
                             </div>
                         </li>
@@ -279,20 +293,22 @@
                         <li>
                             <div class="am-form-group">
                                 <label>向下返佣<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="开启后自己消费后，仅自己邀请的下级将得到相应的佣金"></a></label>
-                                <div class="am-radio-group">
-                                    {{foreach $distribution_is_enable_list as $v}}
-                                        <label class="am-radio-inline am-margin-right-sm">
-                                            <input type="radio" name="is_down_return" value="{{$v.value}}" {{if isset($data['is_down_return']) and $data['is_down_return'] eq $v['value']}}checked="checked"{{else /}}{{if !isset($data['is_down_return']) and isset($v['checked']) and $v['checked'] eq true}}checked="checked"{{/if}}{{/if}} data-am-ucheck /> {{$v.name}}
-                                        </label>
-                                    {{/foreach}}
-                                </div>
+                                <input name="is_down_return" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_down_return']) and $data['is_down_return'] eq 1}}checked="true"{{/if}} />
                             </div>
                         </li>
                         <li>
                             <div class="am-form-group">
-                                <label>最多分摊佣金人数<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="1. 以佣金的最小单位[ 分 ]自动计算最大人数<br />2. 如配置的数量大于或者未配置，则使用系统自动计算的人数，避免出现所有用户都无法正常返佣。<br />3. 实际返佣金额计算规则[ 佣金÷实际用户数量 ]<br />4. 读取用户规则，以最新注册的用户用户为准"></a></label>
+                                <label>最多分摊佣金人数<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="1. 以佣金的最小单位[ 分 ]自动计算最大人数<br />2. 如配置的数量大于或者未配置，则使用系统自动计算的人数，避免出现所有用户都无法正常返佣。<br />3. 实际返佣金额计算规则[ 佣金÷实际用户数量 ]<br />4. 读取用户规则，以最新注册的用户用户为准<br />PC: 转积分模式，最低1元=>1积分为基准数"></a></label>
                                 <div class="am-radio-group">
                                     <input type="number" min="0" name="down_return_number" placeholder="最多分摊佣金人数" data-validation-message="请输入最多分摊佣金人数" class="am-radius" value="{{if !empty($data['down_return_number'])}}{{$data.down_return_number}}{{/if}}" />
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="am-u-sm-6 am-padding-horizontal-0">
+                                <div class="am-form-group">
+                                    <label class="am-block">向下返佣结算佣金转为积分<span class="am-form-group-label-tips">自动舍去小数点值</span></label>
+                                    <input name="is_sdown_return_settlement_convert_integral" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_sdown_return_settlement_convert_integral']) and $data['is_sdown_return_settlement_convert_integral'] eq 1}}checked="true"{{/if}} />
                                 </div>
                             </div>
                         </li>
@@ -310,13 +326,7 @@
                         <li>
                             <div class="am-form-group">
                                 <label>向上返积分<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="开启后，仅向上级邀请人进行返积分"></a></label>
-                                <div class="am-radio-group">
-                                    {{foreach $distribution_is_enable_list as $v}}
-                                        <label class="am-radio-inline am-margin-right-sm">
-                                            <input type="radio" name="is_upper_return_integral" value="{{$v.value}}" {{if isset($data['is_upper_return_integral']) and $data['is_upper_return_integral'] eq $v['value']}}checked="checked"{{else /}}{{if !isset($data['is_upper_return_integral']) and isset($v['checked']) and $v['checked'] eq true}}checked="checked"{{/if}}{{/if}} data-am-ucheck /> {{$v.name}}
-                                        </label>
-                                    {{/foreach}}
-                                </div>
+                                <input name="is_upper_return_integral" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_upper_return_integral']) and $data['is_upper_return_integral'] eq 1}}checked="true"{{/if}} />
                             </div>
                         </li>
                         <li>
@@ -341,13 +351,7 @@
                         <li>
                             <div class="am-form-group">
                                 <label>向下返积分<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="开启后自己消费后，仅自己邀请的下级将得到相应的积分"></a></label>
-                                <div class="am-radio-group">
-                                    {{foreach $distribution_is_enable_list as $v}}
-                                        <label class="am-radio-inline am-margin-right-sm">
-                                            <input type="radio" name="is_down_return_integral" value="{{$v.value}}" {{if isset($data['is_down_return_integral']) and $data['is_down_return_integral'] eq $v['value']}}checked="checked"{{else /}}{{if !isset($data['is_down_return_integral']) and isset($v['checked']) and $v['checked'] eq true}}checked="checked"{{/if}}{{/if}} data-am-ucheck /> {{$v.name}}
-                                        </label>
-                                    {{/foreach}}
-                                </div>
+                                <input name="is_down_return_integral" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_down_return_integral']) and $data['is_down_return_integral'] eq 1}}checked="true"{{/if}} />
                             </div>
                         </li>
                         <li>
@@ -378,13 +382,7 @@
                 <div class="am-panel-bd">
                     <div class="am-form-group">
                         <label>开启仅参加分佣商品<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="开启后，配置的商品仅参与分佣，其他商品则不参与分佣"></a></label>
-                        <div class="am-radio-group">
-                            {{foreach $distribution_is_enable_list as $v}}
-                                <label class="am-radio-inline am-margin-right-sm">
-                                    <input type="radio" name="is_only_join_profit_goods" value="{{$v.value}}" {{if isset($data['is_only_join_profit_goods']) and $data['is_only_join_profit_goods'] eq $v['value']}}checked="checked"{{else /}}{{if !isset($data['is_only_join_profit_goods']) and isset($v['checked']) and $v['checked'] eq true}}checked="checked"{{/if}}{{/if}} data-am-ucheck /> {{$v.name}}
-                                </label>
-                            {{/foreach}}
-                        </div>
+                        <input name="is_only_join_profit_goods" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_only_join_profit_goods']) and $data['is_only_join_profit_goods'] eq 1}}checked="true"{{/if}} />
                     </div>
                     <div class="am-form-group">
                         <label>仅参加分佣的商品</label>
@@ -415,13 +413,7 @@
                 <div class="am-panel-bd">
                     <div class="am-form-group">
                         <label>开启不参加分佣商品<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="开启后，配置的商品不参与分佣"></a></label>
-                        <div class="am-radio-group">
-                            {{foreach $distribution_is_enable_list as $v}}
-                                <label class="am-radio-inline am-margin-right-sm">
-                                    <input type="radio" name="is_not_join_profit_goods" value="{{$v.value}}" {{if isset($data['is_not_join_profit_goods']) and $data['is_not_join_profit_goods'] eq $v['value']}}checked="checked"{{else /}}{{if !isset($data['is_not_join_profit_goods']) and isset($v['checked']) and $v['checked'] eq true}}checked="checked"{{/if}}{{/if}} data-am-ucheck /> {{$v.name}}
-                                </label>
-                            {{/foreach}}
-                        </div>
+                        <input name="is_not_join_profit_goods" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_not_join_profit_goods']) and $data['is_not_join_profit_goods'] eq 1}}checked="true"{{/if}} />
                     </div>
                     <div class="am-form-group">
                         <label>不参加分佣的商品</label>
@@ -452,13 +444,7 @@
                 <div class="am-panel-bd">
                     <div class="am-form-group">
                         <label>开启购买指定商品获得分销等级<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="开启后，购买对应商品后获得分销等级"></a></label>
-                        <div class="am-radio-group">
-                            {{foreach $distribution_is_enable_list as $v}}
-                                <label class="am-radio-inline am-margin-right-sm">
-                                    <input type="radio" name="is_appoint_appoint_level" value="{{$v.value}}" {{if isset($data['is_appoint_appoint_level']) and $data['is_appoint_appoint_level'] eq $v['value']}}checked="checked"{{else /}}{{if !isset($data['is_appoint_appoint_level']) and isset($v['checked']) and $v['checked'] eq true}}checked="checked"{{/if}}{{/if}} data-am-ucheck /> {{$v.name}}
-                                </label>
-                            {{/foreach}}
-                        </div>
+                        <input name="is_appoint_appoint_level" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_appoint_appoint_level']) and $data['is_appoint_appoint_level'] eq 1}}checked="true"{{/if}} />
                     </div>
                     <div class="am-cf">
                         <div class="am-u-sm-12 am-u-md-6 am-padding-horizontal-0">
@@ -508,26 +494,24 @@
                 </div>
             </div>
 
-            <!-- 指定商品及返佣折扣 -->
+            <!-- 指定商品返佣及折扣 -->
             <div class="am-panel am-panel-default am-radius">
                 <div class="am-panel-hd">
-                    <h3 class="am-panel-title">指定商品及返佣折扣</h3>
+                    <h3 class="am-panel-title">指定商品返佣及折扣</h3>
                 </div>
                 <div class="am-panel-bd">
                     <div class="am-form-group">
-                        <label>指定商品及返佣折扣<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="开启后，支持以下配置的商品按照规则进行返佣和折扣"></a></label>
-                        <div class="am-radio-group">
-                            {{foreach $distribution_is_enable_list as $v}}
-                                <label class="am-radio-inline am-margin-right-sm">
-                                    <input type="radio" name="is_appoint_goods" value="{{$v.value}}" {{if isset($data['is_appoint_goods']) and $data['is_appoint_goods'] eq $v['value']}}checked="checked"{{else /}}{{if !isset($data['is_appoint_goods']) and isset($v['checked']) and $v['checked'] eq true}}checked="checked"{{/if}}{{/if}} data-am-ucheck /> {{$v.name}}
-                                </label>
-                            {{/foreach}}
-                        </div>
+                        <label>指定商品返佣及折扣<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="开启后，支持以下配置的商品按照规则进行返佣和折扣"></a></label>
+                        <input name="is_appoint_goods" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_appoint_goods']) and $data['is_appoint_goods'] eq 1}}checked="true"{{/if}} />
                     </div>
                     <div class="am-cf">
                         <div class="am-u-sm-12 am-u-md-6 am-padding-horizontal-0">
                             <div class="am-form-group">
                                 <label>推荐多少个用户购买指定商品后返现商品的金额</label>
+                                <div class="am-radio-group">
+                                    <input name="is_appoint_profit_goods_settlement_convert_integral" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_appoint_profit_goods_settlement_convert_integral']) and $data['is_appoint_profit_goods_settlement_convert_integral'] eq 1}}checked="true"{{/if}} />
+                                    <span class="am-form-group-label-tips">指定商品后返现金额转为积分</span>
+                                </div>
                                 <input type="number" name="appoint_goods_profit_number" min="0" placeholder="指定用户数量" data-validation-message="请填写指定用户数量" class="am-radius am-margin-top-xs" value="{{if !empty($data['appoint_goods_profit_number'])}}{{$data.appoint_goods_profit_number}}{{/if}}" />
                                 <ul class="am-list am-list-border am-margin-top-sm appoint-goods-container appoint-profit-goods-container">
                                     {{if !empty($data['appoint_profit_goods_list']) and is_array($data['appoint_profit_goods_list'])}}
@@ -567,6 +551,10 @@
                                 <div class="am-radio-group">
                                     <input name="appoint_goods_sale_is_user" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['appoint_goods_sale_is_user']) and $data['appoint_goods_sale_is_user'] eq 1}}checked="true"{{/if}} />
                                     <span class="am-form-group-label-tips">按照用户纬度计算</span>
+                                </div>
+                                <div class="am-radio-group">
+                                    <input name="is_appoint_goods_sale_settlement_convert_integral" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_appoint_goods_sale_settlement_convert_integral']) and $data['is_appoint_goods_sale_settlement_convert_integral'] eq 1}}checked="true"{{/if}} />
+                                    <span class="am-form-group-label-tips">返现商品的金额转为积分</span>
                                 </div>
                                 <div class="am-margin-top-xs">
                                     <input type="number" name="appoint_goods_sale_number" min="0" placeholder="商品购买最低数量" data-validation-message="请填写商品购买最低数量" class="am-radius" value="{{if !empty($data['appoint_goods_sale_number'])}}{{$data.appoint_goods_sale_number}}{{/if}}" />
@@ -648,7 +636,7 @@
                                     <div class="am-alert am-alert-warning am-margin-0">
                                         <p>1. 必须配置折扣率、商品</p>
                                         <p>2. 仅对购买人非首次购买享受折扣优惠购买指定的商品（必须存在一个已完成的订单包含商品）</p>
-                                        <p>3. 折扣优惠计算规则[ 当前配置返佣折扣 ]</p>
+                                        <p>3. 折扣优惠计算规则[ 当前配置的折扣优惠 ]</p>
                                     </div>
                                 </div>
                             </div>
@@ -662,6 +650,10 @@
                                 <div class="am-radio-group">
                                     <input name="is_show_profit_ladder_tips" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_show_profit_ladder_tips']) and $data['is_show_profit_ladder_tips'] eq 1}}checked="true"{{/if}} />
                                     <span class="am-form-group-label-tips">是否在用户分销中心展示推广提示信息</span>
+                                </div>
+                                <div class="am-radio-group">
+                                    <input name="is_show_profit_ladder_settlement_convert_integral" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_show_profit_ladder_settlement_convert_integral']) and $data['is_show_profit_ladder_settlement_convert_integral'] eq 1}}checked="true"{{/if}} />
+                                    <span class="am-form-group-label-tips">指定商品阶梯返佣转为积分</span>
                                 </div>
                                 <div class="am-input-group am-input-group-sm am-margin-top-xs">
                                     <input type="number" name="appoint_goods_ladder_interval_time" placeholder="阶梯间隔时间" min="0" data-validation-message="阶梯间隔时间" class="am-form-field am-radius" {{if !empty($data['appoint_goods_ladder_interval_time']) and $data['appoint_goods_ladder_interval_time'] gt 0}} value="{{$data.appoint_goods_ladder_interval_time}}"{{/if}} />
@@ -728,54 +720,32 @@
                         <div class="am-u-sm-4 am-u-md-6 am-padding-horizontal-0">
                             <div class="am-form-group">
                                 <label>自提取货点申请<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="开启则用户可申请成为站点自提模式下取货点"></a></label>
-                                <div class="am-radio-group">
-                                    {{foreach $distribution_is_enable_list as $v}}
-                                        <label class="am-radio-inline am-margin-right-sm">
-                                            <input type="radio" name="is_enable_self_extraction" value="{{$v.value}}" {{if isset($data['is_enable_self_extraction']) and $data['is_enable_self_extraction'] eq $v['value']}}checked="checked"{{else /}}{{if !isset($data['is_enable_self_extraction']) and isset($v['checked']) and $v['checked'] eq true}}checked="checked"{{/if}}{{/if}} data-am-ucheck /> {{$v.name}}
-                                        </label>
-                                    {{/foreach}}
-                                </div>
+                                <input name="is_enable_self_extraction" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_enable_self_extraction']) and $data['is_enable_self_extraction'] eq 1}}checked="true"{{/if}} />
                             </div>
                         </div>
-                        <div class="am-u-sm-4 am-u-md-3 am-padding-horizontal-0">
+                        <div class="am-u-sm-4 am-u-md-6 am-padding-horizontal-0">
                             <div class="am-form-group">
                                 <label>下单默认取货地址<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="用户下单默认取货地址为上级用户的取货点地址、并且是有效的取货点，则默认为上级用户的取货点地址"></a></label>
-                                <div class="am-radio-group">
-                                    {{foreach $distribution_is_enable_list as $v}}
-                                        <label class="am-radio-inline am-margin-right-sm">
-                                            <input type="radio" name="is_buy_default_extraction_address" value="{{$v.value}}" {{if isset($data['is_buy_default_extraction_address']) and $data['is_buy_default_extraction_address'] eq $v['value']}}checked="checked"{{else /}}{{if !isset($data['is_buy_default_extraction_address']) and isset($v['checked']) and $v['checked'] eq true}}checked="checked"{{/if}}{{/if}} data-am-ucheck /> {{$v.name}}
-                                        </label>
-                                    {{/foreach}}
-                                </div>
+                                <input name="is_buy_default_extraction_address" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_buy_default_extraction_address']) and $data['is_buy_default_extraction_address'] eq 1}}checked="true"{{/if}} />
                             </div>
                         </div>
-                        <div class="am-u-sm-4 am-u-md-3 am-padding-horizontal-0">
+                    </div>
+                    <div class="am-cf">
+                        <div class="am-u-sm-4 am-u-md-6 am-padding-horizontal-0">
                             <div class="am-form-group">
                                 <label>取货点返佣<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="当用户选择取货点取货、给取货点返佣（仅对当前订单有效、该规则仅适应自提模式订单、采用返佣至取货点的配置规则、取货点为一级、取货点的上一级为二级、再上一级为三级）<br /><br />PS：仅对下单选择的自提点为用户申请的地址有效，如是系统自带的自提点地址则继续使用正常返佣模式进行。"></a></label>
-                                <div class="am-radio-group">
-                                    {{foreach $distribution_is_enable_list as $v}}
-                                        <label class="am-radio-inline am-margin-right-sm">
-                                            <input type="radio" name="is_self_extraction" value="{{$v.value}}" {{if isset($data['is_self_extraction']) and $data['is_self_extraction'] eq $v['value']}}checked="checked"{{else /}}{{if !isset($data['is_self_extraction']) and isset($v['checked']) and $v['checked'] eq true}}checked="checked"{{/if}}{{/if}} data-am-ucheck /> {{$v.name}}
-                                        </label>
-                                    {{/foreach}}
-                                </div>
+                                <input name="is_self_extraction" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_self_extraction']) and $data['is_self_extraction'] eq 1}}checked="true"{{/if}} />
+                            </div>
+                        </div>
+                        <div class="am-u-sm-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label>取货点返佣后不再向上返佣逻辑<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="PS：当订单选择了取货点、并且对取货点进行了返佣、则不再进行向上返佣的逻辑（如果不开启则会正常再走向上返佣1～3级），前提条件是必须开启了自提点返佣+满足取货点返佣的条件。"></a></label>
+                                <input name="is_self_extraction_close_upper" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_self_extraction_close_upper']) and $data['is_self_extraction_close_upper'] eq 1}}checked="true"{{/if}} />
                             </div>
                         </div>
                     </div>
 
                     <div class="am-cf">
-                        <div class="am-u-sm-6 am-padding-horizontal-0">
-                            <div class="am-form-group">
-                                <label>取货点返佣后不再向上返佣逻辑<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="PS：当订单选择了取货点、并且对取货点进行了返佣、则不再进行向上返佣的逻辑（如果不开启则会正常再走向上返佣1～3级），前提条件是必须开启了自提点返佣+满足取货点返佣的条件。"></a></label>
-                                <div class="am-radio-group">
-                                    {{foreach $distribution_is_enable_list as $v}}
-                                        <label class="am-radio-inline am-margin-right-sm">
-                                            <input type="radio" name="is_self_extraction_close_upper" value="{{$v.value}}" {{if isset($data['is_self_extraction_close_upper']) and $data['is_self_extraction_close_upper'] eq $v['value']}}checked="checked"{{else /}}{{if !isset($data['is_self_extraction_close_upper']) and isset($v['checked']) and $v['checked'] eq true}}checked="checked"{{/if}}{{/if}} data-am-ucheck /> {{$v.name}}
-                                        </label>
-                                    {{/foreach}}
-                                </div>
-                            </div>
-                        </div>
                         <div class="am-u-sm-6 am-padding-horizontal-0">
                             <div class="am-form-group">
                                 <label>取货点返佣层级<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="当开启取货点返佣后，再向取货点的上级（采用自提二级返佣配置）、二级（采用自提三级返佣配置）"></a></label>
@@ -786,6 +756,12 @@
                                         </label>
                                     {{/foreach}}
                                 </div>
+                            </div>
+                        </div>
+                        <div class="am-u-sm-4 am-u-md-6 am-padding-horizontal-0">
+                            <div class="am-form-group">
+                                <label class="am-block">取货点返佣转为积分<span class="am-form-group-label-tips">自动舍去小数点值</span></label>
+                                <input name="is_self_extraction_settlement_convert_integral" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_self_extraction_settlement_convert_integral']) and $data['is_self_extraction_settlement_convert_integral'] eq 1}}checked="true"{{/if}} />
                             </div>
                         </div>
                     </div>
@@ -818,9 +794,9 @@
                             <div class="am-form-group">
                                 <label class="am-block">返佣类型<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="1. 所有订单、就是用户下的每一单都会进行返佣<br />2. 首单、就是用户的第一笔订单会进行返佣<br />3. 默认 所有订单"></a></label>
                                 <div class="am-radio-group">
-                                    {{foreach $distribution_profit_type_list as $v}}
+                                    {{foreach $distribution_order_profit_type_list as $v}}
                                         <label class="am-radio-inline am-margin-right-sm">
-                                            <input type="radio" name="profit_type" value="{{$v.value}}" {{if isset($data['profit_type']) and $data['profit_type'] eq $v['value']}}checked="checked"{{else /}}{{if !isset($data['profit_type']) and isset($v['checked']) and $v['checked'] eq true}}checked="checked"{{/if}}{{/if}} data-am-ucheck /> {{$v.name}}
+                                            <input type="radio" name="order_profit_type" value="{{$v.value}}" {{if isset($data['order_profit_type']) and $data['order_profit_type'] eq $v['value']}}checked="checked"{{else /}}{{if !isset($data['order_profit_type']) and isset($v['checked']) and $v['checked'] eq true}}checked="checked"{{/if}}{{/if}} data-am-ucheck /> {{$v.name}}
                                         </label>
                                     {{/foreach}}
                                 </div>
@@ -830,14 +806,6 @@
                             <div class="am-form-group">
                                 <label>佣金结算周期<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="单位 分钟，默认43200分钟/30天"></a></label>
                                 <input type="number" min="0" name="profit_settlement_limit_time" placeholder="佣金结算周期" data-validation-message="请填写佣金结算周期" class="am-radius" value="{{if !empty($data['profit_settlement_limit_time'])}}{{$data.profit_settlement_limit_time}}{{else /}}43200{{/if}}" required />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="am-cf">
-                        <div class="am-u-sm-6 am-padding-horizontal-0">
-                            <div class="am-form-group">
-                                <label class="am-block">结算转换订单货币汇率<span class="am-form-group-label-tips">结算金额除以订单汇率值</span></label>
-                                <input name="is_profit_transform_currency_rate" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_profit_transform_currency_rate']) and $data['is_profit_transform_currency_rate'] eq 1}}checked="true"{{/if}} />
                             </div>
                         </div>
                     </div>
@@ -899,13 +867,7 @@
                         <div class="am-u-sm-6 am-padding-horizontal-0">
                             <div class="am-form-group">
                                 <label class="am-block">分销中心开启等级介绍<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs" title="开启后用户将可以看见分销等级数据"></a></label>
-                                <div class="am-radio-group">
-                                    {{foreach $distribution_is_enable_list as $v}}
-                                        <label class="am-radio-inline am-margin-right-sm">
-                                            <input type="radio" name="is_show_introduce" value="{{$v.value}}" {{if isset($data['is_show_introduce']) and $data['is_show_introduce'] eq $v['value']}}checked="checked"{{else /}}{{if !isset($data['is_show_introduce']) and !isset($v['checked'])}}checked="checked"{{/if}}{{/if}} data-am-ucheck /> {{$v.name}}
-                                        </label>
-                                    {{/foreach}}
-                                </div>
+                                <input name="is_show_introduce" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_show_introduce']) and $data['is_show_introduce'] eq 1}}checked="true"{{/if}} />
                             </div>
                         </div>
                         <div class="am-u-sm-6 am-padding-horizontal-0">

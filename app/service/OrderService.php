@@ -1518,19 +1518,6 @@ class OrderService
                 {
                     return $ret;
                 }
-                
-
-               // 如果是自提订单，获取用户的收货地址
-                    if(isset($v['order_model']) && $v['order_model'] == 2)
-                    {
-                        $user_address = Db::name('UserAddress')->where(['user_id'=>$v['user_id'], 'is_default'=>1])->find();
-                        if(!empty($user_address))
-                        {
-                            $v['user_address_data'] = $user_address;
-                        }
-                    }
-                
-                
             }
 
             // 微信小程序发货数据
@@ -1613,8 +1600,7 @@ class OrderService
                 // 支付
                 $result['is_pay']       = ($data['pay_status'] == 0 && !in_array($data['status'], [0,5,6])) ? 1 : 0;
                 // 发货
-                $result['is_delivery']  = (isset($data['order_model']) && (($data['order_model'] == 0) || 
-                          ($data['order_model'] == 2 && !empty($data['express_number']))) && in_array($data['status'], [2,3])) ? 1 : 0;
+                $result['is_delivery']  = (isset($data['order_model']) && $data['order_model'] == 0 && in_array($data['status'], [2,3])) ? 1 : 0;
                 // 同城
                 $result['is_service']   = (isset($data['order_model']) && $data['order_model'] == 1 && in_array($data['status'], [2,3])) ? 1 : 0;
                 // 取货
@@ -1986,59 +1972,10 @@ class OrderService
      */
     public static function OrderAddressData($order_ids)
     {
-      
-      
-      // 确保order_ids是数组
-        $order_ids = is_array($order_ids) ? $order_ids : [$order_ids];
-        
         // 销售模式+自提模式 地址信息
         $data = Db::name('OrderAddress')->where(['order_id'=>$order_ids])->column('*', 'order_id');
         if(!empty($data) && is_array($data))
         {
-            $order = Db::name('Order')->where(['id'=>$order_ids])->find();
-            
-            
-            // 如果是自提订单，获取用户的收货地址
-            if(!empty($order) && $order['order_model'] == 2)
-            {
-                // 调试信息
-                trace('OrderAddressData - order_id: ' . $order_ids[0], 'debug');
-                trace('OrderAddressData - order_model: ' . $order['order_model'], 'debug');
-                trace('OrderAddressData - user_id: ' . $order['user_id'], 'debug');
-                trace('OrderAddressData - order_address_data: ' . json_encode($data), 'debug');
-                
-                // 获取用户选择的收货地址
-                $user_address = Db::name('UserAddress')->where(['id'=>$data[$order_ids[0]]['address_id']])->find();
-                if(!empty($user_address))
-                {
-                    // 获取省份、城市、区县名称
-                    $region = RegionService::RegionName($user_address['province'], $user_address['city'], $user_address['county']);
-                    if(is_array($region))
-                    {
-                        $user_address['province_name'] = $region['province_name'];
-                        $user_address['city_name'] = $region['city_name'];
-                        $user_address['county_name'] = $region['county_name'];
-                    } else {
-                        // 如果返回的是字符串，则直接使用
-                        $user_address['province_name'] = $region;
-                        $user_address['city_name'] = '';
-                        $user_address['county_name'] = '';
-                    }
-                    
-                    trace('OrderAddressData - user_address: ' . json_encode($user_address), 'debug');
-                    
-                    
-                    // 将用户地址添加到地址数据中
-                    foreach($data as &$v)
-                    {
-                        $v['user_address_data'] = $user_address;
-                    }
-                }
-            }
-            
-            
-            
-            
             foreach($data as &$v)
             {
                 // 附件
@@ -2046,8 +1983,6 @@ class OrderService
                 $v['idcard_front'] =  ResourcesService::AttachmentPathViewHandle($v['idcard_front']);
                 $v['idcard_back_old'] = $v['idcard_back'];
                 $v['idcard_back'] =  ResourcesService::AttachmentPathViewHandle($v['idcard_back']);
-                
-               
             }
         }
 
@@ -2323,11 +2258,6 @@ class OrderService
 
                 // 自提模式 - 验证取货码
                 case 2 :
-                    if(!empty($params['express_id']) || !empty($params['express_number']) || !empty($params['express_data']))
-                {
-                    // 使用快递发货，不需要验证取货码
-                    break;
-                }
                     $p = [
                         [
                             'checked_type'      => 'empty',
@@ -2394,7 +2324,6 @@ class OrderService
         {
             // 快递
             case 0 :
-            case 2:
                 if(!empty($params['express_id']) && !empty($params['express_number']))
                 {
                     $express_data = [
@@ -2538,13 +2467,10 @@ class OrderService
         self::OrderHistoryAdd($order['id'], $upd_data['status'], $order['status'], MyLang('delivery_title'), $creator, $creator_name);
 
         // 同步微信发货
-        if(isset($order['client_type']) && $order['client_type'] == 'weixin')
+        $ret = self::OrderDeliverySyncWeixin($order, $params);
+        if(!empty($ret) && isset($ret['code']) && $ret['code'] != 0)
         {
-            $ret = self::OrderDeliverySyncWeixin($order, $params);
-            if(!empty($ret) && isset($ret['code']) && $ret['code'] != 0)
-            {
-                return $ret;
-            }
+            return $ret;
         }
 
         // 完成

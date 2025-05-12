@@ -697,6 +697,8 @@ class PosterGoodsService
 
         // web端商品url地址
         $url = MyUrl('index/goods/index', ['id'=>$goods['id'], 'referrer'=>$referrer]);
+        // 手机端地址
+        $mobile_url = '';
 
         // h5端地址处理
         if(APPLICATION_CLIENT_TYPE == 'h5')
@@ -704,7 +706,7 @@ class PosterGoodsService
             $h5_url = BaseService::H5Url($config);
             if(!empty($h5_url))
             {
-                $url = $h5_url;
+                $mobile_url = $h5_url;
             }
         }
 
@@ -713,11 +715,25 @@ class PosterGoodsService
         {
             if(!empty($config['app_url']))
             {
-                $url = $config['app_url'];
+                $mobile_url = $config['app_url'];
+            } else {
+                // 没有设置app则使用h5端的地址
+                $h5_url = BaseService::H5Url($config);
+                if(!empty($h5_url))
+                {
+                    $mobile_url = $h5_url;
+                }
             }
         }
 
-        return $url.'pages/goods-detail/goods-detail?id='.$goods['id'].'&referrer='.$referrer;
+        // 手机端拼接地址
+        if(!empty($mobile_url) && in_array(APPLICATION_CLIENT_TYPE, ['h5', 'ios', 'android']))
+        {
+            return $mobile_url.'pages/goods-detail/goods-detail?id='.$goods['id'].'&referrer='.$referrer;
+        }
+
+        // 默认返回web端
+        return $url;
     }
 
     /**

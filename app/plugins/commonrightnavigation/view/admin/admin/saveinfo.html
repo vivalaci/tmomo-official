@@ -1,0 +1,242 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'commonrightnavigation',
+            'title'     => MyLang('base_config_title'),
+            'back_url'  => PluginsAdminUrl('commonrightnavigation', 'admin', 'index'),
+        ])}}
+
+        <!-- form start -->
+        <form class="am-form form-validation am-form-full-screen am-form-popup-sticky" action="{{:PluginsAdminUrl('commonrightnavigation', 'admin', 'save')}}" method="POST" request-type="ajax-url" request-value="{{:PluginsAdminUrl('commonrightnavigation', 'admin', 'index')}}" enctype="multipart/form-data">
+            <div class="am-form-group am-form-file">
+                <label class="am-block">支付宝小程序二维码<span class="am-form-group-label-tips">建议100*100px</span></label>
+                <div class="am-form-file-upload-container">
+                    <ul class="plug-file-upload-view plugins-alipay_mini_qrcode_images-view" data-form-name="alipay_mini_qrcode_images" data-max-number="1" data-dialog-type="images" data-is-eye="1">
+                        {{if !empty($data['alipay_mini_qrcode_images'])}}
+                            <li>
+                                <input type="text" name="alipay_mini_qrcode_images" value="{{$data.alipay_mini_qrcode_images}}" data-validation-message="请上传支付宝小程序二维码" />
+                                <img src="{{$data.alipay_mini_qrcode_images}}" />
+                                <i class="iconfont icon-close"></i>
+                                <i class="iconfont icon-eye"></i>
+                            </li>
+                        {{/if}}
+                    </ul>
+                    <div class="plug-file-upload-submit" data-view-tag="ul.plugins-alipay_mini_qrcode_images-view">
+                        <i class="iconfont icon-upload-add"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="am-form-group am-form-file">
+                <label class="am-block">支付宝生活号二维码<span class="am-form-group-label-tips">建议100*100px</span></label>
+                <div class="am-form-file-upload-container">
+                    <ul class="plug-file-upload-view plugins-alipay_fuwu_qrcode_images-view" data-form-name="alipay_fuwu_qrcode_images" data-max-number="1" data-dialog-type="images" data-is-eye="1">
+                        {{if !empty($data['alipay_fuwu_qrcode_images'])}}
+                            <li>
+                                <input type="text" name="alipay_fuwu_qrcode_images" value="{{$data.alipay_fuwu_qrcode_images}}" data-validation-message="请上传支付宝生活号二维码" />
+                                <img src="{{$data.alipay_fuwu_qrcode_images}}" />
+                                <i class="iconfont icon-close"></i>
+                                <i class="iconfont icon-eye"></i>
+                            </li>
+                        {{/if}}
+                    </ul>
+                    <div class="plug-file-upload-submit" data-view-tag="ul.plugins-alipay_fuwu_qrcode_images-view">
+                        <i class="iconfont icon-upload-add"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="am-form-group am-form-file">
+                <label class="am-block">微信小程序二维码<span class="am-form-group-label-tips">建议100*100px</span></label>
+                <div class="am-form-file-upload-container">
+                    <ul class="plug-file-upload-view plugins-weixin_mini_qrcode_images-view" data-form-name="weixin_mini_qrcode_images" data-max-number="1" data-dialog-type="images" data-is-eye="1">
+                        {{if !empty($data['weixin_mini_qrcode_images'])}}
+                            <li>
+                                <input type="text" name="weixin_mini_qrcode_images" value="{{$data.weixin_mini_qrcode_images}}" data-validation-message="请上传微信小程序二维码" />
+                                <img src="{{$data.weixin_mini_qrcode_images}}" />
+                                <i class="iconfont icon-close"></i>
+                                <i class="iconfont icon-eye"></i>
+                            </li>
+                        {{/if}}
+                    </ul>
+                    <div class="plug-file-upload-submit" data-view-tag="ul.plugins-weixin_mini_qrcode_images-view">
+                        <i class="iconfont icon-upload-add"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="am-form-group am-form-file">
+                <label class="am-block">微信公众号二维码<span class="am-form-group-label-tips">建议100*100px</span></label>
+                <div class="am-form-file-upload-container">
+                    <ul class="plug-file-upload-view plugins-weixin_fuwu_qrcode_images-view" data-form-name="weixin_fuwu_qrcode_images" data-max-number="1" data-dialog-type="images" data-is-eye="1">
+                        {{if !empty($data['weixin_fuwu_qrcode_images'])}}
+                            <li>
+                                <input type="text" name="weixin_fuwu_qrcode_images" value="{{$data.weixin_fuwu_qrcode_images}}" data-validation-message="请上传微信公众号二维码" />
+                                <img src="{{$data.weixin_fuwu_qrcode_images}}" />
+                                <i class="iconfont icon-close"></i>
+                                <i class="iconfont icon-eye"></i>
+                            </li>
+                        {{/if}}
+                    </ul>
+                    <div class="plug-file-upload-submit" data-view-tag="ul.plugins-weixin_fuwu_qrcode_images-view">
+                        <i class="iconfont icon-upload-add"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="am-form-group am-form-file">
+                <label class="am-block">百度小程序二维码<span class="am-form-group-label-tips">建议100*100px</span></label>
+                <div class="am-form-file-upload-container">
+                    <ul class="plug-file-upload-view plugins-baidu_mini_qrcode_images-view" data-form-name="baidu_mini_qrcode_images" data-max-number="1" data-dialog-type="images" data-is-eye="1">
+                        {{if !empty($data['baidu_mini_qrcode_images'])}}
+                            <li>
+                                <input type="text" name="baidu_mini_qrcode_images" value="{{$data.baidu_mini_qrcode_images}}" data-validation-message="请上传百度小程序二维码" />
+                                <img src="{{$data.baidu_mini_qrcode_images}}" />
+                                <i class="iconfont icon-close"></i>
+                                <i class="iconfont icon-eye"></i>
+                            </li>
+                        {{/if}}
+                    </ul>
+                    <div class="plug-file-upload-submit" data-view-tag="ul.plugins-baidu_mini_qrcode_images-view">
+                        <i class="iconfont icon-upload-add"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="am-form-group am-form-file">
+                <label class="am-block">QQ小程序二维码<span class="am-form-group-label-tips">建议100*100px</span></label>
+                <div class="am-form-file-upload-container">
+                    <ul class="plug-file-upload-view plugins-qq_mini_qrcode_images-view" data-form-name="qq_mini_qrcode_images" data-max-number="1" data-dialog-type="images" data-is-eye="1">
+                        {{if !empty($data['qq_mini_qrcode_images'])}}
+                            <li>
+                                <input type="text" name="qq_mini_qrcode_images" value="{{$data.qq_mini_qrcode_images}}" data-validation-message="请上传QQ小程序二维码" />
+                                <img src="{{$data.qq_mini_qrcode_images}}" />
+                                <i class="iconfont icon-close"></i>
+                                <i class="iconfont icon-eye"></i>
+                            </li>
+                        {{/if}}
+                    </ul>
+                    <div class="plug-file-upload-submit" data-view-tag="ul.plugins-qq_mini_qrcode_images-view">
+                        <i class="iconfont icon-upload-add"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="am-form-group am-form-file">
+                <label class="am-block">头条小程序二维码<span class="am-form-group-label-tips">建议100*100px</span></label>
+                <div class="am-form-file-upload-container">
+                    <ul class="plug-file-upload-view plugins-toutiao_mini_qrcode_images-view" data-form-name="toutiao_mini_qrcode_images" data-max-number="1" data-dialog-type="images" data-is-eye="1">
+                        {{if !empty($data['toutiao_mini_qrcode_images'])}}
+                            <li>
+                                <input type="text" name="toutiao_mini_qrcode_images" value="{{$data.toutiao_mini_qrcode_images}}" data-validation-message="请上传头条小程序二维码" />
+                                <img src="{{$data.toutiao_mini_qrcode_images}}" />
+                                <i class="iconfont icon-close"></i>
+                                <i class="iconfont icon-eye"></i>
+                            </li>
+                        {{/if}}
+                    </ul>
+                    <div class="plug-file-upload-submit" data-view-tag="ul.plugins-toutiao_mini_qrcode_images-view">
+                        <i class="iconfont icon-upload-add"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="am-form-group am-form-file">
+                <label class="am-block">抖音小程序二维码<span class="am-form-group-label-tips">建议100*100px</span></label>
+                <div class="am-form-file-upload-container">
+                    <ul class="plug-file-upload-view plugins-douyin_mini_qrcode_images-view" data-form-name="douyin_mini_qrcode_images" data-max-number="1" data-dialog-type="images" data-is-eye="1">
+                        {{if !empty($data['douyin_mini_qrcode_images'])}}
+                            <li>
+                                <input type="text" name="douyin_mini_qrcode_images" value="{{$data.douyin_mini_qrcode_images}}" data-validation-message="请上传抖音小程序二维码" />
+                                <img src="{{$data.douyin_mini_qrcode_images}}" />
+                                <i class="iconfont icon-close"></i>
+                                <i class="iconfont icon-eye"></i>
+                            </li>
+                        {{/if}}
+                    </ul>
+                    <div class="plug-file-upload-submit" data-view-tag="ul.plugins-douyin_mini_qrcode_images-view">
+                        <i class="iconfont icon-upload-add"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="am-form-group am-form-file">
+                <label class="am-block">H5访问二维码<span class="am-form-group-label-tips">建议100*100px</span></label>
+                <div class="am-form-file-upload-container">
+                    <ul class="plug-file-upload-view plugins-h5_qrcode_images-view" data-form-name="h5_qrcode_images" data-max-number="1" data-dialog-type="images" data-is-eye="1">
+                        {{if !empty($data['h5_qrcode_images'])}}
+                            <li>
+                                <input type="text" name="h5_qrcode_images" value="{{$data.h5_qrcode_images}}" data-validation-message="请上传H5访问二维码" />
+                                <img src="{{$data.h5_qrcode_images}}" />
+                                <i class="iconfont icon-close"></i>
+                                <i class="iconfont icon-eye"></i>
+                            </li>
+                        {{/if}}
+                    </ul>
+                    <div class="plug-file-upload-submit" data-view-tag="ul.plugins-h5_qrcode_images-view">
+                        <i class="iconfont icon-upload-add"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="am-form-group am-form-file">
+                <label class="am-block">APP下载二维码<span class="am-form-group-label-tips">建议100*100px</span></label>
+                <div class="am-form-file-upload-container">
+                    <ul class="plug-file-upload-view plugins-app_download_images-view" data-form-name="app_download_images" data-max-number="1" data-dialog-type="images" data-is-eye="1">
+                        {{if !empty($data['app_download_images'])}}
+                            <li>
+                                <input type="text" name="app_download_images" value="{{$data.app_download_images}}" data-validation-message="请上传APP下载二维码" />
+                                <img src="{{$data.app_download_images}}" />
+                                <i class="iconfont icon-close"></i>
+                                <i class="iconfont icon-eye"></i>
+                            </li>
+                        {{/if}}
+                    </ul>
+                    <div class="plug-file-upload-submit" data-view-tag="ul.plugins-app_download_images-view">
+                        <i class="iconfont icon-upload-add"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="am-form-group">
+                <label class="am-block">是否全局<span class="am-form-group-label-tips">否则只在首页显示，是则全局展示</span></label>
+                <input name="is_overall" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_overall']) and $data['is_overall'] eq 1}}checked="true"{{/if}} />
+            </div>
+
+            <div class="am-form-group">
+                <label class="am-block">商品详情页面展示购物车入口</label>
+                <input name="is_goods_page_show_cart" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_goods_page_show_cart']) and $data['is_goods_page_show_cart'] eq 1}}checked="true"{{/if}} />
+            </div>
+
+            <div class="am-form-group">
+                <label class="am-block">展示提问入口<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs text-copy-submit" title="1. 需要安装【问答】插件配合使用<br />2. 直接点击复制插件地址" data-value="https://store.shopxo.net/goods-73.html"></a></label>
+                <input name="is_ask_add" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_ask_add']) and $data['is_ask_add'] eq 1}}checked="true"{{/if}} />
+            </div>
+
+            <div class="am-form-group">
+                <label class="am-block">展示在线客服<a href="javascript:;" class="am-icon-question-circle am-margin-left-xs text-copy-submit" title="1. 需要安装【客服】插件配合使用<br />2. 直接点击复制插件地址" data-value="https://store.shopxo.net/goods-179.html"></a></label>
+                <input name="is_chat" value="1" type="checkbox" data-off-text="{{:MyLang('no_title')}}" data-on-text="{{:MyLang('yes_title')}}" data-size="xs" data-on-color="success" data-off-color="default" data-handle-width="50" data-am-switch {{if isset($data['is_chat']) and $data['is_chat'] eq 1}}checked="true"{{/if}} />
+            </div>
+
+            <div class="am-form-popup-submit">
+                <a href="{{:PluginsAdminUrl('commonrightnavigation', 'admin', 'index', $params)}}" class="am-btn am-btn-warning am-radius am-btn-xs am-margin-right-lg">
+                    <i class="am-icon-mail-reply"></i>
+                    <span>{{:MyLang('retreat_title')}}</span>
+                </a>
+                <button type="submit" class="am-btn am-btn-primary am-radius am-btn-xs btn-loading-example" data-am-loading="{spinner: 'circle-o-notch', loadingText:'{{:MyLang('save_title')}}'}">
+                    <i class="am-icon-save"></i>
+                    <span>{{:MyLang('save_title')}}</span>
+                </button>
+            </div>
+        </form>
+        <!-- form end -->
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

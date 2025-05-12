@@ -371,8 +371,8 @@ class BuyService
         $common_site_type = SystemBaseService::SiteTypeValue();
         if(!isset($params['site_model']) || $params['site_model'] == -1)
         {
-            // 用户未指定或者负数则默认自提模式
-            $user_site_model = ($common_site_type >= 5) ? (in_array($common_site_type, [5,6,8]) ? 2 : 1) : $common_site_type;
+            // 用户未指定或者负数则默认第一种模式
+            $user_site_model = ($common_site_type >= 5) ? (in_array($common_site_type, [5,7,8]) ? 0 : 1) : $common_site_type;
         } else {
             $user_site_model = intval($params['site_model']);
         }
@@ -809,7 +809,7 @@ class BuyService
         self::BuyCartDelete($params);
 
         // 返回信息
-        $result = [
+        $data = [
             'order_status'  => $order_status,
             'order_ids'     => $order_ids,
             'payment_id'    => $payment_id,
@@ -828,7 +828,7 @@ class BuyService
             // 提交成功,进入合并支付
             case 1 :
                 $msg = MyLang('submit_success');
-                $result['jump_url'] = MyUrl('index/order/pay', ['ids'=>implode(',', $order_ids)]);
+                $data['jump_url'] = MyUrl('index/order/pay', ['ids'=>implode(',', $order_ids)]);
                 break;
 
             // 默认操作成功
@@ -836,7 +836,21 @@ class BuyService
                 $msg = MyLang('operate_success');
         }
 
-        return DataReturn($msg, 0, $result);
+        // 订单提交成功钩子
+        $hook_name = 'plugins_service_buy_order_submit_success';
+        $ret = EventReturnHandle(MyEventTrigger($hook_name, [
+            'hook_name'     => $hook_name,
+            'is_backend'    => true,
+            'data'          => &$data,
+            'params'        => $params,
+            
+        ]));
+        if(isset($ret['code']) && $ret['code'] != 0)
+        {
+            throw new \Exception($ret['msg']);
+        }
+
+        return DataReturn($msg, 0, $data);
     }
 
     /**

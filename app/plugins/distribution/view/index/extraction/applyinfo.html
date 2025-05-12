@@ -50,7 +50,7 @@
                     <div class="am-u-sm-6 am-padding-horizontal-0">
                         <div class="am-form-group">
                             <label>别名</label>
-                            <input type="text" name="alias" placeholder="别名" minlength="0" maxlength="16" data-validation-message="别名格式最多 16 个字符" class="am-radius" value="{{if !empty($data['alias'])}}{{$data.alias}}{{/if}}" required/>
+                            <input type="text" name="alias" placeholder="别名" minlength="0" maxlength="16" data-validation-message="别名格式最多 16 个字符" class="am-radius" value="{{if !empty($data['alias'])}}{{$data.alias}}{{/if}}" />
                         </div>
                     </div>
                 </div>
@@ -59,13 +59,13 @@
                     <div class="am-u-sm-6 am-padding-horizontal-0">
                         <div class="am-form-group">
                             <label>联系人<span class="am-form-group-label-tips-must">*</span></label>
-                            <input type="text" name="name" placeholder="联系人" minlength="0" maxlength="16" data-validation-message="联系人格式 2~16 个字符之间" class="am-radius" value="{{if !empty($data['name'])}}{{$data.name}}{{/if}}" />
+                            <input type="text" name="name" placeholder="联系人" minlength="2" maxlength="16" data-validation-message="联系人格式 2~16 个字符之间" class="am-radius" value="{{if !empty($data['name'])}}{{$data.name}}{{/if}}" required />
                         </div>
                     </div>
                     <div class="am-u-sm-6 am-padding-horizontal-0">
                         <div class="am-form-group">
                             <label>联系电话<span class="am-form-group-label-tips-must">*</span></label>
-                            <input type="text" name="tel" placeholder="联系电话" minlength="0" maxlength="30" data-validation-message="联系电话格式有误" class="am-radius" value="{{if !empty($data['tel'])}}{{$data.tel}}{{/if}}" />
+                            <input type="text" name="tel" placeholder="联系电话" minlength="6" maxlength="30" data-validation-message="联系电话格式有误" class="am-radius" value="{{if !empty($data['tel'])}}{{$data.tel}}{{/if}}" required />
                         </div>
                     </div>
                 </div>
@@ -117,6 +117,6 @@
 $(function()
 {
     // 百度地图初始化
-    MapInit({{if !empty($data['lng'])}}{{$data['lng']}}{{else /}}114.182783{{/if}},{{if !empty($data['lat'])}}{{$data['lat']}}{{else /}}22.300275{{/if}});
+    MapInit({{if !empty($data['lng'])}}{{$data['lng']}}{{else /}}116.400244{{/if}},{{if !empty($data['lat'])}}{{$data['lat']}}{{else /}}39.92556{{/if}});
 });
 </script>

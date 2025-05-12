@@ -469,6 +469,24 @@ class BaseService
                                 $key = 'freightfee_id_'.$v['id'];
                                 $freightfee_id = empty($params['params']) ? (isset($params[$key]) ? intval($params[$key]) : 0) : (empty($params['params']['params']) ? (isset($params['params'][$key]) ? intval($params['params'][$key]) : 0) : (isset($params['params']['params'][$key]) ? intval($params['params']['params'][$key]) : 0));
 
+                              
+                              // 获取配送方式
+                                $delivery_type = isset($v['order_base']['site_model']) ? $v['order_base']['site_model'] : 0;
+
+                                // 根据配送方式选择运费规则
+                                if($delivery_type == 0) {
+                                    // 发快递状态：使用第二条规则
+                                    if(count($rules['fee_list']) > 1) {
+                                        $freightfee_id = array_keys($rules['fee_list'])[1];
+                                    }
+                                } else if($delivery_type == 2) {
+                                    // 自提状态：使用第一条规则
+                                    $freightfee_id = array_keys($rules['fee_list'])[0];
+                                }
+
+                              
+                              
+                              
                                 // 运费模板
                                 $fee = array_key_exists($freightfee_id, $rules['fee_list']) ? $rules['fee_list'][$freightfee_id] : [];
                                 if(!empty($fee))
@@ -500,6 +518,37 @@ class BaseService
                                                 if($spec_volume_total > 0)
                                                 {
                                                     $price = self::FreightTypeCalculate($rules, $spec_volume_total, $template, $fee);
+                                                }
+                                                break;
+                                        }
+                                    } else {
+                                        // 满额减30运费
+                                        switch($template['valuation'])
+                                        {
+                                            // 按件
+                                            case 0 :
+                                                if($buy_count > 0)
+                                                {
+                                                    $price = self::FreightTypeCalculate($rules, $buy_count, $template, $fee);
+                                                    $price = max(0, $price - 30);
+                                                }
+                                                break;
+
+                                            // 按重量
+                                            case 1 :
+                                                if($spec_weight_total > 0)
+                                                {
+                                                    $price = self::FreightTypeCalculate($rules, $spec_weight_total, $template, $fee);
+                                                    $price = max(0, $price - 30);
+                                                }
+                                                break;
+
+                                            // 按体积
+                                            case 2 :
+                                                if($spec_volume_total > 0)
+                                                {
+                                                    $price = self::FreightTypeCalculate($rules, $spec_volume_total, $template, $fee);
+                                                    $price = max(0, $price - 30);
                                                 }
                                                 break;
                                         }

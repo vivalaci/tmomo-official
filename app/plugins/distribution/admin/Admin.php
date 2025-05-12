@@ -90,8 +90,8 @@ class Admin extends Common
         // 取货点返佣上级
         MyViewAssign('distribution_extraction_profit_level_list', BaseService::$distribution_extraction_profit_level_list);
 
-        // 返佣类型
-        MyViewAssign('distribution_profit_type_list', BaseService::$distribution_profit_type_list);
+        // 订单返佣类型
+        MyViewAssign('distribution_order_profit_type_list', BaseService::$distribution_order_profit_type_list);
         
         // 是否开启
         MyViewAssign('distribution_is_enable_list', BaseService::$distribution_is_enable_list);

@@ -15,9 +15,6 @@ use app\service\PluginsService;
 use app\service\GoodsService;
 use app\service\GoodsCategoryService;
 use app\service\WarehouseService;
-use app\plugins\shop\service\ShopService;
-use app\plugins\shop\service\BaseService as ShopBaseService;
-use app\plugins\chat\service\BaseService as ChatBaseService;
 
 /**
  * 智能工具箱 - 基础服务层
@@ -112,7 +109,7 @@ class BaseService
             'method'    => 'GoodsPlaceOriginHandle',
         ],
         'inventory_unit' => [
-            'title'     => '库存单位',
+            'title'     => '计量单位',
             'field'     => 'inventory_unit',
             'type'      => 'base',
             'data_type' => 'string',
@@ -417,7 +414,11 @@ class BaseService
         $chat = [];
         if(isset($config['is_order_aftersale_service_chat']) && $config['is_order_aftersale_service_chat'] == 1)
         {
-            $chat = ChatBaseService::ChatUrl();
+            $ret = CallPluginsServiceMethod('chat', 'BaseService', 'ChatUrl', [], []);
+            if(!empty($ret) && !isset($ret['code']) && !empty($ret['chat_url']))
+            {
+                $chat = $ret;
+            }
         }
         // QQ客服
         $service_qq = empty($config['order_aftersale_service_qq']) ? '' : $config['order_aftersale_service_qq'];
@@ -432,11 +433,15 @@ class BaseService
         if(isset($config['is_order_aftersale_service_show_shop']) && $config['is_order_aftersale_service_show_shop'] == 1 && !empty($order['shop_id']))
         {
             // 店铺信息
-            $shop = ShopService::UserShopInfo($order['shop_id'], 'id', 'id,user_id,service_weixin_qrcode,service_line_qrcode,service_qq,service_tel');
-            if(!empty($shop))
+            $shop = CallPluginsServiceMethod('shop', 'ShopService', 'UserShopInfo', $order['shop_id'], 'id', 'id,user_id,service_weixin_qrcode,service_line_qrcode,service_qq,service_tel');
+            if(!empty($shop) && !isset($shop['code']))
             {
                 // 客服地址
-                $chat = ShopBaseService::ChatUrl(null, $shop['user_id']);
+                $ret = CallPluginsServiceMethod('shop', 'BaseService', 'ChatUrl', [], $shop['user_id']);
+                if(!empty($ret) && !isset($ret['code']) && !empty($ret['chat_url']))
+                {
+                    $chat = $ret;
+                }
                 // qq
                 $service_qq = empty($shop['service_qq']) ? '' : $shop['service_qq'];
                 // tel

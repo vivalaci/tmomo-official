@@ -1,0 +1,112 @@
+{{:ModuleInclude('public/header')}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- nav -->
+        {{:ModuleInclude('public/plugins_admin_nav', [
+            'plugins'   => 'orderexportprint',
+            'title'     => '订单导出打印',
+        ])}}
+
+        <div class="orderexportprint-content am-padding-bottom-xs">
+            <!-- 基础配置 -->
+            <div class="am-panel am-panel-default am-radius orderexportprint-content-base">
+                <div class="am-panel-hd">
+                    <span class="am-panel-title">{{:MyLang('base_config_title')}}</span>
+                    <a class="am-margin-left-lg" href="{{:PluginsAdminUrl('orderexportprint', 'admin', 'saveinfo')}}">
+                        <i class="am-icon-edit"></i>
+                        <span>{{:MyLang('edit_title')}}</span>
+                    </a>
+                </div>
+                <div class="am-panel-bd">
+                    <ul class="am-avg-sm-2 am-avg-md-4 am-avg-lg-4 am-gallery-default">
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启订单导出</label>
+                                <div>
+                                    {{if isset($data['is_export']) and $data['is_export'] eq 1}}
+                                        {{:MyLang('yes_title')}}
+                                    {{else /}}
+                                        {{:MyLang('no_title')}}
+                                    {{/if}}
+                                    {{if isset($data['is_export_shop']) and $data['is_export_shop'] eq 1}}
+                                        <span class="am-badge am-badge-success am-radius am-margin-left-xs">支持多商户</span>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>订单导出商品图片</label>
+                                <div>
+                                    {{if isset($data['is_export_goods_images']) and $data['is_export_goods_images'] eq 1}}
+                                        {{:MyLang('yes_title')}}
+                                    {{else /}}
+                                        {{:MyLang('no_title')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>订单导出仅第一条有订单主数据</label>
+                                <div>
+                                    {{if isset($data['is_export_is_one_main']) and $data['is_export_is_one_main'] eq 1}}
+                                        {{:MyLang('yes_title')}}
+                                    {{else /}}
+                                        {{:MyLang('no_title')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>导出订单商品表单插件数据</label>
+                                <div>
+                                    {{if isset($data['is_export_ordergoodsform']) and $data['is_export_ordergoodsform'] eq 1}}
+                                        {{:MyLang('yes_title')}}
+                                    {{else /}}
+                                        {{:MyLang('no_title')}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>开启订单打印</label>
+                                <div>
+                                    {{if isset($data['is_print']) and $data['is_print'] eq 1}}
+                                        {{:MyLang('yes_title')}}
+                                    {{else /}}
+                                        {{:MyLang('no_title')}}
+                                    {{/if}}
+                                    {{if isset($data['is_print_shop']) and $data['is_print_shop'] eq 1}}
+                                        <span class="am-badge am-badge-success am-radius am-margin-left-xs">支持多商户</span>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="items am-padding-sm">
+                                <label>可打印的订单状态</label>
+                                <div class="am-scrollable-vertical">
+                                    {{if !empty($data['print_order_status_ids_names'])}}
+                                        {{:implode('、', $data['print_order_status_ids_names'])}}
+                                    {{else /}}
+                                        {{:MyLang('no_setup_tips')}}、{{:MyLang('default_title')}}[ 不限制 ]
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{:ModuleInclude('public/footer')}}

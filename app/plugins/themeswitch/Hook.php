@@ -142,7 +142,7 @@ class Hook
             $url = empty($this->plugins_config['h5_url']) ? MyC('common_app_h5_url') : $this->plugins_config['h5_url'];
 
             // h5地址识别处理
-            $url = BaseService::UrlDiscernHandle($url, $this->controller_name, $this->mca);
+            $url = BaseService::UrlDiscernHandle($url, $this->mca);
         } else {
             $url = $request_url;
         }

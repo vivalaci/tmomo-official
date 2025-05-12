@@ -83,8 +83,8 @@ class BaseService
         2 => ['value' => 2, 'name' => '上二级'],
     ];
 
-    // 返佣类型
-    public static $distribution_profit_type_list = [
+    // 订单返佣类型
+    public static $distribution_order_profit_type_list = [
         0 => ['value' => 0, 'name' => '所有订单', 'checked' => true],
         1 => ['value' => 1, 'name' => '首单'],
     ];
@@ -102,6 +102,12 @@ class BaseService
         8 => ['value' => 8, 'name' => '指定商品返现'],
         9 => ['value' => 9, 'name' => '指定商品销售返佣'],
         10 => ['value' => 10, 'name' => '指定商品阶梯返佣'],
+    ];
+
+    // 返佣类型
+    public static $profit_profit_type_list = [
+        0 => ['value' => 0, 'name' => '金额', 'checked' => true],
+        1 => ['value' => 1, 'name' => '积分'],
     ];
 
     // 收益结算状态（0待生效, 1待结算, 2已结算, 3已失效）

@@ -601,6 +601,7 @@ class BusinessService
             $order_pay_status = MyConst('common_order_pay_status');
             $level_name_list = BaseService::$level_name_list;
             $profit_status_list = BaseService::$profit_status_list;
+            $profit_profit_type_list = BaseService::$profit_profit_type_list;
             foreach($data as &$v)
             {
                 // 用户信息
@@ -610,7 +611,10 @@ class BusinessService
                 $v['level_name'] = isset($level_name_list[$v['level']]) ? $level_name_list[$v['level']]['name'] : '';
 
                 // 佣金状态
-                $v['status_name'] = $profit_status_list[$v['status']]['name'];
+                $v['status_name'] = (isset($v['status']) && isset($profit_status_list[$v['status']])) ? $profit_status_list[$v['status']]['name'] : '';
+
+                // 佣金类型
+                $v['profit_type_name'] = (isset($v['profit_type']) && isset($profit_profit_type_list[$v['profit_type']])) ? $profit_profit_type_list[$v['profit_type']]['name'] : '';
 
                 // 订单状态
                 $v['order_status_name'] = isset($order_status_list[$v['order_status']]) ? $order_status_list[$v['order_status']]['name'] : '';
