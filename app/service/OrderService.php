@@ -1607,8 +1607,8 @@ class OrderService
                 $result['is_take']      = (isset($data['order_model']) && in_array($data['order_model'], [2,3]) && $data['status'] == 2) ? 1 : 0;
                 // 收货
                 $result['is_collect']   = ($data['status'] == 3) ? 1 : 0;
-                // 取消
-                $result['is_cancel']    = (in_array($data['status'], [0,1]) || (in_array($data['status'], [2,3,4]) && $data['pay_status'] == 0)) ? 1 : 0;
+                // 取消 - 管理员可以取消未支付订单和已支付的自提订单
+                $result['is_cancel']    = (in_array($data['status'], [0,1]) || (in_array($data['status'], [2,3,4]) && $data['pay_status'] == 0) || (isset($data['order_model']) && $data['order_model'] == 2 && $data['status'] == 2 && $data['pay_status'] == 1)) ? 1 : 0;
                 // 删除
                 $result['is_delete']    = (in_array($data['status'], [5,6]) && isset($data['is_delete_time']) && $data['is_delete_time'] == 0) ? 1 : 0;
 

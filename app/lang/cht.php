@@ -1644,7 +1644,7 @@ return [
             'goods_spec_inventory_dec_fail_tips'    => '規格庫存扣减失敗',
             'exhibition_not_allow_submit_tips'      => '展示型不允許提交訂單',
             'choice_not_address_tips'               => '請選擇地址',
-            'address_empty_tips'                    => '地址有誤',
+            'address_empty_tips'                    => '請確認收貨地址',
             'order_insert_fail_tips'                => '訂單添加失敗',
             'order_detail_insert_fail_tips'         => '訂單詳情添加失敗',
             'order_take_insert_fail_tips'           => '訂單取貨碼添加失敗',

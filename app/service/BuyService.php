@@ -747,6 +747,20 @@ class BuyService
                     $address = $v['order_base']['address'];
                 }
             }
+            
+            // 自提模式下额外检查用户是否有快递地址
+            if($model['site_model'] == 2)
+            {
+                // 获取用户的快递地址
+                $address_params = [
+                    'user'  => $params['user'],
+                ];
+                $ads = UserAddressService::UserDefaultAddress($address_params);
+                if(empty($ads['data']))
+                {
+                    return DataReturn(MyLang('common_service.buy.address_empty_tips'), -1);
+                }
+            }
 
             // 订单主信息
             $order = [

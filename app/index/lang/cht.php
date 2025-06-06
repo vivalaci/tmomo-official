@@ -154,7 +154,7 @@ return [
         'not_goods_tips'                        => '沒有商品',
         'not_payment_tips'                      => '沒有支付方式',
         'user_message_title'                    => '買家留言',
-        'user_message_placeholder'              => '選填、建議填寫和賣家達成一致的說明',
+        'user_message_placeholder'              => '選填、可填寫您的建議或信息',
         'summary_title'                         => '實付款：',
         'summary_contact_name'                  => '連絡人：',
         'summary_address'                       => '地址：',

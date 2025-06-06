@@ -638,6 +638,39 @@ class ConfigService
      */
     public static function ConfigContentRow($key)
     {
+        
+        
+        // 不参与缓存的配置直接查询数据库 在 ConfigContentRow 方法中，协议内容会被缓存，并且缓存键是 $key.'_row_data'。
+        if(in_array($key, self::$not_cache_field_list))
+        {
+            $data = Db::name('Config')->where(['only_tag'=>$key])->field('name,value,type,upd_time')->find();
+            if(!empty($data))
+            {
+                // 富文本处理
+                if(in_array($key, self::$rich_text_list))
+                {
+                    $data['value'] = ResourcesService::ContentStaticReplace($data['value'], 'get');
+                }
+                
+                // 获取多语言配置 bug在于 $data.name 是从数据库直接获取的，而不是通过多语言系统获取的。
+                $lang = MyLang('common_config');
+                if(!empty($lang) && is_array($lang) && array_key_exists($key, $lang) && is_array($lang[$key]))
+                {
+                    $temp = $lang[$key];
+                    if(array_key_exists('name', $temp))
+                    {
+                        $data['name'] = $temp['name'];
+                    }
+                }
+                
+                $data['upd_time_time'] = empty($data['upd_time']) ? null : date('Y-m-d H:i:s', $data['upd_time']);
+            } else {
+                $data = [];
+            }
+            return DataReturn(MyLang('operate_success'), 0, $data);
+        }
+        
+        
         $cache_key = $key.'_row_data';
         $data = MyCache($cache_key);
         if($data === null)
